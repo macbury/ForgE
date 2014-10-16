@@ -1,0 +1,4 @@
+{
+  fragment: "mesh_test",
+  vertex:   "mesh_test"
+}

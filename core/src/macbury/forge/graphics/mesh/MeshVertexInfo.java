@@ -1,0 +1,89 @@
+package macbury.forge.graphics.mesh;
+
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.VertexAttribute;
+import com.badlogic.gdx.graphics.VertexAttributes;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Pool;
+
+/**
+ * Created by macbury on 30.08.14.
+ */
+public class MeshVertexInfo implements Pool.Poolable {
+  public Vector3 position;
+  public Vector3 normal;
+  public Vector2 uv;
+  public Color   color;
+  public short index;
+
+  public static enum AttributeType {
+    Position(VertexAttributes.Usage.Position, 3,ShaderProgram.POSITION_ATTRIBUTE),
+    Normal(VertexAttributes.Usage.Normal, 3, ShaderProgram.NORMAL_ATTRIBUTE),
+    TextureCord(VertexAttributes.Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE+"0"),
+    Color(VertexAttributes.Usage.ColorPacked, 4, ShaderProgram.COLOR_ATTRIBUTE); // probably should be 4 not 1
+
+    private final int attributeSize;
+    private final VertexAttribute attribute;
+
+    AttributeType(int usage, int attributeSize, String shaderAttributte) {
+      this.attributeSize = attributeSize;
+      this.attribute     = new VertexAttribute(usage, attributeSize, shaderAttributte);
+    }
+
+    public int size() {
+      return attributeSize;
+    }
+
+    public VertexAttribute attribute() {
+      return attribute;
+    }
+  }
+
+  public MeshVertexInfo() {
+    this.position = new Vector3();
+    this.normal   = new Vector3();
+    this.color    = new Color(Color.WHITE);
+    this.uv       = new Vector2();
+    this.index    = 0;
+    reset();
+  }
+
+  public MeshVertexInfo normal(float x, float y, float z) {
+    this.normal.set(x,y,z);
+    return this;
+  }
+
+  public MeshVertexInfo uv(float u, float v) {
+    this.uv.set(u,v);
+    return this;
+  }
+
+  public MeshVertexInfo set(float x, float y, float z) {
+    this.position.set(x,y,z);
+    return this;
+  }
+
+  public MeshVertexInfo rgba(float r, float g, float b, float a) {
+    this.color.set(r,g,b,a);
+    return this;
+  }
+
+  public MeshVertexInfo rgb(float r, float g, float b) {
+    rgba(r,g,b,1);
+    return this;
+  }
+
+  public float color() {
+    return Color.toFloatBits(color.r, color.g, color.b, color.a);
+  }
+
+  @Override
+  public void reset() {
+    uv(0,0);
+    set(0,0,0);
+    normal(0,0,0);
+    index = 0;
+  }
+}
