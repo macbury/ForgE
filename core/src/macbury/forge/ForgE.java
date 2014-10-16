@@ -13,7 +13,6 @@ public class ForgE extends Game {
   public static ShadersManager shaders;
   private ForgEBootListener bootListener;
 
-
   @Override
   public void create () {
     graphics = new GraphicsUtils();

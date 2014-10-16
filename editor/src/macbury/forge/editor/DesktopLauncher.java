@@ -1,36 +1,34 @@
 package macbury.forge.editor;
 
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import macbury.forge.ForgE;
-import macbury.forge.ForgEBootListener;
-import macbury.forge.shaders.ShaderReloadListener;
-import macbury.forge.shaders.ShadersManager;
+import javax.swing.*;
 
 /**
  * Created by macbury on 15.10.14.
  */
 public class DesktopLauncher {
   public static void main (String[] arg) {
-    LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-    ForgE game                           = new ForgE();
-    game.setBootListener(new ForgEBootListener() {
-      @Override
-      public void afterEngineCreate(ForgE engine) {
-        ForgE.shaders.addOnShaderReloadListener(new ShaderReloadListener() {
-          @Override
-          public void onShadersReload(ShadersManager shaderManager) {
-
-          }
-
-          @Override
-          public void onShaderError(ShadersManager shaderManager, ShaderProgram program) {
-
-          }
-        });
+    Runtime.getRuntime().addShutdownHook(new Thread() {
+      public void run () {
+      Runtime.getRuntime().halt(0); // Because fuck you, Swing shutdown hooks.
       }
     });
-    new LwjglApplication(game, config);
+    try {
+      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
+    } catch (InstantiationException e) {
+      e.printStackTrace();
+    } catch (IllegalAccessException e) {
+      e.printStackTrace();
+    } catch (UnsupportedLookAndFeelException e) {
+      e.printStackTrace();
+    }
+
+    SwingUtilities.invokeLater(new Runnable() {
+      @Override
+      public void run() {
+        MainWindow mainWindow = new MainWindow();
+      }
+    });
   }
 }
