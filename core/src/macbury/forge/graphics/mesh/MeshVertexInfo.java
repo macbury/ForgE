@@ -55,6 +55,62 @@ public class MeshVertexInfo implements Pool.Poolable {
     return this;
   }
 
+  /**
+   * Sets Normals to X-
+   * @return
+   */
+
+  public MeshVertexInfo normalLeft() {
+    this.normal.set(-1,0,0);
+    return this;
+  }
+
+  /**
+   * Sets Normals to X+
+   * @return
+   */
+
+  public MeshVertexInfo normalRight() {
+    this.normal.set(1,0,0);
+    return this;
+  }
+
+  /**
+   * Sets Normals to Y+
+   * @return
+   */
+  public MeshVertexInfo normalUp() {
+    this.normal.set(0,1,0);
+    return this;
+  }
+
+  /**
+   * Sets Normals to Y-
+   * @return
+   */
+  public MeshVertexInfo normalBottom() {
+    this.normal.set(0,-1,0);
+    return this;
+  }
+
+  /**
+   * Sets Normals to Z+
+   * @return
+   */
+  public MeshVertexInfo normalFront() {
+    this.normal.set(0,0,1);
+    return this;
+  }
+
+  /**
+   * Sets Normals to Z-
+   * @return
+   */
+  public MeshVertexInfo normalBack() {
+    this.normal.set(0,0,-1);
+    return this;
+  }
+
   public MeshVertexInfo uv(float u, float v) {
     this.uv.set(u,v);
     return this;
@@ -78,6 +134,13 @@ public class MeshVertexInfo implements Pool.Poolable {
   public float color() {
     return Color.toFloatBits(color.r, color.g, color.b, color.a);
   }
+
+
+  public MeshVertexInfo color(Color nc) {
+    this.color.set(nc);
+    return this;
+  }
+
 
   @Override
   public void reset() {

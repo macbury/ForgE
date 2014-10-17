@@ -14,6 +14,7 @@ public class MainWindow extends JFrame implements ForgEBootListener {
   private JPanel contentPane;
   private JButton button1;
   private JPanel openGlContainer;
+  private JTree tree1;
 
   public MainWindow() {
     setContentPane(contentPane);
