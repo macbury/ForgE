@@ -12,10 +12,20 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="a2cad" class="javax.swing.JButton" binding="button1" default-binding="true">
+          <component id="a2cad" class="javax.swing.JButton" binding="wireframeButton" default-binding="true">
             <constraints/>
             <properties>
-              <text value="Button"/>
+              <hideActionText value="true"/>
+              <icon value="icons/xray.png"/>
+              <text value=""/>
+            </properties>
+          </component>
+          <component id="ebe95" class="javax.swing.JButton" binding="texturedButton" default-binding="true">
+            <constraints/>
+            <properties>
+              <hideActionText value="true"/>
+              <icon value="icons/texture.png"/>
+              <text value=""/>
             </properties>
           </component>
           <component id="9da4b" class="javax.swing.JToolBar$Separator">
@@ -24,53 +34,14 @@
           </component>
         </children>
       </toolbar>
-      <splitpane id="f90e2">
+      <grid id="9bee5" binding="openGlContainer" layout-manager="BorderLayout" hgap="0" vgap="0">
         <constraints border-constraint="Center"/>
         <properties>
-          <continuousLayout value="true"/>
-          <dividerLocation value="320"/>
-          <resizeWeight value="0.0"/>
+          <background color="-16711423"/>
         </properties>
         <border type="none"/>
-        <children>
-          <component id="3138" class="javax.swing.JTree" binding="tree1" default-binding="true">
-            <constraints>
-              <splitpane position="left"/>
-            </constraints>
-            <properties/>
-          </component>
-          <splitpane id="90118">
-            <constraints>
-              <splitpane position="right"/>
-            </constraints>
-            <properties>
-              <continuousLayout value="true"/>
-              <resizeWeight value="0.8"/>
-            </properties>
-            <border type="none"/>
-            <children>
-              <grid id="572c5" binding="openGlContainer" layout-manager="BorderLayout" hgap="0" vgap="0">
-                <constraints>
-                  <splitpane position="left"/>
-                </constraints>
-                <properties>
-                  <background color="-16711423"/>
-                </properties>
-                <border type="none"/>
-                <children/>
-              </grid>
-              <grid id="ff1c" layout-manager="BorderLayout" hgap="0" vgap="0">
-                <constraints>
-                  <splitpane position="right"/>
-                </constraints>
-                <properties/>
-                <border type="none"/>
-                <children/>
-              </grid>
-            </children>
-          </splitpane>
-        </children>
-      </splitpane>
+        <children/>
+      </grid>
     </children>
   </grid>
 </form>

@@ -1,34 +1,25 @@
-package macbury.forge.screens.test;
+package macbury.forge.editor.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import macbury.forge.ForgE;
 import macbury.forge.graphics.batch.VoxelBatch;
-import macbury.forge.graphics.batch.Wireframe;
 import macbury.forge.graphics.batch.renderable.TerrainTileRenderable;
 import macbury.forge.graphics.builders.TerrainBuilder;
 import macbury.forge.screens.AbstractScreen;
 
 /**
- * Created by macbury on 15.10.14.
+ * Created by macbury on 18.10.14.
  */
-public class TestMeshScreen extends AbstractScreen {
-
-  private Mesh triangleTest;
-  private ShaderProgram shader;
+public class EditorScreen extends AbstractScreen {
   private PerspectiveCamera camera;
   private CameraInputController cameraController;
-  private Wireframe meshWireframe;
-  private ShapeRenderer lineRenderer;
   private TerrainTileRenderable terrainTile;
-  private VoxelBatch batch;
+  public VoxelBatch batch;
 
   @Override
   protected void initialize() {
@@ -80,17 +71,11 @@ public class TestMeshScreen extends AbstractScreen {
     cameraController.update();
     camera.update();
     ForgE.graphics.clearAll(Color.BLACK);
-    batch.setType(VoxelBatch.RenderType.Wireframe);
+
     batch.begin(camera); {
       batch.add(terrainTile);
       batch.render();
     } batch.end();
-
-    //meshWireframe.render(lineRenderer, Color.WHITE);
-    /*shader.begin(); {
-      shader.setUniformMatrix("u_projViewTrans", camera.combined);
-      triangleTest.render(shader, GL30.GL_TRIANGLES);
-    } shader.end();*/
   }
 
   @Override
@@ -124,5 +109,4 @@ public class TestMeshScreen extends AbstractScreen {
   public void dispose() {
 
   }
-
 }

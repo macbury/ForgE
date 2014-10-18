@@ -1,4 +1,5 @@
 {
+  class: macbury.forge.shaders.TerrainShader,
   fragment: "mesh_test",
   vertex:   "mesh_test"
 }

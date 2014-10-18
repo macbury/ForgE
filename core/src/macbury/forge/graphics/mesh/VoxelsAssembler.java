@@ -7,7 +7,6 @@ import com.badlogic.gdx.math.Vector3;
  * Created by macbury on 16.10.14.
  */
 public class VoxelsAssembler extends MeshAssembler {
-
   public void top(Vector3 position, Vector3 size, Color color) {
     MeshVertexInfo vert1 = this.vertex(position.x, position.y + size.y, position.z); //top left
     vert1.normalUp().color(color);

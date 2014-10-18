@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
+import macbury.forge.graphics.batch.Wireframe;
 
 import java.util.ArrayList;
 
@@ -122,6 +123,10 @@ public class MeshAssembler implements Disposable {
 
     clear();
     return mesh;
+  }
+
+  public Wireframe wireframe() {
+    return new Wireframe(triangleArrayList);
   }
 
   public void end() {
