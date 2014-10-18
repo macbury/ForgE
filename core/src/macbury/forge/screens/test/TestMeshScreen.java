@@ -1,103 +1,34 @@
 package macbury.forge.screens.test;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Mesh;
-import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Array;
-import macbury.forge.ForgE;
-import macbury.forge.graphics.batch.VoxelBatch;
-import macbury.forge.graphics.batch.Wireframe;
-import macbury.forge.graphics.batch.renderable.TerrainTileRenderable;
-import macbury.forge.graphics.builders.TerrainBuilder;
+import macbury.forge.level.Level;
 import macbury.forge.screens.AbstractScreen;
 
 /**
  * Created by macbury on 15.10.14.
  */
 public class TestMeshScreen extends AbstractScreen {
-
-  private Mesh triangleTest;
-  private ShaderProgram shader;
-  private PerspectiveCamera camera;
   private CameraInputController cameraController;
-  private Wireframe meshWireframe;
-  private ShapeRenderer lineRenderer;
-  private TerrainTileRenderable terrainTile;
-  private VoxelBatch batch;
+  private Level level;
 
   @Override
   protected void initialize() {
-    this.camera             = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-    this.cameraController   = new CameraInputController(camera);
-    camera.position.set(0,10,10);
-    camera.lookAt(Vector3.Zero);
-    TerrainBuilder assembler = new TerrainBuilder();
+    this.level              = new Level();
+    this.cameraController   = new CameraInputController(level.camera);
 
-    Vector3 position = new Vector3();
-    Vector3 size     = new Vector3(1,1,1);
-
-    Color green1 = new Color(14f / 255f, 123f / 255f, 34f / 255f, 1);
-    Color green2 = new Color(44f / 255f, 159f / 255f, 93f / 255f, 1);
-    Color green3 = new Color(82f / 255f, 198f / 255f, 152f / 255f, 1);
-
-    Array<Color> pallette = new Array<Color>();
-    pallette.add(green1);
-    pallette.add(green2);
-    pallette.add(green3);
-
-    assembler.begin(); {
-      for (int x = 0; x < 10; x++) {
-        for (int y = 0; y < 10; y++) {
-          for (int z = 0; z < 10; z++) {
-            Color color = pallette.get((int)Math.round((float)(pallette.size - 1) * Math.random()));
-            position.set(x, y, z);
-            assembler.top(position, size, color);
-            assembler.bottom(position, size, color);
-
-            assembler.front(position, size, color);
-            assembler.back(position, size, color);
-
-            assembler.left(position, size, color);
-            assembler.right(position, size, color);
-          }
-        }
-      }
-
-      this.terrainTile = assembler.getRenderable();
-    } assembler.end();
-
-    this.batch = new VoxelBatch();
     Gdx.input.setInputProcessor(cameraController);
   }
 
   @Override
   public void render(float delta) {
-    cameraController.update();
-    camera.update();
-    ForgE.graphics.clearAll(Color.BLACK);
-    batch.setType(VoxelBatch.RenderType.Wireframe);
-    batch.begin(camera); {
-      batch.add(terrainTile);
-      batch.render();
-    } batch.end();
-
-    //meshWireframe.render(lineRenderer, Color.WHITE);
-    /*shader.begin(); {
-      shader.setUniformMatrix("u_projViewTrans", camera.combined);
-      triangleTest.render(shader, GL30.GL_TRIANGLES);
-    } shader.end();*/
+    level.update(delta);
+    level.render();
   }
 
   @Override
   public void resize(int width, int height) {
-    camera.viewportWidth  = width;
-    camera.viewportHeight = height;
-    camera.update(true);
+    level.resize(width, height);
   }
 
   @Override
