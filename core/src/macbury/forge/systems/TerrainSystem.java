@@ -37,7 +37,7 @@ public class TerrainSystem extends EntitySystem implements Disposable {
 
   @Override
   public void update(float deltaTime) {
-    while(map.chunkToRebuild.size > 0) {
+    if (map.chunkToRebuild.size > 0) {
       Chunk chunk = map.chunkToRebuild.pop();
       buildChunkGeometry(chunk);
     }

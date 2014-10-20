@@ -21,7 +21,7 @@ public class EditorScreen extends AbstractScreen {
   @Override
   protected void initialize() {
     this.level              = new Level(LevelState.blank());
-    level.camera.position.set(0,15,15);
+    level.camera.position.set(0,-25,-25);
     level.camera.lookAt(Vector3.Zero);
     level.camera.update(true);
     level.entities.addSystem(new EditorSystem());

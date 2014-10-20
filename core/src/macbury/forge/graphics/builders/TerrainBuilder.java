@@ -9,6 +9,7 @@ import macbury.forge.graphics.batch.renderable.TerrainChunkRenderable;
 import macbury.forge.graphics.mesh.MeshVertexInfo;
 import macbury.forge.graphics.mesh.VoxelsAssembler;
 import macbury.forge.level.map.ChunkMap;
+import macbury.forge.utils.Vector3Int;
 
 /**
  * Created by macbury on 16.10.14.
@@ -23,9 +24,13 @@ public class TerrainBuilder extends VoxelsAssembler {
   }
 
   public void facesForChunk(Chunk chunk) {
-    for (int x = chunk.start.x; x < chunk.end.x; x++) {
-      for (int y = chunk.start.y; y < chunk.end.y; y++) {
-        for (int z = chunk.start.z; z < chunk.end.z; z++) {
+    facesForPart(chunk.start, chunk.end);
+  }
+
+  private void facesForPart(Vector3Int start, Vector3Int end) {
+    for (int x = start.x; x < end.x; x++) {
+      for (int y = start.y; y < end.y; y++) {
+        for (int z = start.z; z < end.z; z++) {
           if (map.isSolid(x, y, z)) {
             tempA.set(x,y,z);
             ColorMaterial material = map.getMaterialForPosition(x, y, z);
@@ -57,6 +62,10 @@ public class TerrainBuilder extends VoxelsAssembler {
         }
       }
     }
+  }
+
+  public void facesForMap() {
+    facesForPart(new Vector3Int(0,0,0), new Vector3Int(map.getWidth(), map.getHeight(), map.getDepth()));
   }
 
   public TerrainChunkRenderable getRenderable() {
