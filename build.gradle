@@ -19,6 +19,7 @@ allprojects {
 
     repositories {
         mavenCentral()
+        maven { url "http://repo.typesafe.com/typesafe/releases/" }
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
     }
@@ -30,6 +31,7 @@ project(":editor") {
 
     dependencies {
         compile project(":desktop")
+        compile 'net.contentobjects.jnotify:jnotify:0.94'
     }
 }
 

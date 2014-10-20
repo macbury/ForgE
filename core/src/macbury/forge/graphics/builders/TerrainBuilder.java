@@ -23,6 +23,7 @@ public class TerrainBuilder extends VoxelsAssembler {
     facesForPart(chunk.start, chunk.end);
   }
 
+
   private void facesForPart(Vector3Int start, Vector3Int end) {
     for (int x = start.x; x < end.x; x++) {
       for (int y = start.y; y < end.y; y++) {
