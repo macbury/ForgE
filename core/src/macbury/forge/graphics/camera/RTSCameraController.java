@@ -22,7 +22,7 @@ import macbury.forge.ui.Overlay;
  */
 public class RTSCameraController {
   private static final float LERP_SPEED = 15.0f;
-  public static final int MAX_ZOOM = 20;
+  public static final int MAX_ZOOM = 100;
   private static int CAMERA_MOVE_PADDING = 16;
   private PerspectiveCamera cam;
 
@@ -89,7 +89,7 @@ public class RTSCameraController {
     maxZoom = MAX_ZOOM;
     scrollSpeed = 100.0f;
 
-    minTilt = 0.6f;
+    minTilt = 0.1f;
     maxTilt = (float) (Math.PI / 2) - 0.006f;
 
     currentZoom = maxZoom;

@@ -18,19 +18,23 @@ public class EditorScreen extends AbstractScreen {
   private Stage stage;
   private RTSCameraController cameraController;
   private Overlay overlay;
+  private EditorSystem editorSystem;
 
   @Override
   protected void initialize() {
     this.overlay            = new Overlay();
     this.stage              = new Stage();
     this.level              = new Level(LevelState.blank());
+    this.editorSystem       = new EditorSystem();
     this.cameraController   = new RTSCameraController();
-    cameraController.setCenter(0, 0);
+
+    cameraController.setCenter(level.terrainMap.getWidth() / 2, level.terrainMap.getDepth() / 2);
     cameraController.setCamera(level.camera);
     cameraController.setOverlay(overlay);
-    level.entities.addSystem(new EditorSystem());
-    stage.addActor(overlay);
 
+    editorSystem.setOverlay(overlay);
+    level.entities.addSystem(editorSystem);
+    stage.addActor(overlay);
   }
 
   @Override

@@ -9,7 +9,6 @@ import macbury.forge.graphics.batch.renderable.BaseRenderable;
  */
 public class Renderable extends Component implements Pool.Poolable {
   public BaseRenderable instance;
-  public boolean visible = true;
 
   public Renderable() {
   }
@@ -17,6 +16,5 @@ public class Renderable extends Component implements Pool.Poolable {
   @Override
   public void reset() {
     instance = null;
-    visible  = true;
   }
 }

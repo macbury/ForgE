@@ -7,8 +7,10 @@ import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.ForgE;
+import macbury.forge.components.BoundBox;
 import macbury.forge.components.Position;
 import macbury.forge.components.Renderable;
+import macbury.forge.components.Visible;
 import macbury.forge.graphics.batch.renderable.TerrainChunkRenderable;
 import macbury.forge.graphics.builders.Chunk;
 import macbury.forge.graphics.builders.TerrainBuilder;
@@ -24,6 +26,9 @@ import java.util.HashMap;
 public class TerrainSystem extends EntitySystem implements Disposable {
   private static final String TERRAIN_SHADER = "terrain";
   private ComponentMapper<Renderable> rm = ComponentMapper.getFor(Renderable.class);
+  private ComponentMapper<Visible>    vm = ComponentMapper.getFor(Visible.class);
+  private ComponentMapper<BoundBox>  bbm = ComponentMapper.getFor(BoundBox.class);
+
   private final Vector3 tempA;
   private final LevelEntityEngine engine;
   private HashMap<Chunk, Entity> tileEntities;
@@ -58,29 +63,40 @@ public class TerrainSystem extends EntitySystem implements Disposable {
       } else {
         Entity tileEntity;
         Renderable renderableComponent;
-
+        Visible    visibleComponent;
+        BoundBox   boundBox;
         if (tileEntities.containsKey(chunk)) {
           tileEntity              = tileEntities.get(chunk);
           renderableComponent     = rm.get(tileEntity);
+          visibleComponent        = vm.get(tileEntity);
+          boundBox                = bbm.get(tileEntity);
+
           clearMeshForEntity(tileEntity);
         } else {
-          tileEntity                = engine.createEntity();
-          renderableComponent       = engine.createComponent(Renderable.class);
+          tileEntity                                         = engine.createEntity();
+
+          boundBox                                           = engine.createComponent(BoundBox.class);
+          renderableComponent                                = engine.createComponent(Renderable.class);
+          visibleComponent                                   = engine.createComponent(Visible.class);
 
           renderableComponent.instance                       = new TerrainChunkRenderable();
           renderableComponent.instance.primitiveType         = GL30.GL_TRIANGLES;
           renderableComponent.instance.shader                = (RenderableBaseShader)ForgE.shaders.get(TERRAIN_SHADER);
           tileEntities.put(chunk, tileEntity);
 
+          tileEntity.add(boundBox);
+          tileEntity.add(visibleComponent);
           tileEntity.add(renderableComponent);
           tileEntity.add(engine.createComponent(Position.class));
           engine.addEntity(tileEntity);
         }
 
+
+        visibleComponent.visible = true;
         if (ForgE.config.generateWireframe)
           renderableComponent.instance.wireframe           = builder.wireframe();
         renderableComponent.instance.mesh                  = builder.mesh(MeshVertexInfo.AttributeType.Position, MeshVertexInfo.AttributeType.Normal, MeshVertexInfo.AttributeType.Color);
-        renderableComponent.visible                        = true;
+        renderableComponent.instance.mesh.calculateBoundingBox(boundBox.box);
       }
     } builder.end();
   }
@@ -98,11 +114,11 @@ public class TerrainSystem extends EntitySystem implements Disposable {
 
   private void clearMeshForEntity(Entity tileEntity) {
     Renderable renderableComponent = rm.get(tileEntity);
-
+    Visible  visibleComponent      = vm.get(tileEntity);
     if (renderableComponent.instance.mesh != null) {
       renderableComponent.instance.mesh.dispose();
     }
-    renderableComponent.visible = false;
+    visibleComponent.visible = false;
   }
 
   @Override

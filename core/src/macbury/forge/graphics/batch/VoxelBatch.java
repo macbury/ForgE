@@ -2,7 +2,6 @@ package macbury.forge.graphics.batch;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g3d.utils.DefaultTextureBinder;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
@@ -15,7 +14,7 @@ import macbury.forge.shaders.utils.RenderableBaseShader;
  * Created by macbury on 18.10.14.
  */
 public class VoxelBatch implements Disposable {
-  private final ShapeRenderer shapeRenderer;
+  public final ShapeRenderer shapeRenderer;
   private final CameraRenderableSorter sorter;
   protected Camera camera;
   protected final RenderContext context;
@@ -28,8 +27,8 @@ public class VoxelBatch implements Disposable {
 
   protected RenderType type;
 
-  public VoxelBatch() {
-    this.context        = new RenderContext(new DefaultTextureBinder(DefaultTextureBinder.WEIGHTED, 1));
+  public VoxelBatch(RenderContext customRenderContext) {
+    this.context        = customRenderContext;
     this.shapeRenderer  = new ShapeRenderer();
     this.type           = RenderType.Normal;
     this.sorter         = new CameraRenderableSorter();

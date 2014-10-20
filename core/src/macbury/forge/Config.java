@@ -5,4 +5,5 @@ package macbury.forge;
  */
 public class Config {
   public boolean generateWireframe = false;
+  public boolean renderBoundingBox = false;
 }

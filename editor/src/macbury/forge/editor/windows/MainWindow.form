@@ -8,8 +8,12 @@
     <border type="none"/>
     <children>
       <toolbar id="d1cca">
-        <constraints border-constraint="North"/>
-        <properties/>
+        <constraints border-constraint="West"/>
+        <properties>
+          <borderPainted value="true"/>
+          <floatable value="false"/>
+          <orientation value="1"/>
+        </properties>
         <border type="none"/>
         <children>
           <component id="a2cad" class="javax.swing.JButton" binding="wireframeButton" default-binding="true">
@@ -40,7 +44,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="b4f70" class="javax.swing.JLabel">
+          <component id="b4f70" class="javax.swing.JLabel" binding="statusLabel">
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -55,14 +59,33 @@
           </hspacer>
         </children>
       </grid>
-      <grid id="541db" binding="openGlContainer" layout-manager="BorderLayout" hgap="0" vgap="0">
+      <tabbedpane id="70e4a" binding="tabbedPane1" default-binding="true">
         <constraints border-constraint="Center"/>
         <properties>
-          <background color="-16711423"/>
+          <tabLayoutPolicy value="1"/>
+          <tabPlacement value="1"/>
         </properties>
         <border type="none"/>
-        <children/>
-      </grid>
+        <children>
+          <grid id="4e661" layout-manager="BorderLayout" hgap="0" vgap="0">
+            <constraints>
+              <tabbedpane title="Map001"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <grid id="9f49c" binding="openGlContainer" layout-manager="BorderLayout" hgap="0" vgap="0">
+                <constraints border-constraint="Center"/>
+                <properties>
+                  <background color="-16711423"/>
+                </properties>
+                <border type="none"/>
+                <children/>
+              </grid>
+            </children>
+          </grid>
+        </children>
+      </tabbedpane>
     </children>
   </grid>
 </form>
