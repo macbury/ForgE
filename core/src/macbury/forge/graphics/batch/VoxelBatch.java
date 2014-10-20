@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
-import macbury.forge.shaders.utils.BaseShader;
+import macbury.forge.shaders.utils.RenderableBaseShader;
 
 /**
  * Created by macbury on 18.10.14.
@@ -101,7 +101,7 @@ public class VoxelBatch implements Disposable {
   }
 
   private void renderTextured() {
-    BaseShader currentShader = null;
+    RenderableBaseShader currentShader = null;
     for (int i = 0; i < renderables.size; i++) {
       final BaseRenderable renderable = renderables.get(i);
       if (currentShader != renderable.shader) {

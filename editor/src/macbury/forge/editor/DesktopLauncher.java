@@ -1,5 +1,7 @@
 package macbury.forge.editor;
 
+import macbury.forge.editor.windows.MainWindow;
+
 import javax.swing.*;
 
 /**

@@ -4,12 +4,12 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.GL30;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
 import macbury.forge.graphics.batch.renderable.TerrainChunkRenderable;
-import macbury.forge.shaders.utils.BaseShader;
+import macbury.forge.shaders.utils.RenderableBaseShader;
 
 /**
  * Created by macbury on 18.10.14.
  */
-public class TerrainShader extends BaseShader<TerrainChunkRenderable> {
+public class TerrainShader extends RenderableBaseShader<TerrainChunkRenderable> {
   @Override
   public boolean canRender(BaseRenderable instance) {
     return TerrainChunkRenderable.class.isInstance(instance);

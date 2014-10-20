@@ -1,12 +1,8 @@
 package macbury.forge.graphics.builders;
 
-import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.math.Vector3;
-import macbury.forge.ForgE;
 import macbury.forge.graphics.ColorMaterial;
 import macbury.forge.graphics.VoxelMap;
-import macbury.forge.graphics.batch.renderable.TerrainChunkRenderable;
-import macbury.forge.graphics.mesh.MeshVertexInfo;
 import macbury.forge.graphics.mesh.VoxelsAssembler;
 import macbury.forge.level.map.ChunkMap;
 import macbury.forge.utils.Vector3Int;
@@ -66,15 +62,5 @@ public class TerrainBuilder extends VoxelsAssembler {
 
   public void facesForMap() {
     facesForPart(new Vector3Int(0,0,0), new Vector3Int(map.getWidth(), map.getHeight(), map.getDepth()));
-  }
-
-  public TerrainChunkRenderable getRenderable() {
-    TerrainChunkRenderable renderable = new TerrainChunkRenderable();
-    renderable.primitiveType         = GL30.GL_TRIANGLES;
-    renderable.mesh                  = mesh(MeshVertexInfo.AttributeType.Position, MeshVertexInfo.AttributeType.Color);
-    renderable.shader                = ForgE.shaders.get("mesh_test");
-    if (ForgE.config.generateWireframe)
-      renderable.wireframe           = wireframe();
-    return renderable;
   }
 }

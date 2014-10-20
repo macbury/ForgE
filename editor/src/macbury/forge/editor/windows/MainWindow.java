@@ -1,4 +1,4 @@
-package macbury.forge.editor;
+package macbury.forge.editor.windows;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglAWTCanvas;
 import macbury.forge.Config;
@@ -19,6 +19,7 @@ public class MainWindow extends JFrame implements ForgEBootListener {
   private JButton wireframeButton;
   private JPanel openGlContainer;
   private JButton texturedButton;
+  private JPanel statusBarPanel;
 
   public MainWindow() {
     setContentPane(contentPane);

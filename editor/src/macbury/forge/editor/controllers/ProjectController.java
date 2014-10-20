@@ -1,7 +1,7 @@
 package macbury.forge.editor.controllers;
 
 import macbury.forge.ForgE;
-import macbury.forge.editor.MainWindow;
+import macbury.forge.editor.windows.MainWindow;
 import macbury.forge.editor.screens.EditorScreen;
 import macbury.forge.graphics.batch.VoxelBatch;
 

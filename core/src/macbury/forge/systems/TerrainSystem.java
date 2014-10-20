@@ -14,6 +14,7 @@ import macbury.forge.graphics.builders.Chunk;
 import macbury.forge.graphics.builders.TerrainBuilder;
 import macbury.forge.graphics.mesh.MeshVertexInfo;
 import macbury.forge.level.map.ChunkMap;
+import macbury.forge.shaders.utils.RenderableBaseShader;
 
 import java.util.HashMap;
 
@@ -21,6 +22,7 @@ import java.util.HashMap;
  * Created by macbury on 19.10.14.
  */
 public class TerrainSystem extends EntitySystem implements Disposable {
+  private static final String TERRAIN_SHADER = "terrain";
   private ComponentMapper<Renderable> rm = ComponentMapper.getFor(Renderable.class);
   private final Vector3 tempA;
   private final LevelEntityEngine engine;
@@ -33,6 +35,7 @@ public class TerrainSystem extends EntitySystem implements Disposable {
     this.engine  = engine;
     tileEntities = new HashMap<Chunk, Entity>();
     this.tempA   = new Vector3();
+
   }
 
   @Override
@@ -66,7 +69,7 @@ public class TerrainSystem extends EntitySystem implements Disposable {
 
           renderableComponent.instance                       = new TerrainChunkRenderable();
           renderableComponent.instance.primitiveType         = GL30.GL_TRIANGLES;
-          renderableComponent.instance.shader                = ForgE.shaders.get("mesh_test");
+          renderableComponent.instance.shader                = (RenderableBaseShader)ForgE.shaders.get(TERRAIN_SHADER);
           tileEntities.put(chunk, tileEntity);
 
           tileEntity.add(renderableComponent);
@@ -76,7 +79,7 @@ public class TerrainSystem extends EntitySystem implements Disposable {
 
         if (ForgE.config.generateWireframe)
           renderableComponent.instance.wireframe           = builder.wireframe();
-        renderableComponent.instance.mesh                  = builder.mesh(MeshVertexInfo.AttributeType.Position, MeshVertexInfo.AttributeType.Color);
+        renderableComponent.instance.mesh                  = builder.mesh(MeshVertexInfo.AttributeType.Position, MeshVertexInfo.AttributeType.Normal, MeshVertexInfo.AttributeType.Color);
         renderableComponent.visible                        = true;
       }
     } builder.end();
@@ -104,7 +107,6 @@ public class TerrainSystem extends EntitySystem implements Disposable {
 
   @Override
   public void dispose() {
-
     for (Chunk chunk : tileEntities.keySet()) {
       removeEntityForChunk(chunk);
     }
@@ -112,4 +114,5 @@ public class TerrainSystem extends EntitySystem implements Disposable {
     builder.dispose();
     builder = null;
   }
+
 }
