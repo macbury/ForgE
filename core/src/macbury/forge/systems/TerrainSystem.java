@@ -9,7 +9,6 @@ import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.ForgE;
 import macbury.forge.components.Position;
 import macbury.forge.components.Renderable;
-import macbury.forge.graphics.ColorMaterial;
 import macbury.forge.graphics.batch.renderable.TerrainChunkRenderable;
 import macbury.forge.graphics.builders.Chunk;
 import macbury.forge.graphics.builders.TerrainBuilder;
@@ -40,46 +39,13 @@ public class TerrainSystem extends EntitySystem implements Disposable {
   public void update(float deltaTime) {
     while(map.chunkToRebuild.size > 0) {
       Chunk chunk = map.chunkToRebuild.pop();
-      buildChunk(chunk);
+      buildChunkGeometry(chunk);
     }
   }
 
-  private void buildChunk(Chunk chunk) {
+  private void buildChunkGeometry(Chunk chunk) {
     builder.begin(); {
-      for (int x = chunk.start.x; x < chunk.end.x; x++) {
-        for (int y = chunk.start.y; y < chunk.end.y; y++) {
-          for (int z = chunk.start.z; z < chunk.end.z; z++) {
-            if (map.isSolid(x, y, z)) {
-              tempA.set(x,y,z);
-              ColorMaterial material = map.getMaterialForPosition(x, y, z);
-
-              if (map.isEmpty(x,y+1,z)) {
-                builder.top(tempA, ChunkMap.TILE_SIZE, material);
-              }
-
-              if (map.isEmpty(x,y-1,z)) {
-                builder.bottom(tempA, ChunkMap.TILE_SIZE, material);
-              }
-
-              if (map.isEmpty(x-1,y,z)) {
-                builder.left(tempA, ChunkMap.TILE_SIZE, material);
-              }
-
-              if (map.isEmpty(x+1,y,z)) {
-                builder.right(tempA, ChunkMap.TILE_SIZE, material);
-              }
-
-              if (map.isEmpty(x,y,z+1)) {
-                builder.front(tempA, ChunkMap.TILE_SIZE, material);
-              }
-
-              if (map.isEmpty(x,y,z-1)) {
-                builder.back(tempA, ChunkMap.TILE_SIZE, material);
-              }
-            }
-          }
-        }
-      }
+      builder.facesForChunk(chunk);
 
       if (builder.isEmpty()) {
         if (tileEntities.containsKey(chunk)) {
