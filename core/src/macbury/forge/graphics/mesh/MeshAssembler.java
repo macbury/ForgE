@@ -150,4 +150,7 @@ public class MeshAssembler implements Disposable {
     clear();
   }
 
+  public boolean isEmpty() {
+    return triangleArrayList.size() == 0;
+  }
 }

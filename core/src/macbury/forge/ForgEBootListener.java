@@ -5,7 +5,7 @@ package macbury.forge;
  */
 public interface ForgEBootListener {
   /**
-   * After engine created all managers and allocated all resources
+   * After entities created all managers and allocated all resources
    * @param engine
    */
   public void afterEngineCreate(ForgE engine);

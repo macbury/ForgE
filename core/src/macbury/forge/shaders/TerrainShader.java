@@ -3,16 +3,16 @@ package macbury.forge.shaders;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.GL30;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
-import macbury.forge.graphics.batch.renderable.TerrainTileRenderable;
+import macbury.forge.graphics.batch.renderable.TerrainChunkRenderable;
 import macbury.forge.shaders.utils.BaseShader;
 
 /**
  * Created by macbury on 18.10.14.
  */
-public class TerrainShader extends BaseShader<TerrainTileRenderable> {
+public class TerrainShader extends BaseShader<TerrainChunkRenderable> {
   @Override
   public boolean canRender(BaseRenderable instance) {
-    return TerrainTileRenderable.class.isInstance(instance);
+    return TerrainChunkRenderable.class.isInstance(instance);
   }
 
   @Override
@@ -22,7 +22,7 @@ public class TerrainShader extends BaseShader<TerrainTileRenderable> {
   }
 
   @Override
-  public void beforeRender(TerrainTileRenderable renderable) {
+  public void beforeRender(TerrainChunkRenderable renderable) {
 
   }
 }

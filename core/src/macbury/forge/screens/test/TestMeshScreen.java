@@ -14,7 +14,7 @@ public class TestMeshScreen extends AbstractScreen {
 
   @Override
   protected void initialize() {
-    this.level              = new Level();
+    //this.level              = new Level();
     this.cameraController   = new CameraInputController(level.camera);
 
     Gdx.input.setInputProcessor(cameraController);
@@ -22,8 +22,7 @@ public class TestMeshScreen extends AbstractScreen {
 
   @Override
   public void render(float delta) {
-    level.update(delta);
-    level.render();
+    level.render(delta);
   }
 
   @Override

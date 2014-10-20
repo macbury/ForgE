@@ -5,6 +5,7 @@ import macbury.forge.Config;
 import macbury.forge.ForgE;
 import macbury.forge.ForgEBootListener;
 import macbury.forge.editor.controllers.ProjectController;
+import macbury.forge.editor.views.MainMenu;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,6 +14,7 @@ public class MainWindow extends JFrame implements ForgEBootListener {
   private final LwjglAWTCanvas openGLCanvas;
   private final ForgE engine;
   private final ProjectController projectController;
+  private final MainMenu mainMenu;
   private JPanel contentPane;
   private JButton wireframeButton;
   private JPanel openGlContainer;
@@ -20,7 +22,6 @@ public class MainWindow extends JFrame implements ForgEBootListener {
 
   public MainWindow() {
     setContentPane(contentPane);
-    pack();
     setSize(1360, 768);
     setVisible(true);
     setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -32,6 +33,8 @@ public class MainWindow extends JFrame implements ForgEBootListener {
 
     engine.setBootListener(this);
 
+    mainMenu     = new MainMenu();
+
     openGLCanvas = new LwjglAWTCanvas(engine);
     openGlContainer.add(openGLCanvas.getCanvas(), BorderLayout.CENTER);
 
@@ -39,6 +42,9 @@ public class MainWindow extends JFrame implements ForgEBootListener {
     projectController.setMainWindow(this);
     projectController.setWireframeButton(wireframeButton);
     projectController.setTextureButton(texturedButton);
+    setJMenuBar(mainMenu);
+
+    pack();
   }
 
   @Override
