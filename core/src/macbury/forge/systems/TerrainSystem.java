@@ -2,9 +2,8 @@ package macbury.forge.systems;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.EntitySystem;
+import com.badlogic.ashley.systems.IntervalSystem;
 import com.badlogic.gdx.graphics.GL30;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.ForgE;
 import macbury.forge.components.BoundBox;
@@ -23,31 +22,38 @@ import java.util.HashMap;
 /**
  * Created by macbury on 19.10.14.
  */
-public class TerrainSystem extends EntitySystem implements Disposable {
+public class TerrainSystem extends IntervalSystem implements Disposable {
   private static final String TERRAIN_SHADER = "terrain";
+  private static final float UPDATE_EVERY    = 0.10f;//second
   private ComponentMapper<Renderable> rm = ComponentMapper.getFor(Renderable.class);
   private ComponentMapper<Visible>    vm = ComponentMapper.getFor(Visible.class);
   private ComponentMapper<BoundBox>  bbm = ComponentMapper.getFor(BoundBox.class);
 
-  private final Vector3 tempA;
   private final LevelEntityEngine engine;
   private HashMap<Chunk, Entity> tileEntities;
   private TerrainBuilder builder;
   private ChunkMap map;
+  private int cursor = 0;
 
   public TerrainSystem(LevelEntityEngine engine) {
-    super();
+    super(UPDATE_EVERY);
     this.engine  = engine;
     tileEntities = new HashMap<Chunk, Entity>();
-    this.tempA   = new Vector3();
 
   }
 
   @Override
-  public void update(float deltaTime) {
+  protected void updateInterval() {
     if (map.chunkToRebuild.size > 0) {
-      Chunk chunk = map.chunkToRebuild.pop();
-      buildChunkGeometry(chunk);
+      cursor = (int)Math.ceil(map.chunkToRebuild.size * UPDATE_EVERY);
+      while (map.chunkToRebuild.size > 0) {
+        Chunk chunk = map.chunkToRebuild.pop();
+        buildChunkGeometry(chunk);
+        cursor--;
+        if (cursor <= 0) {
+          break;
+        }
+      }
     }
   }
 
@@ -61,10 +67,11 @@ public class TerrainSystem extends EntitySystem implements Disposable {
           tileEntities.remove(chunk);
         }
       } else {
-        Entity tileEntity;
-        Renderable renderableComponent;
-        Visible    visibleComponent;
-        BoundBox   boundBox;
+        Entity      tileEntity;
+        Renderable  renderableComponent;
+        Visible     visibleComponent;
+        BoundBox    boundBox;
+
         if (tileEntities.containsKey(chunk)) {
           tileEntity              = tileEntities.get(chunk);
           renderableComponent     = rm.get(tileEntity);
@@ -90,7 +97,6 @@ public class TerrainSystem extends EntitySystem implements Disposable {
           tileEntity.add(engine.createComponent(Position.class));
           engine.addEntity(tileEntity);
         }
-
 
         visibleComponent.visible = true;
         if (ForgE.config.generateWireframe)

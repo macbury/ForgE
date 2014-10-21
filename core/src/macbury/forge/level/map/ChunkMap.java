@@ -11,8 +11,8 @@ import macbury.forge.utils.Vector3Int;
  * Created by macbury on 19.10.14.
  */
 public class ChunkMap extends VoxelMap {
-  private static final int CHUNK_SIZE    = 20;
-  public static final Vector3 TILE_SIZE = new Vector3(1,1,1);
+  private static final int CHUNK_SIZE    = 10;
+  public static final Vector3 TILE_SIZE  = new Vector3(1,1,1);
   public final Array<Chunk> chunks;
   public final Array<Chunk> chunkToRebuild;
 
@@ -21,7 +21,6 @@ public class ChunkMap extends VoxelMap {
   private int countChunksZ;
 
   private Vector3Int tempA = new Vector3Int();
-
   public ChunkMap() {
     super();
     chunks         = new Array<Chunk>();
@@ -115,4 +114,5 @@ public class ChunkMap extends VoxelMap {
     chunks.clear();
     chunkToRebuild.clear();
   }
+
 }

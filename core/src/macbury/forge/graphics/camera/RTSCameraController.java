@@ -22,7 +22,7 @@ import macbury.forge.ui.Overlay;
  */
 public class RTSCameraController {
   private static final float LERP_SPEED = 15.0f;
-  public static final int MAX_ZOOM = 100;
+  public static final int MAX_ZOOM = 200;
   private static int CAMERA_MOVE_PADDING = 16;
   private PerspectiveCamera cam;
 
@@ -48,6 +48,7 @@ public class RTSCameraController {
   private Vector3 oldPosition;
   private Vector3 oldCenter;
   private Vector2 mouseRotationDrag;
+  private Vector2 mouseDrag;
 
   private boolean tiltBackward;
   private boolean forwardPressed;
@@ -67,6 +68,7 @@ public class RTSCameraController {
 
   private Vector3 tempVec = new Vector3();
   private boolean rotateMouseButtonPressed;
+  private boolean dragMouseButtonPressed;
   private float alpha;
 
   private RTSCameraListener listener;
@@ -74,11 +76,12 @@ public class RTSCameraController {
 
   public RTSCameraController() {
     super();
-    position = new Vector3(0,0,0);
-    center = new Vector3(0, 0, 0);
-    oldPosition = new Vector3(0,0,0);
-    oldCenter = new Vector3(0, 0, 0);
+    position          = new Vector3(0,0,0);
+    center            = new Vector3(0, 0, 0);
+    oldPosition       = new Vector3(0,0,0);
+    oldCenter         = new Vector3(0, 0, 0);
     mouseRotationDrag = new Vector2();
+    mouseDrag         = new Vector2();
 
     sideSpeed = 35.0f;
     forwardSpeed = 30f;
@@ -138,14 +141,14 @@ public class RTSCameraController {
 
       @Override
       public boolean mouseMoved(InputEvent event, float screenX, float screenY) {
-        if (RTSCameraController.this.overlay.focused()) {
+        /*if (RTSCameraController.this.overlay.focused()) {
           leftHotCorent = (screenX <= CAMERA_MOVE_PADDING);
           rightHotCorent = (Gdx.graphics.getWidth() - CAMERA_MOVE_PADDING <= screenX);
           topHotCorent = (Gdx.graphics.getHeight() - CAMERA_MOVE_PADDING <= screenY);
           bottomHotCorent = (screenY <= CAMERA_MOVE_PADDING);
 
           return true;
-        }
+        }*/
         return false;
       }
 
@@ -154,7 +157,12 @@ public class RTSCameraController {
         if (!enabled)
           return false;
         RTSCameraController.this.overlay.focus();
-        if (button == Input.Buttons.MIDDLE) {
+        if (button == Input.Buttons.RIGHT) {
+          dragMouseButtonPressed = true;
+          //HashBot.ui.grabCursor();
+          mouseDrag.set(screenX, screenY);
+          return true;
+        } else if (button == Input.Buttons.MIDDLE) {
           rotateMouseButtonPressed = true;
           //HashBot.ui.grabCursor();
           mouseRotationDrag.set(screenX, screenY);
@@ -168,7 +176,10 @@ public class RTSCameraController {
       public void touchUp(InputEvent event, float screenX, float screenY, int pointer, int button) {
         if (!enabled)
           return;
-        if (button == Input.Buttons.MIDDLE) {
+        if (button == Input.Buttons.RIGHT) {
+          dragMouseButtonPressed = false;
+          return;
+        } else if (button == Input.Buttons.MIDDLE) {
           rotateMouseButtonPressed = false;
           //HashBot.ui.normalCursor();
           return;
@@ -235,6 +246,13 @@ public class RTSCameraController {
       tempVec.set(mouseRotationDrag.x, mouseRotationDrag.y, 0).sub(Gdx.input.getX(), Gdx.input.getY(), 0).nor();
       tilt += delta * -tempVec.y;
       rotation += delta * tempVec.x;
+    }
+
+    if (dragMouseButtonPressed) {
+      tempVec.set(mouseDrag.x, mouseDrag.y, 0).sub(Gdx.input.getX(), Gdx.input.getY(), 0).nor();
+
+      center.x += tempVec.x * delta * 25;
+      center.z += tempVec.y * delta * 25;
     }
 
     if (tilt > maxTilt)

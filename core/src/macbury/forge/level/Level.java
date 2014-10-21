@@ -15,7 +15,7 @@ import macbury.forge.components.Position;
 import macbury.forge.components.Visible;
 import macbury.forge.graphics.batch.VoxelBatch;
 import macbury.forge.level.map.ChunkMap;
-import macbury.forge.octree.Octree;
+import macbury.forge.octree.OctreeNode;
 import macbury.forge.systems.LevelEntityEngine;
 
 /**
@@ -27,18 +27,20 @@ public class Level implements Disposable {
   public final VoxelBatch            batch;
   public final ChunkMap              terrainMap;
   public final LevelState            state;
-  public final Octree                octree;
+  public final OctreeNode            octree;
   private final RenderContext        renderContext;
 
   public Level(LevelState state) {
     this.state               = state;
     this.renderContext       = new RenderContext(new DefaultTextureBinder(DefaultTextureBinder.WEIGHTED, 1));
-    this.octree              = new Octree();
+    this.octree              = OctreeNode.root();
     this.batch               = new VoxelBatch(renderContext);
     this.camera              = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     camera.far               = 500;
     this.entities            = new LevelEntityEngine(this);
     this.terrainMap          = state.terrainMap;
+
+    octree.setBounds(terrainMap.getBounds(ChunkMap.TILE_SIZE));
 
     entities.rendering.setBatch(batch);
     entities.terrain.setMap(terrainMap);
@@ -88,6 +90,7 @@ public class Level implements Disposable {
     batch.dispose();
     terrainMap.dispose();
     entities.dispose();
+    octree.dispose();
   }
 
   public void setRenderType(VoxelBatch.RenderType renderType) {

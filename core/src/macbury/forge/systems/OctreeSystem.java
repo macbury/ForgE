@@ -8,16 +8,16 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import macbury.forge.components.BoundBox;
 import macbury.forge.components.Position;
 import macbury.forge.components.Visible;
-import macbury.forge.octree.Octree;
+import macbury.forge.octree.OctreeNode;
 
 /**
  * Created by macbury on 20.10.14.
  */
 public class OctreeSystem extends IteratingSystem implements EntityListener {
-  private final Octree tree;
+  private final OctreeNode tree;
 
-  public OctreeSystem(Octree tree) {
-    super(Family.getFor(ComponentType.getBitsFor(Position.class, Visible.class), ComponentType.getBitsFor(BoundBox.class), ComponentType.getBitsFor()));
+  public OctreeSystem(OctreeNode tree) {
+    super(Family.getFor(ComponentType.getBitsFor(Visible.class), ComponentType.getBitsFor(Position.class, BoundBox.class), ComponentType.getBitsFor()));
     this.tree = tree;
   }
 

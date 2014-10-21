@@ -1,5 +1,7 @@
 package macbury.forge.graphics;
 
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
@@ -9,6 +11,8 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
  */
 public class VoxelMap implements Disposable {
   private final ColorMaterial airMaterial;
+  private final BoundingBox boundingBox;
+  private final Vector3 temp = new Vector3();
   protected Array<ColorMaterial> materials;
   protected byte[][][] voxelMap;
   protected int width;
@@ -18,6 +22,7 @@ public class VoxelMap implements Disposable {
   public VoxelMap() {
     materials   = new Array<ColorMaterial>();
     airMaterial = ColorMaterial.air();
+    boundingBox = new BoundingBox();
     materials.add(airMaterial);
   }
 
@@ -85,5 +90,11 @@ public class VoxelMap implements Disposable {
 
   public boolean isSolid(int x, int y, int z) {
     return !isEmpty(x,y,z);
+  }
+
+  public BoundingBox getBounds(Vector3 voxelSize) {
+    temp.set(getWidth() * voxelSize.x, getHeight() * voxelSize.y, getDepth() * voxelSize.z);
+    boundingBox.set(Vector3.Zero, temp);
+    return boundingBox;
   }
 }

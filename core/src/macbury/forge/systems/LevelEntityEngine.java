@@ -18,7 +18,7 @@ public class LevelEntityEngine extends PooledEngine implements Disposable {
     terrain   = new TerrainSystem(this);
     rendering = new RenderingSystem();
     octree    = new OctreeSystem(level.octree);
-    debug     = new DebugSystem(level.batch, level.camera);
+    debug     = new DebugSystem(level);
     movement  = new MovementSystem();
 
     addEntityListener(octree);
