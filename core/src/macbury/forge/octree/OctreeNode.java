@@ -40,25 +40,32 @@ public class OctreeNode implements Pool.Poolable, Disposable {
     clear();
   }
 
-  private OctreeNode(int parentLevel, BoundingBox box) {
-    this();
-    this.level = parentLevel - 1;
-    this.setBounds(box);
-  }
 
   public OctreeNode getNode(OctreePart part) {
     return nodes.get(part.getIndex());
   }
 
   public void split() {
-    bounds.getCenter(center);
+    center = bounds.getCenter(center);
     bounds.getMin(min);
     bounds.getMax(max);
 
-    tempBox.set(center, min);
+    buildNode(tempA.set(max).set(max.x, max.y, min.z), center, OctreePart.FrontTopLeft);
+    buildNode(tempA.set(min).set(min.x, max.y, min.z), center, OctreePart.FrontTopRight);
+    buildNode(min, center, OctreePart.FrontBottomRight);
+    buildNode(tempA.set(max).set(max.x, min.y, min.z), center, OctreePart.FrontTopLeft);
+    buildNode(tempA.set(min).set(min.x, max.y, max.z), center, OctreePart.BackTopRight);
+    buildNode(max, center, OctreePart.BackTopLeft);
+    buildNode(tempA.set(max).set(min.x, min.y, max.z), center, OctreePart.BackBottomRight);
+    buildNode(tempA.set(max).set(max.x, min.y, max.z), center, OctreePart.BackBottomLeft);
 
-    OctreeNode frontBottomLeftQuadrant = OctreeNode.node(level, tempBox);
-    nodes.set(OctreePart.FrontBottomLeft.getIndex(), frontBottomLeftQuadrant);
+  }
+
+  private void buildNode(Vector3 min, Vector3 max, OctreePart part) {
+    tempBox.set(min, max);
+    OctreeNode nodeQuadrant = OctreeNode.node(level, tempBox);
+    nodeQuadrant.setParent(this);
+    nodes.add(nodeQuadrant);
   }
 
   public void getDimension(Vector3 out) {
@@ -122,12 +129,13 @@ public class OctreeNode implements Pool.Poolable, Disposable {
   }
 
   public static OctreeNode root() {
-    return octreeNodePool.obtain();
+    OctreeNode node = octreeNodePool.obtain();
+    return node;
   }
 
   public static OctreeNode node(int parentLevel, BoundingBox box) {
     OctreeNode node = octreeNodePool.obtain();
-    node.setLevel(parentLevel - 1);
+    node.setLevel(parentLevel + 1);
     node.setBounds(box);
     return node;
   }
@@ -142,8 +150,6 @@ public class OctreeNode implements Pool.Poolable, Disposable {
   }
 
   public void bottomNodes(Array<OctreeNode> out) {
-    out.clear();
-
     if (haveNodes()) {
       for(OctreeNode node : nodes) {
         node.bottomNodes(out);

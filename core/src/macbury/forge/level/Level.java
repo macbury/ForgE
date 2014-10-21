@@ -41,6 +41,9 @@ public class Level implements Disposable {
     this.terrainMap          = state.terrainMap;
 
     octree.setBounds(terrainMap.getBounds(ChunkMap.TILE_SIZE));
+    /*octree.split();
+    octree.getNode(OctreePart.FrontBottomRight).split();
+    octree.getNode(OctreePart.FrontBottomRight).getNode(OctreePart.BackTopLeft).split();*/
 
     entities.rendering.setBatch(batch);
     entities.terrain.setMap(terrainMap);
