@@ -27,7 +27,6 @@ public class MainWindow extends JFrame implements ForgEBootListener {
   private JButton texturedButton;
   private JPanel statusBarPanel;
   private JLabel statusLabel;
-  private JTabbedPane tabbedPane1;
 
   public MainWindow() {
     setContentPane(contentPane);
@@ -38,7 +37,7 @@ public class MainWindow extends JFrame implements ForgEBootListener {
     setDefaultCloseOperation(EXIT_ON_CLOSE);
     Config config            = new Config();
     config.generateWireframe = true;
-    config.renderBoundingBox = true;
+    config.renderBoundingBox = false;
     engine                   = new ForgE(config);
 
     engine.setBootListener(this);

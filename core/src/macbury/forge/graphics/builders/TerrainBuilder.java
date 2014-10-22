@@ -20,14 +20,20 @@ public class TerrainBuilder extends VoxelsAssembler {
   }
 
   public void facesForChunk(Chunk chunk) {
-    facesForPart(chunk.start, chunk.end);
+    facesForPart(chunk.start, chunk.end, chunk.size);
   }
 
-  private void facesForPart(Vector3Int start, Vector3Int end) {
+  private void facesForPart(Vector3Int start, Vector3Int end, Vector3 outSize) {
+    outSize.setZero();
+
     for (int x = start.x; x < end.x; x++) {
       for (int y = start.y; y < end.y; y++) {
         for (int z = start.z; z < end.z; z++) {
           if (map.isSolid(x, y, z)) {
+            outSize.x = Math.max(x, outSize.x);
+            outSize.y = Math.max(y, outSize.y);
+            outSize.z = Math.max(z, outSize.z);
+
             tempA.set(x,y,z);
             ColorMaterial material = map.getMaterialForPosition(x, y, z);
 
@@ -58,9 +64,10 @@ public class TerrainBuilder extends VoxelsAssembler {
         }
       }
     }
+    outSize.sub(start.x, start.y, start.z).add(1,1,1);
   }
 
   public void facesForMap() {
-    facesForPart(new Vector3Int(0,0,0), new Vector3Int(map.getWidth(), map.getHeight(), map.getDepth()));
+    facesForPart(new Vector3Int(0,0,0), new Vector3Int(map.getWidth(), map.getHeight(), map.getDepth()), new Vector3());
   }
 }

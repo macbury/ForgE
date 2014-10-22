@@ -20,7 +20,7 @@ public class LevelState {
   public static LevelState blank() {
     LevelState state        = new LevelState();
     state.terrainMap        = new ChunkMap();
-    state.terrainMap.initialize(100,100,100);
+    state.terrainMap.initialize(300,100,200);
     state.id                = uid();
     state.name              = MAP_NAME_PREFIX + state.id;
     return state;

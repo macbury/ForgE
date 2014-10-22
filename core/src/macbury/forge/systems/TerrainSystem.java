@@ -4,9 +4,10 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.systems.IntervalSystem;
 import com.badlogic.gdx.graphics.GL30;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.ForgE;
-import macbury.forge.components.BoundBox;
 import macbury.forge.components.Position;
 import macbury.forge.components.Renderable;
 import macbury.forge.components.Visible;
@@ -27,19 +28,19 @@ public class TerrainSystem extends IntervalSystem implements Disposable {
   private static final float UPDATE_EVERY    = 0.10f;//second
   private ComponentMapper<Renderable> rm = ComponentMapper.getFor(Renderable.class);
   private ComponentMapper<Visible>    vm = ComponentMapper.getFor(Visible.class);
-  private ComponentMapper<BoundBox>  bbm = ComponentMapper.getFor(BoundBox.class);
-
+  private ComponentMapper<Position>   pm = ComponentMapper.getFor(Position.class);
   private final LevelEntityEngine engine;
   private HashMap<Chunk, Entity> tileEntities;
   private TerrainBuilder builder;
   private ChunkMap map;
+  private BoundingBox tempBox;
   private int cursor = 0;
 
   public TerrainSystem(LevelEntityEngine engine) {
     super(UPDATE_EVERY);
     this.engine  = engine;
     tileEntities = new HashMap<Chunk, Entity>();
-
+    tempBox      = new BoundingBox(Vector3.Zero, Vector3.Zero);
   }
 
   @Override
@@ -70,19 +71,16 @@ public class TerrainSystem extends IntervalSystem implements Disposable {
         Entity      tileEntity;
         Renderable  renderableComponent;
         Visible     visibleComponent;
-        BoundBox    boundBox;
-
+        Position    positionComponent;
         if (tileEntities.containsKey(chunk)) {
           tileEntity              = tileEntities.get(chunk);
           renderableComponent     = rm.get(tileEntity);
           visibleComponent        = vm.get(tileEntity);
-          boundBox                = bbm.get(tileEntity);
-
+          positionComponent       = pm.get(tileEntity);
           clearMeshForEntity(tileEntity);
         } else {
           tileEntity                                         = engine.createEntity();
-
-          boundBox                                           = engine.createComponent(BoundBox.class);
+          positionComponent                                  = engine.createComponent(Position.class);
           renderableComponent                                = engine.createComponent(Renderable.class);
           visibleComponent                                   = engine.createComponent(Visible.class);
 
@@ -91,10 +89,9 @@ public class TerrainSystem extends IntervalSystem implements Disposable {
           renderableComponent.instance.shader                = (RenderableBaseShader)ForgE.shaders.get(TERRAIN_SHADER);
           tileEntities.put(chunk, tileEntity);
 
-          tileEntity.add(boundBox);
           tileEntity.add(visibleComponent);
           tileEntity.add(renderableComponent);
-          tileEntity.add(engine.createComponent(Position.class));
+          tileEntity.add(positionComponent);
           engine.addEntity(tileEntity);
         }
 
@@ -102,7 +99,10 @@ public class TerrainSystem extends IntervalSystem implements Disposable {
         if (ForgE.config.generateWireframe)
           renderableComponent.instance.wireframe           = builder.wireframe();
         renderableComponent.instance.mesh                  = builder.mesh(MeshVertexInfo.AttributeType.Position, MeshVertexInfo.AttributeType.Normal, MeshVertexInfo.AttributeType.Color);
-        renderableComponent.instance.mesh.calculateBoundingBox(boundBox.box);
+        positionComponent.vector.set(chunk.worldPosition);
+        positionComponent.size.set(chunk.size);
+
+
       }
     } builder.end();
   }

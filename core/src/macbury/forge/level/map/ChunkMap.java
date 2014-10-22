@@ -93,6 +93,7 @@ public class ChunkMap extends VoxelMap {
         for(int chunkZ = 0; chunkZ < countChunksZ; chunkZ++) {
           Chunk chunk  = new Chunk();
           chunk.position.set(chunkX, chunkY, chunkZ);
+          chunk.worldPosition.set(chunkX * CHUNK_SIZE, chunkY * CHUNK_SIZE, chunkZ * CHUNK_SIZE);
           chunk.start.set(chunkX * CHUNK_SIZE, chunkY * CHUNK_SIZE, chunkZ * CHUNK_SIZE);
           chunk.end.set(chunk.start).add(CHUNK_SIZE, CHUNK_SIZE, CHUNK_SIZE);
           chunks.add(chunk);

@@ -59,33 +59,14 @@
           </hspacer>
         </children>
       </grid>
-      <tabbedpane id="70e4a" binding="tabbedPane1" default-binding="true">
+      <grid id="6abcf" binding="openGlContainer" layout-manager="BorderLayout" hgap="0" vgap="0">
         <constraints border-constraint="Center"/>
         <properties>
-          <tabLayoutPolicy value="1"/>
-          <tabPlacement value="1"/>
+          <background color="-16711423"/>
         </properties>
         <border type="none"/>
-        <children>
-          <grid id="4e661" layout-manager="BorderLayout" hgap="0" vgap="0">
-            <constraints>
-              <tabbedpane title="Map001"/>
-            </constraints>
-            <properties/>
-            <border type="none"/>
-            <children>
-              <grid id="9f49c" binding="openGlContainer" layout-manager="BorderLayout" hgap="0" vgap="0">
-                <constraints border-constraint="Center"/>
-                <properties>
-                  <background color="-16711423"/>
-                </properties>
-                <border type="none"/>
-                <children/>
-              </grid>
-            </children>
-          </grid>
-        </children>
-      </tabbedpane>
+        <children/>
+      </grid>
     </children>
   </grid>
 </form>

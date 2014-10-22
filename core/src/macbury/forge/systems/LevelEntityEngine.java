@@ -13,6 +13,7 @@ public class LevelEntityEngine extends PooledEngine implements Disposable {
   public final OctreeSystem octree;
   public final DebugSystem debug;
   public final MovementSystem movement;
+  public final CullingSystem culling;
 
   public LevelEntityEngine(Level level) {
     terrain   = new TerrainSystem(this);
@@ -20,12 +21,12 @@ public class LevelEntityEngine extends PooledEngine implements Disposable {
     octree    = new OctreeSystem(level.octree);
     debug     = new DebugSystem(level);
     movement  = new MovementSystem();
-
-    addEntityListener(octree);
+    culling   = new CullingSystem(level.octree, level.camera);
 
     addSystem(terrain);
     addSystem(movement);
     addSystem(octree);
+    addSystem(culling);
     addSystem(debug);
     addSystem(rendering);
   }

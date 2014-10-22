@@ -1,5 +1,6 @@
 package macbury.forge.octree;
 
+import com.badlogic.gdx.math.Frustum;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Array;
@@ -10,12 +11,16 @@ import com.badlogic.gdx.utils.Pool;
  * Created by macbury on 20.10.14.
  */
 public class OctreeNode implements Pool.Poolable, Disposable {
+  public static int MAX_OBJECTS = 24;
+  public static int MAX_LEVELS  = 5;
+
   private int                 level;
   private Array<OctreeObject> objects;
   private Array<OctreeNode>   nodes;
   private BoundingBox         bounds;
   private final Vector3       tempA;
   private final Vector3       tempB;
+  private final Vector3       tempC;
   private OctreeNode          parent;
 
   private Vector3             center  = new Vector3();
@@ -32,6 +37,7 @@ public class OctreeNode implements Pool.Poolable, Disposable {
   public OctreeNode() {
     this.tempA    = new Vector3();
     this.tempB    = new Vector3();
+    this.tempC    = new Vector3();
     this.level    = 0;
     this.objects  = new Array<OctreeObject>();
     this.nodes    = new Array<OctreeNode>();
@@ -40,12 +46,73 @@ public class OctreeNode implements Pool.Poolable, Disposable {
     clear();
   }
 
+  public int getIndex(OctreeObject object) {
+    return getIndex(object.getBoundingBox());
+  }
+
+  public int getIndex(BoundingBox pRect) {
+    int index = -1;
+    if (haveNodes()) {
+      for (int i = 0; i < nodes.size; i++) {
+        OctreeNode node = nodes.get(i);
+        if (node.contains(pRect)) {
+          index = i;
+          break;
+        }
+      }
+    }
+    return index;
+  }
+
+  public boolean contains(BoundingBox pRect) {
+    pRect.getMin(tempA);
+    pRect.getMax(tempB);
+    return bounds.contains(tempA) || bounds.contains(tempB);
+  }
+
+  public void insert(OctreeObject objectToInsert) {
+    if (haveNodes()) {
+      int index = getIndex(objectToInsert);
+      if (index != -1) {
+        nodes.get(index).insert(objectToInsert);
+        return;
+      }
+    } else {
+      objects.add(objectToInsert);
+      objectToInsert.setOctreeParent(this);
+      if (objects.size > MAX_OBJECTS && level < MAX_LEVELS) {
+        if (!haveNodes()) {
+          split();
+        }
+        int i = 0;
+        while (i < objects.size) {
+          OctreeObject currentObject = objects.get(i);
+          int index                  = getIndex(currentObject);
+          if (index != -1) {
+            objects.removeValue(currentObject, false);
+            nodes.get(index).insert(currentObject);
+          } else {
+            i++;
+          }
+        }
+      }
+    }
+  }
+
+  public boolean remove(OctreeObject object) {
+    int index = getIndex(object);
+    if (index == -1) {
+      return objects.removeValue(object, true);
+    } else {
+      return nodes.get(index).remove(object);
+    }
+  }
 
   public OctreeNode getNode(OctreePart part) {
     return nodes.get(part.getIndex());
   }
 
-  public void split() {
+  private void split() {
     center = bounds.getCenter(center);
     bounds.getMin(min);
     bounds.getMax(max);
@@ -113,6 +180,9 @@ public class OctreeNode implements Pool.Poolable, Disposable {
   }
 
   public void clear() {
+    for (OctreeObject o : objects) {
+      o.setOctreeParent(null);
+    }
     objects.clear();
     for (OctreeNode node : nodes) {
       octreeNodePool.free(node);
@@ -157,5 +227,28 @@ public class OctreeNode implements Pool.Poolable, Disposable {
     } else {
       out.add(this);
     }
+  }
+
+  public void retrieve(Array<OctreeObject> returnObjects, Frustum frustum) {
+    if (haveNodes()) {
+      for(OctreeNode node : nodes) {
+        if (frustum.boundsInFrustum(node.getBounds())) {
+          node.retrieve(returnObjects, frustum);
+        }
+      }
+    }
+    returnObjects.addAll(objects);
+  }
+
+  public void retrieve(Array<OctreeObject> returnObjects, BoundingBox object) {
+    int index = getIndex(object);
+    if (index != -1 && haveNodes()) {
+      nodes.get(index).retrieve(returnObjects, object);
+    }
+    returnObjects.addAll(objects);
+  }
+
+  public void retrieve(Array<OctreeObject> returnObjects, OctreeObject object) {
+    retrieve(returnObjects, object.getBoundingBox());
   }
 }

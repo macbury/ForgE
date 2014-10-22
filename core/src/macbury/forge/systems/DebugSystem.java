@@ -10,13 +10,11 @@ import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
-import macbury.forge.components.BoundBox;
 import macbury.forge.components.Position;
 import macbury.forge.components.Visible;
 import macbury.forge.graphics.DebugShape;
 import macbury.forge.graphics.batch.VoxelBatch;
 import macbury.forge.level.Level;
-import macbury.forge.level.map.ChunkMap;
 import macbury.forge.octree.OctreeNode;
 
 /**
@@ -29,13 +27,12 @@ public class DebugSystem extends IteratingSystem {
   private final PerspectiveCamera camera;
   private final OctreeNode octree;
   private ComponentMapper<Position> pm   = ComponentMapper.getFor(Position.class);
-  private ComponentMapper<BoundBox> bbm  = ComponentMapper.getFor(BoundBox.class);
   private ComponentMapper<Visible>    vm = ComponentMapper.getFor(Visible.class);
   private final BoundingBox tempBox;
   private final Vector3     tempVec;
 
   public DebugSystem(Level level) {
-    super(Family.getFor(ComponentType.getBitsFor(Position.class), ComponentType.getBitsFor(BoundBox.class, Visible.class), ComponentType.getBitsFor()));
+    super(Family.getFor(ComponentType.getBitsFor(Position.class), ComponentType.getBitsFor(Visible.class), ComponentType.getBitsFor()));
     this.batch   = level.batch;
     this.octree  = level.octree;
     this.camera  = level.camera;
@@ -52,14 +49,9 @@ public class DebugSystem extends IteratingSystem {
   public void processEntity(Entity entity, float deltaTime) {
     boolean render             = true;
     Visible  visibleComponent  = vm.get(entity);
-    BoundBox boundBoxComponent = bbm.get(entity);
     Position positionComponent = pm.get(entity);
 
-    if (boundBoxComponent != null) {
-      tempBox.set(boundBoxComponent.box);
-    } else {
-      tempBox.set(positionComponent.vector, tempVec.set(ChunkMap.TILE_SIZE).add(positionComponent.vector));
-    }
+    tempBox.set(positionComponent.getBoundingBox());
 
     if (visibleComponent != null)
       render = visibleComponent.visible;

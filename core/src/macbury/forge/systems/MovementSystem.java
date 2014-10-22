@@ -33,7 +33,7 @@ public class MovementSystem extends IteratingSystem {
 
     if (positionComponent.vector.x < 10) {
       movementComponent.direction.x = 1;
-    } else if (positionComponent.vector.x > 90) {
+    } else if (positionComponent.vector.x > 200) {
       movementComponent.direction.x = -1;
     }
 
