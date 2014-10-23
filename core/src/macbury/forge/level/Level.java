@@ -17,34 +17,46 @@ import macbury.forge.graphics.frustrum.FrustrumDebugAndRenderer;
 import macbury.forge.level.map.ChunkMap;
 import macbury.forge.octree.OctreeNode;
 import macbury.forge.systems.engine.LevelEntityEngine;
+import macbury.forge.terrain.TerrainEngine;
 
 /**
  * Created by macbury on 18.10.14.
  */
 public class Level implements Disposable {
-  public final LevelEntityEngine     entities;
-  public final PerspectiveCamera     camera;
-  public final VoxelBatch            batch;
-  public final ChunkMap              terrainMap;
-  public final LevelState            state;
-  public final OctreeNode            octree;
-  public final RenderContext         renderContext;
+  public final LevelEntityEngine        entities;
+  public final PerspectiveCamera        camera;
+  public final VoxelBatch               batch;
+  public final ChunkMap                 terrainMap;
+  public final LevelState               state;
+  /**
+   * Dynamic octree refreshed every 100 ms
+   */
+  public final OctreeNode               dynamicOctree;
+  /**
+   * Static octree refreshed only after terrain was rebuild
+   */
+  public final OctreeNode               staticOctree;
+  public final RenderContext            renderContext;
   public final FrustrumDebugAndRenderer frustrumDebugger;
+  public final TerrainEngine            terrainEngine;
 
   public Level(LevelState state) {
     this.state               = state;
+    this.terrainMap          = state.terrainMap;
     this.renderContext       = new RenderContext(new DefaultTextureBinder(DefaultTextureBinder.WEIGHTED, 1));
-    this.octree              = OctreeNode.root();
+
+    this.dynamicOctree       = OctreeNode.root();
+    this.staticOctree        = OctreeNode.root();
+
     this.batch               = new VoxelBatch(renderContext);
     this.camera              = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     this.frustrumDebugger    = new FrustrumDebugAndRenderer(camera);
     this.entities            = new LevelEntityEngine(this);
-    this.terrainMap          = state.terrainMap;
 
-    octree.setBounds(terrainMap.getBounds(ChunkMap.TILE_SIZE));
-    entities.rendering.setBatch(batch);
-    entities.terrain.setMap(terrainMap);
+    this.terrainEngine       = new TerrainEngine(this);
 
+    staticOctree.setBounds(terrainMap.getBounds(ChunkMap.TILE_SIZE));
+    dynamicOctree.setBounds(terrainMap.getBounds(ChunkMap.TILE_SIZE));
     for (int i = 0; i < 50; i++) {
       Entity e          = entities.createEntity();
       Position position = entities.createComponent(Position.class);
@@ -58,7 +70,6 @@ public class Level implements Disposable {
       e.add(position);
       entities.addEntity(e);
     }
-
   }
 
   public void resize(int width, int height) {
@@ -70,7 +81,9 @@ public class Level implements Disposable {
 
   public void render(float delta) {
     camera.update();
+    terrainEngine.update();
     batch.begin(camera); {
+      batch.add(terrainEngine);
       this.entities.update(delta);
       batch.render();
     } batch.end();
@@ -93,8 +106,10 @@ public class Level implements Disposable {
     batch.dispose();
     terrainMap.dispose();
     entities.dispose();
-    octree.dispose();
+    dynamicOctree.dispose();
+    staticOctree.dispose();
     frustrumDebugger.dispose();
+    terrainEngine.dispose();
   }
 
   public void setRenderType(VoxelBatch.RenderType renderType) {

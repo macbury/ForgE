@@ -5,17 +5,20 @@ import javax.swing.*;
 /**
  * Created by macbury on 19.10.14.
  */
-public class MainMenu extends JMenuBar {
-  public JCheckBoxMenuItem debugShowOctree;
+public class MainMenu extends JPopupMenu {
+  public JCheckBoxMenuItem debugRenderDynamicOctree;
   public JCheckBoxMenuItem debugBoundingBox;
   public JRadioButtonMenuItem debugWireframeItem;
   public JRadioButtonMenuItem debugTexturedItem;
+  public JCheckBoxMenuItem debugRenderStaticOctree;
 
   public MainMenu() {
     super();
 
     createProjectMenu();
     createDebugWindow();
+
+    //add(Box.createRigidArea(new Dimension(320,28)));
   }
 
   private void createDebugWindow() {
@@ -33,10 +36,17 @@ public class MainMenu extends JMenuBar {
     viewModeMenu.add(debugWireframeItem);
     viewModeMenu.add(debugTexturedItem);
 
-    this.debugShowOctree  = new JCheckBoxMenuItem("Render octree partitions");
-    this.debugBoundingBox = new JCheckBoxMenuItem("Render bounding boxes");
-    debugMenu.add(debugShowOctree);
-    debugMenu.add(debugBoundingBox);
+    JMenu debugRenderMenu         = new JMenu("Render");
+
+    this.debugRenderDynamicOctree = new JCheckBoxMenuItem("Render dynamic octree partitions");
+    this.debugRenderStaticOctree  = new JCheckBoxMenuItem("Render static octree partitions");
+    this.debugBoundingBox         = new JCheckBoxMenuItem("Render bounding boxes");
+
+    debugRenderMenu.add(debugBoundingBox);
+    debugRenderMenu.add(debugRenderDynamicOctree);
+    debugRenderMenu.add(debugRenderStaticOctree);
+
+    debugMenu.add(debugRenderMenu);
     debugMenu.add(viewModeMenu);
     add(debugMenu);
   }

@@ -8,6 +8,7 @@ import macbury.forge.components.Position;
 import macbury.forge.components.Renderable;
 import macbury.forge.graphics.batch.VoxelBatch;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
+import macbury.forge.level.Level;
 
 /**
  * Created by macbury on 19.10.14.
@@ -17,8 +18,10 @@ public class RenderingSystem extends IteratingSystem {
   private ComponentMapper<Renderable> rm = ComponentMapper.getFor(Renderable.class);
   private VoxelBatch batch;
 
-  public RenderingSystem() {
+  public RenderingSystem(Level level) {
     super(Family.getFor(Position.class, Renderable.class));
+
+    this.batch = level.batch;
   }
 
   @Override
@@ -32,12 +35,7 @@ public class RenderingSystem extends IteratingSystem {
         baseRenderable.worldTransform.set(position.getWorldTransformMatrix());
       }
 
-
       batch.add(baseRenderable);
     }
-  }
-
-  public void setBatch(VoxelBatch batch) {
-    this.batch = batch;
   }
 }

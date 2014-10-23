@@ -10,21 +10,18 @@ import macbury.forge.systems.*;
  */
 public class LevelEntityEngine extends PooledEngine implements Disposable {
   public final RenderingSystem rendering;
-  public final TerrainSystem terrain;
   public final OctreeSystem octree;
   public final DebugSystem debug;
   public final MovementSystem movement;
   public final CullingSystem culling;
 
   public LevelEntityEngine(Level level) {
-    terrain   = new TerrainSystem(this);
-    rendering = new RenderingSystem();
-    octree    = new OctreeSystem(level.octree);
+    rendering = new RenderingSystem(level);
+    octree    = new OctreeSystem(level.dynamicOctree);
     debug     = new DebugSystem(level);
     movement  = new MovementSystem();
     culling   = new CullingSystem(level);
 
-    addSystem(terrain);
     addSystem(movement);
     addSystem(octree);
     addSystem(culling);
@@ -35,6 +32,5 @@ public class LevelEntityEngine extends PooledEngine implements Disposable {
   @Override
   public void dispose() {
     removeAllEntities();
-    terrain.dispose();
   }
 }

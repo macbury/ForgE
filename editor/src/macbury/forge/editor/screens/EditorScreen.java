@@ -14,7 +14,7 @@ import macbury.forge.ui.Overlay;
  * Created by macbury on 18.10.14.
  */
 public class EditorScreen extends AbstractScreen {
-  private Level level;
+  public Level level;
   private Stage stage;
   private RTSCameraController cameraController;
   private Overlay overlay;
@@ -75,7 +75,4 @@ public class EditorScreen extends AbstractScreen {
     level.dispose();
   }
 
-  public Level getLevel() {
-    return level;
-  }
 }

@@ -1,19 +1,15 @@
 package macbury.forge.editor.windows;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglAWTCanvas;
 import macbury.forge.Config;
 import macbury.forge.ForgE;
 import macbury.forge.ForgEBootListener;
 import macbury.forge.editor.controllers.ProjectController;
 import macbury.forge.editor.views.MainMenu;
-import macbury.forge.utils.FormatUtils;
+import macbury.forge.editor.views.MoreToolbarButton;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 
 public class MainWindow extends JFrame implements ForgEBootListener {
@@ -21,18 +17,24 @@ public class MainWindow extends JFrame implements ForgEBootListener {
   private final ForgE engine;
   private final ProjectController projectController;
   private final MainMenu mainMenu;
+  private final MoreToolbarButton moreButton;
   private JPanel contentPane;
   private JButton wireframeButton;
   private JPanel openGlContainer;
   private JButton texturedButton;
   private JPanel statusBarPanel;
-  private JLabel statusLabel;
+  private JLabel statusRenderablesLabel;
+  private JLabel statusFpsLabel;
+  private JLabel statusMemoryLabel;
+  private JButton button1;
+  private JButton button2;
+  private JToolBar mainToolbar;
 
   public MainWindow() {
     setContentPane(contentPane);
     setSize(1360, 768);
     setVisible(true);
-    setExtendedState(JFrame.MAXIMIZED_BOTH);
+    //setExtendedState(JFrame.MAXIMIZED_BOTH);
 
     setDefaultCloseOperation(EXIT_ON_CLOSE);
     Config config            = new Config();
@@ -43,7 +45,7 @@ public class MainWindow extends JFrame implements ForgEBootListener {
     engine.setBootListener(this);
 
     mainMenu     = new MainMenu();
-
+    moreButton   = new MoreToolbarButton(mainMenu);
     openGLCanvas = new LwjglAWTCanvas(engine);
     openGlContainer.add(openGLCanvas.getCanvas(), BorderLayout.CENTER);
 
@@ -52,21 +54,21 @@ public class MainWindow extends JFrame implements ForgEBootListener {
     projectController.setMainMenu(mainMenu);
     projectController.setWireframeButton(wireframeButton);
     projectController.setTextureButton(texturedButton);
-    setJMenuBar(mainMenu);
+    projectController.setStatusLabel(statusFpsLabel, statusMemoryLabel, statusRenderablesLabel);
 
-    pack();
+    mainToolbar.add(Box.createHorizontalGlue(),4);
+    mainToolbar.add(moreButton, 0);
+    //setJMenuBar(mainMenu);
+
+    //pack();
   }
 
   @Override
   public void afterEngineCreate(ForgE engine) {
     projectController.newMap();
-    ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-    executor.scheduleAtFixedRate(updateStatusInfo, 0, 1, TimeUnit.SECONDS);
   }
 
-  private Runnable updateStatusInfo = new Runnable() {
-    public void run() {
-      statusLabel.setText("FPS: " + Gdx.graphics.getFramesPerSecond() + " Native: " + FormatUtils.humanReadableByteCount(Gdx.app.getNativeHeap(), true) + " Java: " + FormatUtils.humanReadableByteCount(Gdx.app.getJavaHeap(), true));
-    }
-  };
+  private void createUIComponents() {
+    // TODO: place custom component creation code here
+  }
 }

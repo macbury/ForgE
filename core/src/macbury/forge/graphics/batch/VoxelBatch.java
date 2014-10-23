@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
+import macbury.forge.graphics.batch.renderable.BaseRenderableProvider;
 import macbury.forge.shaders.utils.RenderableBaseShader;
 
 /**
@@ -20,6 +21,7 @@ public class VoxelBatch implements Disposable {
   protected final RenderContext context;
   protected final Array<BaseRenderable> renderables = new Array<BaseRenderable>();
   private boolean sorted;
+  public int renderablesPerFrame;
 
   public enum RenderType {
     Normal, Wireframe
@@ -32,6 +34,7 @@ public class VoxelBatch implements Disposable {
     this.shapeRenderer  = new ShapeRenderer();
     this.type           = RenderType.Normal;
     this.sorter         = new CameraRenderableSorter();
+    renderablesPerFrame = 0;
   }
 
   public RenderType getType() {
@@ -52,10 +55,24 @@ public class VoxelBatch implements Disposable {
    * Add BaseRenderable to queue
    * @param renderable
    */
-  public void add(BaseRenderable renderable) {
+  public void add(final BaseRenderable renderable) {
     if (camera == null) throw new GdxRuntimeException("Call begin() first.");
     renderables.add(renderable);
     renderable.mesh.setAutoBind(false);
+  }
+
+  /**
+   * Add BaseRenderable to queue
+   * @param renderableProvider
+   */
+  public void add(final BaseRenderableProvider renderableProvider) {
+    if (camera == null) throw new GdxRuntimeException("Call begin() first.");
+    final int offset = renderables.size;
+    renderableProvider.getRenderables(renderables);
+    for (int i = offset; i < renderables.size; i++) {
+      BaseRenderable renderable = renderables.get(i);
+      renderable.mesh.setAutoBind(false);
+    }
   }
 
   /**
@@ -110,6 +127,7 @@ public class VoxelBatch implements Disposable {
       }
       currentShader.render(renderable);
     }
+    renderablesPerFrame = renderables.size;
     if (currentShader != null) currentShader.end();
   }
 

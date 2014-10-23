@@ -6,10 +6,13 @@ import com.badlogic.ashley.systems.IntervalSystem;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.ForgE;
 import macbury.forge.components.Position;
 import macbury.forge.components.Renderable;
+import macbury.forge.graphics.batch.renderable.BaseRenderable;
+import macbury.forge.graphics.batch.renderable.BaseRenderableProvider;
 import macbury.forge.graphics.batch.renderable.TerrainChunkRenderable;
 import macbury.forge.graphics.builders.Chunk;
 import macbury.forge.graphics.builders.TerrainBuilder;
@@ -23,11 +26,11 @@ import java.util.HashMap;
 /**
  * Created by macbury on 19.10.14.
  */
-public class TerrainSystem extends IntervalSystem implements Disposable {
+public class TerrainSystem extends IntervalSystem implements Disposable, BaseRenderableProvider {
   private static final String TERRAIN_SHADER = "terrain";
   private static final float UPDATE_EVERY    = 0.10f;//second
-  private ComponentMapper<Renderable> rm = ComponentMapper.getFor(Renderable.class);
-  private ComponentMapper<Position>   pm = ComponentMapper.getFor(Position.class);
+  private ComponentMapper<Renderable> rm     = ComponentMapper.getFor(Renderable.class);
+  private ComponentMapper<Position>   pm     = ComponentMapper.getFor(Position.class);
   private final LevelEntityEngine engine;
   private HashMap<Chunk, Entity> tileEntities;
   private TerrainBuilder builder;
@@ -128,4 +131,8 @@ public class TerrainSystem extends IntervalSystem implements Disposable {
     builder = null;
   }
 
+  @Override
+  public void getRenderables(Array<BaseRenderable> renderables) {
+
+  }
 }

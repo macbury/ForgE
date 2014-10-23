@@ -26,20 +26,22 @@ public class DebugSystem extends IteratingSystem {
   private static final Color OCTREE_BOUNDS_COLOR = Color.OLIVE;
   private final VoxelBatch batch;
   private final PerspectiveCamera camera;
-  private final OctreeNode octree;
+  private final OctreeNode dynamicOctree;
   private final FrustrumDebugAndRenderer frustrumDebugger;
+  private final OctreeNode terrainOctree;
   private ComponentMapper<Position>   pm = ComponentMapper.getFor(Position.class);
   private final BoundingBox tempBox;
   private final Vector3     tempVec;
 
   public DebugSystem(Level level) {
     super(Family.getFor(Position.class));
-    this.batch   = level.batch;
-    this.octree  = level.octree;
-    this.camera  = level.camera;
+    this.batch            = level.batch;
+    this.dynamicOctree    = level.dynamicOctree;
+    this.terrainOctree    = level.staticOctree;
+    this.camera           = level.camera;
     this.frustrumDebugger = level.frustrumDebugger;
-    this.tempBox = new BoundingBox();
-    this.tempVec = new Vector3();
+    this.tempBox          = new BoundingBox();
+    this.tempVec          = new Vector3();
   }
 
   @Override
@@ -60,6 +62,11 @@ public class DebugSystem extends IteratingSystem {
 
   @Override
   public void update(float deltaTime) {
+    Frustum currentFrustrum = camera.frustum;
+    if (frustrumDebugger.isEnabled()) {
+      currentFrustrum = frustrumDebugger.getFrustrum();
+    }
+
     batch.shapeRenderer.setProjectionMatrix(camera.combined);
 
     batch.shapeRenderer.begin(ShapeRenderer.ShapeType.Line); {
@@ -69,12 +76,12 @@ public class DebugSystem extends IteratingSystem {
       }
 
       batch.shapeRenderer.setColor(OCTREE_BOUNDS_COLOR);
-      if (ForgE.config.renderOctree) {
-        Frustum currentFrustrum = camera.frustum;
-        if (frustrumDebugger.isEnabled()) {
-          currentFrustrum = frustrumDebugger.getFrustrum();
-        }
-        DebugShape.cullledOctree(batch.shapeRenderer, octree, currentFrustrum);
+      if (ForgE.config.renderDynamicOctree) {
+        DebugShape.cullledOctree(batch.shapeRenderer, dynamicOctree, currentFrustrum);
+      }
+
+      if (ForgE.config.renderStaticOctree) {
+        DebugShape.cullledOctree(batch.shapeRenderer, terrainOctree, currentFrustrum);
       }
     } batch.shapeRenderer.end();
 

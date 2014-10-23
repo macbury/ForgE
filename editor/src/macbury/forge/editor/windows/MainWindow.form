@@ -16,11 +16,23 @@
         </properties>
         <border type="none"/>
         <children>
+          <component id="4d328" class="javax.swing.JToolBar$Separator">
+            <constraints/>
+            <properties/>
+          </component>
           <component id="a2cad" class="javax.swing.JButton" binding="wireframeButton" default-binding="true">
             <constraints/>
             <properties>
               <hideActionText value="true"/>
-              <icon value="icons/xray.png"/>
+              <icon value="icons/draw_pencil.png"/>
+              <text value=""/>
+            </properties>
+          </component>
+          <component id="1f1fb" class="javax.swing.JButton" default-binding="true">
+            <constraints/>
+            <properties>
+              <hideActionText value="true"/>
+              <icon value="icons/draw_rect.png"/>
               <text value=""/>
             </properties>
           </component>
@@ -28,7 +40,7 @@
             <constraints/>
             <properties>
               <hideActionText value="true"/>
-              <icon value="icons/texture.png"/>
+              <icon value="icons/draw_oval.png"/>
               <text value=""/>
             </properties>
           </component>
@@ -38,28 +50,114 @@
           </component>
         </children>
       </toolbar>
-      <grid id="83958" binding="statusBarPanel" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-        <margin top="5" left="10" bottom="5" right="0"/>
+      <grid id="83958" binding="statusBarPanel" layout-manager="GridLayoutManager" row-count="1" column-count="8" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="5" left="5" bottom="5" right="10"/>
         <constraints border-constraint="South"/>
         <properties/>
         <border type="none"/>
         <children>
-          <component id="b4f70" class="javax.swing.JLabel" binding="statusLabel">
+          <component id="b4f70" class="javax.swing.JLabel" binding="statusRenderablesLabel">
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="5" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="FPS: 60, Memory: 6GB, Java: 3GB"/>
+              <text value="Voxels: 6"/>
             </properties>
           </component>
-          <hspacer id="766ab">
+          <hspacer id="d7a2e">
             <constraints>
-              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
           </hspacer>
+          <component id="d7623" class="javax.swing.JToolBar$Separator">
+            <constraints>
+              <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <orientation value="1"/>
+            </properties>
+          </component>
+          <component id="d1c7f" class="javax.swing.JToolBar$Separator">
+            <constraints>
+              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <orientation value="1"/>
+            </properties>
+          </component>
+          <component id="5b2f3" class="javax.swing.JLabel" binding="statusMemoryLabel">
+            <constraints>
+              <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Memory: 6GB/10GB"/>
+            </properties>
+          </component>
+          <component id="a5f16" class="javax.swing.JLabel" binding="statusFpsLabel">
+            <constraints>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="FPS: 60"/>
+            </properties>
+          </component>
+          <component id="382a0" class="javax.swing.JToolBar$Separator">
+            <constraints>
+              <grid row="0" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <orientation value="1"/>
+            </properties>
+          </component>
+          <component id="5fe6f" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="0" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="0x0x0"/>
+            </properties>
+          </component>
         </children>
       </grid>
-      <grid id="6abcf" binding="openGlContainer" layout-manager="BorderLayout" hgap="0" vgap="0">
+      <toolbar id="2aef2" binding="mainToolbar">
+        <constraints border-constraint="North"/>
+        <properties>
+          <floatable value="false"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="d979a" class="javax.swing.JToolBar$Separator">
+            <constraints/>
+            <properties/>
+          </component>
+          <component id="8b5d4" class="javax.swing.JButton" binding="button2" default-binding="true">
+            <constraints/>
+            <properties>
+              <icon value="icons/new.png"/>
+              <text value=""/>
+            </properties>
+          </component>
+          <component id="7113a" class="javax.swing.JButton" default-binding="true">
+            <constraints/>
+            <properties>
+              <icon value="icons/open.png"/>
+              <text value=""/>
+            </properties>
+          </component>
+          <component id="ed4ed" class="javax.swing.JToolBar$Separator">
+            <constraints/>
+            <properties/>
+          </component>
+          <component id="f3de6" class="javax.swing.JButton" binding="button1" default-binding="true">
+            <constraints/>
+            <properties>
+              <icon value="icons/play_game.png"/>
+              <text value=""/>
+            </properties>
+          </component>
+        </children>
+      </toolbar>
+      <grid id="f1caa" binding="openGlContainer" layout-manager="BorderLayout" hgap="0" vgap="0">
         <constraints border-constraint="Center"/>
         <properties>
           <background color="-16711423"/>
