@@ -2,6 +2,7 @@ package macbury.forge.graphics;
 
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Frustum;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Array;
@@ -69,6 +70,14 @@ public class DebugShape {
     nodes.clear();
     rootNode.bottomNodes(nodes);
 
+    for (OctreeNode node : nodes) {
+      draw(renderer, node.getBounds());
+    }
+  }
+
+  public static void cullledOctree(ShapeRenderer renderer, OctreeNode rootNode, Frustum frustum) {
+    nodes.clear();
+    rootNode.retriveNodes(nodes, frustum);
     for (OctreeNode node : nodes) {
       draw(renderer, node.getBounds());
     }

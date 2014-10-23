@@ -1,19 +1,20 @@
 package macbury.forge.systems;
 
 import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.ComponentType;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Frustum;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
+import macbury.forge.ForgE;
 import macbury.forge.components.Position;
-import macbury.forge.components.Visible;
 import macbury.forge.graphics.DebugShape;
 import macbury.forge.graphics.batch.VoxelBatch;
+import macbury.forge.graphics.frustrum.FrustrumDebugAndRenderer;
 import macbury.forge.level.Level;
 import macbury.forge.octree.OctreeNode;
 
@@ -26,16 +27,17 @@ public class DebugSystem extends IteratingSystem {
   private final VoxelBatch batch;
   private final PerspectiveCamera camera;
   private final OctreeNode octree;
-  private ComponentMapper<Position> pm   = ComponentMapper.getFor(Position.class);
-  private ComponentMapper<Visible>    vm = ComponentMapper.getFor(Visible.class);
+  private final FrustrumDebugAndRenderer frustrumDebugger;
+  private ComponentMapper<Position>   pm = ComponentMapper.getFor(Position.class);
   private final BoundingBox tempBox;
   private final Vector3     tempVec;
 
   public DebugSystem(Level level) {
-    super(Family.getFor(ComponentType.getBitsFor(Position.class), ComponentType.getBitsFor(Visible.class), ComponentType.getBitsFor()));
+    super(Family.getFor(Position.class));
     this.batch   = level.batch;
     this.octree  = level.octree;
     this.camera  = level.camera;
+    this.frustrumDebugger = level.frustrumDebugger;
     this.tempBox = new BoundingBox();
     this.tempVec = new Vector3();
   }
@@ -47,16 +49,11 @@ public class DebugSystem extends IteratingSystem {
 
   @Override
   public void processEntity(Entity entity, float deltaTime) {
-    boolean render             = true;
-    Visible  visibleComponent  = vm.get(entity);
     Position positionComponent = pm.get(entity);
 
     tempBox.set(positionComponent.getBoundingBox());
 
-    if (visibleComponent != null)
-      render = visibleComponent.visible;
-
-    if (render) {
+    if (positionComponent.visible) {
       DebugShape.draw(batch.shapeRenderer, tempBox);
     }
   }
@@ -67,10 +64,20 @@ public class DebugSystem extends IteratingSystem {
 
     batch.shapeRenderer.begin(ShapeRenderer.ShapeType.Line); {
       batch.shapeRenderer.setColor(BOUNDING_BOX_COLOR);
-      super.update(deltaTime);
+      if (ForgE.config.renderBoundingBox) {
+        super.update(deltaTime);
+      }
 
       batch.shapeRenderer.setColor(OCTREE_BOUNDS_COLOR);
-      DebugShape.octree(batch.shapeRenderer, octree);
+      if (ForgE.config.renderOctree) {
+        Frustum currentFrustrum = camera.frustum;
+        if (frustrumDebugger.isEnabled()) {
+          currentFrustrum = frustrumDebugger.getFrustrum();
+        }
+        DebugShape.cullledOctree(batch.shapeRenderer, octree, currentFrustrum);
+      }
     } batch.shapeRenderer.end();
+
+    frustrumDebugger.render(camera);
   }
 }

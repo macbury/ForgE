@@ -12,11 +12,11 @@ import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.ForgE;
 import macbury.forge.components.Movement;
 import macbury.forge.components.Position;
-import macbury.forge.components.Visible;
 import macbury.forge.graphics.batch.VoxelBatch;
+import macbury.forge.graphics.frustrum.FrustrumDebugAndRenderer;
 import macbury.forge.level.map.ChunkMap;
 import macbury.forge.octree.OctreeNode;
-import macbury.forge.systems.LevelEntityEngine;
+import macbury.forge.systems.engine.LevelEntityEngine;
 
 /**
  * Created by macbury on 18.10.14.
@@ -28,7 +28,8 @@ public class Level implements Disposable {
   public final ChunkMap              terrainMap;
   public final LevelState            state;
   public final OctreeNode            octree;
-  private final RenderContext        renderContext;
+  public final RenderContext         renderContext;
+  public final FrustrumDebugAndRenderer frustrumDebugger;
 
   public Level(LevelState state) {
     this.state               = state;
@@ -36,19 +37,18 @@ public class Level implements Disposable {
     this.octree              = OctreeNode.root();
     this.batch               = new VoxelBatch(renderContext);
     this.camera              = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-    camera.far               = 500;
+    this.frustrumDebugger    = new FrustrumDebugAndRenderer(camera);
     this.entities            = new LevelEntityEngine(this);
     this.terrainMap          = state.terrainMap;
 
     octree.setBounds(terrainMap.getBounds(ChunkMap.TILE_SIZE));
-
     entities.rendering.setBatch(batch);
     entities.terrain.setMap(terrainMap);
 
     for (int i = 0; i < 50; i++) {
       Entity e          = entities.createEntity();
       Position position = entities.createComponent(Position.class);
-      position.vector.set(5,2,100);
+      position.vector.set(5,2,100+i);
       position.size.set(1,1,1);
       Movement movement = entities.createComponent(Movement.class);
       movement.speed    = 40;
@@ -56,7 +56,6 @@ public class Level implements Disposable {
 
       e.add(movement);
       e.add(position);
-      e.add(entities.createComponent(Visible.class));
       entities.addEntity(e);
     }
 
@@ -65,6 +64,7 @@ public class Level implements Disposable {
   public void resize(int width, int height) {
     camera.viewportWidth  = width;
     camera.viewportHeight = height;
+    camera.far            = 512;
     camera.update(true);
   }
 
@@ -78,7 +78,7 @@ public class Level implements Disposable {
   }
 
   private void renderDebugInfo() {
-    if (ForgE.config.renderBoundingBox) {
+    if (ForgE.config.debug) {
       renderContext.begin(); {
         renderContext.setDepthMask(true);
         renderContext.setCullFace(GL30.GL_BACK);
@@ -94,6 +94,7 @@ public class Level implements Disposable {
     terrainMap.dispose();
     entities.dispose();
     octree.dispose();
+    frustrumDebugger.dispose();
   }
 
   public void setRenderType(VoxelBatch.RenderType renderType) {

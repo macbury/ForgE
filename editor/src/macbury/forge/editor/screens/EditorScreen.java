@@ -27,7 +27,6 @@ public class EditorScreen extends AbstractScreen {
     this.level              = new Level(LevelState.blank());
     this.editorSystem       = new EditorSystem();
     this.cameraController   = new RTSCameraController();
-
     cameraController.setCenter(level.terrainMap.getWidth() / 2, level.terrainMap.getDepth() / 2);
     cameraController.setCamera(level.camera);
     cameraController.setOverlay(overlay);

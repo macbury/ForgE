@@ -6,7 +6,6 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import macbury.forge.components.Position;
 import macbury.forge.components.Renderable;
-import macbury.forge.components.Visible;
 import macbury.forge.graphics.batch.VoxelBatch;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
 
@@ -16,24 +15,24 @@ import macbury.forge.graphics.batch.renderable.BaseRenderable;
 public class RenderingSystem extends IteratingSystem {
   private ComponentMapper<Position>   pm = ComponentMapper.getFor(Position.class);
   private ComponentMapper<Renderable> rm = ComponentMapper.getFor(Renderable.class);
-  private ComponentMapper<Visible>    vm = ComponentMapper.getFor(Visible.class);
   private VoxelBatch batch;
 
   public RenderingSystem() {
-    super(Family.getFor(Position.class, Renderable.class, Visible.class));
+    super(Family.getFor(Position.class, Renderable.class));
   }
 
   @Override
   public void processEntity(Entity entity, float deltaTime) {
     Position position     = pm.get(entity);
     Renderable renderable = rm.get(entity);
-    Visible    visible    = vm.get(entity);
 
-    if (visible.visible) {
+    if (position.visible) {
       BaseRenderable baseRenderable = renderable.instance;
-      baseRenderable.worldTransform.idt();
-      baseRenderable.worldTransform.setToTranslationAndScaling(position.vector, position.scale);
-      baseRenderable.worldTransform.rotate(position.rotation);
+      if (renderable.useWorldTransform) {
+        baseRenderable.worldTransform.set(position.getWorldTransformMatrix());
+      }
+
+
       batch.add(baseRenderable);
     }
   }

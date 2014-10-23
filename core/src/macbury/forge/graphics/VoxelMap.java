@@ -34,9 +34,7 @@ public class VoxelMap implements Disposable {
   }
 
   public byte getColorIndexForPosition(int x, int y, int z) {
-    if (x < 0 || y < 0 || z < 0) {
-      return 0;
-    } else if (x >= width || y >= height || z >= depth) {
+    if (isOutOfBounds(x,y,z)) {
       return 0;
     } else {
       return voxelMap[x][y][z];
@@ -69,6 +67,16 @@ public class VoxelMap implements Disposable {
   public boolean isEmpty(int x, int y, int z) {
     ColorMaterial mat = getMaterialForPosition(x,y,z);
     return mat == null || mat.isAir();
+  }
+
+  public boolean isOutOfBounds(int x, int y, int z) {
+    if (x < 0 || y < 0 || z < 0) {
+      return true;
+    } else if (x >= width || y >= height || z >= depth) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @Override

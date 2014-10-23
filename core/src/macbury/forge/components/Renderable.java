@@ -9,12 +9,13 @@ import macbury.forge.graphics.batch.renderable.BaseRenderable;
  */
 public class Renderable extends Component implements Pool.Poolable {
   public BaseRenderable instance;
-
+  public boolean useWorldTransform = true;
   public Renderable() {
   }
 
   @Override
   public void reset() {
     instance = null;
+    useWorldTransform = true;
   }
 }

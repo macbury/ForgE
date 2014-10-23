@@ -37,7 +37,7 @@ public class MainWindow extends JFrame implements ForgEBootListener {
     setDefaultCloseOperation(EXIT_ON_CLOSE);
     Config config            = new Config();
     config.generateWireframe = true;
-    config.renderBoundingBox = false;
+    config.debug             = true;
     engine                   = new ForgE(config);
 
     engine.setBootListener(this);
@@ -49,6 +49,7 @@ public class MainWindow extends JFrame implements ForgEBootListener {
 
     projectController = new ProjectController();
     projectController.setMainWindow(this);
+    projectController.setMainMenu(mainMenu);
     projectController.setWireframeButton(wireframeButton);
     projectController.setTextureButton(texturedButton);
     setJMenuBar(mainMenu);

@@ -27,9 +27,7 @@ public class ChunkMap extends VoxelMap {
     chunkToRebuild = new Array<Chunk>();
   }
 
-  @Override
-  public void initialize(int width, int height, int depth) {
-    super.initialize(width, height, depth);
+  public void buildFloor() {
     ColorMaterial grass1 = new ColorMaterial(44f/255f,159f/255f,93f/255f,1);
     ColorMaterial grass2 = new ColorMaterial(82f/255f,198f/255f,152f/255f,1);
     ColorMaterial grass3 = new ColorMaterial(14f/255f,123f/255f,34f/255f,1);
@@ -39,7 +37,7 @@ public class ChunkMap extends VoxelMap {
     m.add(grass2);
     //m.add(grass3);
 
-    for(int y = 0; y < 1; y++) {
+    for(int y = 0; y < height; y++) {
       for(int x = 0; x < width; x++) {
         for(int z = 0; z < depth; z++) {
           setMaterialForPosition(m.get((int)Math.round((m.size-1) * Math.random())), x,y,z);

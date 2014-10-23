@@ -1,6 +1,7 @@
 package macbury.forge.editor.controllers;
 
 import macbury.forge.ForgE;
+import macbury.forge.editor.views.MainMenu;
 import macbury.forge.editor.windows.MainWindow;
 import macbury.forge.editor.screens.EditorScreen;
 import macbury.forge.graphics.batch.VoxelBatch;
@@ -17,6 +18,7 @@ public class ProjectController implements ActionListener {
   private EditorScreen editorScreen;
   private JButton wireframeButton;
   private JButton textureButton;
+  private MainMenu mainMenu;
 
   public void setMainWindow(MainWindow mainWindow) {
     this.mainWindow = mainWindow;
@@ -30,6 +32,12 @@ public class ProjectController implements ActionListener {
     mainWindow.setTitle("[ForgE] - New project");
     this.editorScreen = new EditorScreen();
     ForgE.screens.set(editorScreen);
+    refresh();
+  }
+
+  private void refresh() {
+    mainMenu.debugShowOctree.setState(ForgE.config.renderOctree);
+    mainMenu.debugBoundingBox.setState(ForgE.config.renderBoundingBox);
   }
 
   public void setWireframeButton(JButton wireframeButton) {
@@ -51,6 +59,24 @@ public class ProjectController implements ActionListener {
   public void setTextureButton(JButton textureButton) {
     this.textureButton = textureButton;
     this.textureButton.addActionListener(this);
+  }
+
+  public void setMainMenu(MainMenu mainMenu) {
+    this.mainMenu = mainMenu;
+
+    mainMenu.debugShowOctree.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        ForgE.config.renderOctree = ProjectController.this.mainMenu.debugShowOctree.getState();
+      }
+    });
+
+    mainMenu.debugBoundingBox.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        ForgE.config.renderBoundingBox = ProjectController.this.mainMenu.debugBoundingBox.getState();
+      }
+    });
   }
 
 }

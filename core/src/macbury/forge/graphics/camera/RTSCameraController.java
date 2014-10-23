@@ -90,7 +90,7 @@ public class RTSCameraController {
 
     minZoom = 3;
     maxZoom = MAX_ZOOM;
-    scrollSpeed = 100.0f;
+    scrollSpeed = 200.0f;
 
     minTilt = 0.1f;
     maxTilt = (float) (Math.PI / 2) - 0.006f;
