@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.ForgE;
+import macbury.forge.graphics.camera.GameCamera;
 import macbury.forge.input.InputManager;
 
 public class FrustrumDebugAndRenderer  extends InputAdapter implements Disposable {
@@ -16,28 +17,20 @@ public class FrustrumDebugAndRenderer  extends InputAdapter implements Disposabl
     {0,4,1,5,2,6,3,7}
   };
   private static final String TAG = "FrustrumRenderer";
+  private final GameCamera frustrumCamera;
   private ShapeRenderer renderer;
-
-  private PerspectiveCamera frustrumCamera;
-  private DebugFrustrum frustrum;
 
   private boolean enabled;
 
-  public FrustrumDebugAndRenderer(PerspectiveCamera camera) {
+  public FrustrumDebugAndRenderer(GameCamera camera) {
     this.frustrumCamera = camera;
     this.renderer       = new ShapeRenderer();
-    saveState();
     ForgE.input.addProcessor(this);
   }
 
-  public void saveState() {
-    Gdx.app.log(TAG, "Saving state");
-    this.frustrumCamera.update(true);
-    this.frustrum = new DebugFrustrum(this.frustrumCamera.frustum, this.frustrumCamera.invProjectionView);
-  }
 
   public void render(PerspectiveCamera camera) {
-    if (!enabled) {
+    if (!isEnabled()) {
       return;
     }
     renderer.setProjectionMatrix(camera.combined);
@@ -49,7 +42,8 @@ public class FrustrumDebugAndRenderer  extends InputAdapter implements Disposabl
       for(int index = 1; index < RENDER_SEQUENCE[sequence].length; index+=2) {
         short a = RENDER_SEQUENCE[sequence][index];
         short b = RENDER_SEQUENCE[sequence][index-1];
-        renderer.line(frustrum.planePoints[a], frustrum.planePoints[b]);
+
+        renderer.line(frustrumCamera.getDebugFrustrum().planePoints[a], frustrumCamera.getDebugFrustrum().planePoints[b]);
       }
     }
 
@@ -61,9 +55,10 @@ public class FrustrumDebugAndRenderer  extends InputAdapter implements Disposabl
     if ( ForgE.input.isEqual(InputManager.Action.TestFrustrum, keycode)) {
       this.enabled = !this.enabled;
       if (enabled) {
-        saveState();
+        frustrumCamera.saveDebugFrustrum();
         Gdx.app.log(TAG, "Enabled frustrum debugger");
       } else {
+        frustrumCamera.clearDebugFrustrum();
         Gdx.app.log(TAG, "Disabled frustrum debugger");
       }
       return true;
@@ -73,11 +68,11 @@ public class FrustrumDebugAndRenderer  extends InputAdapter implements Disposabl
   }
 
   public DebugFrustrum getFrustrum() {
-    return frustrum;
+    return frustrumCamera.getDebugFrustrum();
   }
 
   public boolean isEnabled() {
-    return enabled;
+    return frustrumCamera.haveDebugFrustrum();
   }
 
   @Override

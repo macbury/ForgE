@@ -4,7 +4,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.GL30;
-import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.utils.DefaultTextureBinder;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.math.Vector3;
@@ -13,6 +12,7 @@ import macbury.forge.ForgE;
 import macbury.forge.components.Movement;
 import macbury.forge.components.Position;
 import macbury.forge.graphics.batch.VoxelBatch;
+import macbury.forge.graphics.camera.GameCamera;
 import macbury.forge.graphics.frustrum.FrustrumDebugAndRenderer;
 import macbury.forge.level.map.ChunkMap;
 import macbury.forge.octree.OctreeNode;
@@ -24,7 +24,7 @@ import macbury.forge.terrain.TerrainEngine;
  */
 public class Level implements Disposable {
   public final LevelEntityEngine        entities;
-  public final PerspectiveCamera        camera;
+  public final GameCamera               camera;
   public final VoxelBatch               batch;
   public final ChunkMap                 terrainMap;
   public final LevelState               state;
@@ -49,11 +49,10 @@ public class Level implements Disposable {
     this.staticOctree        = OctreeNode.root();
 
     this.batch               = new VoxelBatch(renderContext);
-    this.camera              = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+    this.camera              = new GameCamera();
     this.frustrumDebugger    = new FrustrumDebugAndRenderer(camera);
-    this.entities            = new LevelEntityEngine(this);
-
     this.terrainEngine       = new TerrainEngine(this);
+    this.entities            = new LevelEntityEngine(this);
 
     staticOctree.setBounds(terrainMap.getBounds(ChunkMap.TILE_SIZE));
     dynamicOctree.setBounds(terrainMap.getBounds(ChunkMap.TILE_SIZE));

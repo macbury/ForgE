@@ -49,7 +49,8 @@ public class OctreeNode implements Pool.Poolable, Disposable {
   }
 
   public int getIndex(OctreeObject object) {
-    return getIndex(object.getBoundingBox());
+    object.getBoundingBox(tempBox);
+    return getIndex(tempBox);
   }
 
   public int getIndex(BoundingBox pRect) {
@@ -78,6 +79,12 @@ public class OctreeNode implements Pool.Poolable, Disposable {
     if (index != -1) {
       nodes.get(index).insert(objectToInsert);
       return;
+    }
+  }
+
+  public void insert(Array<OctreeObject> objectsToInsert) {
+    for (int i = 0; i < objectsToInsert.size; i++) {
+      insert(objectsToInsert.get(i));
     }
   }
 
@@ -259,7 +266,8 @@ public class OctreeNode implements Pool.Poolable, Disposable {
 
     if (checkObjectsToo) {
       for (OctreeObject object : objects) {
-        if (frustum.boundsInFrustum(object.getBoundingBox())) {
+        object.getBoundingBox(tempBox);
+        if (frustum.boundsInFrustum(tempBox)) {
           returnObjects.add(object);
         }
       }
@@ -278,6 +286,7 @@ public class OctreeNode implements Pool.Poolable, Disposable {
   }
 
   public void retrieve(Array<OctreeObject> returnObjects, OctreeObject object) {
-    retrieve(returnObjects, object.getBoundingBox());
+    object.getBoundingBox(tempBox);
+    retrieve(returnObjects, tempBox);
   }
 }

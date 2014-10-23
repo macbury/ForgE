@@ -14,7 +14,6 @@ import macbury.forge.octree.OctreeObject;
  * Created by macbury on 19.10.14.
  */
 public class Position extends Component implements Pool.Poolable, OctreeObject {
-  public final BoundingBox box;
   public final Vector3     vector;
   public final Quaternion  rotation;
   public final Vector3     size;
@@ -29,7 +28,6 @@ public class Position extends Component implements Pool.Poolable, OctreeObject {
     this.rotation       = new Quaternion();
     this.size           = new Vector3();
     this.scale          = new Vector3();
-    this.box            = new BoundingBox();
     this.worldTransform = new Matrix4();
   }
   
@@ -45,8 +43,8 @@ public class Position extends Component implements Pool.Poolable, OctreeObject {
   }
 
   @Override
-  public BoundingBox getBoundingBox() {
-    return box.set(vector, temp.set(vector).add(size));
+  public void getBoundingBox(BoundingBox outBox) {
+    outBox.set(vector, temp.set(vector).add(size));
   }
 
   @Override

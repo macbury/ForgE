@@ -127,13 +127,14 @@ public class VoxelBatch implements Disposable {
       }
       currentShader.render(renderable);
     }
-    renderablesPerFrame = renderables.size;
+
     if (currentShader != null) currentShader.end();
   }
 
   public void end() {
     camera = null;
     sorted = false;
+    renderablesPerFrame = renderables.size;
     renderables.clear();
   }
 
