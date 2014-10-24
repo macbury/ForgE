@@ -1,22 +1,19 @@
 package macbury.forge.terrain;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL30;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
-import macbury.forge.ForgE;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
 import macbury.forge.graphics.batch.renderable.BaseRenderableProvider;
-import macbury.forge.graphics.batch.renderable.TerrainChunkRenderable;
+import macbury.forge.graphics.batch.renderable.VoxelFaceRenderable;
 import macbury.forge.graphics.builders.Chunk;
 import macbury.forge.graphics.builders.TerrainBuilder;
 import macbury.forge.graphics.camera.GameCamera;
-import macbury.forge.graphics.mesh.MeshVertexInfo;
 import macbury.forge.level.Level;
 import macbury.forge.level.map.ChunkMap;
 import macbury.forge.octree.OctreeNode;
 import macbury.forge.octree.OctreeObject;
-import macbury.forge.shaders.utils.RenderableBaseShader;
 import macbury.forge.utils.ActionTimer;
 
 /**
@@ -24,26 +21,30 @@ import macbury.forge.utils.ActionTimer;
  */
 public class TerrainEngine implements Disposable, ActionTimer.TimerListener, BaseRenderableProvider {
   private static final float UPDATE_EVERY    = 0.05f;
-  private static final String TERRAIN_SHADER = "terrain";
+  private static final String TAG = "TerrainEngine";
   private final ActionTimer       timer;
   private final ChunkMap          map;
   private final OctreeNode        octree;
   private final GameCamera        camera;
   private final TerrainBuilder    builder;
   public  final Array<Chunk>      chunks;
-  public  final Array<OctreeObject> visibleChunks;
-  private int cursor;
+  public  final Array<VoxelFaceRenderable> visibleFaces;
+  public  final Array<OctreeObject> tempObjects;
+  public  final Vector3 tempA;
+
 
   public TerrainEngine(Level level) {
     this.timer = new ActionTimer(UPDATE_EVERY, this);
     this.timer.start();
 
-    this.visibleChunks        = new Array<OctreeObject>();
+    this.tempObjects          = new Array<OctreeObject>();
+    this.visibleFaces         = new Array<VoxelFaceRenderable>();
     this.chunks               = new Array<Chunk>();
     this.map                  = level.terrainMap;
     this.octree               = level.staticOctree;
     this.camera               = level.camera;
     this.builder              = new TerrainBuilder(map);
+    this.tempA                = new Vector3();
   }
 
   public void update() {
@@ -57,11 +58,24 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
   }
 
   private void occulsion() {
-    visibleChunks.clear();
+    visibleFaces.clear();
+    tempObjects.clear();
+    octree.retrieve(tempObjects, camera.normalOrDebugFrustrum(), false);
 
-    octree.retrieve(visibleChunks, camera.normalOrDebugFrustrum(), false);
+    while(tempObjects.size > 0) {
+      Chunk visibleChunk = (Chunk) tempObjects.pop();
+
+      if (visibleChunk.renderables.size > 0) {
+        for (int i = 0; i < visibleChunk.renderables.size; i++) {
+          VoxelFaceRenderable renderable = visibleChunk.renderables.get(i);
+
+          if (tempA.set(camera.normalOrDebugDirection()).dot(renderable.direction) < 0.0f) {
+            visibleFaces.add(renderable);
+          }
+        }
+      }
+    }
   }
-
 
   /**
    * Rebuild pending chunks in queue, return true if everything has been rebuilded
@@ -69,6 +83,7 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
    */
   private boolean rebuild() {
     if (map.chunkToRebuild.size > 0) {
+      Gdx.app.log(TAG, "Chunks to rebuild: " + map.chunkToRebuild.size);
       while (map.chunkToRebuild.size > 0) {
         Chunk chunk = map.chunkToRebuild.pop();
         buildChunkGeometry(chunk);
@@ -84,29 +99,65 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
   }
 
   private void buildChunkGeometry(Chunk chunk) {
+    chunk.clearFaces();
+
     builder.begin(); {
-      builder.facesForChunk(chunk);
+      builder.cursor.set(chunk);
+      VoxelFaceRenderable renderable = null;
 
-      if (builder.isEmpty()) {
-        remove(chunk);
-      } else {
-        if (chunk.renderable == null) {
-          chunk.renderable               = new TerrainChunkRenderable();
-          chunk.renderable.primitiveType = GL30.GL_TRIANGLES;
-          chunk.renderable.shader        = (RenderableBaseShader) ForgE.shaders.get(TERRAIN_SHADER);
-        } else if (chunk.renderable.mesh != null) {
-          chunk.renderable.mesh.dispose();
-        }
+      builder.backFace();
+      if (builder.haveGeometry()) {
+        renderable = builder.getRenderable();
+        renderable.direction.set(0,0, -1);
+        chunk.renderables.add(renderable);
+      }
 
-        if (ForgE.config.generateWireframe)
-          chunk.renderable.wireframe           = builder.wireframe();
-        chunk.renderable.mesh                  = builder.mesh(MeshVertexInfo.AttributeType.Position, MeshVertexInfo.AttributeType.Normal, MeshVertexInfo.AttributeType.Color);
-        chunk.updateBoundingBox();
-        if (!chunks.contains(chunk, true)) {
-          chunks.add(chunk);
-        }
+      builder.frontFace();
+      if (builder.haveGeometry()) {
+        renderable = builder.getRenderable();
+        renderable.direction.set(0,0, 1);
+        chunk.renderables.add(renderable);
+      }
+
+      builder.topFace();
+      if (builder.haveGeometry()) {
+        renderable = builder.getRenderable();
+        renderable.direction.set(0,1, 0);
+        chunk.renderables.add(renderable);
+      }
+
+      builder.bottomFace();
+      if (builder.haveGeometry()) {
+        renderable = builder.getRenderable();
+        renderable.direction.set(0,-1, 0);
+        chunk.renderables.add(renderable);
+      }
+
+      builder.leftFace();
+      if (builder.haveGeometry()) {
+        renderable = builder.getRenderable();
+        renderable.direction.set(-1,0, 0);
+        chunk.renderables.add(renderable);
+      }
+
+      builder.rightFace();
+      if (builder.haveGeometry()) {
+        renderable = builder.getRenderable();
+        renderable.direction.set(1,0, 0);
+        chunk.renderables.add(renderable);
+      }
+    } builder.end();
+
+    if (chunk.isEmpty()) {
+      remove(chunk);
+    } else {
+      chunk.updateBoundingBox();
+
+      if (!chunks.contains(chunk, true)) {
+        chunks.add(chunk);
       }
     }
+
   }
 
   private void remove(Chunk chunk) {
@@ -124,9 +175,6 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
 
   @Override
   public void getRenderables(Array<BaseRenderable> renderables) {
-    for (int i = 0; i < visibleChunks.size; i++) {
-      Chunk chunk = (Chunk)visibleChunks.get(i);
-      renderables.add(chunk.renderable);
-    }
+    renderables.addAll(visibleFaces);
   }
 }

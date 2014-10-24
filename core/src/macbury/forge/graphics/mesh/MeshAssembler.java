@@ -153,4 +153,8 @@ public class MeshAssembler implements Disposable {
   public boolean isEmpty() {
     return triangleArrayList.size() == 0;
   }
+
+  public boolean haveGeometry() {
+    return !isEmpty();
+  }
 }

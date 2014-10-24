@@ -52,8 +52,6 @@ public class MainWindow extends JFrame implements ForgEBootListener {
     projectController = new ProjectController();
     projectController.setMainWindow(this);
     projectController.setMainMenu(mainMenu);
-    projectController.setWireframeButton(wireframeButton);
-    projectController.setTextureButton(texturedButton);
     projectController.setStatusLabel(statusFpsLabel, statusMemoryLabel, statusRenderablesLabel);
 
     mainToolbar.add(Box.createHorizontalGlue(),4);

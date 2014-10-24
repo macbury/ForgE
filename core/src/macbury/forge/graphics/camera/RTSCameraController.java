@@ -92,7 +92,7 @@ public class RTSCameraController {
     maxZoom = MAX_ZOOM;
     scrollSpeed = 200.0f;
 
-    minTilt = 0.1f;
+    minTilt = -5f;
     maxTilt = (float) (Math.PI / 2) - 0.006f;
 
     currentZoom = maxZoom;
@@ -249,10 +249,10 @@ public class RTSCameraController {
     }
 
     if (dragMouseButtonPressed) {
-      tempVec.set(mouseDrag.x, mouseDrag.y, 0).sub(Gdx.input.getX(), Gdx.input.getY(), 0).nor();
+      //tempVec.set(mouseDrag.x, mouseDrag.y, 0).sub(Gdx.input.getX(), Gdx.input.getY(), 0).nor();
 
-      center.x += tempVec.x * delta * 25;
-      center.z += tempVec.y * delta * 25;
+      //center.x += tempVec.x * delta * 25;
+      //center.z += tempVec.y * delta * 25;
     }
 
     if (tilt > maxTilt)

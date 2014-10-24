@@ -1,5 +1,7 @@
 package macbury.forge.utils;
 
+import com.badlogic.gdx.math.Vector3;
+
 /**
  * Created by macbury on 19.10.14.
  */
@@ -48,5 +50,22 @@ public class Vector3Int {
     } else {
       return super.equals(obj);
     }
+  }
+
+  public void setZero() {
+    this.set(0,0,0);
+  }
+
+  public void set(Vector3 other) {
+    this.set((int)other.x, (int)other.y, (int)other.z);
+  }
+
+  @Override
+  public String toString() {
+    return "[" + x + ":" + y + ":" + z + "]";
+  }
+
+  public boolean lessThan(Vector3Int other) {
+    return x < other.x && y < other.y && other.z < other.z;
   }
 }

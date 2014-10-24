@@ -4,12 +4,13 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.GL30;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
 import macbury.forge.graphics.batch.renderable.TerrainChunkRenderable;
+import macbury.forge.graphics.batch.renderable.VoxelFaceRenderable;
 import macbury.forge.shaders.utils.RenderableBaseShader;
 
 /**
  * Created by macbury on 18.10.14.
  */
-public class TerrainShader extends RenderableBaseShader<TerrainChunkRenderable> {
+public class TerrainShader extends RenderableBaseShader<VoxelFaceRenderable> {
   @Override
   public boolean canRender(BaseRenderable instance) {
     return TerrainChunkRenderable.class.isInstance(instance);
@@ -22,7 +23,7 @@ public class TerrainShader extends RenderableBaseShader<TerrainChunkRenderable> 
   }
 
   @Override
-  public void beforeRender(TerrainChunkRenderable renderable) {
+  public void beforeRender(VoxelFaceRenderable renderable) {
 
   }
 }

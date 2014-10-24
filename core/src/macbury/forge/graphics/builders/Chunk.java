@@ -2,8 +2,9 @@ package macbury.forge.graphics.builders;
 
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
-import macbury.forge.graphics.batch.renderable.TerrainChunkRenderable;
+import macbury.forge.graphics.batch.renderable.VoxelFaceRenderable;
 import macbury.forge.octree.OctreeNode;
 import macbury.forge.octree.OctreeObject;
 import macbury.forge.utils.Vector3Int;
@@ -19,7 +20,7 @@ public class Chunk implements OctreeObject, Disposable {
   public Vector3Int end           = new Vector3Int();
   public BoundingBox boundingBox  = new BoundingBox();
   public boolean needRebuild      = true;
-  public TerrainChunkRenderable   renderable;
+  public Array<VoxelFaceRenderable> renderables = new Array<VoxelFaceRenderable>(6);
   public OctreeNode parent;
   private final static Vector3 temp = new Vector3();
 
@@ -39,12 +40,20 @@ public class Chunk implements OctreeObject, Disposable {
 
   @Override
   public void dispose() {
-    if (renderable != null) {
-      if (renderable.mesh != null) {
-        renderable.mesh.dispose();
-        renderable.mesh = null;
-      }
+    clearFaces();
+  }
+
+  public void clearFaces() {
+    while(renderables.size > 0) {
+      renderables.pop().dispose();
     }
   }
 
+  /**
+   * Check if chunk have any voxel faces
+   * @return
+   */
+  public boolean isEmpty() {
+    return renderables.size == 0;
+  }
 }
