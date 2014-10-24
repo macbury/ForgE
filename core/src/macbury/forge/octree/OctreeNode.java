@@ -68,10 +68,7 @@ public class OctreeNode implements Pool.Poolable, Disposable {
   }
 
   public boolean contains(BoundingBox pRect) {
-    pRect.getMin(tempA);
-    pRect.getMax(tempB);
-    tempC.set(pRect.getCenter(tempC));
-    return (bounds.contains(tempA) || bounds.contains(tempB) || bounds.contains(tempC));
+    return bounds.contains(pRect);
   }
 
   private void insertIntoProperNode(OctreeObject objectToInsert) {
@@ -79,6 +76,8 @@ public class OctreeNode implements Pool.Poolable, Disposable {
     if (index != -1) {
       nodes.get(index).insert(objectToInsert);
       return;
+    } else {
+      objects.add(objectToInsert);
     }
   }
 

@@ -2,6 +2,7 @@ package macbury.forge.terrain;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
@@ -31,7 +32,7 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
   public  final Array<VoxelFaceRenderable> visibleFaces;
   public  final Array<OctreeObject> tempObjects;
   public  final Vector3 tempA;
-
+  private  final BoundingBox tempBox;
 
   public TerrainEngine(Level level) {
     this.timer = new ActionTimer(UPDATE_EVERY, this);
@@ -45,6 +46,7 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
     this.camera               = level.camera;
     this.builder              = new TerrainBuilder(map);
     this.tempA                = new Vector3();
+    this.tempBox              = new BoundingBox();
   }
 
   public void update() {
@@ -60,21 +62,27 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
   private void occulsion() {
     visibleFaces.clear();
     tempObjects.clear();
+
+    camera.extendFov();
     octree.retrieve(tempObjects, camera.normalOrDebugFrustrum(), false);
 
     while(tempObjects.size > 0) {
       Chunk visibleChunk = (Chunk) tempObjects.pop();
+      visibleChunk.getBoundingBox(tempBox);
+      if(camera.normalOrDebugFrustrum().boundsInFrustum(tempBox)) {
+        if (visibleChunk.renderables.size > 0) {
+          for (int i = 0; i < visibleChunk.renderables.size; i++) {
+            VoxelFaceRenderable renderable = visibleChunk.renderables.get(i);
 
-      if (visibleChunk.renderables.size > 0) {
-        for (int i = 0; i < visibleChunk.renderables.size; i++) {
-          VoxelFaceRenderable renderable = visibleChunk.renderables.get(i);
-
-          if (tempA.set(camera.normalOrDebugDirection()).dot(renderable.direction) < 0.0f) {
-            visibleFaces.add(renderable);
+            if (tempA.set(camera.normalOrDebugPosition()).sub(visibleChunk.worldPosition).dot(renderable.direction) > 0.1f) {
+              visibleFaces.add(renderable);
+            }
           }
         }
       }
     }
+
+    camera.restoreFov();
   }
 
   /**

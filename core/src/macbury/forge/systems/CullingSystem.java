@@ -4,10 +4,9 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.math.Frustum;
 import com.badlogic.gdx.utils.Array;
 import macbury.forge.components.Position;
+import macbury.forge.graphics.camera.GameCamera;
 import macbury.forge.graphics.frustrum.FrustrumDebugAndRenderer;
 import macbury.forge.level.Level;
 import macbury.forge.octree.OctreeNode;
@@ -18,7 +17,7 @@ import macbury.forge.octree.OctreeObject;
  */
 public class CullingSystem extends IteratingSystem {
   private final OctreeNode rootNode;
-  private final PerspectiveCamera camera;
+  private final GameCamera camera;
   private final Array<OctreeObject> octreeVisibleObjects;
   private final FrustrumDebugAndRenderer frustrumDebugger;
   private ComponentMapper<Position>   pm = ComponentMapper.getFor(Position.class);
@@ -37,18 +36,9 @@ public class CullingSystem extends IteratingSystem {
   public void update(float deltaTime) {
     super.update(deltaTime);
     octreeVisibleObjects.clear();
-    Frustum currentFrustrum;
 
-    if (frustrumDebugger.isEnabled()) {
-      currentFrustrum = frustrumDebugger.getFrustrum();
-    } else {
-      cameraOldFieldOfView = camera.fieldOfView;
-      camera.fieldOfView   += 10;
-      camera.update();
-      currentFrustrum = camera.frustum;
-    }
-
-    rootNode.retrieve(octreeVisibleObjects, currentFrustrum, true);
+    camera.extendFov();
+    rootNode.retrieve(octreeVisibleObjects, camera.normalOrDebugFrustrum(), true);
 
     camera.fieldOfView   = cameraOldFieldOfView;
     camera.update();
@@ -57,6 +47,8 @@ public class CullingSystem extends IteratingSystem {
       Position position = (Position) octreeVisibleObjects.get(i);
       position.visible  = true;
     }
+
+    camera.restoreFov();
   }
 
   @Override

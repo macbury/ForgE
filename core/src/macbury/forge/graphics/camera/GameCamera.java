@@ -11,18 +11,34 @@ import macbury.forge.graphics.frustrum.DebugFrustrum;
  */
 public class GameCamera extends PerspectiveCamera {
   private static final float BASE_FOV = 67;
+  private static final float EXTEND_FOV_BY = 10;
   private final Vector3 debugDirection;
+  private final Vector3 debugPosition;
   private DebugFrustrum debugFrustrum;
+  private float oldFieldOfView;
 
   public GameCamera() {
     super(BASE_FOV, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     debugDirection = new Vector3();
+    this.debugPosition = new Vector3();
   }
 
   public void saveDebugFrustrum() {
-    this.update();
     this.debugFrustrum = new DebugFrustrum(frustum, invProjectionView);
     this.debugDirection.set(direction);
+    debugPosition.set(position);
+    restoreFov();
+  }
+
+  public void extendFov() {
+    this.oldFieldOfView = this.fieldOfView;
+    this.fieldOfView    += EXTEND_FOV_BY;
+    this.update();
+  }
+
+  public void restoreFov() {
+    this.fieldOfView = this.oldFieldOfView;
+    this.update();
   }
 
   public boolean haveDebugFrustrum() {
@@ -42,10 +58,18 @@ public class GameCamera extends PerspectiveCamera {
    * @return
    */
   public Frustum normalOrDebugFrustrum() {
-    return haveDebugFrustrum() ? debugFrustrum : frustum;
+    if (haveDebugFrustrum()) {
+      return debugFrustrum;
+    } else {
+      return frustum;
+    }
   }
 
   public Vector3 normalOrDebugDirection() {
     return haveDebugFrustrum() ? debugDirection : direction;
+  }
+
+  public Vector3 normalOrDebugPosition() {
+    return haveDebugFrustrum() ? debugPosition : position;
   }
 }

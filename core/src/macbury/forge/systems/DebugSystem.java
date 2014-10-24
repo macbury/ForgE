@@ -12,6 +12,7 @@ import macbury.forge.ForgE;
 import macbury.forge.components.Position;
 import macbury.forge.graphics.DebugShape;
 import macbury.forge.graphics.batch.VoxelBatch;
+import macbury.forge.graphics.builders.Chunk;
 import macbury.forge.graphics.camera.GameCamera;
 import macbury.forge.graphics.frustrum.FrustrumDebugAndRenderer;
 import macbury.forge.level.Level;
@@ -64,7 +65,6 @@ public class DebugSystem extends IteratingSystem {
   @Override
   public void update(float deltaTime) {
 
-
     batch.shapeRenderer.setProjectionMatrix(camera.combined);
 
     batch.shapeRenderer.begin(ShapeRenderer.ShapeType.Line); {
@@ -73,7 +73,10 @@ public class DebugSystem extends IteratingSystem {
         super.update(deltaTime);
 
         for (int i = 0; i < terrain.chunks.size; i++) {
-          terrain.chunks.get(i).getBoundingBox(tempBox);
+          batch.shapeRenderer.setColor(BOUNDING_BOX_COLOR);
+          Chunk chunk = terrain.chunks.get(i);
+          chunk.getBoundingBox(tempBox);
+
           DebugShape.draw(batch.shapeRenderer, tempBox);
         }
       }

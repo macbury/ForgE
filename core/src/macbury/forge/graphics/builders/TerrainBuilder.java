@@ -52,6 +52,7 @@ public class TerrainBuilder extends VoxelsAssembler {
     cursor.size.sub(cursor.size.x, cursor.size.y, cursor.size.z).add(1,1,1);
   }
 
+  
   public void topFace() {
     for (int y = cursor.start.y; y < cursor.end.y; y++) {
       for (int x = cursor.start.x; x < cursor.end.x; x++) {
