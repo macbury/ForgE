@@ -43,6 +43,11 @@ public class Chunk implements OctreeObject, Disposable {
     clearFaces();
   }
 
+  public void addFace(VoxelFaceRenderable face) {
+    face.setParent(this);
+    this.renderables.add(face);
+  }
+
   public void clearFaces() {
     while(renderables.size > 0) {
       renderables.pop().dispose();

@@ -1,6 +1,8 @@
 package macbury.forge.editor.views;
 
 import macbury.forge.ForgE;
+import macbury.forge.editor.controllers.ProjectController;
+import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
 import macbury.forge.editor.screens.EditorScreen;
 import macbury.forge.graphics.batch.VoxelBatch;
 
@@ -11,7 +13,7 @@ import java.awt.event.ActionListener;
 /**
  * Created by macbury on 19.10.14.
  */
-public class MainMenu extends JPopupMenu {
+public class MainMenu extends JPopupMenu implements OnMapChangeListener {
   public JCheckBoxMenuItem debugRenderDynamicOctree;
   public JCheckBoxMenuItem debugBoundingBox;
   public JRadioButtonMenuItem debugWireframeItem;
@@ -128,5 +130,10 @@ public class MainMenu extends JPopupMenu {
     projectMenu.add(openProjectItem);
 
     add(projectMenu);
+  }
+
+  @Override
+  public void onNewMap(ProjectController controller, EditorScreen screen) {
+    setEditor(screen);
   }
 }

@@ -20,27 +20,11 @@
             <constraints/>
             <properties/>
           </component>
-          <component id="a2cad" class="javax.swing.JButton" binding="wireframeButton" default-binding="true">
-            <constraints/>
-            <properties>
-              <hideActionText value="true"/>
-              <icon value="icons/draw_pencil.png"/>
-              <text value=""/>
-            </properties>
-          </component>
-          <component id="1f1fb" class="javax.swing.JButton" default-binding="true">
+          <component id="1f1fb" class="javax.swing.JButton" binding="rectButton">
             <constraints/>
             <properties>
               <hideActionText value="true"/>
               <icon value="icons/draw_rect.png"/>
-              <text value=""/>
-            </properties>
-          </component>
-          <component id="ebe95" class="javax.swing.JButton" binding="texturedButton" default-binding="true">
-            <constraints/>
-            <properties>
-              <hideActionText value="true"/>
-              <icon value="icons/draw_oval.png"/>
               <text value=""/>
             </properties>
           </component>
@@ -125,37 +109,7 @@
           <floatable value="false"/>
         </properties>
         <border type="none"/>
-        <children>
-          <component id="d979a" class="javax.swing.JToolBar$Separator">
-            <constraints/>
-            <properties/>
-          </component>
-          <component id="8b5d4" class="javax.swing.JButton" binding="button2" default-binding="true">
-            <constraints/>
-            <properties>
-              <icon value="icons/new.png"/>
-              <text value=""/>
-            </properties>
-          </component>
-          <component id="7113a" class="javax.swing.JButton" default-binding="true">
-            <constraints/>
-            <properties>
-              <icon value="icons/open.png"/>
-              <text value=""/>
-            </properties>
-          </component>
-          <component id="ed4ed" class="javax.swing.JToolBar$Separator">
-            <constraints/>
-            <properties/>
-          </component>
-          <component id="f3de6" class="javax.swing.JButton" binding="button1" default-binding="true">
-            <constraints/>
-            <properties>
-              <icon value="icons/play_game.png"/>
-              <text value=""/>
-            </properties>
-          </component>
-        </children>
+        <children/>
       </toolbar>
       <grid id="f1caa" binding="openGlContainer" layout-manager="BorderLayout" hgap="0" vgap="0">
         <constraints border-constraint="Center"/>

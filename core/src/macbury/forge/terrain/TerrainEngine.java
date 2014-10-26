@@ -1,8 +1,10 @@
 package macbury.forge.terrain;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
+import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
@@ -33,6 +35,8 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
   public  final Array<OctreeObject> tempObjects;
   public  final Vector3 tempA;
   private  final BoundingBox tempBox;
+  private float[] tempVerticies;
+  private short[] tempIndicies;
 
   public TerrainEngine(Level level) {
     this.timer = new ActionTimer(UPDATE_EVERY, this);
@@ -59,6 +63,10 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
     occulsion();
   }
 
+  /**
+   * Check which chunks with its renderables are visible!
+   */
+
   private void occulsion() {
     visibleFaces.clear();
     tempObjects.clear();
@@ -69,12 +77,12 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
     while(tempObjects.size > 0) {
       Chunk visibleChunk = (Chunk) tempObjects.pop();
       visibleChunk.getBoundingBox(tempBox);
-      if(camera.normalOrDebugFrustrum().boundsInFrustum(tempBox)) {
+      if(camera.boundsInFrustum(tempBox)) {
         if (visibleChunk.renderables.size > 0) {
           for (int i = 0; i < visibleChunk.renderables.size; i++) {
             VoxelFaceRenderable renderable = visibleChunk.renderables.get(i);
 
-            if (tempA.set(camera.normalOrDebugPosition()).sub(visibleChunk.worldPosition).dot(renderable.direction) > 0.1f) {
+            if (camera.boundsInFrustum(renderable.boundingBox) && tempA.set(camera.normalOrDebugPosition()).sub(visibleChunk.worldPosition).dot(renderable.direction) > 0.1f) {
               visibleFaces.add(renderable);
             }
           }
@@ -83,6 +91,22 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
     }
 
     camera.restoreFov();
+  }
+
+  public VoxelFaceRenderable getFaceForPickRay(Ray pickRay, Vector3 outIntersectPoint) {
+    if (tempVerticies == null) {
+      tempVerticies = new float[1200];
+      tempIndicies  = new short[400];
+    }
+    for (int i = 0; i < visibleFaces.size; i++) {
+      VoxelFaceRenderable face = visibleFaces.get(i);
+      face.mesh.getVertices(tempVerticies);
+      face.mesh.getIndices(tempIndicies);
+      if (Intersector.intersectRayTriangles(pickRay, tempVerticies, tempIndicies, face.mesh.getVertexSize(), outIntersectPoint)) {
+        return face;
+      }
+    }
+    return null;
   }
 
   /**
@@ -117,42 +141,42 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
       if (builder.haveGeometry()) {
         renderable = builder.getRenderable();
         renderable.direction.set(0,0, -1);
-        chunk.renderables.add(renderable);
+        chunk.addFace(renderable);
       }
 
       builder.frontFace();
       if (builder.haveGeometry()) {
         renderable = builder.getRenderable();
         renderable.direction.set(0,0, 1);
-        chunk.renderables.add(renderable);
+        chunk.addFace(renderable);
       }
 
       builder.topFace();
       if (builder.haveGeometry()) {
         renderable = builder.getRenderable();
         renderable.direction.set(0,1, 0);
-        chunk.renderables.add(renderable);
+        chunk.addFace(renderable);
       }
 
       builder.bottomFace();
       if (builder.haveGeometry()) {
         renderable = builder.getRenderable();
         renderable.direction.set(0,-1, 0);
-        chunk.renderables.add(renderable);
+        chunk.addFace(renderable);
       }
 
       builder.leftFace();
       if (builder.haveGeometry()) {
         renderable = builder.getRenderable();
         renderable.direction.set(-1,0, 0);
-        chunk.renderables.add(renderable);
+        chunk.addFace(renderable);
       }
 
       builder.rightFace();
       if (builder.haveGeometry()) {
         renderable = builder.getRenderable();
         renderable.direction.set(1,0, 0);
-        chunk.renderables.add(renderable);
+        chunk.addFace(renderable);
       }
     } builder.end();
 

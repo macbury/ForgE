@@ -52,11 +52,22 @@ public class TerrainBuilder extends VoxelsAssembler {
     cursor.size.sub(cursor.size.x, cursor.size.y, cursor.size.z).add(1,1,1);
   }
 
-  
+  private final Vector3Int cursorStart    = new Vector3Int();
+  private final Vector3Int cursorPosition = new Vector3Int();
+  private final Vector3Int tempSize       = new Vector3Int();
   public void topFace() {
+
     for (int y = cursor.start.y; y < cursor.end.y; y++) {
-      for (int x = cursor.start.x; x < cursor.end.x; x++) {
-        for (int z = cursor.start.z; z < cursor.end.z; z++) {
+      cursorStart.set(cursor.start).y = y;
+      cursorPosition.set(cursorStart);
+
+      /*tempSize.set(ChunkMap.TILE_SIZE);
+      while(cursorPosition.x < cursor.end.x) {
+        cursorPosition.x++;
+
+      }*/
+      for (int x = cursorPosition.x; x < cursor.end.x; x++) {
+        for (int z = cursorPosition.z; z < cursor.end.z; z++) {
           if (map.isSolid(x, y, z)) {
             cursor.size.x = Math.max(x, cursor.size.x);
             cursor.size.y = Math.max(y, cursor.size.y);
@@ -230,7 +241,7 @@ public class TerrainBuilder extends VoxelsAssembler {
     renderable.shader                = (RenderableBaseShader) ForgE.shaders.get(TERRAIN_SHADER);
     if (ForgE.config.generateWireframe)
       renderable.wireframe           = this.wireframe();
-    renderable.mesh                  = this.mesh(MeshVertexInfo.AttributeType.Position, MeshVertexInfo.AttributeType.Normal, MeshVertexInfo.AttributeType.Color);
+    renderable.setMesh(this.mesh(MeshVertexInfo.AttributeType.Position, MeshVertexInfo.AttributeType.Normal, MeshVertexInfo.AttributeType.Color));
 
     return renderable;
   }

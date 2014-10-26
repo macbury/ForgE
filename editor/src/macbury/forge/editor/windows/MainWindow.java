@@ -4,9 +4,9 @@ import com.badlogic.gdx.backends.lwjgl.LwjglAWTCanvas;
 import macbury.forge.Config;
 import macbury.forge.ForgE;
 import macbury.forge.ForgEBootListener;
+import macbury.forge.editor.controllers.MainToolbarController;
 import macbury.forge.editor.controllers.ProjectController;
 import macbury.forge.editor.views.MainMenu;
-import macbury.forge.editor.views.MoreToolbarButton;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,18 +17,15 @@ public class MainWindow extends JFrame implements ForgEBootListener {
   private final ForgE engine;
   private final ProjectController projectController;
   private final MainMenu mainMenu;
-  private final MoreToolbarButton moreButton;
+  private final MainToolbarController mainToolbarController;
   private JPanel contentPane;
-  private JButton wireframeButton;
-  private JPanel openGlContainer;
-  private JButton texturedButton;
   private JPanel statusBarPanel;
+  private JPanel openGlContainer;
   private JLabel statusRenderablesLabel;
   private JLabel statusFpsLabel;
   private JLabel statusMemoryLabel;
-  private JButton button1;
-  private JButton button2;
   private JToolBar mainToolbar;
+  private JButton rectButton;
 
   public MainWindow() {
     setContentPane(contentPane);
@@ -45,17 +42,17 @@ public class MainWindow extends JFrame implements ForgEBootListener {
     engine.setBootListener(this);
 
     mainMenu     = new MainMenu();
-    moreButton   = new MoreToolbarButton(mainMenu);
+
     openGLCanvas = new LwjglAWTCanvas(engine);
     openGlContainer.add(openGLCanvas.getCanvas(), BorderLayout.CENTER);
 
+    mainToolbarController = new MainToolbarController(mainToolbar, mainMenu);
+
     projectController = new ProjectController();
     projectController.setMainWindow(this);
-    projectController.setMainMenu(mainMenu);
     projectController.setStatusLabel(statusFpsLabel, statusMemoryLabel, statusRenderablesLabel);
 
-    mainToolbar.add(Box.createHorizontalGlue(),4);
-    mainToolbar.add(moreButton, 0);
+    projectController.addOnMapChangeListener(mainMenu);
     //setJMenuBar(mainMenu);
 
     //pack();

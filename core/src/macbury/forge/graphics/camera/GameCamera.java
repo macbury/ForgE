@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.Frustum;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.BoundingBox;
 import macbury.forge.graphics.frustrum.DebugFrustrum;
 
 /**
@@ -71,5 +72,9 @@ public class GameCamera extends PerspectiveCamera {
 
   public Vector3 normalOrDebugPosition() {
     return haveDebugFrustrum() ? debugPosition : position;
+  }
+
+  public boolean boundsInFrustum(BoundingBox testBounds) {
+    return normalOrDebugFrustrum().boundsInFrustum(testBounds);
   }
 }

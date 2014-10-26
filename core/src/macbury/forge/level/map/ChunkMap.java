@@ -37,7 +37,7 @@ public class ChunkMap extends VoxelMap {
     m.add(grass2);
     //m.add(grass3);
 
-    for(int y = 0; y < 10; y++) {
+    for(int y = 0; y < 1; y++) {
       for(int x = 0; x < width; x++) {
         for(int z = 0; z < depth; z++) {
           setMaterialForPosition(m.get((int)Math.round((m.size-1) * Math.random())), x,y,z);

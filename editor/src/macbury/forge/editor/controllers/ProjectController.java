@@ -1,9 +1,10 @@
 package macbury.forge.editor.controllers;
 
+import com.badlogic.gdx.utils.Array;
 import macbury.forge.ForgE;
+import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
 import macbury.forge.editor.runnables.UpdateStatusBar;
 import macbury.forge.editor.screens.EditorScreen;
-import macbury.forge.editor.views.MainMenu;
 import macbury.forge.editor.windows.MainWindow;
 
 import javax.swing.*;
@@ -17,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 public class ProjectController {
   private MainWindow mainWindow;
   public EditorScreen editorScreen;
-  private MainMenu mainMenu;
+  private Array<OnMapChangeListener> onMapChangeListenerArray = new Array<OnMapChangeListener>();
 
   public void setMainWindow(MainWindow mainWindow) {
     this.mainWindow = mainWindow;
@@ -31,23 +32,20 @@ public class ProjectController {
     mainWindow.setTitle("[ForgE] - New project");
     this.editorScreen = new EditorScreen();
     ForgE.screens.set(editorScreen);
-    refresh();
-  }
 
-  private void refresh() {
-    this.mainMenu.setEditor(editorScreen);
+    for (OnMapChangeListener listener : onMapChangeListenerArray) {
+      listener.onNewMap(this, this.editorScreen);
+    }
   }
-
 
   public void setStatusLabel(JLabel statusLabel, JLabel statusMemoryLabel, JLabel statusRenderablesLabel) {
     ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
     executor.scheduleAtFixedRate(new UpdateStatusBar(this, statusLabel, statusMemoryLabel, statusRenderablesLabel), 0, 1, TimeUnit.SECONDS);
   }
 
-  public void setMainMenu(MainMenu mainMenu) {
-    this.mainMenu = mainMenu;
-
-
+  public void addOnMapChangeListener(OnMapChangeListener listener) {
+    if (!onMapChangeListenerArray.contains(listener, true)) {
+      onMapChangeListenerArray.add(listener);
+    }
   }
-
 }
