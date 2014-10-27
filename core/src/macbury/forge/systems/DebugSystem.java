@@ -5,14 +5,16 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL30;
+import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import macbury.forge.ForgE;
+import macbury.forge.components.Cursor;
 import macbury.forge.components.Position;
 import macbury.forge.graphics.DebugShape;
 import macbury.forge.graphics.batch.VoxelBatch;
-import macbury.forge.graphics.batch.renderable.VoxelFaceRenderable;
 import macbury.forge.graphics.builders.Chunk;
 import macbury.forge.graphics.camera.GameCamera;
 import macbury.forge.graphics.frustrum.FrustrumDebugAndRenderer;
@@ -32,13 +34,16 @@ public class DebugSystem extends IteratingSystem {
   private final FrustrumDebugAndRenderer frustrumDebugger;
   private final OctreeNode terrainOctree;
   private final TerrainEngine terrain;
+  private final RenderContext context;
   private ComponentMapper<Position>   pm = ComponentMapper.getFor(Position.class);
+  private ComponentMapper<Cursor>     cm = ComponentMapper.getFor(Cursor.class);
   private final BoundingBox tempBox;
   private final Vector3     tempVec;
 
   public DebugSystem(Level level) {
     super(Family.getFor(Position.class));
     this.batch            = level.batch;
+    this.context          = level.renderContext;
     this.dynamicOctree    = level.dynamicOctree;
     this.terrainOctree    = level.staticOctree;
     this.camera           = level.camera;
@@ -56,22 +61,30 @@ public class DebugSystem extends IteratingSystem {
   @Override
   public void processEntity(Entity entity, float deltaTime) {
     Position positionComponent = pm.get(entity);
+    Cursor   cursorComponent   = cm.get(entity);
 
-    positionComponent.getBoundingBox(tempBox);
-    if (positionComponent.visible) {
+    if (positionComponent.visible && ForgE.config.renderBoundingBox) {
+      positionComponent.getBoundingBox(tempBox);
+      DebugShape.draw(batch.shapeRenderer, tempBox);
+    }
+
+    if (cursorComponent != null) {
+      positionComponent.getBoundingBox(tempBox);
       DebugShape.draw(batch.shapeRenderer, tempBox);
     }
   }
 
   @Override
   public void update(float deltaTime) {
+    context.begin();
+    context.setDepthTest(GL30.GL_LEQUAL);
     batch.shapeRenderer.setProjectionMatrix(camera.combined);
 
     batch.shapeRenderer.begin(ShapeRenderer.ShapeType.Line); {
       batch.shapeRenderer.setColor(BOUNDING_BOX_COLOR);
+      batch.shapeRenderer.identity();
+      super.update(deltaTime);
       if (ForgE.config.renderBoundingBox) {
-        batch.shapeRenderer.identity();
-        super.update(deltaTime);
         batch.shapeRenderer.identity();
         for (int i = 0; i < terrain.chunks.size; i++) {
           batch.shapeRenderer.setColor(BOUNDING_BOX_COLOR);
@@ -81,8 +94,8 @@ public class DebugSystem extends IteratingSystem {
           DebugShape.draw(batch.shapeRenderer, tempBox);
           batch.shapeRenderer.setColor(Color.NAVY);
           for (int j = 0; j < chunk.renderables.size; j++) {
-            VoxelFaceRenderable renderable = chunk.renderables.get(j);
-            DebugShape.draw(batch.shapeRenderer, renderable.boundingBox);
+           // VoxelFaceRenderable renderable = chunk.renderables.get(j);
+           // DebugShape.draw(batch.shapeRenderer, renderable.boundingBox);
           }
         }
       }
@@ -98,5 +111,6 @@ public class DebugSystem extends IteratingSystem {
     } batch.shapeRenderer.end();
 
     frustrumDebugger.render(camera);
+    context.end();
   }
 }

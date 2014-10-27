@@ -26,6 +26,7 @@ public class MainWindow extends JFrame implements ForgEBootListener {
   private JLabel statusMemoryLabel;
   private JToolBar mainToolbar;
   private JButton rectButton;
+  private JLabel mapCursorPositionLabel;
 
   public MainWindow() {
     setContentPane(contentPane);
@@ -52,7 +53,7 @@ public class MainWindow extends JFrame implements ForgEBootListener {
 
     projectController = new ProjectController();
     projectController.setMainWindow(this);
-    projectController.setStatusLabel(statusFpsLabel, statusMemoryLabel, statusRenderablesLabel);
+    projectController.setStatusLabel(statusFpsLabel, statusMemoryLabel, statusRenderablesLabel, mapCursorPositionLabel);
 
     projectController.addOnMapChangeListener(mainMenu);
     //setJMenuBar(mainMenu);

@@ -2,28 +2,28 @@ package macbury.forge.graphics.builders;
 
 import com.badlogic.gdx.math.Vector3;
 import macbury.forge.graphics.VoxelMap;
-import macbury.forge.utils.Vector3Int;
+import macbury.forge.utils.Vector3i;
 
 /**
  * Created by macbury on 23.10.14.
  */
 public class TerrainCursor {
-  public final Vector3Int cursor;
-  public final Vector3Int start;
-  public final Vector3Int end;
+  public final Vector3i cursor;
+  public final Vector3i start;
+  public final Vector3i end;
   public final Vector3 size;
-  public final Vector3Int sliceVec;
-  public final Vector3Int verticalVec;
-  public final Vector3Int horizontalVec;
+  public final Vector3i sliceVec;
+  public final Vector3i verticalVec;
+  public final Vector3i horizontalVec;
 
   public TerrainCursor() {
-    this.cursor    = new Vector3Int();
-    this.start     = new Vector3Int();
-    this.end       = new Vector3Int();
+    this.cursor    = new Vector3i();
+    this.start     = new Vector3i();
+    this.end       = new Vector3i();
     this.size      = new Vector3();
-    sliceVec       = new Vector3Int();
-    verticalVec    = new Vector3Int();
-    horizontalVec  = new Vector3Int();
+    sliceVec       = new Vector3i();
+    verticalVec    = new Vector3i();
+    horizontalVec  = new Vector3i();
   }
 
   public void set(Chunk chunk) {
@@ -33,10 +33,10 @@ public class TerrainCursor {
 
   public void set(VoxelMap map) {
     reset();
-    setStartEnd(new Vector3Int(), new Vector3Int(map.getWidth(), map.getHeight(), map.getDepth()));
+    setStartEnd(new Vector3i(), new Vector3i(map.getWidth(), map.getHeight(), map.getDepth()));
   }
 
-  public void setStartEnd(Vector3Int startVec, Vector3Int endVec) {
+  public void setStartEnd(Vector3i startVec, Vector3i endVec) {
     this.start.set(startVec);
     this.end.set(endVec);
   }

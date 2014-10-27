@@ -1,46 +1,64 @@
 package macbury.forge.editor.systems;
 
-import com.badlogic.ashley.systems.IntervalSystem;
-import com.badlogic.gdx.Gdx;
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.EntityListener;
+import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import macbury.forge.components.Cursor;
+import macbury.forge.components.Position;
 import macbury.forge.graphics.camera.GameCamera;
 import macbury.forge.level.Level;
+import macbury.forge.level.map.ChunkMap;
 import macbury.forge.terrain.TerrainEngine;
 import macbury.forge.ui.Overlay;
-import macbury.forge.utils.Vector3Int;
+import macbury.forge.utils.Vector3i;
 
 /**
  * Created by macbury on 19.10.14.
  * handles editor ui and editor input like selecting voxels, appending voxels, deleting voxels, clicking on enityt etc
  */
-public class EditorSystem extends IntervalSystem {
+public class EditorSystem extends EntitySystem implements EntityListener {
   private final GameCamera camera;
   private final TerrainEngine terrain;
+  private final Position cursorPositionComponent;
   private Overlay overlay;
   private final MousePosition mousePosition = new MousePosition();
-  private Vector3Int intersectionPoint = new Vector3Int();
+  public final Vector3i intersectionPoint = new Vector3i();
 
   public EditorSystem(Level level) {
-    super(0.1f);
+    super();
     this.camera  = level.camera;
     this.terrain = level.terrainEngine;
+    Entity cursorEntity          = level.entities.createEntity();
+    this.cursorPositionComponent = level.entities.createComponent(Position.class);
+    cursorEntity.add(cursorPositionComponent);
+    Cursor cursorComponent       = level.entities.createComponent(Cursor.class);
+    cursorEntity.add(cursorComponent);
+    level.entities.addEntity(cursorEntity);
   }
 
   @Override
-  protected void updateInterval() {
+  public void addedToEngine(Engine engine) {
+    super.addedToEngine(engine);
+    engine.addEntityListener(this);
+
+  }
+
+  @Override
+  public void update(float deltaTime) {
+    super.update(deltaTime);
     if (mousePosition.isDirty()) {
       mousePosition.setDirty(false);
-      Ray pickRay              = camera.getPickRay(mousePosition.x, mousePosition.y);
-      intersectionPoint.setZero();
-      if (terrain.getVoxelPositionForPickRay(pickRay, intersectionPoint)) {
-        //Gdx.app.log("Pick ray", pickRay.toString());
-        Gdx.app.log("Voxel position", intersectionPoint.toString());
-      } else {
-        Gdx.app.log("TEST", "Not Found!");
-      }
 
+      Ray pickRay              = camera.getPickRay(mousePosition.x, mousePosition.y);
+
+      if (terrain.getVoxelPositionForPickRay(pickRay, camera.far, intersectionPoint)) {
+        cursorPositionComponent.size.set(ChunkMap.TERRAIN_TILE_SIZE);
+        cursorPositionComponent.vector.set(intersectionPoint.x, intersectionPoint.y, intersectionPoint.z);
+      }
     }
   }
 
@@ -50,9 +68,19 @@ public class EditorSystem extends IntervalSystem {
 
       @Override
       public boolean mouseMoved(InputEvent event, float x, float y) {
-        mousePosition.set(x, y);
+        mousePosition.set(x, camera.viewportHeight - y);
         return true;
       }
     });
+  }
+
+  @Override
+  public void entityAdded(Entity entity) {
+
+  }
+
+  @Override
+  public void entityRemoved(Entity entity) {
+
   }
 }

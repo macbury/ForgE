@@ -5,7 +5,7 @@ import com.badlogic.gdx.utils.Array;
 import macbury.forge.graphics.ColorMaterial;
 import macbury.forge.graphics.VoxelMap;
 import macbury.forge.graphics.builders.Chunk;
-import macbury.forge.utils.Vector3Int;
+import macbury.forge.utils.Vector3i;
 
 /**
  * Created by macbury on 19.10.14.
@@ -21,7 +21,7 @@ public class ChunkMap extends VoxelMap {
   private int countChunksY;
   private int countChunksZ;
 
-  private Vector3Int tempA = new Vector3Int();
+  private Vector3i tempA = new Vector3i();
   public ChunkMap(Vector3 tileSize) {
     super(tileSize);
     chunks         = new Array<Chunk>();
@@ -49,11 +49,11 @@ public class ChunkMap extends VoxelMap {
     splitIntoChunks();
   }
 
-  public Vector3Int voxelPositionToChunkPosition(int x, int y, int z){
+  public Vector3i voxelPositionToChunkPosition(int x, int y, int z){
     return tempA.set(x/CHUNK_SIZE,y/CHUNK_SIZE,z/CHUNK_SIZE);
   }
 
-  public Chunk findForChunkPosition(Vector3Int position) {
+  public Chunk findForChunkPosition(Vector3i position) {
     for (Chunk chunk : chunks) {
       if (chunk.position.equals(position))
         return chunk;
@@ -68,7 +68,7 @@ public class ChunkMap extends VoxelMap {
   }
 
   private void rebuildChunkForPosition(int x, int y, int z) {
-    Vector3Int chunkPosition = voxelPositionToChunkPosition(x,y,z);
+    Vector3i chunkPosition = voxelPositionToChunkPosition(x,y,z);
     Chunk chunk              = findForChunkPosition(chunkPosition);
     if (chunk == null) {
       //throw new GdxRuntimeException("Chunk is null!!");

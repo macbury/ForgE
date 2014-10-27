@@ -1,8 +1,7 @@
 package macbury.forge.ray;
 
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.math.collision.Ray;
-import macbury.forge.utils.Vector3Int;
+import macbury.forge.utils.Vector3i;
 
 /**
  * Created by macbury on 26.10.14.
@@ -13,10 +12,10 @@ public class VoxelIntersector {
   private final Vector3 pos = new Vector3();
   private final Vector3 dir = new Vector3();
 
-  private final Vector3Int index = new Vector3Int();
+  private final Vector3i index = new Vector3i();
 
   private final Vector3 delta = new Vector3();
-  private final Vector3Int sign = new Vector3Int();
+  private final Vector3i sign = new Vector3i();
   private final Vector3 max = new Vector3();
 
   private int limit;
@@ -26,14 +25,14 @@ public class VoxelIntersector {
     size.set(voxelSize);
   }
 
-  public void begin(Vector3Int offset, Ray ray, int limit) {
+  public void begin(Vector3i offset, Vector3i origin, Vector3 direction, int limit) {
     off.set( offset.x, offset.y, offset.z );
     this.limit = limit;
 
-    pos.set( ray.origin );
-    dir.set( ray.direction ).nor();
+    pos.set( origin.x, origin.y, origin.z );
+    dir.set( direction ).nor();
 
-    delta.set(size.x / dir.x, size.y / dir.y, size.z / dir.z);
+    delta.set(dir.x / size.x, dir.y / size.y, dir.z / size.z);
 
     sign.x = (dir.x > 0) ? 1 : (dir.x < 0 ? -1 : 0);
     sign.y = (dir.y > 0) ? 1 : (dir.y < 0 ? -1 : 0);
@@ -62,7 +61,7 @@ public class VoxelIntersector {
     return (plotted <= limit);
   }
 
-  public Vector3Int get(){
+  public Vector3i get(){
     return index;
   }
 

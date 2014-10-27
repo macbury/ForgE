@@ -12,7 +12,7 @@ import macbury.forge.graphics.mesh.MeshVertexInfo;
 import macbury.forge.graphics.mesh.VoxelsAssembler;
 import macbury.forge.level.map.ChunkMap;
 import macbury.forge.shaders.utils.RenderableBaseShader;
-import macbury.forge.utils.Vector3Int;
+import macbury.forge.utils.Vector3i;
 
 /**
  * Created by macbury on 16.10.14.
@@ -20,10 +20,10 @@ import macbury.forge.utils.Vector3Int;
 public class TerrainBuilder extends VoxelsAssembler {
 
   public enum Face {
-    Left(Vector3Int.LEFT), Right(Vector3Int.RIGHT), Top(Vector3Int.TOP), Bottom(Vector3Int.BOTTOM), Front(Vector3Int.FRONT), Back(Vector3Int.BACK);
-    public final Vector3Int direction;
+    Left(Vector3i.LEFT), Right(Vector3i.RIGHT), Top(Vector3i.TOP), Bottom(Vector3i.BOTTOM), Front(Vector3i.FRONT), Back(Vector3i.BACK);
+    public final Vector3i direction;
 
-    Face(Vector3Int direction) {
+    Face(Vector3i direction) {
       this.direction = direction;
     }
   }
@@ -41,7 +41,7 @@ public class TerrainBuilder extends VoxelsAssembler {
     this.cursor    = new TerrainCursor();
   }
 
-  private void buildFace(Vector3Int checkTileInDirection, Face face) {
+  private void buildFace(Vector3i checkTileInDirection, Face face) {
     for (int y = cursor.start.y; y < cursor.end.y; y++) {
       for (int x = cursor.start.x; x < cursor.end.x; x++) {
         for (int z = cursor.start.z; z < cursor.end.z; z++) {
@@ -94,7 +94,7 @@ public class TerrainBuilder extends VoxelsAssembler {
     facesForPart(chunk.start, chunk.end, chunk.size);
   }
 
-  private void facesForPart(Vector3Int start, Vector3Int end, Vector3 outSize) {
+  private void facesForPart(Vector3i start, Vector3i end, Vector3 outSize) {
     outSize.setZero();
     Gdx.app.log(TAG, "Building faces for: " + start.toString() + " - " + end.toString());
     for (int x = start.x; x < end.x; x++) {
@@ -140,7 +140,7 @@ public class TerrainBuilder extends VoxelsAssembler {
   }
 
   public void facesForMap() {
-    facesForPart(new Vector3Int(0,0,0), new Vector3Int(map.getWidth(), map.getHeight(), map.getDepth()), new Vector3());
+    facesForPart(new Vector3i(0,0,0), new Vector3i(map.getWidth(), map.getHeight(), map.getDepth()), new Vector3());
   }
 
   @Override

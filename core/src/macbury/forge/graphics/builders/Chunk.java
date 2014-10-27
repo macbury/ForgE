@@ -7,17 +7,27 @@ import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.graphics.batch.renderable.VoxelFaceRenderable;
 import macbury.forge.octree.OctreeNode;
 import macbury.forge.octree.OctreeObject;
-import macbury.forge.utils.Vector3Int;
+import macbury.forge.utils.Vector3i;
 
 /**
  * Created by macbury on 19.10.14.
  */
 public class Chunk implements OctreeObject, Disposable {
-  public Vector3Int position      = new Vector3Int();
+  /**
+   * Position is position of chunk. To change it to world position it needs to be multiply by CHUNK_SIZE
+   */
+  public Vector3i position      = new Vector3i();
+
+  /**
+   * World position and size are world size and position
+   */
   public Vector3    worldPosition = new Vector3();
   public Vector3    size          = new Vector3();
-  public Vector3Int start         = new Vector3Int();
-  public Vector3Int end           = new Vector3Int();
+  /**
+   * Start and end are offsets in array
+   */
+  public Vector3i start         = new Vector3i();
+  public Vector3i end           = new Vector3i();
   public BoundingBox boundingBox  = new BoundingBox();
   public boolean needRebuild      = true;
   public Array<VoxelFaceRenderable> renderables = new Array<VoxelFaceRenderable>(6);
@@ -30,9 +40,10 @@ public class Chunk implements OctreeObject, Disposable {
   }
 
   public void updateBoundingBox() {
+    //for (VoxelFaceRenderable face : renderables) {
+    //  boundingBox.set(face.boundingBox.min, face.boundingBox.max);
+    //}
     boundingBox.set(worldPosition, temp.set(worldPosition).add(size));
-    //boundingBox.min.scl(ChunkMap.TERRAIN_TILE_SIZE);
-    //boundingBox.max.scl(ChunkMap.TERRAIN_TILE_SIZE);
   }
 
   @Override

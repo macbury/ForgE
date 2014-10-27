@@ -38,9 +38,9 @@ public class ProjectController {
     }
   }
 
-  public void setStatusLabel(JLabel statusLabel, JLabel statusMemoryLabel, JLabel statusRenderablesLabel) {
+  public void setStatusLabel(JLabel statusLabel, JLabel statusMemoryLabel, JLabel statusRenderablesLabel, JLabel mapCursorPositionLabel) {
     ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-    executor.scheduleAtFixedRate(new UpdateStatusBar(this, statusLabel, statusMemoryLabel, statusRenderablesLabel), 0, 1, TimeUnit.SECONDS);
+    executor.scheduleAtFixedRate(new UpdateStatusBar(this, statusLabel, statusMemoryLabel, statusRenderablesLabel, mapCursorPositionLabel), 0, 250, TimeUnit.MILLISECONDS);
   }
 
   public void addOnMapChangeListener(OnMapChangeListener listener) {

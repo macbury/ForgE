@@ -1,11 +1,12 @@
 package macbury.forge.graphics;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import macbury.forge.utils.Vector3Int;
+import macbury.forge.utils.Vector3i;
 
 /**
  * Created by macbury on 17.10.14.
@@ -42,6 +43,14 @@ public class VoxelMap implements Disposable {
     } else {
       return voxelMap[x][y][z];
     }
+  }
+
+  public void worldPositionToLocalVoxelPosition(Vector3 in, Vector3i out) {
+    out.set(MathUtils.floor(in.x / tileSize.x), MathUtils.floor(in.y / tileSize.y), MathUtils.floor(in.z / tileSize.z));
+  }
+
+  public void localVoxelPositionToWorldPosition(Vector3i in, Vector3 out) {
+    out.set(in.x * tileSize.x, in.y * tileSize.y, in.z * tileSize.z);
   }
 
   public ColorMaterial getMaterialForPosition(int x, int y, int z) {
@@ -109,7 +118,11 @@ public class VoxelMap implements Disposable {
     return boundingBox;
   }
 
-  public boolean isSolid(Vector3Int position) {
-    return isEmpty(position.x, position.y, position.z);
+  public boolean isSolid(Vector3i position) {
+    return isSolid(position.x, position.y, position.z);
+  }
+
+  public boolean isSolid(Vector3 position) {
+    return isSolid(Math.round(position.x), Math.round(position.y), Math.round(position.z));
   }
 }

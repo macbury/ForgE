@@ -14,11 +14,13 @@ public class UpdateStatusBar implements Runnable {
   private final JLabel fpsLabel;
   private final JLabel statusMemoryLabel;
   private final JLabel statusRenderablesLabel;
+  private final JLabel mapCursorPositionLabel;
   private ProjectController projectController;
 
-  public UpdateStatusBar(ProjectController projectController, JLabel fpsLabel, JLabel statusMemoryLabel, JLabel statusRenderablesLabel) {
+  public UpdateStatusBar(ProjectController projectController, JLabel fpsLabel, JLabel statusMemoryLabel, JLabel statusRenderablesLabel, JLabel mapCursorPositionLabel) {
     this.fpsLabel = fpsLabel;
     this.statusMemoryLabel = statusMemoryLabel;
+    this.mapCursorPositionLabel = mapCursorPositionLabel;
     this.statusRenderablesLabel = statusRenderablesLabel;
     this.projectController = projectController;
   }
@@ -30,10 +32,13 @@ public class UpdateStatusBar implements Runnable {
       fpsLabel.setText("...");
       statusMemoryLabel.setText("...");
       statusRenderablesLabel.setText("...");
+      mapCursorPositionLabel.setText("...");
     } else {
       fpsLabel.setText("FPS: " + Gdx.graphics.getFramesPerSecond());
       statusMemoryLabel.setText("Memory: " + FormatUtils.humanReadableByteCount(Gdx.app.getNativeHeap(), true) + "/" + FormatUtils.humanReadableByteCount(Gdx.app.getJavaHeap(), true));
       statusRenderablesLabel.setText("Renderables: " + String.valueOf(projectController.editorScreen.level.batch.renderablesPerFrame));
+
+      mapCursorPositionLabel.setText(projectController.editorScreen.editorSystem.intersectionPoint.toString());
     }
   }
 }

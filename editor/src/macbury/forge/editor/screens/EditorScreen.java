@@ -18,7 +18,7 @@ public class EditorScreen extends AbstractScreen {
   private Stage stage;
   private RTSCameraController cameraController;
   private Overlay overlay;
-  private EditorSystem editorSystem;
+  public EditorSystem editorSystem;
 
   @Override
   protected void initialize() {

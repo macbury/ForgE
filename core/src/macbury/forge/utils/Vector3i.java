@@ -5,53 +5,53 @@ import com.badlogic.gdx.math.Vector3;
 /**
  * Created by macbury on 19.10.14.
  */
-public class Vector3Int {
-  public static final Vector3Int TOP = new Vector3Int(0,1,0);
-  public static final Vector3Int BOTTOM = new Vector3Int(0,-1,0);
-  public static final Vector3Int BACK = new Vector3Int(0, 0, -1);
-  public static final Vector3Int FRONT = new Vector3Int(0, 0, 1);
-  public static final Vector3Int RIGHT = new Vector3Int(1, 0, 0);
-  public static final Vector3Int LEFT = new Vector3Int(-1,0,0);
+public class Vector3i {
+  public static final Vector3i TOP = new Vector3i(0,1,0);
+  public static final Vector3i BOTTOM = new Vector3i(0,-1,0);
+  public static final Vector3i BACK = new Vector3i(0, 0, -1);
+  public static final Vector3i FRONT = new Vector3i(0, 0, 1);
+  public static final Vector3i RIGHT = new Vector3i(1, 0, 0);
+  public static final Vector3i LEFT = new Vector3i(-1,0,0);
   public int x;
   public int y;
   public int z;
 
-  public Vector3Int(int nx, int ny, int nz){
+  public Vector3i(int nx, int ny, int nz){
     set(nx, ny, nz);
   }
 
-  public Vector3Int() {
+  public Vector3i() {
     this(0,0,0);
   }
 
-  public Vector3Int set(int nx, int ny, int nz){
+  public Vector3i set(int nx, int ny, int nz){
     this.x = nx;
     this.y = ny;
     this.z = nz;
     return this;
   }
 
-  public Vector3Int add(int nx, int ny, int nz) {
+  public Vector3i add(int nx, int ny, int nz) {
     this.x += nx;
     this.y += ny;
     this.z += nz;
     return this;
   }
 
-  public Vector3Int set(Vector3Int other) {
+  public Vector3i set(Vector3i other) {
     set(other.x, other.y, other.z);
     return this;
   }
 
-  public Vector3Int add(Vector3Int other) {
+  public Vector3i add(Vector3i other) {
     add(other.x, other.y, other.z);
     return this;
   }
 
   @Override
   public boolean equals(Object obj) {
-    if (Vector3Int.class.isInstance(obj)) {
-      Vector3Int other = (Vector3Int)obj;
+    if (Vector3i.class.isInstance(obj)) {
+      Vector3i other = (Vector3i)obj;
       return (other.x == x && other.y == y && other.z == z);
     } else {
       return super.equals(obj);
@@ -68,10 +68,10 @@ public class Vector3Int {
 
   @Override
   public String toString() {
-    return "[" + x + ":" + y + ":" + z + "]";
+    return x + "x" + y + "x" + z;
   }
 
-  public boolean lessThan(Vector3Int other) {
+  public boolean lessThan(Vector3i other) {
     return x < other.x && y < other.y && other.z < other.z;
   }
 }

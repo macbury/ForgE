@@ -16,9 +16,10 @@ import macbury.forge.level.Level;
 import macbury.forge.level.map.ChunkMap;
 import macbury.forge.octree.OctreeNode;
 import macbury.forge.octree.OctreeObject;
-import macbury.forge.ray.VoxelIntersector;
 import macbury.forge.utils.ActionTimer;
-import macbury.forge.utils.Vector3Int;
+import macbury.forge.utils.Vector3i;
+
+import java.util.Comparator;
 
 /**
  * Created by macbury on 23.10.14.
@@ -34,9 +35,12 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
   public  final Array<Chunk>      chunks;
   public  final Array<VoxelFaceRenderable> visibleFaces;
   public  final Array<OctreeObject> tempObjects;
-  public  final Vector3 tempA;
+  public  final Vector3 tempA  = new Vector3();
+  public  final Vector3 tempC  = new Vector3();
+  public  final Vector3i tempB = new Vector3i();
   private  final BoundingBox tempBox;
   private final Array<Chunk> visibleChunks;
+  private final Comparator<Chunk> sorter;
   private float[] tempVerticies;
   private short[] tempIndicies;
 
@@ -52,8 +56,22 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
     this.octree               = level.staticOctree;
     this.camera               = level.camera;
     this.builder              = new TerrainBuilder(map);
-    this.tempA                = new Vector3();
     this.tempBox              = new BoundingBox();
+    this.sorter               = new Comparator<Chunk>() {
+      @Override
+      public int compare(Chunk o1, Chunk o2) {
+        tempA.set(o1.worldPosition);
+        tempC.set(o2.worldPosition);
+        final float dst = (int)(1000f * camera.normalOrDebugPosition().dst2(tempA)) - (int)(1000f * camera.normalOrDebugPosition().dst2(tempC));
+        final int result = dst < 0 ? -1 : (dst > 0 ? 1 : 0);
+        return result;
+      }
+
+      @Override
+      public boolean equals(Object obj) {
+        return false;
+      }
+    };
   }
 
   public void update() {
@@ -94,25 +112,17 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
         }
       }
     }
-    //throw new GdxRuntimeException("Sort here visible chunk from the closest to farest from camera!");
-
+    visibleChunks.sort(sorter);
     camera.restoreFov();
   }
 
-  public boolean getVoxelPositionForPickRay(Ray pickRay, Vector3Int outVoxelIntersectPoint) {
-    VoxelIntersector intersector = new VoxelIntersector(ChunkMap.TERRAIN_TILE_SIZE);
-    for (int i = 0; i < visibleChunks.size; i++) {
-      Chunk visibleChunk = visibleChunks.get(i);
-
-      //change pick ray origin into voxel position
-      intersector.begin(visibleChunk.position, pickRay, ChunkMap.CHUNK_ARRAY_SIZE); {
-        while (intersector.next()) {
-          if (map.isSolid(intersector.get())) {
-            intersector.end();
-            outVoxelIntersectPoint.set(intersector.get());
-            return true;
-          }
-        }
+  public boolean getVoxelPositionForPickRay(Ray pickRay, float far, Vector3i outVoxelIntersectPoint) {
+    for (float j = 0; j < far; j+=0.5f) {
+      pickRay.getEndPoint(tempA, j);
+      map.worldPositionToLocalVoxelPosition(tempA, tempB);
+      if (map.isSolid(tempB)) {
+        outVoxelIntersectPoint.set(tempB);
+        return true;
       }
     }
     return false;
@@ -135,7 +145,6 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
         octree.insert(chunks.get(i));
       }
     }
-
     return map.chunkToRebuild.size == 0;
   }
 
