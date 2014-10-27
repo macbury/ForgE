@@ -19,7 +19,7 @@ public class LevelState {
    */
   public static LevelState blank() {
     LevelState state        = new LevelState();
-    state.terrainMap        = new ChunkMap();
+    state.terrainMap        = new ChunkMap(ChunkMap.TERRAIN_TILE_SIZE);
     state.id                = uid();
     state.name              = MAP_NAME_PREFIX + state.id;
 

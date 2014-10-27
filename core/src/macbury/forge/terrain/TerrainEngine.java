@@ -99,9 +99,8 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
     camera.restoreFov();
   }
 
-
   public boolean getVoxelPositionForPickRay(Ray pickRay, Vector3Int outVoxelIntersectPoint) {
-    VoxelIntersector intersector = new VoxelIntersector(ChunkMap.TILE_SIZE);
+    VoxelIntersector intersector = new VoxelIntersector(ChunkMap.TERRAIN_TILE_SIZE);
     for (int i = 0; i < visibleChunks.size; i++) {
       Chunk visibleChunk = visibleChunks.get(i);
 

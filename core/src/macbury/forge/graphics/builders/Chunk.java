@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.graphics.batch.renderable.VoxelFaceRenderable;
+import macbury.forge.level.map.ChunkMap;
 import macbury.forge.octree.OctreeNode;
 import macbury.forge.octree.OctreeObject;
 import macbury.forge.utils.Vector3Int;
@@ -31,6 +32,8 @@ public class Chunk implements OctreeObject, Disposable {
 
   public void updateBoundingBox() {
     boundingBox.set(worldPosition, temp.set(worldPosition).add(size));
+    boundingBox.min.scl(ChunkMap.TERRAIN_TILE_SIZE);
+    boundingBox.max.scl(ChunkMap.TERRAIN_TILE_SIZE);
   }
 
   @Override

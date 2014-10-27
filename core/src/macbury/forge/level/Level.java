@@ -54,8 +54,8 @@ public class Level implements Disposable {
     this.terrainEngine       = new TerrainEngine(this);
     this.entities            = new LevelEntityEngine(this);
 
-    staticOctree.setBounds(terrainMap.getBounds(ChunkMap.TILE_SIZE));
-    dynamicOctree.setBounds(terrainMap.getBounds(ChunkMap.TILE_SIZE));
+    staticOctree.setBounds(terrainMap.getBounds(ChunkMap.TERRAIN_TILE_SIZE));
+    dynamicOctree.setBounds(terrainMap.getBounds(ChunkMap.TERRAIN_TILE_SIZE));
     for (int i = 0; i < 50; i++) {
       Entity e          = entities.createEntity();
       Position position = entities.createComponent(Position.class);

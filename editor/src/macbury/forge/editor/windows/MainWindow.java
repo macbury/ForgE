@@ -36,6 +36,8 @@ public class MainWindow extends JFrame implements ForgEBootListener {
     setDefaultCloseOperation(EXIT_ON_CLOSE);
     Config config            = new Config();
     config.generateWireframe = true;
+    config.renderStaticOctree = false;
+    config.renderBoundingBox = false;
     config.debug             = true;
     engine                   = new ForgE(config);
 

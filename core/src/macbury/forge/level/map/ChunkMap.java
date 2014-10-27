@@ -13,7 +13,7 @@ import macbury.forge.utils.Vector3Int;
 public class ChunkMap extends VoxelMap {
   public static final int CHUNK_SIZE         = 20;
   public static final int CHUNK_ARRAY_SIZE    = CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE;
-  public static final Vector3 TILE_SIZE  = new Vector3(1,1,1);
+  public static final Vector3 TERRAIN_TILE_SIZE = new Vector3(1,1,1);
   public final Array<Chunk> chunks;
   public final Array<Chunk> chunkToRebuild;
 
@@ -22,8 +22,8 @@ public class ChunkMap extends VoxelMap {
   private int countChunksZ;
 
   private Vector3Int tempA = new Vector3Int();
-  public ChunkMap() {
-    super();
+  public ChunkMap(Vector3 tileSize) {
+    super(tileSize);
     chunks         = new Array<Chunk>();
     chunkToRebuild = new Array<Chunk>();
   }
@@ -38,7 +38,7 @@ public class ChunkMap extends VoxelMap {
     m.add(grass2);
     //m.add(grass3);
 
-    for(int y = 0; y < 1; y++) {
+    for(int y = 0; y < 10; y++) {
       for(int x = 0; x < width; x++) {
         for(int z = 0; z < depth; z++) {
           setMaterialForPosition(m.get((int)Math.round((m.size-1) * Math.random())), x,y,z);

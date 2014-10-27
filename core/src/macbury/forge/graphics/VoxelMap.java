@@ -14,13 +14,15 @@ public class VoxelMap implements Disposable {
   private final ColorMaterial airMaterial;
   private final BoundingBox boundingBox;
   private final Vector3 temp = new Vector3();
+  public final Vector3 tileSize;
   protected Array<ColorMaterial> materials;
   protected byte[][][] voxelMap;
   protected int width;
   protected int height;
   protected int depth;
 
-  public VoxelMap() {
+  public VoxelMap(Vector3 tileSize) {
+    this.tileSize = tileSize;
     materials   = new Array<ColorMaterial>();
     airMaterial = ColorMaterial.air();
     boundingBox = new BoundingBox();

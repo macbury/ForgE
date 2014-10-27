@@ -18,6 +18,7 @@ import macbury.forge.utils.Vector3Int;
  * Created by macbury on 16.10.14.
  */
 public class TerrainBuilder extends VoxelsAssembler {
+
   public enum Face {
     Left(Vector3Int.LEFT), Right(Vector3Int.RIGHT), Top(Vector3Int.TOP), Bottom(Vector3Int.BOTTOM), Front(Vector3Int.FRONT), Back(Vector3Int.BACK);
     public final Vector3Int direction;
@@ -31,6 +32,7 @@ public class TerrainBuilder extends VoxelsAssembler {
   private final VoxelMap map;
   public final TerrainCursor cursor;
   private Vector3 tempA = new Vector3();
+  private Vector3 tempB = new Vector3();
   private Array<Face> facesToBuild = new Array<Face>();
 
   public TerrainBuilder(VoxelMap voxelMap) {
@@ -48,33 +50,34 @@ public class TerrainBuilder extends VoxelsAssembler {
             cursor.size.y = Math.max(y, cursor.size.y);
             cursor.size.z = Math.max(z, cursor.size.z);
 
-            tempA.set(x,y,z).sub(cursor.start.x, cursor.start.y, cursor.start.z);
+            tempB.set(cursor.start.x, cursor.start.y, cursor.start.z);
+            tempA.set(x,y,z).scl(map.tileSize).sub(tempB);
 
-            if (map.isEmpty(x + checkTileInDirection.x,y+checkTileInDirection.y,z+checkTileInDirection.z)) {
+            if (map.isEmpty(x + checkTileInDirection.x,y + checkTileInDirection.y, z + checkTileInDirection.z)) {
               ColorMaterial material = map.getMaterialForPosition(x, y, z);
               switch (face) {
                 case Top:
-                  top(tempA, ChunkMap.TILE_SIZE, material);
+                  top(tempA, map.tileSize, material);
                 break;
 
                 case Bottom:
-                  bottom(tempA, ChunkMap.TILE_SIZE, material);
+                  bottom(tempA, map.tileSize, material);
                 break;
 
                 case Front:
-                  front(tempA, ChunkMap.TILE_SIZE, material);
+                  front(tempA, map.tileSize, material);
                 break;
 
                 case Back:
-                  back(tempA, ChunkMap.TILE_SIZE, material);
+                  back(tempA, map.tileSize, material);
                 break;
 
                 case Left:
-                  left(tempA, ChunkMap.TILE_SIZE, material);
+                  left(tempA, map.tileSize, material);
                 break;
 
                 case Right:
-                  right(tempA, ChunkMap.TILE_SIZE, material);
+                  right(tempA, map.tileSize, material);
                 break;
               }
 
@@ -83,8 +86,8 @@ public class TerrainBuilder extends VoxelsAssembler {
         }
       }
     }
-
-    cursor.size.sub(cursor.size.x, cursor.size.y, cursor.size.z).add(1,1,1);
+    tempA.set(cursor.start.x, cursor.start.y, cursor.start.z).scl(map.tileSize);
+    cursor.size.scl(map.tileSize).sub(tempA).add(map.tileSize);
   }
 
   public void facesForChunk(Chunk chunk) {
@@ -107,27 +110,27 @@ public class TerrainBuilder extends VoxelsAssembler {
             ColorMaterial material = map.getMaterialForPosition(x, y, z);
 
             if (map.isEmpty(x,y+1,z)) {
-              top(tempA, ChunkMap.TILE_SIZE, material);
+              top(tempA, ChunkMap.TERRAIN_TILE_SIZE, material);
             }
 
             if (map.isEmpty(x,y-1,z)) {
-              bottom(tempA, ChunkMap.TILE_SIZE, material);
+              bottom(tempA, ChunkMap.TERRAIN_TILE_SIZE, material);
             }
 
             if (map.isEmpty(x-1,y,z)) {
-              left(tempA, ChunkMap.TILE_SIZE, material);
+              left(tempA, ChunkMap.TERRAIN_TILE_SIZE, material);
             }
 
             if (map.isEmpty(x+1,y,z)) {
-              right(tempA, ChunkMap.TILE_SIZE, material);
+              right(tempA, ChunkMap.TERRAIN_TILE_SIZE, material);
             }
 
             if (map.isEmpty(x,y,z+1)) {
-              front(tempA, ChunkMap.TILE_SIZE, material);
+              front(tempA, ChunkMap.TERRAIN_TILE_SIZE, material);
             }
 
             if (map.isEmpty(x,y,z-1)) {
-              back(tempA, ChunkMap.TILE_SIZE, material);
+              back(tempA, ChunkMap.TERRAIN_TILE_SIZE, material);
             }
           }
         }
@@ -162,6 +165,9 @@ public class TerrainBuilder extends VoxelsAssembler {
       renderable.worldTransform.idt();
       renderable.worldTransform.translate(chunk.worldPosition);
       renderable.direction.set(face.direction.x, face.direction.y, face.direction.z);
+      renderable.mesh.calculateBoundingBox(renderable.boundingBox);
+      renderable.boundingBox.min.add(chunk.worldPosition);
+      renderable.boundingBox.max.add(chunk.worldPosition);
       return renderable;
     }
   }
@@ -173,7 +179,7 @@ public class TerrainBuilder extends VoxelsAssembler {
 
     if (ForgE.config.generateWireframe)
       renderable.wireframe           = this.wireframe();
-    renderable.setMesh(this.mesh(MeshVertexInfo.AttributeType.Position, MeshVertexInfo.AttributeType.Normal, MeshVertexInfo.AttributeType.Color));
+    renderable.mesh = this.mesh(MeshVertexInfo.AttributeType.Position, MeshVertexInfo.AttributeType.Normal, MeshVertexInfo.AttributeType.Color);
 
     return renderable;
   }

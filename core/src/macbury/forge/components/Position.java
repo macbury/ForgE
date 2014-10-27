@@ -36,7 +36,7 @@ public class Position extends Component implements Pool.Poolable, OctreeObject {
     vector.setZero();
     worldTransform.idt();
     rotation.set(Vector3.Z, 90);
-    size.set(ChunkMap.TILE_SIZE);
+    size.set(ChunkMap.TERRAIN_TILE_SIZE);
     scale.set(1,1,1);
     parent = null;
     visible = false;

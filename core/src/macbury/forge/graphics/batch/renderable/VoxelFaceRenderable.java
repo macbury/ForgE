@@ -1,6 +1,5 @@
 package macbury.forge.graphics.batch.renderable;
 
-import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Disposable;
@@ -12,13 +11,8 @@ import macbury.forge.graphics.builders.Chunk;
 public class VoxelFaceRenderable extends BaseRenderable implements Disposable {
   public Vector3 direction = new Vector3();
   private Chunk parent;
-  public BoundingBox boundingBox;
+  public BoundingBox boundingBox = new BoundingBox();
 
-  public void setMesh(Mesh mesh) {
-    this.mesh = mesh;
-    boundingBox = new BoundingBox();
-    mesh.calculateBoundingBox(boundingBox);
-  }
 
   @Override
   public void dispose() {
