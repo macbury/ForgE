@@ -79,12 +79,10 @@ public class DebugSystem extends IteratingSystem {
           chunk.getBoundingBox(tempBox);
 
           DebugShape.draw(batch.shapeRenderer, tempBox);
-          //batch.shapeRenderer.identity();
           batch.shapeRenderer.setColor(Color.NAVY);
           for (int j = 0; j < chunk.renderables.size; j++) {
             VoxelFaceRenderable renderable = chunk.renderables.get(j);
-            //batch.shapeRenderer.setTransformMatrix(renderable.worldTransform);
-            //DebugShape.draw(batch.shapeRenderer, renderable.boundingBox);
+            DebugShape.draw(batch.shapeRenderer, renderable.boundingBox);
           }
         }
       }

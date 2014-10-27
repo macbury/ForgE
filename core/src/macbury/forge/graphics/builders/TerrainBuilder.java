@@ -50,7 +50,7 @@ public class TerrainBuilder extends VoxelsAssembler {
             cursor.size.y = Math.max(y, cursor.size.y);
             cursor.size.z = Math.max(z, cursor.size.z);
 
-            tempB.set(cursor.start.x, cursor.start.y, cursor.start.z);
+            tempB.set(cursor.start.x, cursor.start.y, cursor.start.z).scl(map.tileSize);
             tempA.set(x,y,z).scl(map.tileSize).sub(tempB);
 
             if (map.isEmpty(x + checkTileInDirection.x,y + checkTileInDirection.y, z + checkTileInDirection.z)) {
