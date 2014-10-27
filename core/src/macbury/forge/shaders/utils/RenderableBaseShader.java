@@ -8,6 +8,7 @@ import macbury.forge.graphics.batch.renderable.BaseRenderable;
  */
 public abstract class RenderableBaseShader<T extends BaseRenderable> extends BaseShader {
   protected Mesh currentMesh;
+  public final String UNIFORM_WORLD_TRANSFORM = "u_worldTransform";
 
   public abstract boolean canRender (BaseRenderable instance);
 

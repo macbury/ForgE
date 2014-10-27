@@ -3,6 +3,7 @@ package macbury.forge.graphics.builders;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 import macbury.forge.ForgE;
 import macbury.forge.graphics.ColorMaterial;
 import macbury.forge.graphics.VoxelMap;
@@ -17,11 +18,20 @@ import macbury.forge.utils.Vector3Int;
  * Created by macbury on 16.10.14.
  */
 public class TerrainBuilder extends VoxelsAssembler {
+  public enum Face {
+    Left(Vector3Int.LEFT), Right(Vector3Int.RIGHT), Top(Vector3Int.TOP), Bottom(Vector3Int.BOTTOM), Front(Vector3Int.FRONT), Back(Vector3Int.BACK);
+    public final Vector3Int direction;
+
+    Face(Vector3Int direction) {
+      this.direction = direction;
+    }
+  }
   private static final String TAG = "TerrainBuilder";
   private static final String TERRAIN_SHADER = "terrain";
   private final VoxelMap map;
   public final TerrainCursor cursor;
   private Vector3 tempA = new Vector3();
+  private Array<Face> facesToBuild = new Array<Face>();
 
   public TerrainBuilder(VoxelMap voxelMap) {
     super();
@@ -29,7 +39,7 @@ public class TerrainBuilder extends VoxelsAssembler {
     this.cursor    = new TerrainCursor();
   }
 
-  public void bottomFace() {
+  private void buildFace(Vector3Int checkTileInDirection, Face face) {
     for (int y = cursor.start.y; y < cursor.end.y; y++) {
       for (int x = cursor.start.x; x < cursor.end.x; x++) {
         for (int z = cursor.start.z; z < cursor.end.z; z++) {
@@ -38,141 +48,36 @@ public class TerrainBuilder extends VoxelsAssembler {
             cursor.size.y = Math.max(y, cursor.size.y);
             cursor.size.z = Math.max(z, cursor.size.z);
 
-            tempA.set(x,y,z);
-            ColorMaterial material = map.getMaterialForPosition(x, y, z);
+            tempA.set(x,y,z).sub(cursor.start.x, cursor.start.y, cursor.start.z);
 
-            if (map.isEmpty(x,y-1,z)) {
-              bottom(tempA, ChunkMap.TILE_SIZE, material);
-            }
-          }
-        }
-      }
-    }
+            if (map.isEmpty(x + checkTileInDirection.x,y+checkTileInDirection.y,z+checkTileInDirection.z)) {
+              ColorMaterial material = map.getMaterialForPosition(x, y, z);
+              switch (face) {
+                case Top:
+                  top(tempA, ChunkMap.TILE_SIZE, material);
+                break;
 
-    cursor.size.sub(cursor.size.x, cursor.size.y, cursor.size.z).add(1,1,1);
-  }
+                case Bottom:
+                  bottom(tempA, ChunkMap.TILE_SIZE, material);
+                break;
 
-  private final Vector3Int cursorStart    = new Vector3Int();
-  private final Vector3Int cursorPosition = new Vector3Int();
-  private final Vector3Int tempSize       = new Vector3Int();
-  public void topFace() {
+                case Front:
+                  front(tempA, ChunkMap.TILE_SIZE, material);
+                break;
 
-    for (int y = cursor.start.y; y < cursor.end.y; y++) {
-      cursorStart.set(cursor.start).y = y;
-      cursorPosition.set(cursorStart);
+                case Back:
+                  back(tempA, ChunkMap.TILE_SIZE, material);
+                break;
 
-      /*tempSize.set(ChunkMap.TILE_SIZE);
-      while(cursorPosition.x < cursor.end.x) {
-        cursorPosition.x++;
+                case Left:
+                  left(tempA, ChunkMap.TILE_SIZE, material);
+                break;
 
-      }*/
-      for (int x = cursorPosition.x; x < cursor.end.x; x++) {
-        for (int z = cursorPosition.z; z < cursor.end.z; z++) {
-          if (map.isSolid(x, y, z)) {
-            cursor.size.x = Math.max(x, cursor.size.x);
-            cursor.size.y = Math.max(y, cursor.size.y);
-            cursor.size.z = Math.max(z, cursor.size.z);
+                case Right:
+                  right(tempA, ChunkMap.TILE_SIZE, material);
+                break;
+              }
 
-            tempA.set(x,y,z);
-            ColorMaterial material = map.getMaterialForPosition(x, y, z);
-
-            if (map.isEmpty(x,y+1,z)) {
-              top(tempA, ChunkMap.TILE_SIZE, material);
-            }
-          }
-        }
-      }
-    }
-
-    cursor.size.sub(cursor.size.x, cursor.size.y, cursor.size.z).add(1,1,1);
-  }
-
-  public void rightFace() {
-    for (int z = cursor.start.z; z < cursor.end.z; z++) {
-      for (int y = cursor.start.y; y < cursor.end.y; y++) {
-        for (int x = cursor.start.x; x < cursor.end.x; x++) {
-          if (map.isSolid(x, y, z)) {
-            cursor.size.x = Math.max(x, cursor.size.x);
-            cursor.size.y = Math.max(y, cursor.size.y);
-            cursor.size.z = Math.max(z, cursor.size.z);
-
-            tempA.set(x,y,z);
-            ColorMaterial material = map.getMaterialForPosition(x, y, z);
-
-            if (map.isEmpty(x+1,y,z)) {
-              right(tempA, ChunkMap.TILE_SIZE, material);
-            }
-          }
-        }
-      }
-    }
-
-    cursor.size.sub(cursor.size.x, cursor.size.y, cursor.size.z).add(1,1,1);
-  }
-
-  public void leftFace() {
-    //Gdx.app.log(TAG, "Building faces for: " + cursor.start.toString() + " - " + cursor.end.toString());
-    for (int z = cursor.start.z; z < cursor.end.z; z++) {
-      for (int y = cursor.start.y; y < cursor.end.y; y++) {
-        for (int x = cursor.start.x; x < cursor.end.x; x++) {
-          if (map.isSolid(x, y, z)) {
-            cursor.size.x = Math.max(x, cursor.size.x);
-            cursor.size.y = Math.max(y, cursor.size.y);
-            cursor.size.z = Math.max(z, cursor.size.z);
-
-            tempA.set(x,y,z);
-            ColorMaterial material = map.getMaterialForPosition(x, y, z);
-
-            if (map.isEmpty(x-1,y,z)) {
-              left(tempA, ChunkMap.TILE_SIZE, material);
-            }
-          }
-        }
-      }
-    }
-
-    cursor.size.sub(cursor.size.x, cursor.size.y, cursor.size.z).add(1,1,1);
-  }
-
-  public void backFace() {
-    //Gdx.app.log(TAG, "Building faces for: " + cursor.start.toString() + " - " + cursor.end.toString());
-    for (int z = cursor.start.z; z < cursor.end.z; z++) {
-      for (int y = cursor.start.y; y < cursor.end.y; y++) {
-        for (int x = cursor.start.x; x < cursor.end.x; x++) {
-          if (map.isSolid(x, y, z)) {
-            cursor.size.x = Math.max(x, cursor.size.x);
-            cursor.size.y = Math.max(y, cursor.size.y);
-            cursor.size.z = Math.max(z, cursor.size.z);
-
-            tempA.set(x,y,z);
-            ColorMaterial material = map.getMaterialForPosition(x, y, z);
-
-            if (map.isEmpty(x,y,z-1)) {
-              back(tempA, ChunkMap.TILE_SIZE, material);
-            }
-          }
-        }
-      }
-    }
-
-    cursor.size.sub(cursor.size.x, cursor.size.y, cursor.size.z).add(1,1,1);
-  }
-
-  public void frontFace() {
-    //Gdx.app.log(TAG, "Building faces for: " + cursor.start.toString() + " - " + cursor.end.toString());
-    for (int z = cursor.start.z; z < cursor.end.z; z++) {
-      for (int y = cursor.start.y; y < cursor.end.y; y++) {
-        for (int x = cursor.start.x; x < cursor.end.x; x++) {
-          if (map.isSolid(x, y, z)) {
-            cursor.size.x = Math.max(x, cursor.size.x);
-            cursor.size.y = Math.max(y, cursor.size.y);
-            cursor.size.z = Math.max(z, cursor.size.z);
-
-            tempA.set(x,y,z);
-            ColorMaterial material = map.getMaterialForPosition(x, y, z);
-
-            if (map.isEmpty(x,y,z+1)) {
-              front(tempA, ChunkMap.TILE_SIZE, material);
             }
           }
         }
@@ -235,16 +140,42 @@ public class TerrainBuilder extends VoxelsAssembler {
     facesForPart(new Vector3Int(0,0,0), new Vector3Int(map.getWidth(), map.getHeight(), map.getDepth()), new Vector3());
   }
 
-  public VoxelFaceRenderable getRenderable() {
+  @Override
+  public void begin() {
+    super.begin();
+    facesToBuild.clear();
+    facesToBuild.addAll(Face.values());
+  }
+
+  public boolean next() {
+    return facesToBuild.size > 0;
+  }
+
+  public VoxelFaceRenderable buildFaceForChunk(Chunk chunk) {
+    Face face = facesToBuild.pop();
+    buildFace(face.direction, face);
+
+    if (isEmpty()) {
+      return null;
+    } else {
+      VoxelFaceRenderable renderable = getRenderable();
+      renderable.worldTransform.idt();
+      renderable.worldTransform.translate(chunk.worldPosition);
+      renderable.direction.set(face.direction.x, face.direction.y, face.direction.z);
+      return renderable;
+    }
+  }
+
+  private VoxelFaceRenderable getRenderable() {
     VoxelFaceRenderable renderable   = new VoxelFaceRenderable();
     renderable.primitiveType         = GL30.GL_TRIANGLES;
     renderable.shader                = (RenderableBaseShader) ForgE.shaders.get(TERRAIN_SHADER);
+
     if (ForgE.config.generateWireframe)
       renderable.wireframe           = this.wireframe();
     renderable.setMesh(this.mesh(MeshVertexInfo.AttributeType.Position, MeshVertexInfo.AttributeType.Normal, MeshVertexInfo.AttributeType.Color));
 
     return renderable;
   }
-
 
 }

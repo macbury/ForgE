@@ -109,6 +109,7 @@ public class VoxelBatch implements Disposable {
         for (int i = 0; i < renderables.size; i++) {
           final BaseRenderable renderable = renderables.get(i);
           if (renderable.wireframe != null) {
+            shapeRenderer.setTransformMatrix(renderable.worldTransform);
             renderable.wireframe.render(shapeRenderer, Color.WHITE);
           }
         }

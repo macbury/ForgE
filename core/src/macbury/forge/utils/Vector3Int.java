@@ -6,6 +6,12 @@ import com.badlogic.gdx.math.Vector3;
  * Created by macbury on 19.10.14.
  */
 public class Vector3Int {
+  public static final Vector3Int TOP = new Vector3Int(0,1,0);
+  public static final Vector3Int BOTTOM = new Vector3Int(0,-1,0);
+  public static final Vector3Int BACK = new Vector3Int(0, 0, -1);
+  public static final Vector3Int FRONT = new Vector3Int(0, 0, 1);
+  public static final Vector3Int RIGHT = new Vector3Int(1, 0, 0);
+  public static final Vector3Int LEFT = new Vector3Int(-1,0,0);
   public int x;
   public int y;
   public int z;

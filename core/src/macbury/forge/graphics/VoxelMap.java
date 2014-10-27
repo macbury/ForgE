@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import macbury.forge.utils.Vector3Int;
 
 /**
  * Created by macbury on 17.10.14.
@@ -104,5 +105,9 @@ public class VoxelMap implements Disposable {
     temp.set(getWidth() * voxelSize.x, getHeight() * voxelSize.y, getDepth() * voxelSize.z);
     boundingBox.set(Vector3.Zero, temp);
     return boundingBox;
+  }
+
+  public boolean isSolid(Vector3Int position) {
+    return isEmpty(position.x, position.y, position.z);
   }
 }

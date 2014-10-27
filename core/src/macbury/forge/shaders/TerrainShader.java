@@ -24,6 +24,6 @@ public class TerrainShader extends RenderableBaseShader<VoxelFaceRenderable> {
 
   @Override
   public void beforeRender(VoxelFaceRenderable renderable) {
-
+    shader.setUniformMatrix(UNIFORM_WORLD_TRANSFORM, renderable.worldTransform);
   }
 }

@@ -32,4 +32,8 @@ public class VoxelFaceRenderable extends BaseRenderable implements Disposable {
   public void setParent(Chunk parent) {
     this.parent = parent;
   }
+
+  public Chunk getParent() {
+    return parent;
+  }
 }
