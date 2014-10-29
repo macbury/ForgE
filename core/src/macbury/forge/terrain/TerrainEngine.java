@@ -1,10 +1,8 @@
 package macbury.forge.terrain;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
-import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
@@ -115,41 +113,6 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
     }
     visibleChunks.sort(sorter);
     camera.restoreFov();
-  }
-
-  public boolean getVoxelPositionForPickRay(Ray pickRay, float far, Vector3i outVoxelIntersectPoint) {
-    for (float j = 0; j < far; j+=0.5f) {
-      pickRay.getEndPoint(tempA, j);
-      map.worldPositionToLocalVoxelPosition(tempA, tempB);
-      if (map.isSolid(tempB)) {
-        outVoxelIntersectPoint.set(tempB);
-        tempC.setZero().sub(pickRay.direction);
-
-        if (map.isEmpty(tempB.x, tempB.y,tempB.z - MathUtils.ceil(tempC.z))) {
-          outVoxelIntersectPoint.add(0,0,-1);
-        } else if (map.isEmpty(tempB.x, tempB.y,tempB.z + MathUtils.ceil(tempC.z))) {
-          outVoxelIntersectPoint.add(0,0,1);
-        } else if (map.isEmpty(tempB.x, tempB.y + MathUtils.ceil(tempC.y), tempB.z)) {
-          outVoxelIntersectPoint.add(0,1,0);
-        }
-        //map.localVoxelPositionToWorldPosition(tempB, tempC);
-        /*Array<OctreeObject> testChunk = new Array<OctreeObject>();
-        octree.retrieve(testChunk, tempC);
-
-        for (int i = 0; i < testChunk.size; i++) {
-          Chunk chunk = (Chunk)testChunk.get(i);
-          for (int k = 0; k < chunk.renderables.size; k++) {
-            VoxelFaceRenderable faceRenderable = chunk.getFace(k);
-            if (faceRenderable.boundingBox.contains(tempC)) {
-              outVoxelIntersectPoint.add(faceRenderable.direction);
-              break;
-            }
-          }
-        }*/
-        return true;
-      }
-    }
-    return false;
   }
 
   /**

@@ -15,6 +15,7 @@ import macbury.forge.level.map.ChunkMap;
 import macbury.forge.terrain.TerrainEngine;
 import macbury.forge.ui.Overlay;
 import macbury.forge.utils.Vector3i;
+import macbury.forge.utils.VoxelPicker;
 
 /**
  * Created by macbury on 19.10.14.
@@ -25,12 +26,14 @@ public class EditorSystem extends EntitySystem implements EntityListener {
   private final TerrainEngine terrain;
   private final Position cursorPositionComponent;
   private final ChunkMap map;
+  private final VoxelPicker voxelPicker;
   private Overlay overlay;
   private final MousePosition mousePosition;
   public final Vector3i intersectionPoint = new Vector3i();
 
   public EditorSystem(Level level) {
     super();
+    this.voxelPicker = new VoxelPicker(level.terrainMap);
     this.camera   = level.camera;
     mousePosition = new MousePosition(camera);
     this.terrain  = level.terrainEngine;
@@ -62,7 +65,7 @@ public class EditorSystem extends EntitySystem implements EntityListener {
   private void updateCursor() {
     Ray pickRay              = camera.getPickRay(mousePosition.x, mousePosition.y);
 
-    if (terrain.getVoxelPositionForPickRay(pickRay, camera.far, intersectionPoint)) {
+    if (voxelPicker.getVoxelPositionForPickRay(pickRay, camera.far, intersectionPoint)) {
       cursorPositionComponent.size.set(ChunkMap.TERRAIN_TILE_SIZE);
       cursorPositionComponent.vector.set(intersectionPoint.x, intersectionPoint.y, intersectionPoint.z);
     }

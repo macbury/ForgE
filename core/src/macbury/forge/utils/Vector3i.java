@@ -78,4 +78,10 @@ public class Vector3i {
   public void add(Vector3 other) {
     add((int)other.x, (int)other.y, (int)other.z);
   }
+
+  public void sub(Vector3 other) {
+    x -= other.x;
+    y -= other.y;
+    z -= other.z;
+  }
 }
