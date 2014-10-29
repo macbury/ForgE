@@ -37,12 +37,13 @@ public abstract class BaseShader implements Disposable {
     fragmentSrc = loadHelpers(FRAGMENT_HELPER_KEY) + fragmentSrc;
     vertexSrc   = loadHelpers(VERTEX_HELPER_KEY) + vertexSrc;
 
-    shader                   = new ShaderProgram(vertexSrc, fragmentSrc);
-    if (shader.isCompiled()) {
+    ShaderProgram newShaderProgram = new ShaderProgram(vertexSrc, fragmentSrc);
+    if (newShaderProgram.isCompiled()) {
+      shader = newShaderProgram;
       return true;
     } else {
       Gdx.app.error(TAG, "Error while compiling shader:");
-      Gdx.app.error(TAG, getLog());
+      Gdx.app.error(TAG, newShaderProgram.getLog());
       Gdx.app.error(TAG, "Fragment SRC === " + fragment);
       Gdx.app.error(TAG, fragmentSrc);
       Gdx.app.error(TAG, "Vertex SRC ===" + vertex);

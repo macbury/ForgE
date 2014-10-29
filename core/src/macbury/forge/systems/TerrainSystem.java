@@ -18,7 +18,6 @@ import macbury.forge.graphics.builders.Chunk;
 import macbury.forge.graphics.builders.TerrainBuilder;
 import macbury.forge.graphics.mesh.MeshVertexInfo;
 import macbury.forge.level.map.ChunkMap;
-import macbury.forge.shaders.utils.RenderableBaseShader;
 import macbury.forge.systems.engine.LevelEntityEngine;
 
 import java.util.HashMap;
@@ -27,7 +26,6 @@ import java.util.HashMap;
  * Created by macbury on 19.10.14.
  */
 public class TerrainSystem extends IntervalSystem implements Disposable, BaseRenderableProvider {
-  private static final String TERRAIN_SHADER = "terrain";
   private static final float UPDATE_EVERY    = 0.10f;//second
   private ComponentMapper<Renderable> rm     = ComponentMapper.getFor(Renderable.class);
   private ComponentMapper<Position>   pm     = ComponentMapper.getFor(Position.class);
@@ -85,7 +83,6 @@ public class TerrainSystem extends IntervalSystem implements Disposable, BaseRen
           renderableComponent.useWorldTransform              = false;
           renderableComponent.instance                       = new TerrainChunkRenderable();
           renderableComponent.instance.primitiveType         = GL30.GL_TRIANGLES;
-          renderableComponent.instance.shader                = (RenderableBaseShader)ForgE.shaders.get(TERRAIN_SHADER);
           tileEntities.put(chunk, tileEntity);
 
           tileEntity.add(renderableComponent);

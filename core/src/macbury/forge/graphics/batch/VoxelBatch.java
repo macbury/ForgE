@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
 import macbury.forge.graphics.batch.renderable.BaseRenderableProvider;
 import macbury.forge.level.LevelEnv;
+import macbury.forge.shaders.ShaderProvider;
 import macbury.forge.shaders.utils.RenderableBaseShader;
 
 /**
@@ -18,6 +19,8 @@ import macbury.forge.shaders.utils.RenderableBaseShader;
 public class VoxelBatch implements Disposable {
   public final ShapeRenderer shapeRenderer;
   private final CameraRenderableSorter sorter;
+  private final ShaderProvider shaderProvider;
+  public long trianglesPerFrame;
   protected Camera camera;
   protected final RenderContext context;
   protected final Array<BaseRenderable> renderables = new Array<BaseRenderable>();
@@ -32,10 +35,12 @@ public class VoxelBatch implements Disposable {
 
   public VoxelBatch(RenderContext customRenderContext) {
     this.context        = customRenderContext;
+    this.shaderProvider = new ShaderProvider();
     this.shapeRenderer  = new ShapeRenderer();
     this.type           = RenderType.Normal;
     this.sorter         = new CameraRenderableSorter();
     renderablesPerFrame = 0;
+    trianglesPerFrame   = 0;
   }
 
   public RenderType getType() {
@@ -50,6 +55,7 @@ public class VoxelBatch implements Disposable {
     if (camera != null) throw new GdxRuntimeException("Call end() first.");
     camera = cam;
     sorted = false;
+    trianglesPerFrame = 0;
   }
 
   /**
@@ -112,6 +118,7 @@ public class VoxelBatch implements Disposable {
           if (renderable.wireframe != null) {
             shapeRenderer.setTransformMatrix(renderable.worldTransform);
             renderable.wireframe.render(shapeRenderer, Color.WHITE);
+            trianglesPerFrame += renderable.triangleCount;
           }
         }
       } shapeRenderer.end();
@@ -120,14 +127,18 @@ public class VoxelBatch implements Disposable {
 
   private void renderTextured(LevelEnv env) {
     RenderableBaseShader currentShader = null;
+    RenderableBaseShader currentRenderableShader = null;
     for (int i = 0; i < renderables.size; i++) {
       final BaseRenderable renderable = renderables.get(i);
-      if (currentShader != renderable.shader) {
+      currentRenderableShader         = shaderProvider.provide(renderable);
+
+      if (currentShader != currentRenderableShader) {
         if (currentShader != null) currentShader.end();
-        currentShader = renderable.shader;
+        currentShader = currentRenderableShader;
         currentShader.begin(camera, context, env);
       }
       currentShader.render(renderable);
+      trianglesPerFrame += renderable.triangleCount;
     }
 
     if (currentShader != null) currentShader.end();

@@ -28,6 +28,7 @@ public class MainWindow extends JFrame implements ForgEBootListener {
   private JToolBar mainToolbar;
   private JButton rectButton;
   private JLabel mapCursorPositionLabel;
+  private JLabel statusTriangleCountLabel;
   private ShaderFileChangeListener shaderFileChangeListener;
 
   public MainWindow() {
@@ -55,12 +56,9 @@ public class MainWindow extends JFrame implements ForgEBootListener {
 
     projectController = new ProjectController();
     projectController.setMainWindow(this);
-    projectController.setStatusLabel(statusFpsLabel, statusMemoryLabel, statusRenderablesLabel, mapCursorPositionLabel);
+    projectController.setStatusLabel(statusFpsLabel, statusMemoryLabel, statusRenderablesLabel, mapCursorPositionLabel, statusTriangleCountLabel);
 
     projectController.addOnMapChangeListener(mainMenu);
-    //setJMenuBar(mainMenu);
-
-    //pack();
   }
 
   public void centreWindow() {

@@ -17,6 +17,7 @@ import macbury.forge.level.Level;
 import macbury.forge.level.map.ChunkMap;
 import macbury.forge.octree.OctreeNode;
 import macbury.forge.octree.OctreeObject;
+import macbury.forge.octree.query.FrustrumClassFilterOctreeQuery;
 import macbury.forge.utils.ActionTimer;
 import macbury.forge.utils.Vector3i;
 
@@ -43,20 +44,23 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
   private  final BoundingBox tempBox;
   private final Array<Chunk> visibleChunks;
   private final Comparator<Chunk> sorter;
+  private final FrustrumClassFilterOctreeQuery frustrumOctreeQuery;
 
   public TerrainEngine(Level level) {
     this.timer = new ActionTimer(UPDATE_EVERY, this);
     this.timer.start();
-
+    this.frustrumOctreeQuery  = new FrustrumClassFilterOctreeQuery();
     this.tempObjects          = new Array<OctreeObject>();
     this.visibleChunks        = new Array<Chunk>();
     this.visibleFaces         = new Array<VoxelFaceRenderable>();
     this.chunks               = new Array<Chunk>();
     this.map                  = level.terrainMap;
-    this.octree               = level.staticOctree;
+    this.octree               = level.octree;
     this.camera               = level.camera;
     this.builder              = new TerrainBuilder(map);
     this.tempBox              = new BoundingBox();
+    frustrumOctreeQuery.setKlass(Chunk.class);
+
     this.sorter               = new Comparator<Chunk>() {
       @Override
       public int compare(Chunk o1, Chunk o2) {
@@ -93,25 +97,18 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
     tempObjects.clear();
 
     camera.extendFov();
-    octree.retrieve(tempObjects, camera.normalOrDebugFrustrum(), false);
+    frustrumOctreeQuery.setFrustum(camera.normalOrDebugFrustrum());
+    octree.retrieve(tempObjects, frustrumOctreeQuery);
 
     while(tempObjects.size > 0) {
       Chunk visibleChunk = (Chunk) tempObjects.pop();
-      visibleChunk.getBoundingBox(tempBox);
-      if(camera.boundsInFrustum(tempBox)) {
-        if (visibleChunk.renderables.size > 0) {
-          visibleChunks.add(visibleChunk);
+      if (visibleChunk.renderables.size > 0) {
+        visibleChunks.add(visibleChunk);
 
-          for (int i = 0; i < visibleChunk.renderables.size; i++) {
-            VoxelFaceRenderable renderable = visibleChunk.renderables.get(i);
-            //get ray from my position to face position, get its direction, then check if facing direction is oposite to renderable position then show it
-            //renderable.worldTransform.getTranslation(tempC);
-            //tempC.sub(renderable.direction);
-            //tempA.set(camera.normalOrDebugPosition()).sub(camera.normalOrDebugDirection());
-
-            if (camera.boundsInFrustum(renderable.boundingBox)) {
-              visibleFaces.add(renderable);
-            }
+        for (int i = 0; i < visibleChunk.renderables.size; i++) {
+          VoxelFaceRenderable renderable = visibleChunk.renderables.get(i);
+          if (camera.boundsInFrustum(renderable.boundingBox)) {
+            visibleFaces.add(renderable);
           }
         }
       }
@@ -128,7 +125,9 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
         outVoxelIntersectPoint.set(tempB);
         tempC.setZero().sub(pickRay.direction);
 
-        if (map.isEmpty(tempB.x, tempB.y,tempB.z + MathUtils.ceil(tempC.z))) {
+        if (map.isEmpty(tempB.x, tempB.y,tempB.z - MathUtils.ceil(tempC.z))) {
+          outVoxelIntersectPoint.add(0,0,-1);
+        } else if (map.isEmpty(tempB.x, tempB.y,tempB.z + MathUtils.ceil(tempC.z))) {
           outVoxelIntersectPoint.add(0,0,1);
         } else if (map.isEmpty(tempB.x, tempB.y + MathUtils.ceil(tempC.y), tempB.z)) {
           outVoxelIntersectPoint.add(0,1,0);
@@ -163,12 +162,6 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
       while (map.chunkToRebuild.size > 0) {
         Chunk chunk = map.chunkToRebuild.pop();
         buildChunkGeometry(chunk);
-      }
-
-      octree.clear();
-      octree.setMaxObjects(5);
-      for (int i = 0; i < chunks.size; i++) {
-        octree.insert(chunks.get(i));
       }
     }
     return map.chunkToRebuild.size == 0;

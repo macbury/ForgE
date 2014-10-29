@@ -5,20 +5,18 @@ import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import macbury.forge.ForgE;
-import macbury.forge.graphics.VoxelMaterial;
 import macbury.forge.graphics.VoxelMap;
+import macbury.forge.graphics.VoxelMaterial;
 import macbury.forge.graphics.batch.renderable.VoxelFaceRenderable;
 import macbury.forge.graphics.mesh.MeshVertexInfo;
 import macbury.forge.graphics.mesh.VoxelsAssembler;
 import macbury.forge.level.map.ChunkMap;
-import macbury.forge.shaders.utils.RenderableBaseShader;
 import macbury.forge.utils.Vector3i;
 
 /**
  * Created by macbury on 16.10.14.
  */
 public class TerrainBuilder extends VoxelsAssembler {
-
   public enum Face {
     Left(Vector3i.LEFT), Right(Vector3i.RIGHT), Top(Vector3i.TOP), Bottom(Vector3i.BOTTOM), Front(Vector3i.FRONT), Back(Vector3i.BACK);
     public final Vector3i direction;
@@ -28,7 +26,7 @@ public class TerrainBuilder extends VoxelsAssembler {
     }
   }
   private static final String TAG = "TerrainBuilder";
-  private static final String TERRAIN_SHADER = "terrain";
+
   private final VoxelMap map;
   public final TerrainCursor cursor;
   private Vector3 tempA = new Vector3();
@@ -175,13 +173,14 @@ public class TerrainBuilder extends VoxelsAssembler {
   private VoxelFaceRenderable getRenderable() {
     VoxelFaceRenderable renderable   = new VoxelFaceRenderable();
     renderable.primitiveType         = GL30.GL_TRIANGLES;
-    renderable.shader                = (RenderableBaseShader) ForgE.shaders.get(TERRAIN_SHADER);
 
     if (ForgE.config.generateWireframe)
       renderable.wireframe           = this.wireframe();
+    renderable.triangleCount         = triangleArrayList.size();
     renderable.mesh = this.mesh(MeshVertexInfo.AttributeType.Position, MeshVertexInfo.AttributeType.Normal, MeshVertexInfo.AttributeType.Color);
 
     return renderable;
   }
+
 
 }

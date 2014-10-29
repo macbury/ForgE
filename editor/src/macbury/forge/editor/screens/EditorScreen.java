@@ -24,7 +24,7 @@ public class EditorScreen extends AbstractScreen {
   protected void initialize() {
     this.overlay            = new Overlay();
     this.stage              = new Stage();
-    this.level              = new Level(LevelState.heightMapTest());
+    this.level              = new Level(LevelState.blank());
     this.editorSystem       = new EditorSystem(level);
     level.camera.far        = 512;
     this.cameraController   = new RTSCameraController();

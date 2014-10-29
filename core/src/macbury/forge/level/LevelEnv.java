@@ -12,7 +12,7 @@ public class LevelEnv {
 
   public LevelEnv() {
     mainLight    = new DirectionalLight();
-    mainLight.set(1.4f, 1.4f, 1.4f, 0.2f, -0.3f, -0.54f);
+    mainLight.set(1.0f, 1.0f, 1.0f, 0.2f, -0.3f, -0.54f);
     ambientLight = new Color( 0.4f, 0.4f, 0.4f, 1f);
   }
 }

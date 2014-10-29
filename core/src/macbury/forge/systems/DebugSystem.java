@@ -45,8 +45,8 @@ public class DebugSystem extends IteratingSystem {
     super(Family.getFor(Position.class));
     this.batch            = level.batch;
     this.context          = level.renderContext;
-    this.dynamicOctree    = level.dynamicOctree;
-    this.terrainOctree    = level.staticOctree;
+    this.dynamicOctree    = level.octree;
+    this.terrainOctree    = level.octree;
     this.camera           = level.camera;
     this.terrain          = level.terrainEngine;
     this.frustrumDebugger = level.frustrumDebugger;

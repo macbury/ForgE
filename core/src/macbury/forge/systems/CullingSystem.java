@@ -11,6 +11,7 @@ import macbury.forge.graphics.frustrum.FrustrumDebugAndRenderer;
 import macbury.forge.level.Level;
 import macbury.forge.octree.OctreeNode;
 import macbury.forge.octree.OctreeObject;
+import macbury.forge.octree.query.FrustrumClassFilterOctreeQuery;
 
 /**
  * Created by macbury on 22.10.14.
@@ -20,16 +21,19 @@ public class CullingSystem extends IteratingSystem {
   private final GameCamera camera;
   private final Array<OctreeObject> octreeVisibleObjects;
   private final FrustrumDebugAndRenderer frustrumDebugger;
+  private final FrustrumClassFilterOctreeQuery frustrumOctreeQuery;
   private ComponentMapper<Position>   pm = ComponentMapper.getFor(Position.class);
   private float cameraOldFieldOfView;
 
   public CullingSystem(Level level) {
     super(Family.getFor(Position.class));
 
-    this.rootNode              = level.dynamicOctree;
+    this.rootNode              = level.octree;
     this.camera                = level.camera;
     this.frustrumDebugger      = level.frustrumDebugger;
     this.octreeVisibleObjects  = new Array<OctreeObject>();
+    this.frustrumOctreeQuery   = new FrustrumClassFilterOctreeQuery();
+    frustrumOctreeQuery.setKlass(Position.class);
   }
 
   @Override
@@ -38,10 +42,8 @@ public class CullingSystem extends IteratingSystem {
     octreeVisibleObjects.clear();
 
     camera.extendFov();
-    rootNode.retrieve(octreeVisibleObjects, camera.normalOrDebugFrustrum(), true);
-
-    camera.fieldOfView   = cameraOldFieldOfView;
-    camera.update();
+    frustrumOctreeQuery.setFrustum(camera.normalOrDebugFrustrum());
+    rootNode.retrieve(octreeVisibleObjects, frustrumOctreeQuery);
 
     for (int i = 0; i < octreeVisibleObjects.size; i++) {
       Position position = (Position) octreeVisibleObjects.get(i);

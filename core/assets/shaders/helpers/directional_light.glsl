@@ -8,11 +8,11 @@ vec3 directionalLightDiffuse(DirectionalLight source, vec3 normal) {
     vec3 value = source.color.rgb * NdotL;
     return value;
 }
-/*
-vec3 sunLight(vec3 surfaceNormal, vec3 eyeNormal, float shiny, float spec, float diffuse){
-    vec3 diffuseColor = max(dot(sunDirection, surfaceNormal),0.0)*sunColor*diffuse;
-    vec3 reflection = normalize(reflect(-sunDirection, surfaceNormal));
+
+vec3 sunLight(DirectionalLight source, vec3 surfaceNormal, vec3 eyeNormal, float shiny, float spec, float diffuse){
+    vec3 diffuseColor = max(dot(source.direction, surfaceNormal),0.0)*source.color.rgb*diffuse;
+    vec3 reflection = normalize(reflect(-source.direction, surfaceNormal));
     float direction = max(0.0, dot(eyeNormal, reflection));
-    vec3 specular = pow(direction, shiny)*sunColor*spec;
+    vec3 specular = pow(direction, shiny)*source.color.rgb*spec;
     return diffuseColor + specular;
-}*/
+}

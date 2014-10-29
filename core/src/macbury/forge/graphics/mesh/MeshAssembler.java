@@ -18,8 +18,8 @@ public class MeshAssembler implements Disposable {
   private final static Pool<MeshVertexInfo> meshVertexPool = Pools.get(MeshVertexInfo.class);
   private final static Pool<MeshTriangle> trianglesPool    = Pools.get(MeshTriangle.class);
 
-  private ArrayList<MeshVertexInfo> vertexArrayList;
-  private ArrayList<MeshTriangle> triangleArrayList;
+  protected ArrayList<MeshVertexInfo> vertexArrayList;
+  protected ArrayList<MeshTriangle> triangleArrayList;
   private short currentIndex = 0;
 
   public MeshAssembler() {

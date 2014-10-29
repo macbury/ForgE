@@ -6,16 +6,14 @@ import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Pool;
+import macbury.forge.octree.query.OctreeQuery;
 
 /**
  * Created by macbury on 20.10.14.
  */
 public class OctreeNode implements Pool.Poolable, Disposable {
-  private static final Vector3 NODE_OFFSET_PLUS  = new Vector3(10,10,10);
-  private static final Vector3 NODE_OFFSET_MINUS = new Vector3(10,10,10);
-
-  public static int MAX_LEVELS  = 5;
-  private int maxObjects  = 24;
+  public static int MAX_LEVELS  = 6;
+  private int maxObjects        = 20;
 
   private int                 level;
   private Array<OctreeObject> objects;
@@ -329,4 +327,21 @@ public class OctreeNode implements Pool.Poolable, Disposable {
   public void setMaxObjects(int maxObjects) {
     this.maxObjects = maxObjects;
   }
+
+  public void retrieve(Array<OctreeObject> returnObjects, OctreeQuery query) {
+    if (haveNodes()) {
+      for(OctreeNode node : nodes) {
+        if (query.checkNode(node)) {
+          node.retrieve(returnObjects, query);
+        }
+      }
+    }
+
+    for (OctreeObject object : objects) {
+      if (query.checkObject(object)) {
+        returnObjects.add(object);
+      }
+    }
+  }
+
 }

@@ -31,11 +31,10 @@ public class Level implements Disposable {
   /**
    * Dynamic octree refreshed every 100 ms
    */
-  public final OctreeNode               dynamicOctree;
+  public final OctreeNode octree;
   /**
    * Static octree refreshed only after terrain was rebuild
    */
-  public final OctreeNode               staticOctree;
   public final RenderContext            renderContext;
   public final FrustrumDebugAndRenderer frustrumDebugger;
   public final TerrainEngine            terrainEngine;
@@ -47,8 +46,7 @@ public class Level implements Disposable {
     this.terrainMap          = state.terrainMap;
     this.renderContext       = new RenderContext(new DefaultTextureBinder(DefaultTextureBinder.WEIGHTED, 1));
 
-    this.dynamicOctree       = OctreeNode.root();
-    this.staticOctree        = OctreeNode.root();
+    this.octree              = OctreeNode.root();
 
     this.batch               = new VoxelBatch(renderContext);
     this.camera              = new GameCamera();
@@ -56,8 +54,8 @@ public class Level implements Disposable {
     this.terrainEngine       = new TerrainEngine(this);
     this.entities            = new LevelEntityEngine(this);
 
-    staticOctree.setBounds(terrainMap.getBounds(ChunkMap.TERRAIN_TILE_SIZE));
-    dynamicOctree.setBounds(terrainMap.getBounds(ChunkMap.TERRAIN_TILE_SIZE));
+    octree.setBounds(terrainMap.getBounds(ChunkMap.TERRAIN_TILE_SIZE));
+
     for (int i = 0; i < 50; i++) {
       Entity e          = entities.createEntity();
       Position position = entities.createComponent(Position.class);
@@ -106,13 +104,9 @@ public class Level implements Disposable {
     batch.dispose();
     terrainMap.dispose();
     entities.dispose();
-    dynamicOctree.dispose();
-    staticOctree.dispose();
+    octree.dispose();
     frustrumDebugger.dispose();
     terrainEngine.dispose();
   }
 
-  public void setRenderType(VoxelBatch.RenderType renderType) {
-    batch.setType(renderType);
-  }
 }

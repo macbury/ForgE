@@ -27,7 +27,7 @@ public class LevelState {
     state.id                = uid();
     state.name              = MAP_NAME_PREFIX + state.id;
 
-    state.terrainMap.initialize(100,20,100);
+    state.terrainMap.initialize(500,20,500);
     state.terrainMap.buildFloor();
     return state;
   }
