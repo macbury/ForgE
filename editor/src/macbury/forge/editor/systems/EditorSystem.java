@@ -24,14 +24,17 @@ public class EditorSystem extends EntitySystem implements EntityListener {
   private final GameCamera camera;
   private final TerrainEngine terrain;
   private final Position cursorPositionComponent;
+  private final ChunkMap map;
   private Overlay overlay;
-  private final MousePosition mousePosition = new MousePosition();
+  private final MousePosition mousePosition;
   public final Vector3i intersectionPoint = new Vector3i();
 
   public EditorSystem(Level level) {
     super();
-    this.camera  = level.camera;
-    this.terrain = level.terrainEngine;
+    this.camera   = level.camera;
+    mousePosition = new MousePosition(camera);
+    this.terrain  = level.terrainEngine;
+    this.map      = level.terrainMap;
     Entity cursorEntity          = level.entities.createEntity();
     this.cursorPositionComponent = level.entities.createComponent(Position.class);
     cursorEntity.add(cursorPositionComponent);
@@ -44,7 +47,6 @@ public class EditorSystem extends EntitySystem implements EntityListener {
   public void addedToEngine(Engine engine) {
     super.addedToEngine(engine);
     engine.addEntityListener(this);
-
   }
 
   @Override
@@ -53,12 +55,16 @@ public class EditorSystem extends EntitySystem implements EntityListener {
     if (mousePosition.isDirty()) {
       mousePosition.setDirty(false);
 
-      Ray pickRay              = camera.getPickRay(mousePosition.x, mousePosition.y);
 
-      if (terrain.getVoxelPositionForPickRay(pickRay, camera.far, intersectionPoint)) {
-        cursorPositionComponent.size.set(ChunkMap.TERRAIN_TILE_SIZE);
-        cursorPositionComponent.vector.set(intersectionPoint.x, intersectionPoint.y, intersectionPoint.z);
-      }
+    }
+  }
+
+  private void updateCursor() {
+    Ray pickRay              = camera.getPickRay(mousePosition.x, mousePosition.y);
+
+    if (terrain.getVoxelPositionForPickRay(pickRay, camera.far, intersectionPoint)) {
+      cursorPositionComponent.size.set(ChunkMap.TERRAIN_TILE_SIZE);
+      cursorPositionComponent.vector.set(intersectionPoint.x, intersectionPoint.y, intersectionPoint.z);
     }
   }
 
@@ -68,7 +74,17 @@ public class EditorSystem extends EntitySystem implements EntityListener {
 
       @Override
       public boolean mouseMoved(InputEvent event, float x, float y) {
-        mousePosition.set(x, camera.viewportHeight - y);
+        mousePosition.set(x, y);
+        updateCursor();
+        return true;
+      }
+
+      @Override
+      public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+        mousePosition.set(x, y);
+        //ColorMaterial mat = map.materials.get(4);
+        //map.setMaterialForPosition(mat, intersectionPoint);
+        //updateCursor();
         return true;
       }
     });

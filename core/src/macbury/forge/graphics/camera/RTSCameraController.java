@@ -95,7 +95,7 @@ public class RTSCameraController {
     minTilt = 0.001f;
     maxTilt = (float) (Math.PI / 2) - 0.006f;
 
-    currentZoom = maxZoom;
+    currentZoom = 10;
   }
 
   public void setOverlay(Overlay overlay) {

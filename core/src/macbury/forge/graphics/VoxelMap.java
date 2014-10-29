@@ -12,11 +12,11 @@ import macbury.forge.utils.Vector3i;
  * Created by macbury on 17.10.14.
  */
 public class VoxelMap implements Disposable {
-  private final ColorMaterial airMaterial;
+  private final VoxelMaterial airMaterial;
   private final BoundingBox boundingBox;
   private final Vector3 temp = new Vector3();
   public final Vector3 tileSize;
-  protected Array<ColorMaterial> materials;
+  public final Array<VoxelMaterial> materials;
   protected byte[][][] voxelMap;
   protected int width;
   protected int height;
@@ -24,8 +24,8 @@ public class VoxelMap implements Disposable {
 
   public VoxelMap(Vector3 tileSize) {
     this.tileSize = tileSize;
-    materials   = new Array<ColorMaterial>();
-    airMaterial = ColorMaterial.air();
+    materials   = new Array<VoxelMaterial>();
+    airMaterial = VoxelMaterial.air();
     boundingBox = new BoundingBox();
     materials.add(airMaterial);
   }
@@ -53,12 +53,12 @@ public class VoxelMap implements Disposable {
     out.set(in.x * tileSize.x, in.y * tileSize.y, in.z * tileSize.z);
   }
 
-  public ColorMaterial getMaterialForPosition(int x, int y, int z) {
+  public VoxelMaterial getMaterialForPosition(int x, int y, int z) {
     int index = getColorIndexForPosition(x,y,z);
     return materials.get(index);
   }
 
-  public void setMaterialForPosition(ColorMaterial color, int x, int y, int z) {
+  public void setMaterialForPosition(VoxelMaterial color, int x, int y, int z) {
     int index = materials.indexOf(color, true);
     if (index == -1) {
       materials.add(color);
@@ -77,8 +77,12 @@ public class VoxelMap implements Disposable {
   }
 
   public boolean isEmpty(int x, int y, int z) {
-    ColorMaterial mat = getMaterialForPosition(x,y,z);
+    VoxelMaterial mat = getMaterialForPosition(x,y,z);
     return mat == null || mat.isAir();
+  }
+
+  public boolean isEmptyNotOutOfBounds(int x, int y, int z) {
+    return !isOutOfBounds(x,y,z) && (isEmpty(x,y,z));
   }
 
   public boolean isOutOfBounds(int x, int y, int z) {
@@ -124,5 +128,9 @@ public class VoxelMap implements Disposable {
 
   public boolean isSolid(Vector3 position) {
     return isSolid(Math.round(position.x), Math.round(position.y), Math.round(position.z));
+  }
+
+  public void setMaterialForPosition(VoxelMaterial voxelMaterial, Vector3i voxelPosition) {
+    setMaterialForPosition(voxelMaterial, voxelPosition.x, voxelPosition.y, voxelPosition.z);
   }
 }

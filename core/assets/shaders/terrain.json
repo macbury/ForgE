@@ -1,5 +1,9 @@
 {
   class: macbury.forge.shaders.TerrainShader,
   fragment: "terrain",
-  vertex:   "terrain"
+  vertex:   "terrain",
+  helpers: {
+    vertex: ["directional_light"],
+    fragment: []
+  }
 }

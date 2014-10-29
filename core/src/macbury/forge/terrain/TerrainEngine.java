@@ -1,6 +1,7 @@
 package macbury.forge.terrain;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.math.collision.Ray;
@@ -37,12 +38,11 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
   public  final Array<OctreeObject> tempObjects;
   public  final Vector3 tempA  = new Vector3();
   public  final Vector3 tempC  = new Vector3();
+  public  final Vector3 tempD  = new Vector3();
   public  final Vector3i tempB = new Vector3i();
   private  final BoundingBox tempBox;
   private final Array<Chunk> visibleChunks;
   private final Comparator<Chunk> sorter;
-  private float[] tempVerticies;
-  private short[] tempIndicies;
 
   public TerrainEngine(Level level) {
     this.timer = new ActionTimer(UPDATE_EVERY, this);
@@ -104,8 +104,12 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
 
           for (int i = 0; i < visibleChunk.renderables.size; i++) {
             VoxelFaceRenderable renderable = visibleChunk.renderables.get(i);
+            //get ray from my position to face position, get its direction, then check if facing direction is oposite to renderable position then show it
+            //renderable.worldTransform.getTranslation(tempC);
+            //tempC.sub(renderable.direction);
+            //tempA.set(camera.normalOrDebugPosition()).sub(camera.normalOrDebugDirection());
 
-            if (camera.boundsInFrustum(renderable.boundingBox) && tempA.set(camera.normalOrDebugPosition()).sub(visibleChunk.worldPosition).dot(renderable.direction) > 0.1f) {
+            if (camera.boundsInFrustum(renderable.boundingBox)) {
               visibleFaces.add(renderable);
             }
           }
@@ -122,6 +126,27 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
       map.worldPositionToLocalVoxelPosition(tempA, tempB);
       if (map.isSolid(tempB)) {
         outVoxelIntersectPoint.set(tempB);
+        tempC.setZero().sub(pickRay.direction);
+
+        if (map.isEmpty(tempB.x, tempB.y,tempB.z + MathUtils.ceil(tempC.z))) {
+          outVoxelIntersectPoint.add(0,0,1);
+        } else if (map.isEmpty(tempB.x, tempB.y + MathUtils.ceil(tempC.y), tempB.z)) {
+          outVoxelIntersectPoint.add(0,1,0);
+        }
+        //map.localVoxelPositionToWorldPosition(tempB, tempC);
+        /*Array<OctreeObject> testChunk = new Array<OctreeObject>();
+        octree.retrieve(testChunk, tempC);
+
+        for (int i = 0; i < testChunk.size; i++) {
+          Chunk chunk = (Chunk)testChunk.get(i);
+          for (int k = 0; k < chunk.renderables.size; k++) {
+            VoxelFaceRenderable faceRenderable = chunk.getFace(k);
+            if (faceRenderable.boundingBox.contains(tempC)) {
+              outVoxelIntersectPoint.add(faceRenderable.direction);
+              break;
+            }
+          }
+        }*/
         return true;
       }
     }
@@ -141,6 +166,7 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
       }
 
       octree.clear();
+      octree.setMaxObjects(5);
       for (int i = 0; i < chunks.size; i++) {
         octree.insert(chunks.get(i));
       }

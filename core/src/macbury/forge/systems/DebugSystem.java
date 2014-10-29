@@ -15,6 +15,7 @@ import macbury.forge.components.Cursor;
 import macbury.forge.components.Position;
 import macbury.forge.graphics.DebugShape;
 import macbury.forge.graphics.batch.VoxelBatch;
+import macbury.forge.graphics.batch.renderable.VoxelFaceRenderable;
 import macbury.forge.graphics.builders.Chunk;
 import macbury.forge.graphics.camera.GameCamera;
 import macbury.forge.graphics.frustrum.FrustrumDebugAndRenderer;
@@ -94,8 +95,8 @@ public class DebugSystem extends IteratingSystem {
           DebugShape.draw(batch.shapeRenderer, tempBox);
           batch.shapeRenderer.setColor(Color.NAVY);
           for (int j = 0; j < chunk.renderables.size; j++) {
-           // VoxelFaceRenderable renderable = chunk.renderables.get(j);
-           // DebugShape.draw(batch.shapeRenderer, renderable.boundingBox);
+            VoxelFaceRenderable renderable = chunk.renderables.get(j);
+            DebugShape.draw(batch.shapeRenderer, renderable.boundingBox);
           }
         }
       }

@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import macbury.forge.ForgE;
-import macbury.forge.graphics.ColorMaterial;
+import macbury.forge.graphics.VoxelMaterial;
 import macbury.forge.graphics.VoxelMap;
 import macbury.forge.graphics.batch.renderable.VoxelFaceRenderable;
 import macbury.forge.graphics.mesh.MeshVertexInfo;
@@ -53,8 +53,8 @@ public class TerrainBuilder extends VoxelsAssembler {
             tempB.set(cursor.start.x, cursor.start.y, cursor.start.z).scl(map.tileSize);
             tempA.set(x,y,z).scl(map.tileSize).sub(tempB);
 
-            if (map.isEmpty(x + checkTileInDirection.x,y + checkTileInDirection.y, z + checkTileInDirection.z)) {
-              ColorMaterial material = map.getMaterialForPosition(x, y, z);
+            if (map.isEmptyNotOutOfBounds(x + checkTileInDirection.x,y + checkTileInDirection.y, z + checkTileInDirection.z)) {
+              VoxelMaterial material = map.getMaterialForPosition(x, y, z);
               switch (face) {
                 case Top:
                   top(tempA, map.tileSize, material);
@@ -87,7 +87,7 @@ public class TerrainBuilder extends VoxelsAssembler {
       }
     }
     tempA.set(cursor.start.x, cursor.start.y, cursor.start.z).scl(map.tileSize);
-    cursor.size.scl(map.tileSize).sub(tempA).add(map.tileSize);
+    cursor.size.scl(map.tileSize).sub(tempA);
   }
 
   public void facesForChunk(Chunk chunk) {
@@ -107,7 +107,7 @@ public class TerrainBuilder extends VoxelsAssembler {
 
             tempA.set(x,y,z);
             Gdx.app.log(TAG, tempA.toString());
-            ColorMaterial material = map.getMaterialForPosition(x, y, z);
+            VoxelMaterial material = map.getMaterialForPosition(x, y, z);
 
             if (map.isEmpty(x,y+1,z)) {
               top(tempA, ChunkMap.TERRAIN_TILE_SIZE, material);

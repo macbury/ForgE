@@ -74,4 +74,8 @@ public class Chunk implements OctreeObject, Disposable {
   public boolean isEmpty() {
     return renderables.size == 0;
   }
+
+  public VoxelFaceRenderable getFace(int i) {
+    return renderables.get(i);
+  }
 }

@@ -22,6 +22,7 @@ public class GameCamera extends PerspectiveCamera {
     super(BASE_FOV, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     debugDirection = new Vector3();
     this.debugPosition = new Vector3();
+    this.far           = 100;
   }
 
   public void saveDebugFrustrum() {

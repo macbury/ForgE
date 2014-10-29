@@ -2,7 +2,7 @@ package macbury.forge.level.map;
 
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
-import macbury.forge.graphics.ColorMaterial;
+import macbury.forge.graphics.VoxelMaterial;
 import macbury.forge.graphics.VoxelMap;
 import macbury.forge.graphics.builders.Chunk;
 import macbury.forge.utils.Vector3i;
@@ -11,7 +11,7 @@ import macbury.forge.utils.Vector3i;
  * Created by macbury on 19.10.14.
  */
 public class ChunkMap extends VoxelMap {
-  public static final int CHUNK_SIZE         = 20;
+  public static final int CHUNK_SIZE         = 10;
   public static final int CHUNK_ARRAY_SIZE    = CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE;
   public static final Vector3 TERRAIN_TILE_SIZE = new Vector3(1,1,1);
   public final Array<Chunk> chunks;
@@ -28,17 +28,23 @@ public class ChunkMap extends VoxelMap {
     chunkToRebuild = new Array<Chunk>();
   }
 
-  public void buildFloor() {
-    ColorMaterial grass1 = new ColorMaterial(44f/255f,159f/255f,93f/255f,1);
-    ColorMaterial grass2 = new ColorMaterial(82f/255f,198f/255f,152f/255f,1);
-    ColorMaterial grass3 = new ColorMaterial(14f/255f,123f/255f,34f/255f,1);
+  @Override
+  public void initialize(int width, int height, int depth) {
+    super.initialize(width, height, depth);
+    splitIntoChunks();
+  }
 
-    Array<ColorMaterial> m = new Array<ColorMaterial>();
+  public void buildFloor() {
+    VoxelMaterial grass1 = new VoxelMaterial(44f/255f,159f/255f,93f/255f,1);
+    VoxelMaterial grass2 = new VoxelMaterial(82f/255f,198f/255f,152f/255f,1);
+    VoxelMaterial grass3 = new VoxelMaterial(14f/255f,123f/255f,34f/255f,1);
+
+    Array<VoxelMaterial> m = new Array<VoxelMaterial>();
     m.add(grass1);
     m.add(grass2);
-    //m.add(grass3);
+    m.add(grass3);
 
-    for(int y = 0; y < 10; y++) {
+    for(int y = 0; y < 1; y++) {
       for(int x = 0; x < width; x++) {
         for(int z = 0; z < depth; z++) {
           setMaterialForPosition(m.get((int)Math.round((m.size-1) * Math.random())), x,y,z);
@@ -46,7 +52,8 @@ public class ChunkMap extends VoxelMap {
       }
     }
 
-    splitIntoChunks();
+    VoxelMaterial rock = new VoxelMaterial(186f/255f,191f/255f,186f/255f,1);
+    materials.add(rock);
   }
 
   public Vector3i voxelPositionToChunkPosition(int x, int y, int z){
@@ -62,7 +69,7 @@ public class ChunkMap extends VoxelMap {
   }
 
   @Override
-  public void setMaterialForPosition(ColorMaterial color, int x, int y, int z) {
+  public void setMaterialForPosition(VoxelMaterial color, int x, int y, int z) {
     super.setMaterialForPosition(color, x, y, z);
     rebuildChunkForPosition(x,y,z);
   }

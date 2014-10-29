@@ -74,4 +74,8 @@ public class Vector3i {
   public boolean lessThan(Vector3i other) {
     return x < other.x && y < other.y && other.z < other.z;
   }
+
+  public void add(Vector3 other) {
+    add((int)other.x, (int)other.y, (int)other.z);
+  }
 }

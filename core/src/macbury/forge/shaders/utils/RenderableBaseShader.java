@@ -9,6 +9,11 @@ import macbury.forge.graphics.batch.renderable.BaseRenderable;
 public abstract class RenderableBaseShader<T extends BaseRenderable> extends BaseShader {
   protected Mesh currentMesh;
   public final String UNIFORM_WORLD_TRANSFORM = "u_worldTransform";
+  public final String UNIFORM_NORMAL_MATRIX   = "u_normalMatrix";
+
+  public final String UNIFORM_AMBIENT_LIGHT          = "u_ambientLight";
+  public final String UNIFORM_MAIN_LIGHT_COLOR       = "u_mainLight.color";
+  public final String UNIFORM_MAIN_LIGHT_DIRECTION   = "u_mainLight.direction";
 
   public abstract boolean canRender (BaseRenderable instance);
 

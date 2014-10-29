@@ -13,8 +13,9 @@ import com.badlogic.gdx.utils.Pool;
 public class OctreeNode implements Pool.Poolable, Disposable {
   private static final Vector3 NODE_OFFSET_PLUS  = new Vector3(10,10,10);
   private static final Vector3 NODE_OFFSET_MINUS = new Vector3(10,10,10);
-  public static int MAX_OBJECTS = 24;
+
   public static int MAX_LEVELS  = 5;
+  private int maxObjects  = 24;
 
   private int                 level;
   private Array<OctreeObject> objects;
@@ -45,12 +46,27 @@ public class OctreeNode implements Pool.Poolable, Disposable {
     this.nodes    = new Array<OctreeNode>();
     this.bounds   = new BoundingBox();
     this.parent   = null;
+    this.maxObjects = 24;
     clear();
   }
 
   public int getIndex(OctreeObject object) {
     object.getBoundingBox(tempBox);
     return getIndex(tempBox);
+  }
+
+  private int getIndex(Vector3 point) {
+    int index = -1;
+    if (haveNodes()) {
+      for (int i = 0; i < nodes.size; i++) {
+        OctreeNode node = nodes.get(i);
+        if (node.getBounds().contains(point)) {
+          index = i;
+          break;
+        }
+      }
+    }
+    return index;
   }
 
   public int getIndex(BoundingBox pRect) {
@@ -93,7 +109,7 @@ public class OctreeNode implements Pool.Poolable, Disposable {
     } else {
       objects.add(objectToInsert);
       objectToInsert.setOctreeParent(this);
-      if (objects.size > MAX_OBJECTS && level < MAX_LEVELS) {
+      if (objects.size > maxObjects && level < MAX_LEVELS) {
         if (!haveNodes())
           split();
 
@@ -145,6 +161,7 @@ public class OctreeNode implements Pool.Poolable, Disposable {
     tempBox.set(min, max);
     OctreeNode nodeQuadrant = OctreeNode.node(level, tempBox);
     nodeQuadrant.setParent(this);
+    nodeQuadrant.setMaxObjects(maxObjects);
     nodes.add(nodeQuadrant);
   }
 
@@ -284,8 +301,32 @@ public class OctreeNode implements Pool.Poolable, Disposable {
     returnObjects.addAll(objects);
   }
 
+  /**
+   * Return objects that have bounding box containg point
+   * @param returnObjects
+   * @param point
+   */
+  public void retrieve(Array<OctreeObject> returnObjects, Vector3 point) {
+    int index = getIndex(point);
+    if (index != -1 && haveNodes()) {
+      nodes.get(index).retrieve(returnObjects, point);
+    }
+
+    for (int i = 0; i < objects.size; i++) {
+      OctreeObject octreeObject = objects.get(i);
+      octreeObject.getBoundingBox(tempBox);
+      if (tempBox.contains(point)) {
+        returnObjects.add(octreeObject);
+      }
+    }
+  }
+
   public void retrieve(Array<OctreeObject> returnObjects, OctreeObject object) {
     object.getBoundingBox(tempBox);
     retrieve(returnObjects, tempBox);
+  }
+
+  public void setMaxObjects(int maxObjects) {
+    this.maxObjects = maxObjects;
   }
 }

@@ -1,5 +1,9 @@
 package macbury.forge.level;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import macbury.forge.graphics.VoxelMaterial;
 import macbury.forge.level.map.ChunkMap;
 
 /**
@@ -23,8 +27,38 @@ public class LevelState {
     state.id                = uid();
     state.name              = MAP_NAME_PREFIX + state.id;
 
-    state.terrainMap.initialize(40,20,40);
+    state.terrainMap.initialize(100,20,100);
     state.terrainMap.buildFloor();
+    return state;
+  }
+
+  public static LevelState heightMapTest() {
+    LevelState state        = new LevelState();
+    state.terrainMap        = new ChunkMap(ChunkMap.TERRAIN_TILE_SIZE);
+    state.id                = uid();
+    state.name              = MAP_NAME_PREFIX + state.id;
+
+    state.terrainMap.initialize(250,50,250);
+    state.terrainMap.buildFloor();
+
+    Pixmap pixmap = new Pixmap(Gdx.files.internal("heightmap.png"));
+    Color color   = new Color();
+
+    for (int x = 0; x < state.terrainMap.getWidth(); x++) {
+      for (int z = 0; z < state.terrainMap.getDepth(); z++) {
+        int rawColor = pixmap.getPixel(x, z);
+        color.set(rawColor);
+        int height        = (int)Math.floor(color.r * (state.terrainMap.getHeight() - 5));
+
+        for (int y = 1; y < height; y++) {
+          VoxelMaterial mat = state.terrainMap.materials.get(Math.max((int)Math.round((state.terrainMap.materials.size-1) * Math.random()), 1));
+          state.terrainMap.setMaterialForPosition(mat, x,y,z);
+        }
+      }
+    }
+
+    pixmap.dispose();
+
     return state;
   }
 

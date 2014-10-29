@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
 import macbury.forge.graphics.batch.renderable.BaseRenderableProvider;
+import macbury.forge.level.LevelEnv;
 import macbury.forge.shaders.utils.RenderableBaseShader;
 
 /**
@@ -78,11 +79,11 @@ public class VoxelBatch implements Disposable {
   /**
    * Render normally all renderables
    */
-  public void render() {
+  public void render(LevelEnv env) {
     if (camera == null) throw new GdxRuntimeException("Call begin() first.");
     sortUnlessNotSorted();
     if (type == RenderType.Normal) {
-      renderTextured();
+      renderTextured(env);
     } else {
       renderWireframe();
     }
@@ -117,14 +118,14 @@ public class VoxelBatch implements Disposable {
     } context.end();
   }
 
-  private void renderTextured() {
+  private void renderTextured(LevelEnv env) {
     RenderableBaseShader currentShader = null;
     for (int i = 0; i < renderables.size; i++) {
       final BaseRenderable renderable = renderables.get(i);
       if (currentShader != renderable.shader) {
         if (currentShader != null) currentShader.end();
         currentShader = renderable.shader;
-        currentShader.begin(camera, context);
+        currentShader.begin(camera, context, env);
       }
       currentShader.render(renderable);
     }

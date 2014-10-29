@@ -39,8 +39,10 @@ public class Level implements Disposable {
   public final RenderContext            renderContext;
   public final FrustrumDebugAndRenderer frustrumDebugger;
   public final TerrainEngine            terrainEngine;
+  public final LevelEnv env;
 
   public Level(LevelState state) {
+    this.env                 = new LevelEnv();
     this.state               = state;
     this.terrainMap          = state.terrainMap;
     this.renderContext       = new RenderContext(new DefaultTextureBinder(DefaultTextureBinder.WEIGHTED, 1));
@@ -74,7 +76,6 @@ public class Level implements Disposable {
   public void resize(int width, int height) {
     camera.viewportWidth  = width;
     camera.viewportHeight = height;
-    camera.far            = 512;
     camera.update(true);
   }
 
@@ -84,7 +85,7 @@ public class Level implements Disposable {
     batch.begin(camera); {
       batch.add(terrainEngine);
       this.entities.update(delta);
-      batch.render();
+      batch.render(env);
     } batch.end();
     renderDebugInfo();
   }
