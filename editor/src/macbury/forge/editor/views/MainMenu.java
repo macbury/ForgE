@@ -21,6 +21,8 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
   public JCheckBoxMenuItem debugRenderStaticOctree;
   private EditorScreen editor;
   private JMenu debugRenderMenu;
+  private JRadioButtonMenuItem debugNormalsItem;
+  private JRadioButtonMenuItem debugLightingItem;
 
   public MainMenu() {
     super();
@@ -50,10 +52,19 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
       debugRenderMenu.setVisible(false);
     } else {
       debugRenderMenu.setVisible(true);
-      if (editor.level.batch.getType() == VoxelBatch.RenderType.Normal) {
-        debugTexturedItem.setSelected(true);
-      } else {
-        debugWireframeItem.setSelected(false);
+      switch (editor.level.batch.getType()) {
+        case Normals:
+          debugNormalsItem.setSelected(true);
+        break;
+        case Lighting:
+          debugLightingItem.setSelected(true);
+        break;
+        case Wireframe:
+          debugWireframeItem.setSelected(true);
+          break;
+        default:
+          debugTexturedItem.setSelected(true);
+        break;
       }
     }
   }
@@ -65,12 +76,18 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
 
     this.debugWireframeItem  = new JRadioButtonMenuItem("Wireframe");
     this.debugTexturedItem   = new JRadioButtonMenuItem("Textured");
+    this.debugNormalsItem    = new JRadioButtonMenuItem("Normals");
+    this.debugLightingItem   = new JRadioButtonMenuItem("Lighting");
 
     group.add(debugWireframeItem);
     group.add(debugTexturedItem);
+    group.add(debugLightingItem);
+    group.add(debugNormalsItem);
 
     viewModeMenu.add(debugWireframeItem);
     viewModeMenu.add(debugTexturedItem);
+    viewModeMenu.add(debugNormalsItem);
+    viewModeMenu.add(debugLightingItem);
 
     this.debugRenderMenu         = new JMenu("Render");
 
@@ -92,10 +109,24 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
       }
     });
 
+    debugNormalsItem.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        editor.level.batch.setType(VoxelBatch.RenderType.Normals);
+      }
+    });
+
+    debugLightingItem.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        editor.level.batch.setType(VoxelBatch.RenderType.Lighting);
+      }
+    });
+
     debugTexturedItem.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        editor.level.batch.setType(VoxelBatch.RenderType.Normal);
+        editor.level.batch.setType(VoxelBatch.RenderType.Textured);
       }
     });
 

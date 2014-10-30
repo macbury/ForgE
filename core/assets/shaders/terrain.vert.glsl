@@ -11,11 +11,19 @@ uniform vec4             u_ambientLight;
 
 varying vec4   v_color;
 varying vec3   v_normal;
-varying vec3   v_lightDiffuse;
 
 void main() {
-  v_color        = a_color;
-  v_normal       = normalize(u_normalMatrix * a_normal);
-  v_lightDiffuse = u_ambientLight.rgb + directionalLightDiffuse(u_mainLight, v_normal);
-  gl_Position    = u_projectionMatrix * u_worldTransform * a_position;
+  v_normal          = normalize(u_normalMatrix * a_normal);
+
+  vec3 lightDiffuse = u_ambientLight.rgb + directionalLightDiffuse(u_mainLight, v_normal);
+
+  if (shouldDebugRenderNormals()) {
+    v_color.rgb = v_normal;
+  } else if (shouldDebugRenderLighting()) {
+    v_color.rgb = lightDiffuse;
+  } else {
+    v_color           = vec4(a_color.rgb * lightDiffuse, a_color.a);
+  }
+
+  gl_Position       = u_projectionMatrix * u_worldTransform * a_position;
 }

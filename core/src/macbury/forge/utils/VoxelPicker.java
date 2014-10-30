@@ -1,6 +1,5 @@
 package macbury.forge.utils;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
@@ -44,8 +43,6 @@ public class VoxelPicker {
 
           dir.set(Math.round(Math.abs(dir.x)), Math.round(Math.abs(dir.y)), Math.round(Math.abs(dir.z))).scl(sign);
           worldVoxelPosition.sub(dir);
-
-          Gdx.app.log(TAG, dir.toString());
 
           outVoxelIntersectPoint.set(worldVoxelPosition);
         }

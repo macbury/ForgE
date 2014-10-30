@@ -2,6 +2,7 @@ package macbury.forge.level;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
+import macbury.forge.graphics.batch.VoxelBatch;
 
 /**
  * Created by macbury on 28.10.14.
@@ -9,10 +10,12 @@ import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 public class LevelEnv {
   public final DirectionalLight mainLight;
   public final Color ambientLight;
+  public VoxelBatch.RenderType renderType;
 
   public LevelEnv() {
     mainLight    = new DirectionalLight();
-    mainLight.set(1.0f, 1.0f, 1.0f, 0.2f, -0.3f, -0.54f);
-    ambientLight = new Color( 0.4f, 0.4f, 0.4f, 1f);
+    mainLight.set(1.0f, 1.0f, 1.0f,-1, -1, 0.5f);
+
+    ambientLight = Color.valueOf("cccccc");
   }
 }

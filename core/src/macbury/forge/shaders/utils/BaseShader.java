@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import macbury.forge.ForgE;
 import macbury.forge.level.LevelEnv;
 
 import java.util.HashMap;
@@ -15,6 +16,7 @@ import java.util.HashMap;
  */
 public abstract class BaseShader implements Disposable {
   public static final String UNIFORM_PROJECTION_MATRIX = "u_projectionMatrix";
+  public static final String UNIFORM_DEBUG_MODE        = "u_debugMode";
   private static final String VERTEX_HELPER_KEY        = "vertex";
   private static final String FRAGMENT_HELPER_KEY      = "fragment";
   private static final String TAG = "BaseShader";
@@ -28,6 +30,8 @@ public abstract class BaseShader implements Disposable {
   protected LevelEnv env;
 
   public boolean load(ShadersManager manager) {
+    ShaderProgram.pedantic = false;
+    
     String fragmentSrc   = Gdx.files.internal(ShadersManager.SHADERS_PATH +fragment+".frag.glsl").readString();
     String   vertexSrc   = Gdx.files.internal(ShadersManager.SHADERS_PATH +vertex+".vert.glsl").readString();
     if (shader != null) {
@@ -36,7 +40,9 @@ public abstract class BaseShader implements Disposable {
 
     fragmentSrc = loadHelpers(FRAGMENT_HELPER_KEY) + fragmentSrc;
     vertexSrc   = loadHelpers(VERTEX_HELPER_KEY) + vertexSrc;
-
+    if (ForgE.config.shaderDebug) {
+      vertexSrc = loadHelperSrc("debug") + vertexSrc;
+    }
     ShaderProgram newShaderProgram = new ShaderProgram(vertexSrc, fragmentSrc);
     if (newShaderProgram.isCompiled()) {
       shader = newShaderProgram;
@@ -58,10 +64,14 @@ public abstract class BaseShader implements Disposable {
       Array<String> helperNames = helpers.get(key);
       for (int i = 0; i < helperNames.size; i++) {
         String helperName = helperNames.get(i);
-        helperSrc += Gdx.files.internal(ShadersManager.SHADER_HELPERS_PATH +helperName+".glsl").readString() + "\n";
+        helperSrc += loadHelperSrc(helperName);
       }
     }
     return helperSrc;
+  }
+
+  private String loadHelperSrc(String helperName) {
+    return Gdx.files.internal(ShadersManager.SHADER_HELPERS_PATH +helperName+".glsl").readString() + "\n";
   }
 
   public String getLog() {
@@ -79,6 +89,8 @@ public abstract class BaseShader implements Disposable {
     this.env     = env;
     shader.begin();
     shader.setUniformMatrix(UNIFORM_PROJECTION_MATRIX, camera.combined);
+    if (ForgE.config.shaderDebug)
+      shader.setUniformf(UNIFORM_DEBUG_MODE, env.renderType.ordinal());
     context.begin();
     afterBegin();
   }

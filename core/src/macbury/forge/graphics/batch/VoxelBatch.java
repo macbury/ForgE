@@ -28,7 +28,7 @@ public class VoxelBatch implements Disposable {
   public int renderablesPerFrame;
 
   public enum RenderType {
-    Normal, Wireframe
+    Textured, Wireframe, Normals, Lighting
   }
 
   protected RenderType type;
@@ -37,7 +37,7 @@ public class VoxelBatch implements Disposable {
     this.context        = customRenderContext;
     this.shaderProvider = new ShaderProvider();
     this.shapeRenderer  = new ShapeRenderer();
-    this.type           = RenderType.Normal;
+    this.type           = RenderType.Textured;
     this.sorter         = new CameraRenderableSorter();
     renderablesPerFrame = 0;
     trianglesPerFrame   = 0;
@@ -88,10 +88,10 @@ public class VoxelBatch implements Disposable {
   public void render(LevelEnv env) {
     if (camera == null) throw new GdxRuntimeException("Call begin() first.");
     sortUnlessNotSorted();
-    if (type == RenderType.Normal) {
-      renderTextured(env);
-    } else {
+    if (type == RenderType.Wireframe) {
       renderWireframe();
+    } else {
+      renderTextured(env);
     }
   }
 
@@ -135,6 +135,7 @@ public class VoxelBatch implements Disposable {
       if (currentShader != currentRenderableShader) {
         if (currentShader != null) currentShader.end();
         currentShader = currentRenderableShader;
+        env.renderType = this.type;
         currentShader.begin(camera, context, env);
       }
       currentShader.render(renderable);
