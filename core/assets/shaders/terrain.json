@@ -4,6 +4,6 @@
   vertex:   "terrain",
   helpers: {
     vertex: ["directional_light"],
-    fragment: []
+    fragment: ["fog"]
   }
 }

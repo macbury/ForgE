@@ -10,9 +10,11 @@ import macbury.forge.graphics.batch.VoxelBatch;
 public class LevelEnv {
   public final DirectionalLight mainLight;
   public final Color ambientLight;
+  public final Color skyColor;
   public VoxelBatch.RenderType renderType;
 
   public LevelEnv() {
+    skyColor     = new Color(Color.BLACK);
     mainLight    = new DirectionalLight();
     mainLight.set(1.0f, 1.0f, 1.0f,-1, -1, 0.5f);
 

@@ -1,5 +1,7 @@
-struct Fog {
-    vec4 color;
-    float startHeight;
-    float finishHeight;
-};
+
+
+float fogNormal(vec4 eyePosition, vec4 fragmentPosition) {
+ vec3 flen = eyePosition.xyz - fragmentPosition.xyz;
+ float fog = dot(flen, flen) * eyePosition.w;
+ return fog;
+}

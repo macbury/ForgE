@@ -11,6 +11,7 @@ uniform vec4             u_ambientLight;
 
 varying vec4   v_color;
 varying vec3   v_normal;
+varying vec4   v_position;
 
 void main() {
   v_normal          = normalize(u_normalMatrix * a_normal);
@@ -25,5 +26,6 @@ void main() {
     v_color           = vec4(a_color.rgb * lightDiffuse, a_color.a);
   }
 
-  gl_Position       = u_projectionMatrix * u_worldTransform * a_position;
+  v_position        = u_worldTransform * a_position;
+  gl_Position       = u_projectionMatrix * v_position;
 }

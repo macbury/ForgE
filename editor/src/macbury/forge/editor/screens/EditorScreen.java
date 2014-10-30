@@ -1,7 +1,6 @@
 package macbury.forge.editor.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import macbury.forge.ForgE;
 import macbury.forge.editor.systems.EditorSystem;
@@ -28,7 +27,7 @@ public class EditorScreen extends AbstractScreen {
     this.stage              = new Stage();
     this.level              = new Level(LevelState.heightMapTest());
     this.editorSystem       = new EditorSystem(level);
-    level.camera.far        = 512;
+    level.camera.far        = 200;
     this.cameraController   = new RTSCameraController();
     cameraController.setCenter(level.terrainMap.getWidth() / 2, level.terrainMap.getDepth() / 2);
     cameraController.setCamera(level.camera);
@@ -43,7 +42,6 @@ public class EditorScreen extends AbstractScreen {
   public void render(float delta) {
     stage.act(delta);
     cameraController.update(delta);
-    ForgE.graphics.clearAll(Color.BLACK);
     level.render(delta);
     stage.draw();
   }

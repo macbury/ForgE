@@ -23,9 +23,9 @@ public class TerrainShader extends RenderableBaseShader<VoxelFaceRenderable> {
     context.setCullFace(GL30.GL_BACK);
     context.setDepthTest(GL20.GL_LEQUAL);
 
-    shader.setUniformf(UNIFORM_AMBIENT_LIGHT, env.ambientLight);
-    shader.setUniformf(UNIFORM_MAIN_LIGHT_COLOR, env.mainLight.color);
-    shader.setUniformf(UNIFORM_MAIN_LIGHT_DIRECTION, env.mainLight.direction);
+    setUniformSkyColor();
+    setUniformSun();
+    setUniformEyePosition();
   }
 
   @Override

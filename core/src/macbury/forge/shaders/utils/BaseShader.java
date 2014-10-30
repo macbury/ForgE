@@ -16,6 +16,7 @@ import java.util.HashMap;
  */
 public abstract class BaseShader implements Disposable {
   public static final String UNIFORM_PROJECTION_MATRIX = "u_projectionMatrix";
+  public static final String UNIFORM_EYE_POSITION      = "u_eyePosition";
   public static final String UNIFORM_DEBUG_MODE        = "u_debugMode";
   private static final String VERTEX_HELPER_KEY        = "vertex";
   private static final String FRAGMENT_HELPER_KEY      = "fragment";
@@ -94,6 +95,8 @@ public abstract class BaseShader implements Disposable {
     context.begin();
     afterBegin();
   }
+
+
 
   /**
    * Setup global uniforms here

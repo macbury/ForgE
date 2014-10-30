@@ -80,6 +80,8 @@ public class Level implements Disposable {
   public void render(float delta) {
     camera.update();
     terrainEngine.update();
+
+    ForgE.graphics.clearAll(env.skyColor);
     batch.begin(camera); {
       batch.add(terrainEngine);
       this.entities.update(delta);
