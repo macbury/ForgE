@@ -1,5 +1,6 @@
 package macbury.forge.editor.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import macbury.forge.ForgE;
@@ -14,6 +15,7 @@ import macbury.forge.ui.Overlay;
  * Created by macbury on 18.10.14.
  */
 public class EditorScreen extends AbstractScreen {
+  private static final String TAG = "EditorScreen";
   public Level level;
   private Stage stage;
   private RTSCameraController cameraController;
@@ -48,7 +50,11 @@ public class EditorScreen extends AbstractScreen {
 
   @Override
   public void resize(int width, int height) {
+    Gdx.app.log(TAG, "Resize: "+ width +"x"+height);
+
     level.resize(width, height);
+    stage.getViewport().update(width,height);
+    overlay.invalidateHierarchy();
   }
 
   @Override
