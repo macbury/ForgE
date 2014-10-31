@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import macbury.forge.Config;
+import macbury.forge.ForgE;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
 import macbury.forge.graphics.batch.renderable.BaseRenderableProvider;
 import macbury.forge.level.LevelEnv;
@@ -27,28 +29,13 @@ public class VoxelBatch implements Disposable {
   private boolean sorted;
   public int renderablesPerFrame;
 
-  public enum RenderType {
-    Textured, Wireframe, Normals, Lighting
-  }
-
-  protected RenderType type;
-
   public VoxelBatch(RenderContext customRenderContext) {
     this.context        = customRenderContext;
     this.shaderProvider = new ShaderProvider();
     this.shapeRenderer  = new ShapeRenderer();
-    this.type           = RenderType.Textured;
     this.sorter         = new CameraRenderableSorter();
     renderablesPerFrame = 0;
     trianglesPerFrame   = 0;
-  }
-
-  public RenderType getType() {
-    return type;
-  }
-
-  public void setType(RenderType type) {
-    this.type = type;
   }
 
   public void begin(Camera cam) {
@@ -88,7 +75,7 @@ public class VoxelBatch implements Disposable {
   public void render(LevelEnv env) {
     if (camera == null) throw new GdxRuntimeException("Call begin() first.");
     sortUnlessNotSorted();
-    if (type == RenderType.Wireframe) {
+    if (ForgE.config.renderDebug == Config.RenderDebug.Wireframe) {
       renderWireframe();
     } else {
       renderTextured(env);
@@ -135,7 +122,6 @@ public class VoxelBatch implements Disposable {
       if (currentShader != currentRenderableShader) {
         if (currentShader != null) currentShader.end();
         currentShader = currentRenderableShader;
-        env.renderType = this.type;
         currentShader.begin(camera, context, env);
       }
       currentShader.render(renderable);

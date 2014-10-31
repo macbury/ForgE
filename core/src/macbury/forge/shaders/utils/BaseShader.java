@@ -39,11 +39,9 @@ public abstract class BaseShader implements Disposable {
       shader.dispose();
     }
 
-    fragmentSrc = loadHelpers(FRAGMENT_HELPER_KEY) + fragmentSrc;
-    vertexSrc   = loadHelpers(VERTEX_HELPER_KEY) + vertexSrc;
-    if (ForgE.config.shaderDebug) {
-      vertexSrc = loadHelperSrc("debug") + vertexSrc;
-    }
+    fragmentSrc = applyDebugPrefixes() + loadHelpers(FRAGMENT_HELPER_KEY) + fragmentSrc;
+    vertexSrc   = applyDebugPrefixes() + loadHelpers(VERTEX_HELPER_KEY) + vertexSrc;
+
     ShaderProgram newShaderProgram = new ShaderProgram(vertexSrc, fragmentSrc);
     if (newShaderProgram.isCompiled()) {
       shader = newShaderProgram;
@@ -57,6 +55,21 @@ public abstract class BaseShader implements Disposable {
       Gdx.app.error(TAG, vertexSrc);
       return false;
     }
+  }
+
+  private String applyDebugPrefixes() {
+    String out = "";
+    switch (ForgE.config.renderDebug) {
+      case Normals:
+        out += "#define normalsDebugFlag\n";
+        break;
+      case Lighting:
+        out += "#define lightingDebugFlag\n";
+        break;
+    }
+
+    Gdx.app.log(TAG, "Debug prefixes: \n"+out);
+    return out;
   }
 
   private String loadHelpers(String key) {
@@ -90,8 +103,6 @@ public abstract class BaseShader implements Disposable {
     this.env     = env;
     shader.begin();
     shader.setUniformMatrix(UNIFORM_PROJECTION_MATRIX, camera.combined);
-    if (ForgE.config.shaderDebug)
-      shader.setUniformf(UNIFORM_DEBUG_MODE, env.renderType.ordinal());
     context.begin();
     afterBegin();
   }

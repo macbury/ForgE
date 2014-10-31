@@ -17,14 +17,14 @@ void main() {
   v_normal          = normalize(u_normalMatrix * a_normal);
 
   vec3 lightDiffuse = u_ambientLight.rgb + directionalLightDiffuse(u_mainLight, v_normal);
+  v_color           = vec4(a_color.rgb * lightDiffuse, a_color.a);
 
-  if (shouldDebugRenderNormals()) {
+  #ifdef normalsDebugFlag
     v_color.rgb = v_normal;
-  } else if (shouldDebugRenderLighting()) {
+  #endif
+  #ifdef lightingDebugFlag
     v_color.rgb = lightDiffuse;
-  } else {
-    v_color           = vec4(a_color.rgb * lightDiffuse, a_color.a);
-  }
+  #endif
 
   v_position        = u_worldTransform * a_position;
   gl_Position       = u_projectionMatrix * v_position;

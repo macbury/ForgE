@@ -5,5 +5,5 @@ varying vec3   v_normal;
 varying vec4   v_position;
 
 void main() {
-  gl_FragColor = mix(v_color, u_skyColor, fogNormal(u_eyePosition, v_position));
+  gl_FragColor = fog(v_color, u_skyColor, u_eyePosition, v_position);
 }
