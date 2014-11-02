@@ -3,7 +3,9 @@ package macbury.forge.editor.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import macbury.forge.ForgE;
-import macbury.forge.editor.systems.EditorSystem;
+import macbury.forge.editor.managers.ChangeManager;
+import macbury.forge.editor.systems.SelectionSystem;
+import macbury.forge.editor.systems.TerrainPainterSystem;
 import macbury.forge.graphics.camera.RTSCameraController;
 import macbury.forge.level.Level;
 import macbury.forge.level.LevelState;
@@ -19,23 +21,30 @@ public class EditorScreen extends AbstractScreen {
   private Stage stage;
   private RTSCameraController cameraController;
   private Overlay overlay;
-  public EditorSystem editorSystem;
+  public SelectionSystem selectionSystem;
+  public TerrainPainterSystem terrainPainterSystem;
+  public ChangeManager changeManager;
 
   @Override
   protected void initialize() {
-    this.overlay            = new Overlay();
-    this.stage              = new Stage();
-    this.level              = new Level(LevelState.heightMapTest());
-    this.editorSystem       = new EditorSystem(level);
-    level.camera.far        = 200;
-    this.cameraController   = new RTSCameraController();
+    this.overlay              = new Overlay();
+    this.stage                = new Stage();
+    this.changeManager        = new ChangeManager();
+    this.level                = new Level(LevelState.blank());
+    this.selectionSystem      = new SelectionSystem(level);
+    this.terrainPainterSystem = new TerrainPainterSystem(level, changeManager);
+    this.cameraController     = new RTSCameraController();
+
+    level.camera.far          = 200;
+
     cameraController.setCenter(level.terrainMap.getWidth() / 2, level.terrainMap.getDepth() / 2);
     cameraController.setCamera(level.camera);
     cameraController.setOverlay(overlay);
 
-    editorSystem.setOverlay(overlay);
-    level.entities.addSystem(editorSystem);
+    selectionSystem.setOverlay(overlay);
+    level.entities.addSystem(selectionSystem);
     stage.addActor(overlay);
+    selectionSystem.addListener(terrainPainterSystem);
   }
 
   @Override
@@ -78,6 +87,7 @@ public class EditorScreen extends AbstractScreen {
   @Override
   public void dispose() {
     level.dispose();
+    changeManager.dispose();
   }
 
 }

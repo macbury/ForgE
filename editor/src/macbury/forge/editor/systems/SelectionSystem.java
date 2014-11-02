@@ -3,18 +3,24 @@ package macbury.forge.editor.systems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.GL30;
+import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.utils.Array;
 import macbury.forge.components.Cursor;
 import macbury.forge.components.Position;
 import macbury.forge.editor.selection.AbstractSelection;
-import macbury.forge.editor.selection.BoxSelection;
+import macbury.forge.editor.selection.SelectionInterface;
+import macbury.forge.editor.selection.SingleBlockSelection;
 import macbury.forge.editor.utils.MousePosition;
+import macbury.forge.graphics.DebugShape;
 import macbury.forge.graphics.camera.GameCamera;
 import macbury.forge.level.Level;
 import macbury.forge.level.map.ChunkMap;
-import macbury.forge.terrain.TerrainEngine;
 import macbury.forge.ui.Overlay;
 import macbury.forge.utils.VoxelCursor;
 import macbury.forge.utils.VoxelPicker;
@@ -23,25 +29,29 @@ import macbury.forge.utils.VoxelPicker;
  * Created by macbury on 19.10.14.
  * handles editor ui and editor input like selecting voxels, appending voxels, deleting voxels, clicking on enityt etc
  */
-public class EditorSystem extends EntitySystem {
+public class SelectionSystem extends EntitySystem {
   private static final String TAG = "EditorSysten";
   private final GameCamera camera;
-  private final TerrainEngine terrain;
   private final ChunkMap map;
   private final VoxelPicker voxelPicker;
   private final Cursor cursorComponent;
+  private final ShapeRenderer shapeRenderer;
+  private final RenderContext renderContext;
   private Overlay overlay;
   private final MousePosition mousePosition;
   public final VoxelCursor voxelCursor = new VoxelCursor();
   private AbstractSelection selection;
+  private Array<SelectionInterface> listeners;
 
-  public EditorSystem(Level level) {
+  public SelectionSystem(Level level) {
     super();
+    this.listeners               = new Array<SelectionInterface>();
     this.voxelPicker             = new VoxelPicker(level.terrainMap);
     this.camera                  = level.camera;
-    mousePosition                = new MousePosition(camera);
-    this.terrain                 = level.terrainEngine;
+    this.mousePosition           = new MousePosition(camera);
     this.map                     = level.terrainMap;
+    this.shapeRenderer           = level.batch.shapeRenderer;
+    this.renderContext           = level.renderContext;
     Entity cursorEntity          = level.entities.createEntity();
 
     this.cursorComponent         = level.entities.createComponent(Cursor.class);
@@ -50,14 +60,27 @@ public class EditorSystem extends EntitySystem {
     cursorEntity.add(cursorComponent);
     level.entities.addEntity(cursorEntity);
 
-    this.selection = new BoxSelection(this.map);
-
+    this.selection = new SingleBlockSelection(this.map);
   }
 
+  public void addListener(SelectionInterface selectionInterface) {
+    listeners.add(selectionInterface);
+  }
 
   @Override
   public void update(float deltaTime) {
-    cursorComponent.cursorBox.set(selection.getBoundingBox());
+    cursorComponent.set(selection.getBoundingBox());
+    renderContext.begin(); {
+      renderContext.setDepthMask(true);
+      renderContext.setCullFace(GL30.GL_BACK);
+      renderContext.setDepthTest(GL20.GL_LEQUAL);
+      shapeRenderer.setProjectionMatrix(camera.combined);
+      shapeRenderer.begin(ShapeRenderer.ShapeType.Line); {
+        shapeRenderer.setColor(cursorComponent.color);
+        DebugShape.draw(shapeRenderer, cursorComponent.cursorBox);
+      }
+      shapeRenderer.end();
+    } renderContext.end();
   }
 
   private boolean getCurrentVoxelCursor(float screenX, float screenY) {
@@ -83,6 +106,9 @@ public class EditorSystem extends EntitySystem {
       public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
         if (button == Input.Buttons.LEFT && getCurrentVoxelCursor(x,y)) {
           selection.start(voxelCursor);
+          for (SelectionInterface listener : listeners) {
+            listener.onSelectionStart(selection);
+          }
           return true;
         }
 
@@ -93,6 +119,9 @@ public class EditorSystem extends EntitySystem {
       public void touchDragged(InputEvent event, float x, float y, int pointer) {
         if (getCurrentVoxelCursor(x,y)) {
           selection.update(voxelCursor);
+          for (SelectionInterface listener : listeners) {
+            listener.onSelectionChange(selection);
+          }
         }
       }
 
@@ -100,6 +129,10 @@ public class EditorSystem extends EntitySystem {
       public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
         if (button == Input.Buttons.LEFT && getCurrentVoxelCursor(x,y)) {
           selection.end(voxelCursor);
+          for (SelectionInterface listener : listeners) {
+            listener.onSelectionEnd(selection);
+          }
+          selection.reset(voxelCursor);
         }
         super.touchUp(event, x, y, pointer, button);
       }

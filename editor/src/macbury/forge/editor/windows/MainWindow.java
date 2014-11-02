@@ -1,5 +1,6 @@
 package macbury.forge.editor.windows;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglAWTCanvas;
 import macbury.forge.Config;
 import macbury.forge.ForgE;
@@ -43,6 +44,7 @@ public class MainWindow extends JFrame implements ForgEBootListener {
     config.renderStaticOctree = false;
     config.renderBoundingBox = false;
     config.debug             = true;
+
     engine                   = new ForgE(config);
 
     engine.setBootListener(this);
@@ -50,7 +52,9 @@ public class MainWindow extends JFrame implements ForgEBootListener {
     mainMenu     = new MainMenu();
 
     openGLCanvas = new LwjglAWTCanvas(engine);
-    openGlContainer.add(openGLCanvas.getCanvas(), BorderLayout.CENTER);
+    openGlContainer.add(
+
+    openGLCanvas.getCanvas(), BorderLayout.CENTER);
 
     mainToolbarController = new MainToolbarController(mainToolbar, mainMenu);
 
@@ -70,6 +74,7 @@ public class MainWindow extends JFrame implements ForgEBootListener {
 
   @Override
   public void afterEngineCreate(ForgE engine) {
+    Gdx.graphics.setVSync(true);
     projectController.newMap();
     shaderFileChangeListener = new ShaderFileChangeListener();
   }

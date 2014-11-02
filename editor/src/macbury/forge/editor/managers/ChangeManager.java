@@ -1,21 +1,28 @@
 package macbury.forge.editor.managers;
 
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Disposable;
+
 /**
  * Created by macbury on 31.10.14.
  */
 
-public class ChangeManager {
+public class ChangeManager implements Disposable {
   private Node currentIndex = null;
   private Node parentNode = new Node();
-  private ChangeManagerListener listener;
-
+  private Array<ChangeManagerListener> listeners;
   /**
    * Creates a new ChangeManager object which is initially empty.
    */
-  public ChangeManager(ChangeManagerListener listener){
+  public ChangeManager(){
     currentIndex = parentNode;
-    this.listener = listener;
-    this.listener.onChangeManagerChange(this);
+    this.listeners = new Array<ChangeManagerListener>();
+  }
+
+  public void addListener(ChangeManagerListener listener) {
+    if (listeners.indexOf(listener, true) == -1) {
+      listeners.add(listener);
+    }
   }
 
   /**
@@ -24,7 +31,9 @@ public class ChangeManager {
   public void clear(){
     parentNode   = new Node();
     currentIndex = parentNode;
-    this.listener.onChangeManagerChange(this);
+    for (ChangeManagerListener listener : listeners) {
+      listener.onChangeManagerChange(this);
+    }
   }
 
 
@@ -37,7 +46,9 @@ public class ChangeManager {
     currentIndex.right = node;
     node.left          = currentIndex;
     currentIndex       = node;
-    this.listener.onChangeManagerChange(this);
+    for (ChangeManagerListener listener : listeners) {
+      listener.onChangeManagerChange(this);
+    }
   }
 
   /**
@@ -81,7 +92,9 @@ public class ChangeManager {
     }
     currentIndex = currentIndex.left;
 
-    this.listener.onChangeManagerChange(this);
+    for (ChangeManagerListener listener : listeners) {
+      listener.onChangeManagerChange(this);
+    }
     System.gc();
   }
 
@@ -94,7 +107,9 @@ public class ChangeManager {
       throw new IllegalStateException("Internal index set to null.");
     }
     currentIndex = currentIndex.right;
-    this.listener.onChangeManagerChange(this);
+    for (ChangeManagerListener listener : listeners) {
+      listener.onChangeManagerChange(this);
+    }
     System.gc();
   }
 
@@ -111,6 +126,12 @@ public class ChangeManager {
     moveRight();
     //redo
     currentIndex.changeable.redo();
+  }
+
+  @Override
+  public void dispose() {
+    listeners.clear();
+    clear();
   }
 
 

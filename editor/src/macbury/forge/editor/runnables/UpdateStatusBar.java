@@ -41,7 +41,7 @@ public class UpdateStatusBar implements Runnable {
       statusMemoryLabel.setText("Memory: " + FormatUtils.humanReadableByteCount(Gdx.app.getNativeHeap(), true) + "/" + FormatUtils.humanReadableByteCount(Gdx.app.getJavaHeap(), true));
       statusRenderablesLabel.setText("Renderables: " + String.valueOf(projectController.editorScreen.level.batch.renderablesPerFrame));
       statusTriangleCountLabel.setText("Triangles: " + String.valueOf(projectController.editorScreen.level.batch.trianglesPerFrame));
-      mapCursorPositionLabel.setText(projectController.editorScreen.editorSystem.voxelCursor.replace.toString());
+      mapCursorPositionLabel.setText(projectController.editorScreen.selectionSystem.voxelCursor.replace.toString());
     }
   }
 }

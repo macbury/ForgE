@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import macbury.forge.ForgE;
-import macbury.forge.components.Cursor;
 import macbury.forge.components.Position;
 import macbury.forge.graphics.DebugShape;
 import macbury.forge.graphics.batch.VoxelBatch;
@@ -37,7 +36,6 @@ public class DebugSystem extends IteratingSystem {
   private final TerrainEngine terrain;
   private final RenderContext context;
   private ComponentMapper<Position>   pm = ComponentMapper.getFor(Position.class);
-  private ComponentMapper<Cursor>     cm = ComponentMapper.getFor(Cursor.class);
   private final BoundingBox tempBox;
   private final Vector3     tempVec;
 
@@ -62,16 +60,9 @@ public class DebugSystem extends IteratingSystem {
   @Override
   public void processEntity(Entity entity, float deltaTime) {
     Position positionComponent = pm.get(entity);
-    Cursor   cursorComponent   = cm.get(entity);
 
     if (positionComponent.visible && ForgE.config.renderBoundingBox) {
       positionComponent.getBoundingBox(tempBox);
-      DebugShape.draw(batch.shapeRenderer, tempBox);
-    }
-
-    if (cursorComponent != null) {
-      batch.shapeRenderer.setColor(cursorComponent.color);
-      tempBox.set(cursorComponent.cursorBox);
       DebugShape.draw(batch.shapeRenderer, tempBox);
     }
   }
