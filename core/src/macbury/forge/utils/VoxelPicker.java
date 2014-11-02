@@ -24,13 +24,14 @@ public class VoxelPicker {
     this.map = map;
   }
 
-  public boolean getVoxelPositionForPickRay(Ray pickRay, float far, Vector3i outVoxelIntersectPoint) {
+  public boolean getVoxelPositionForPickRay(Ray pickRay, float far, VoxelCursor outVoxelIntersectPoint) {
     for (float j = 0; j < far; j+=0.1f) {
       pickRay.getEndPoint(rayEndPoint, j);
       map.worldPositionToLocalVoxelPosition(rayEndPoint, localVoxelPosition);
 
       if (map.isSolid(localVoxelPosition)) {
         map.localVoxelPositionToWorldPosition(localVoxelPosition, worldVoxelPosition);
+        outVoxelIntersectPoint.replace.set(worldVoxelPosition);
         worldVoxelPositionWithSize.set(worldVoxelPosition).add(map.tileSize);
         voxelBoundingBox.set(worldVoxelPosition, worldVoxelPositionWithSize);
 
@@ -44,7 +45,7 @@ public class VoxelPicker {
           dir.set(Math.round(Math.abs(dir.x)), Math.round(Math.abs(dir.y)), Math.round(Math.abs(dir.z))).scl(sign);
           worldVoxelPosition.sub(dir);
 
-          outVoxelIntersectPoint.set(worldVoxelPosition);
+          outVoxelIntersectPoint.append.set(worldVoxelPosition);
         }
 
         return true;

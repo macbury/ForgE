@@ -70,7 +70,8 @@ public class DebugSystem extends IteratingSystem {
     }
 
     if (cursorComponent != null) {
-      positionComponent.getBoundingBox(tempBox);
+      batch.shapeRenderer.setColor(cursorComponent.color);
+      tempBox.set(cursorComponent.cursorBox);
       DebugShape.draw(batch.shapeRenderer, tempBox);
     }
   }

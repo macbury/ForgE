@@ -5,5 +5,5 @@ package macbury.forge.editor.selection;
  */
 
 public enum SelectType {
-  Face, Block
+  Replace, Append
 }

@@ -84,4 +84,8 @@ public class Vector3i {
     y -= other.y;
     z -= other.z;
   }
+
+  public void applyTo(Vector3 vectorToApply) {
+    vectorToApply.set(x,y,z);
+  }
 }

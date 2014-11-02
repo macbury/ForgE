@@ -1,4 +1,4 @@
-package macbury.forge.editor.systems;
+package macbury.forge.editor.utils;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
