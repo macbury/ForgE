@@ -63,6 +63,7 @@ public class MainWindow extends JFrame implements ForgEBootListener {
     projectController.setStatusLabel(statusFpsLabel, statusMemoryLabel, statusRenderablesLabel, mapCursorPositionLabel, statusTriangleCountLabel);
 
     projectController.addOnMapChangeListener(mainMenu);
+    projectController.addOnMapChangeListener(mainToolbarController);
   }
 
   public void centreWindow() {

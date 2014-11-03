@@ -25,6 +25,13 @@ public class ChangeManager implements Disposable {
     }
   }
 
+
+  public void removeListener(ChangeManagerListener listener) {
+    if (listeners.indexOf(listener, true) != -1) {
+      listeners.removeValue(listener, true);
+    }
+  }
+
   /**
    * Clears all Changables contained in this manager.
    */
@@ -133,6 +140,7 @@ public class ChangeManager implements Disposable {
     listeners.clear();
     clear();
   }
+
 
 
   private class Node {
