@@ -2,8 +2,9 @@ package macbury.forge.level.map;
 
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
-import macbury.forge.graphics.VoxelMaterial;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import macbury.forge.graphics.VoxelMap;
+import macbury.forge.graphics.VoxelMaterial;
 import macbury.forge.graphics.builders.Chunk;
 import macbury.forge.utils.Vector3i;
 
@@ -47,11 +48,12 @@ public class ChunkMap extends VoxelMap {
     for(int y = 0; y < 1; y++) {
       for(int x = 0; x < width; x++) {
         for(int z = 0; z < depth; z++) {
-          setMaterialForPosition(m.get((int)Math.round((m.size-1) * Math.random())), x,y,z);
+          setMaterialForPosition(grass1, x,y,z);
         }
       }
     }
 
+    materials.addAll(m);
     VoxelMaterial rock = new VoxelMaterial(186f/255f,191f/255f,186f/255f,1);
     materials.add(rock);
   }
@@ -76,9 +78,9 @@ public class ChunkMap extends VoxelMap {
 
   private void rebuildChunkForPosition(int x, int y, int z) {
     Vector3i chunkPosition = voxelPositionToChunkPosition(x,y,z);
-    Chunk chunk              = findForChunkPosition(chunkPosition);
+    Chunk chunk            = findForChunkPosition(chunkPosition);
     if (chunk == null) {
-      //throw new GdxRuntimeException("Chunk is null!!");
+      throw new GdxRuntimeException("Chunk is null!!");
     } else {
       addToRebuild(chunk);
     }
@@ -104,7 +106,6 @@ public class ChunkMap extends VoxelMap {
           chunk.end.set(chunk.start).add(CHUNK_SIZE, CHUNK_SIZE, CHUNK_SIZE);
           chunk.size.set(CHUNK_SIZE, CHUNK_SIZE, CHUNK_SIZE).scl(tileSize);
           chunks.add(chunk);
-          addToRebuild(chunk);
         }
       }
     }

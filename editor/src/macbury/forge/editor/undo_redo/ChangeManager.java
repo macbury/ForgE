@@ -1,4 +1,4 @@
-package macbury.forge.editor.managers;
+package macbury.forge.editor.undo_redo;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
@@ -48,7 +48,7 @@ public class ChangeManager implements Disposable {
    * Adds a Changeable to manage.
    * @param changeable
    */
-  public void addChangeable(Changeable changeable){
+  public Changeable addChangeable(Changeable changeable){
     Node node          = new Node(changeable);
     currentIndex.right = node;
     node.left          = currentIndex;
@@ -56,10 +56,12 @@ public class ChangeManager implements Disposable {
     for (ChangeManagerListener listener : listeners) {
       listener.onChangeManagerChange(this);
     }
+
+    return changeable;
   }
 
   /**
-   * Determines if an undo can be performed.
+   * Determines if an revert can be performed.
    * @return
    */
   public boolean canUndo(){
@@ -67,7 +69,7 @@ public class ChangeManager implements Disposable {
   }
 
   /**
-   * Determines if a redo can be performed.
+   * Determines if a apply can be performed.
    * @return
    */
   public boolean canRedo(){
@@ -81,10 +83,10 @@ public class ChangeManager implements Disposable {
   public void undo(){
     //validate
     if ( !canUndo() ){
-      throw new IllegalStateException("Cannot undo. Index is out of range.");
+      throw new IllegalStateException("Cannot revert. Index is out of range.");
     }
-    //undo
-    currentIndex.changeable.undo();
+    //revert
+    currentIndex.changeable.revert();
     //set index
     moveLeft();
   }
@@ -127,12 +129,12 @@ public class ChangeManager implements Disposable {
   public void redo(){
     //validate
     if ( !canRedo() ){
-      throw new IllegalStateException("Cannot redo. Index is out of range.");
+      throw new IllegalStateException("Cannot apply. Index is out of range.");
     }
     //reset index
     moveRight();
-    //redo
-    currentIndex.changeable.redo();
+    //apply
+    currentIndex.changeable.apply();
   }
 
   @Override
@@ -140,8 +142,6 @@ public class ChangeManager implements Disposable {
     listeners.clear();
     clear();
   }
-
-
 
   private class Node {
     private Node left  = null;

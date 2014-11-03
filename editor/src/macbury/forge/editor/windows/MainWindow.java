@@ -36,7 +36,7 @@ public class MainWindow extends JFrame implements ForgEBootListener {
     setContentPane(contentPane);
     setSize(1360, 768);
     setVisible(true);
-    setExtendedState(JFrame.MAXIMIZED_BOTH);
+    //setExtendedState(JFrame.MAXIMIZED_BOTH);
 
     setDefaultCloseOperation(EXIT_ON_CLOSE);
     Config config            = new Config();

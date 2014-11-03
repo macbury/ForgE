@@ -3,7 +3,7 @@ package macbury.forge.editor.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import macbury.forge.ForgE;
-import macbury.forge.editor.managers.ChangeManager;
+import macbury.forge.editor.undo_redo.ChangeManager;
 import macbury.forge.editor.systems.SelectionSystem;
 import macbury.forge.editor.systems.TerrainPainterSystem;
 import macbury.forge.graphics.camera.RTSCameraController;
@@ -43,6 +43,7 @@ public class EditorScreen extends AbstractScreen {
 
     selectionSystem.setOverlay(overlay);
     level.entities.addSystem(selectionSystem);
+    level.entities.addSystem(terrainPainterSystem);
     stage.addActor(overlay);
     selectionSystem.addListener(terrainPainterSystem);
   }

@@ -30,4 +30,9 @@ public class VoxelCursor {
       return super.equals(obj);
     }
   }
+
+  @Override
+  public String toString() {
+    return append.toString();
+  }
 }

@@ -78,11 +78,11 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
 
   public void update() {
     timer.update(Gdx.graphics.getDeltaTime());
+    rebuild();
   }
 
   @Override
   public void onTimerTick(ActionTimer timer) {
-    rebuild();
     occulsion();
   }
 
@@ -122,11 +122,16 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
   private boolean rebuild() {
     if (map.chunkToRebuild.size > 0) {
       Gdx.app.log(TAG, "Chunks to rebuild: " + map.chunkToRebuild.size);
-      while (map.chunkToRebuild.size > 0) {
+      int i = 100;
+      while(map.chunkToRebuild.size > 0) {
         Chunk chunk = map.chunkToRebuild.pop();
         buildChunkGeometry(chunk);
+        i--;
+        if (i <= 0) break;
       }
+      occulsion();
     }
+
     return map.chunkToRebuild.size == 0;
   }
 

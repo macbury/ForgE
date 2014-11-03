@@ -68,8 +68,10 @@ public class VoxelMap implements Disposable {
     if (index > 255) {
       throw new GdxRuntimeException("Maximum materials for color pallete is finished!");
     }
+    if (!isOutOfBounds(x,y,z)) {
+      voxelMap[x][y][z] = (byte)index;
+    }
 
-    voxelMap[x][y][z] = (byte)index;
   }
 
   public void setEmptyForPosition(int x, int y, int z) {

@@ -53,6 +53,18 @@ public abstract class AbstractSelection {
   }
 
   protected abstract void getMaximum(Vector3 out);
-
   protected abstract void getMinimum(Vector3 out);
+
+  public VoxelCursor getStartPosition() {
+    return startPosition;
+  }
+
+  public VoxelCursor getEndPostion() {
+    return endPostion;
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + ": " + startPosition.toString() + " - " + endPostion.toString();
+  }
 }

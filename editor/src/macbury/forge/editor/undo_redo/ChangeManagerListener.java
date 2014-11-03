@@ -1,4 +1,4 @@
-package macbury.forge.editor.managers;
+package macbury.forge.editor.undo_redo;
 
 /**
  * Created by macbury on 31.10.14.

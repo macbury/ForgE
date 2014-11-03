@@ -79,8 +79,8 @@ public class Level implements Disposable {
 
     ForgE.graphics.clearAll(env.skyColor);
     batch.begin(camera); {
-      batch.add(terrainEngine);
       entities.update(delta);
+      batch.add(terrainEngine);
       batch.render(env);
     } batch.end();
     renderDebugInfo();

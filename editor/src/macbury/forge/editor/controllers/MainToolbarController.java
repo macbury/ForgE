@@ -1,8 +1,8 @@
 package macbury.forge.editor.controllers;
 
 import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
-import macbury.forge.editor.managers.ChangeManager;
-import macbury.forge.editor.managers.ChangeManagerListener;
+import macbury.forge.editor.undo_redo.ChangeManager;
+import macbury.forge.editor.undo_redo.ChangeManagerListener;
 import macbury.forge.editor.screens.EditorScreen;
 import macbury.forge.editor.views.MainMenu;
 import macbury.forge.editor.views.MoreToolbarButton;
