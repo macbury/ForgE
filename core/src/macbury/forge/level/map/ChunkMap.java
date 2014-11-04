@@ -15,6 +15,7 @@ public class ChunkMap extends VoxelMap {
   public static final int CHUNK_SIZE         = 10;
   public static final int CHUNK_ARRAY_SIZE    = CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE;
   public static final Vector3 TERRAIN_TILE_SIZE = new Vector3(1,1,1);
+  private static final String TAG = "ChunkMap";
   public final Array<Chunk> chunks;
   public final Array<Chunk> chunkToRebuild;
 
@@ -23,6 +24,7 @@ public class ChunkMap extends VoxelMap {
   private int countChunksZ;
 
   private Vector3i tempA = new Vector3i();
+  private Vector3i tempB = new Vector3i();
   public ChunkMap(Vector3 tileSize) {
     super(tileSize);
     chunks         = new Array<Chunk>();
@@ -73,11 +75,59 @@ public class ChunkMap extends VoxelMap {
   @Override
   public void setMaterialForPosition(VoxelMaterial color, int x, int y, int z) {
     super.setMaterialForPosition(color, x, y, z);
-    rebuildChunkForPosition(x,y,z);
+    rebuildChunkAroundPosition(x, y, z);
   }
 
-  private void rebuildChunkForPosition(int x, int y, int z) {
-    Vector3i chunkPosition = voxelPositionToChunkPosition(x,y,z);
+  private void rebuildChunkAroundPosition(int x, int y, int z) {
+    Vector3i chunkPosition = voxelPositionToChunkPosition(x, y, z);
+    Chunk    centerChunk   = findForChunkPosition(chunkPosition);
+    addToRebuild(centerChunk);
+
+    if (centerChunk.start.x == x) {
+      //Gdx.app.log(TAG, "X left border!");
+      tempB.set(chunkPosition).x -= 1;
+      rebuildChunkForChunkPositionIfExists(tempB);
+    }
+
+    if (centerChunk.end.x - 1 == x) {
+      //Gdx.app.log(TAG, "X right border!");
+      tempB.set(chunkPosition).x += 1;
+      rebuildChunkForChunkPositionIfExists(tempB);
+    }
+
+    if (centerChunk.start.y == y) {
+      //Gdx.app.log(TAG, "Y top border!");
+      tempB.set(chunkPosition).y += 1;
+      rebuildChunkForChunkPositionIfExists(tempB);
+    }
+
+    if (centerChunk.end.y - 1 == y) {
+      //Gdx.app.log(TAG, "Y bottom border!");
+      tempB.set(chunkPosition).y += 1;
+      rebuildChunkForChunkPositionIfExists(tempB);
+    }
+
+    if (centerChunk.start.z == z) {
+      //Gdx.app.log(TAG, "Z Front border!");
+      tempB.set(chunkPosition).z -= 1;
+      rebuildChunkForChunkPositionIfExists(tempB);
+    }
+
+    if (centerChunk.end.z - 1 == z) {
+      //Gdx.app.log(TAG, "Z back border!");
+      tempB.set(chunkPosition).z += 1;
+      rebuildChunkForChunkPositionIfExists(tempB);
+    }
+  }
+
+  private void rebuildChunkForChunkPositionIfExists(Vector3i chunkPosition) {
+    Chunk chunk            = findForChunkPosition(chunkPosition);
+    if (chunk != null) {
+      addToRebuild(chunk);
+    }
+  }
+
+  private void rebuildChunkForChunkPosition(Vector3i chunkPosition) {
     Chunk chunk            = findForChunkPosition(chunkPosition);
     if (chunk == null) {
       throw new GdxRuntimeException("Chunk is null!!");
@@ -86,10 +136,15 @@ public class ChunkMap extends VoxelMap {
     }
   }
 
+  private void rebuildChunkForPosition(int x, int y, int z) {
+    Vector3i chunkPosition = voxelPositionToChunkPosition(x,y,z);
+    rebuildChunkForChunkPosition(chunkPosition);
+  }
+
   @Override
   public void setEmptyForPosition(int x, int y, int z) {
     super.setEmptyForPosition(x, y, z);
-    rebuildChunkForPosition(x,y,z);
+    rebuildChunkAroundPosition(x, y, z);
   }
 
   private void splitIntoChunks() {

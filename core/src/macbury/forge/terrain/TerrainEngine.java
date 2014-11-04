@@ -122,7 +122,7 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
   private boolean rebuild() {
     if (map.chunkToRebuild.size > 0) {
       Gdx.app.log(TAG, "Chunks to rebuild: " + map.chunkToRebuild.size);
-      int i = 100;
+      int i = 10;
       while(map.chunkToRebuild.size > 0) {
         Chunk chunk = map.chunkToRebuild.pop();
         buildChunkGeometry(chunk);

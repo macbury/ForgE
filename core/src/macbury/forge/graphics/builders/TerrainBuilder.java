@@ -63,7 +63,7 @@ public class TerrainBuilder extends VoxelsAssembler {
               VoxelMaterial material = map.getMaterialForPosition(x, y, z);
 
               tempColor.set(material);
-              float noise = (float)perlinNoise.simpleNoise(x,y,z, 10, 0.2) * 0.3f;
+              float noise = (float)perlinNoise.simpleNoise(x,y,z, 10, 0.2) * 0.1f;
               //Gdx.app.log(TAG, "n="+noise);
               tempColor.sub(noise, noise, noise, 0);
               switch (face) {
