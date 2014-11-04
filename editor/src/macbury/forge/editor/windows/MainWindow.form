@@ -7,33 +7,6 @@
     <properties/>
     <border type="none"/>
     <children>
-      <toolbar id="d1cca">
-        <constraints border-constraint="West"/>
-        <properties>
-          <borderPainted value="true"/>
-          <floatable value="false"/>
-          <orientation value="1"/>
-        </properties>
-        <border type="none"/>
-        <children>
-          <component id="4d328" class="javax.swing.JToolBar$Separator">
-            <constraints/>
-            <properties/>
-          </component>
-          <component id="1f1fb" class="javax.swing.JButton" binding="rectButton">
-            <constraints/>
-            <properties>
-              <hideActionText value="true"/>
-              <icon value="icons/draw_rect.png"/>
-              <text value=""/>
-            </properties>
-          </component>
-          <component id="9da4b" class="javax.swing.JToolBar$Separator">
-            <constraints/>
-            <properties/>
-          </component>
-        </children>
-      </toolbar>
       <grid id="83958" binding="statusBarPanel" layout-manager="GridLayoutManager" row-count="1" column-count="10" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="5" left="5" bottom="5" right="10"/>
         <constraints border-constraint="South"/>
@@ -127,14 +100,98 @@
         <border type="none"/>
         <children/>
       </toolbar>
-      <grid id="f1caa" binding="openGlContainer" layout-manager="BorderLayout" hgap="0" vgap="0">
+      <splitpane id="5e439">
         <constraints border-constraint="Center"/>
         <properties>
-          <background color="-16711423"/>
+          <continuousLayout value="true"/>
+          <dividerLocation value="320"/>
         </properties>
         <border type="none"/>
-        <children/>
-      </grid>
+        <children>
+          <grid id="31e25" binding="openGlContainer" layout-manager="BorderLayout" hgap="0" vgap="0">
+            <constraints>
+              <splitpane position="right"/>
+            </constraints>
+            <properties>
+              <background color="-16711423"/>
+            </properties>
+            <border type="none"/>
+            <children/>
+          </grid>
+          <splitpane id="63177">
+            <constraints>
+              <splitpane position="left"/>
+            </constraints>
+            <properties>
+              <continuousLayout value="true"/>
+              <dividerLocation value="320"/>
+              <orientation value="0"/>
+              <resizeWeight value="0.5"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <component id="303cd" class="javax.swing.JTree" binding="tree1" default-binding="true">
+                <constraints>
+                  <splitpane position="right"/>
+                </constraints>
+                <properties/>
+              </component>
+              <grid id="36bd0" layout-manager="BorderLayout" hgap="0" vgap="0">
+                <constraints>
+                  <splitpane position="left"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <tabbedpane id="28bf8" binding="tabbedPane1" default-binding="true">
+                    <constraints border-constraint="Center"/>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <grid id="c58e8" layout-manager="BorderLayout" hgap="0" vgap="0">
+                        <constraints>
+                          <tabbedpane title="Terrain"/>
+                        </constraints>
+                        <properties/>
+                        <border type="none"/>
+                        <children/>
+                      </grid>
+                      <grid id="8907d" layout-manager="BorderLayout" hgap="0" vgap="0">
+                        <constraints>
+                          <tabbedpane title="Objects"/>
+                        </constraints>
+                        <properties/>
+                        <border type="none"/>
+                        <children/>
+                      </grid>
+                      <grid id="81fbb" layout-manager="BorderLayout" hgap="0" vgap="0">
+                        <constraints>
+                          <tabbedpane title="Events"/>
+                        </constraints>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <component id="375df" class="javax.swing.JTextArea" binding="filterEvents">
+                            <constraints border-constraint="North"/>
+                            <properties/>
+                            <clientProperties>
+                              <caretAspectRatio class="java.lang.Float" value="0.04"/>
+                            </clientProperties>
+                          </component>
+                          <component id="9abbd" class="javax.swing.JList" binding="list1" default-binding="true">
+                            <constraints border-constraint="Center"/>
+                            <properties/>
+                          </component>
+                        </children>
+                      </grid>
+                    </children>
+                  </tabbedpane>
+                </children>
+              </grid>
+            </children>
+          </splitpane>
+        </children>
+      </splitpane>
     </children>
   </grid>
 </form>

@@ -27,9 +27,12 @@ public class MainWindow extends JFrame implements ForgEBootListener {
   private JLabel statusFpsLabel;
   private JLabel statusMemoryLabel;
   private JToolBar mainToolbar;
-  private JButton rectButton;
   private JLabel mapCursorPositionLabel;
   private JLabel statusTriangleCountLabel;
+  private JTree tree1;
+  private JTabbedPane tabbedPane1;
+  private JTextArea filterEvents;
+  private JList list1;
   private ShaderFileChangeListener shaderFileChangeListener;
 
   public MainWindow() {
