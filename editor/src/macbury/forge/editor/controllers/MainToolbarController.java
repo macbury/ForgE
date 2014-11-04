@@ -18,8 +18,6 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
   private final ButtonGroup editorModeButtonGroup;
   private final JToolBar mainToolbar;
   private final MoreToolbarButton moreButton;
-  private final JToggleButton editorModeTerrainButton;
-  private final JToggleButton editorModeEventsButton;
   private final JButton editorRedoButton;
   private final JButton editorUndoButton;
   private EditorScreen screen;
@@ -30,19 +28,11 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
     this.mainToolbar           = mainToolbar;
     moreButton                 = new MoreToolbarButton(mainMenu);
 
-    this.editorModeTerrainButton = buildToogleButton("blocks");
-    this.editorModeEventsButton  = buildToogleButton("game_objects");
 
     this.editorRedoButton        = buildButton("redo");
     this.editorUndoButton        = buildButton("undo");
 
-    editorModeButtonGroup.add(editorModeTerrainButton);
-    editorModeButtonGroup.add(editorModeEventsButton);
-
     mainToolbar.add(moreButton);
-    mainToolbar.addSeparator();
-    mainToolbar.add(editorModeTerrainButton);
-    mainToolbar.add(editorModeEventsButton);
     mainToolbar.addSeparator();
     mainToolbar.add(editorUndoButton);
     mainToolbar.add(editorRedoButton);

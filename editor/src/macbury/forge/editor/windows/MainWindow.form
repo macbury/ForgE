@@ -150,15 +150,31 @@
                     <children>
                       <grid id="c58e8" layout-manager="BorderLayout" hgap="0" vgap="0">
                         <constraints>
-                          <tabbedpane title="Terrain"/>
+                          <tabbedpane title="Terrain" icon="icons/soil_layers.png"/>
                         </constraints>
                         <properties/>
                         <border type="none"/>
-                        <children/>
+                        <children>
+                          <toolbar id="10c61" binding="terrainToolsToolbar">
+                            <constraints border-constraint="North"/>
+                            <properties>
+                              <borderPainted value="true"/>
+                              <floatable value="false"/>
+                              <rollover value="true"/>
+                            </properties>
+                            <clientProperties>
+                              <JToolBar.isRollover class="java.lang.Boolean" value="true"/>
+                            </clientProperties>
+                            <border type="none">
+                              <font/>
+                            </border>
+                            <children/>
+                          </toolbar>
+                        </children>
                       </grid>
                       <grid id="8907d" layout-manager="BorderLayout" hgap="0" vgap="0">
                         <constraints>
-                          <tabbedpane title="Objects"/>
+                          <tabbedpane title="Objects" icon="icons/places.png"/>
                         </constraints>
                         <properties/>
                         <border type="none"/>
@@ -166,7 +182,7 @@
                       </grid>
                       <grid id="81fbb" layout-manager="BorderLayout" hgap="0" vgap="0">
                         <constraints>
-                          <tabbedpane title="Events"/>
+                          <tabbedpane title="Events" icon="icons/ice_cube.png"/>
                         </constraints>
                         <properties/>
                         <border type="none"/>

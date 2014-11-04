@@ -7,6 +7,7 @@ import macbury.forge.ForgE;
 import macbury.forge.ForgEBootListener;
 import macbury.forge.editor.controllers.MainToolbarController;
 import macbury.forge.editor.controllers.ProjectController;
+import macbury.forge.editor.controllers.TerrainToolsController;
 import macbury.forge.editor.reloader.ShaderFileChangeListener;
 import macbury.forge.editor.views.MainMenu;
 
@@ -20,6 +21,8 @@ public class MainWindow extends JFrame implements ForgEBootListener {
   private final ProjectController projectController;
   private final MainMenu mainMenu;
   private final MainToolbarController mainToolbarController;
+  private final TerrainToolsController terrainToolsController;
+  private final ProgressTaskDialog progressTaskDialog;
   private JPanel contentPane;
   private JPanel statusBarPanel;
   private JPanel openGlContainer;
@@ -33,15 +36,20 @@ public class MainWindow extends JFrame implements ForgEBootListener {
   private JTabbedPane tabbedPane1;
   private JTextArea filterEvents;
   private JList list1;
+  private JToolBar terrainToolsToolbar;
   private ShaderFileChangeListener shaderFileChangeListener;
 
   public MainWindow() {
+    this.progressTaskDialog = new ProgressTaskDialog();
     setContentPane(contentPane);
     setSize(1360, 768);
+    setExtendedState(JFrame.MAXIMIZED_BOTH);
     setVisible(true);
-    //setExtendedState(JFrame.MAXIMIZED_BOTH);
-
     setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+    progressTaskDialog.setVisible(true);
+    progressTaskDialog.setLocationRelativeTo(this);
+
     Config config            = new Config();
     config.generateWireframe = true;
     config.renderStaticOctree = false;
@@ -55,11 +63,10 @@ public class MainWindow extends JFrame implements ForgEBootListener {
     mainMenu     = new MainMenu();
 
     openGLCanvas = new LwjglAWTCanvas(engine);
-    openGlContainer.add(
+    openGlContainer.add(openGLCanvas.getCanvas(), BorderLayout.CENTER);
 
-    openGLCanvas.getCanvas(), BorderLayout.CENTER);
-
-    mainToolbarController = new MainToolbarController(mainToolbar, mainMenu);
+    terrainToolsController   = new TerrainToolsController(terrainToolsToolbar);
+    mainToolbarController    = new MainToolbarController(mainToolbar, mainMenu);
 
     projectController = new ProjectController();
     projectController.setMainWindow(this);
@@ -67,6 +74,7 @@ public class MainWindow extends JFrame implements ForgEBootListener {
 
     projectController.addOnMapChangeListener(mainMenu);
     projectController.addOnMapChangeListener(mainToolbarController);
+    projectController.addOnMapChangeListener(terrainToolsController);
   }
 
   public void centreWindow() {
@@ -81,6 +89,7 @@ public class MainWindow extends JFrame implements ForgEBootListener {
     Gdx.graphics.setVSync(true);
     projectController.newMap();
     shaderFileChangeListener = new ShaderFileChangeListener();
+    progressTaskDialog.setVisible(false);
   }
 
   private void createUIComponents() {
