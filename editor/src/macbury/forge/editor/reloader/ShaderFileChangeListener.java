@@ -26,7 +26,6 @@ public class ShaderFileChangeListener implements JNotifyListener, Disposable {
 
   public void fileRenamed(int wd, String rootPath, String oldName, String newName) {
     print("renamed " + rootPath + " : " + oldName + " -> " + newName);
-    //reloadShaders();
   }
 
   public void fileModified(int wd, String rootPath, String name) {
@@ -45,12 +44,10 @@ public class ShaderFileChangeListener implements JNotifyListener, Disposable {
 
   public void fileDeleted(int wd, String rootPath, String name) {
     print("deleted " + rootPath + " : " + name);
-    //reloadShaders();
   }
 
   public void fileCreated(int wd, String rootPath, String name) {
     print("created " + rootPath + " : " + name);
-    //reloadShaders();
   }
 
   void print(String msg) {

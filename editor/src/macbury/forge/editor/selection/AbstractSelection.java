@@ -3,6 +3,7 @@ package macbury.forge.editor.selection;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import macbury.forge.graphics.VoxelMap;
+import macbury.forge.utils.Vector3i;
 import macbury.forge.utils.VoxelCursor;
 
 /**
@@ -55,12 +56,20 @@ public abstract class AbstractSelection {
   protected abstract void getMaximum(Vector3 out);
   protected abstract void getMinimum(Vector3 out);
 
-  public VoxelCursor getStartPosition() {
-    return startPosition;
+  public Vector3i getStartPosition() {
+    if (isAppendSelectType()) {
+      return startPosition.append;
+    } else {
+      return startPosition.replace;
+    }
   }
 
-  public VoxelCursor getEndPostion() {
-    return endPostion;
+  public Vector3i getEndPostion() {
+    if (isAppendSelectType()) {
+      return endPostion.append;
+    } else {
+      return endPostion.replace;
+    }
   }
 
   @Override

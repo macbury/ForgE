@@ -3,8 +3,6 @@ package macbury.forge.editor.systems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.collision.Ray;
@@ -14,10 +12,9 @@ import com.badlogic.gdx.utils.Array;
 import macbury.forge.components.Cursor;
 import macbury.forge.components.Position;
 import macbury.forge.editor.selection.AbstractSelection;
+import macbury.forge.editor.selection.BoxSelection;
 import macbury.forge.editor.selection.SelectionInterface;
-import macbury.forge.editor.selection.SingleBlockSelection;
 import macbury.forge.editor.utils.MousePosition;
-import macbury.forge.graphics.DebugShape;
 import macbury.forge.graphics.camera.GameCamera;
 import macbury.forge.level.Level;
 import macbury.forge.level.map.ChunkMap;
@@ -60,7 +57,8 @@ public class SelectionSystem extends EntitySystem {
     cursorEntity.add(cursorComponent);
     level.entities.addEntity(cursorEntity);
 
-    this.selection = new SingleBlockSelection(this.map);
+    //this.selection = new SingleBlockSelection(this.map);
+    this.selection = new BoxSelection(this.map);
   }
 
   public void addListener(SelectionInterface selectionInterface) {
@@ -70,17 +68,6 @@ public class SelectionSystem extends EntitySystem {
   @Override
   public void update(float deltaTime) {
     cursorComponent.set(selection.getBoundingBox());
-    renderContext.begin(); {
-      renderContext.setDepthMask(true);
-      renderContext.setCullFace(GL30.GL_BACK);
-      renderContext.setDepthTest(GL20.GL_LEQUAL);
-      shapeRenderer.setProjectionMatrix(camera.combined);
-      shapeRenderer.begin(ShapeRenderer.ShapeType.Line); {
-        shapeRenderer.setColor(cursorComponent.color);
-        DebugShape.draw(shapeRenderer, cursorComponent.cursorBox);
-      }
-      shapeRenderer.end();
-    } renderContext.end();
   }
 
   private boolean getCurrentVoxelCursor(float screenX, float screenY) {

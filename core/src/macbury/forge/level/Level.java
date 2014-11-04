@@ -1,8 +1,5 @@
 package macbury.forge.level;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.g3d.utils.DefaultTextureBinder;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.utils.Disposable;
@@ -83,19 +80,8 @@ public class Level implements Disposable {
       batch.add(terrainEngine);
       batch.render(env);
     } batch.end();
-    renderDebugInfo();
   }
 
-  private void renderDebugInfo() {
-    if (ForgE.config.debug) {
-      renderContext.begin(); {
-        renderContext.setDepthMask(true);
-        renderContext.setCullFace(GL30.GL_BACK);
-        renderContext.setDepthTest(GL20.GL_LEQUAL);
-        entities.debug.update(Gdx.graphics.getDeltaTime());
-      } renderContext.end();
-    }
-  }
 
   @Override
   public void dispose() {

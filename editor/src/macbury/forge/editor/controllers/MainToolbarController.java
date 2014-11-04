@@ -101,6 +101,12 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
 
   @Override
   public void actionPerformed(ActionEvent e) {
+    if (e.getSource() == editorUndoButton) {
+      screen.changeManager.undo();
+    }
 
+    if (e.getSource() == editorRedoButton) {
+      screen.changeManager.redo();
+    }
   }
 }

@@ -1,6 +1,7 @@
 package macbury.forge.graphics.builders;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
@@ -11,6 +12,7 @@ import macbury.forge.graphics.batch.renderable.VoxelFaceRenderable;
 import macbury.forge.graphics.mesh.MeshVertexInfo;
 import macbury.forge.graphics.mesh.VoxelsAssembler;
 import macbury.forge.level.map.ChunkMap;
+import macbury.forge.procedular.PerlinNoise;
 import macbury.forge.utils.Vector3i;
 
 /**
@@ -32,11 +34,17 @@ public class TerrainBuilder extends VoxelsAssembler {
   private Vector3 tempA = new Vector3();
   private Vector3 tempB = new Vector3();
   private Array<Face> facesToBuild = new Array<Face>();
-
+  private final PerlinNoise perlinNoise;
+  private Color tempColor = new Color();
   public TerrainBuilder(VoxelMap voxelMap) {
     super();
     this.map       = voxelMap;
     this.cursor    = new TerrainCursor();
+    this.perlinNoise = new PerlinNoise(System.currentTimeMillis());
+    //perlinNoise.setLacunarity(3);
+    //perlinNoise.setPersistence(2);
+    //perlinNoise.setOctaves(9);
+
   }
 
   private void buildFace(Vector3i checkTileInDirection, Face face) {
@@ -53,29 +61,34 @@ public class TerrainBuilder extends VoxelsAssembler {
 
             if (map.isEmptyNotOutOfBounds(x + checkTileInDirection.x,y + checkTileInDirection.y, z + checkTileInDirection.z)) {
               VoxelMaterial material = map.getMaterialForPosition(x, y, z);
+
+              tempColor.set(material);
+              float noise = (float)perlinNoise.simpleNoise(x,y,z, 10, 0.2) * 0.3f;
+              //Gdx.app.log(TAG, "n="+noise);
+              tempColor.sub(noise, noise, noise, 0);
               switch (face) {
                 case Top:
-                  top(tempA, map.tileSize, material);
+                  top(tempA, map.tileSize, tempColor);
                 break;
 
                 case Bottom:
-                  bottom(tempA, map.tileSize, material);
+                  bottom(tempA, map.tileSize, tempColor);
                 break;
 
                 case Front:
-                  front(tempA, map.tileSize, material);
+                  front(tempA, map.tileSize, tempColor);
                 break;
 
                 case Back:
-                  back(tempA, map.tileSize, material);
+                  back(tempA, map.tileSize, tempColor);
                 break;
 
                 case Left:
-                  left(tempA, map.tileSize, material);
+                  left(tempA, map.tileSize, tempColor);
                 break;
 
                 case Right:
-                  right(tempA, map.tileSize, material);
+                  right(tempA, map.tileSize, tempColor);
                 break;
               }
 

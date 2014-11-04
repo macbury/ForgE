@@ -1,12 +1,10 @@
 package macbury.forge.editor.systems;
 
 import com.badlogic.ashley.systems.IntervalSystem;
-import com.badlogic.gdx.Gdx;
 import macbury.forge.editor.selection.AbstractSelection;
 import macbury.forge.editor.selection.SelectionInterface;
 import macbury.forge.editor.undo_redo.ChangeManager;
-import macbury.forge.editor.undo_redo.Changeable;
-import macbury.forge.editor.undo_redo.actions.ApplyBlock;
+import macbury.forge.editor.undo_redo.actions.ApplyRangeBlock;
 import macbury.forge.level.Level;
 import macbury.forge.level.map.ChunkMap;
 
@@ -41,8 +39,8 @@ public class TerrainPainterSystem extends IntervalSystem implements SelectionInt
 
   @Override
   public void onSelectionEnd(AbstractSelection selection) {
-    Gdx.app.log(TAG, selection.toString());
-    final Changeable changeable = new ApplyBlock(selection, map);
-    changeManager.addChangeable(changeable).apply();
+    //Gdx.app.log(TAG, selection.toString());
+    //changeManager.addChangeable(new ApplyBlock(selection, map)).apply();
+    changeManager.addChangeable(new ApplyRangeBlock(selection, map)).apply();
   }
 }

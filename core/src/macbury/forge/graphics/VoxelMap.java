@@ -135,4 +135,16 @@ public class VoxelMap implements Disposable {
   public void setMaterialForPosition(VoxelMaterial voxelMaterial, Vector3i voxelPosition) {
     setMaterialForPosition(voxelMaterial, voxelPosition.x, voxelPosition.y, voxelPosition.z);
   }
+
+  public VoxelMaterial getMaterialForPosition(Vector3i voxelPosition) {
+    return getMaterialForPosition(voxelPosition.x, voxelPosition.y, voxelPosition.z);
+  }
+
+  public boolean isEmpty(Vector3i voxelPosition) {
+    return isEmpty(voxelPosition.x, voxelPosition.y, voxelPosition.z);
+  }
+
+  public void setEmptyForPosition(Vector3i voxelPosition) {
+    setEmptyForPosition(voxelPosition.x, voxelPosition.y, voxelPosition.z);
+  }
 }
