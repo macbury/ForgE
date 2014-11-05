@@ -5,7 +5,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import macbury.forge.ForgE;
 import macbury.forge.editor.undo_redo.ChangeManager;
 import macbury.forge.editor.systems.SelectionSystem;
-import macbury.forge.editor.systems.TerrainPainterSystem;
 import macbury.forge.graphics.camera.RTSCameraController;
 import macbury.forge.level.Level;
 import macbury.forge.level.LevelState;
@@ -17,12 +16,12 @@ import macbury.forge.ui.Overlay;
  */
 public class EditorScreen extends AbstractScreen {
   private static final String TAG = "EditorScreen";
+  private static final float LEVEL_EDITOR_FAR_CAMERA = 200;
   public Level level;
   private Stage stage;
   private RTSCameraController cameraController;
   private Overlay overlay;
   public SelectionSystem selectionSystem;
-  public TerrainPainterSystem terrainPainterSystem;
   public ChangeManager changeManager;
 
   @Override
@@ -32,10 +31,9 @@ public class EditorScreen extends AbstractScreen {
     this.changeManager        = new ChangeManager();
     this.level                = new Level(LevelState.blank());
     this.selectionSystem      = new SelectionSystem(level);
-    this.terrainPainterSystem = new TerrainPainterSystem(level, changeManager);
     this.cameraController     = new RTSCameraController();
 
-    level.camera.far          = 200;
+    level.camera.far          = LEVEL_EDITOR_FAR_CAMERA;
 
     cameraController.setCenter(level.terrainMap.getWidth() / 2, level.terrainMap.getDepth() / 2);
     cameraController.setCamera(level.camera);
@@ -43,9 +41,7 @@ public class EditorScreen extends AbstractScreen {
 
     selectionSystem.setOverlay(overlay);
     level.entities.addSystem(selectionSystem);
-    level.entities.addSystem(terrainPainterSystem);
     stage.addActor(overlay);
-    selectionSystem.addListener(terrainPainterSystem);
   }
 
   @Override

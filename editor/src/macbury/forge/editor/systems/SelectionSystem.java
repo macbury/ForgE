@@ -12,7 +12,6 @@ import com.badlogic.gdx.utils.Array;
 import macbury.forge.components.Cursor;
 import macbury.forge.components.Position;
 import macbury.forge.editor.selection.AbstractSelection;
-import macbury.forge.editor.selection.BoxSelection;
 import macbury.forge.editor.selection.SelectionInterface;
 import macbury.forge.editor.utils.MousePosition;
 import macbury.forge.graphics.camera.GameCamera;
@@ -56,13 +55,14 @@ public class SelectionSystem extends EntitySystem {
     cursorEntity.add(level.entities.createComponent(Position.class));
     cursorEntity.add(cursorComponent);
     level.entities.addEntity(cursorEntity);
-
-    //this.selection = new SingleBlockSelection(this.map);
-    this.selection = new BoxSelection(this.map);
   }
 
   public void addListener(SelectionInterface selectionInterface) {
     listeners.add(selectionInterface);
+  }
+
+  public void removeListener(SelectionInterface selectionInterface) {
+    listeners.removeValue(selectionInterface, true);
   }
 
   @Override
@@ -126,4 +126,8 @@ public class SelectionSystem extends EntitySystem {
     });
   }
 
+
+  public void setSelection(AbstractSelection selection) {
+    this.selection = selection;
+  }
 }

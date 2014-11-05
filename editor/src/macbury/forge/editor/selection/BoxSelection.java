@@ -1,18 +1,15 @@
 package macbury.forge.editor.selection;
 
 import com.badlogic.gdx.math.Vector3;
-import macbury.forge.graphics.VoxelMap;
 import macbury.forge.utils.VoxelCursor;
 
 /**
  * Created by macbury on 01.11.14.
  */
 public class BoxSelection extends AbstractSelection {
-  public BoxSelection(VoxelMap map) {
-    super(map);
-  }
   private final Vector3 tempA = new Vector3();
   private final Vector3 tempB = new Vector3();
+
   @Override
   public void start(VoxelCursor voxelCursor) {
     startPosition.set(voxelCursor);

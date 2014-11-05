@@ -56,8 +56,8 @@ public class TerrainBuilder extends VoxelsAssembler {
             cursor.size.y = Math.max(y, cursor.size.y);
             cursor.size.z = Math.max(z, cursor.size.z);
 
-            tempB.set(cursor.start.x, cursor.start.y, cursor.start.z).scl(map.tileSize);
-            tempA.set(x,y,z).scl(map.tileSize).sub(tempB);
+            tempB.set(cursor.start.x, cursor.start.y, cursor.start.z).scl(map.voxelSize);
+            tempA.set(x,y,z).scl(map.voxelSize).sub(tempB);
 
             if (map.isEmptyNotOutOfBounds(x + checkTileInDirection.x,y + checkTileInDirection.y, z + checkTileInDirection.z)) {
               VoxelMaterial material = map.getMaterialForPosition(x, y, z);
@@ -68,27 +68,27 @@ public class TerrainBuilder extends VoxelsAssembler {
               tempColor.sub(noise, noise, noise, 0);
               switch (face) {
                 case Top:
-                  top(tempA, map.tileSize, tempColor);
+                  top(tempA, map.voxelSize, tempColor);
                 break;
 
                 case Bottom:
-                  bottom(tempA, map.tileSize, tempColor);
+                  bottom(tempA, map.voxelSize, tempColor);
                 break;
 
                 case Front:
-                  front(tempA, map.tileSize, tempColor);
+                  front(tempA, map.voxelSize, tempColor);
                 break;
 
                 case Back:
-                  back(tempA, map.tileSize, tempColor);
+                  back(tempA, map.voxelSize, tempColor);
                 break;
 
                 case Left:
-                  left(tempA, map.tileSize, tempColor);
+                  left(tempA, map.voxelSize, tempColor);
                 break;
 
                 case Right:
-                  right(tempA, map.tileSize, tempColor);
+                  right(tempA, map.voxelSize, tempColor);
                 break;
               }
 
@@ -97,8 +97,8 @@ public class TerrainBuilder extends VoxelsAssembler {
         }
       }
     }
-    tempA.set(cursor.start.x, cursor.start.y, cursor.start.z).scl(map.tileSize);
-    cursor.size.scl(map.tileSize).sub(tempA);
+    tempA.set(cursor.start.x, cursor.start.y, cursor.start.z).scl(map.voxelSize);
+    cursor.size.scl(map.voxelSize).sub(tempA);
   }
 
   public void facesForChunk(Chunk chunk) {

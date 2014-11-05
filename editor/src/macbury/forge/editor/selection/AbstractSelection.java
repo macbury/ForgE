@@ -2,7 +2,6 @@ package macbury.forge.editor.selection;
 
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
-import macbury.forge.graphics.VoxelMap;
 import macbury.forge.utils.Vector3i;
 import macbury.forge.utils.VoxelCursor;
 
@@ -23,11 +22,15 @@ public abstract class AbstractSelection {
   public abstract void update(VoxelCursor voxelCursor);
   public abstract void end(VoxelCursor voxelCursor);
 
-  protected final Vector3 voxelSize;
+  protected Vector3 voxelSize;
   protected boolean selecting         = false;
 
-  public AbstractSelection(VoxelMap map) {
-    this.voxelSize = new Vector3(map.tileSize);
+  public AbstractSelection(Vector3 voxelSize) {
+    this.voxelSize = new Vector3(voxelSize);
+  }
+
+  public AbstractSelection() {
+    this.voxelSize = new Vector3(1,1,1);
   }
 
   public SelectType getSelectType() {
@@ -75,5 +78,9 @@ public abstract class AbstractSelection {
   @Override
   public String toString() {
     return getClass().getSimpleName() + ": " + startPosition.toString() + " - " + endPostion.toString();
+  }
+
+  public void setVoxelSize(Vector3 voxelSize) {
+    this.voxelSize.set(voxelSize);
   }
 }

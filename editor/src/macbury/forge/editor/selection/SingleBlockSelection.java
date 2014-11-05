@@ -1,17 +1,12 @@
 package macbury.forge.editor.selection;
 
 import com.badlogic.gdx.math.Vector3;
-import macbury.forge.graphics.VoxelMap;
 import macbury.forge.utils.VoxelCursor;
 
 /**
  * Created by macbury on 01.11.14.
  */
 public class SingleBlockSelection extends AbstractSelection {
-
-  public SingleBlockSelection(VoxelMap map) {
-    super(map);
-  }
 
   @Override
   public void start(VoxelCursor voxelCursor) {

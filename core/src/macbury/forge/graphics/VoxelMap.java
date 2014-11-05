@@ -15,15 +15,15 @@ public class VoxelMap implements Disposable {
   private final VoxelMaterial airMaterial;
   private final BoundingBox boundingBox;
   private final Vector3 temp = new Vector3();
-  public final Vector3 tileSize;
+  public final Vector3 voxelSize;
   public final Array<VoxelMaterial> materials;
   protected byte[][][] voxelMap;
   protected int width;
   protected int height;
   protected int depth;
 
-  public VoxelMap(Vector3 tileSize) {
-    this.tileSize = tileSize;
+  public VoxelMap(Vector3 voxelSize) {
+    this.voxelSize = voxelSize;
     materials   = new Array<VoxelMaterial>();
     airMaterial = VoxelMaterial.air();
     boundingBox = new BoundingBox();
@@ -46,11 +46,11 @@ public class VoxelMap implements Disposable {
   }
 
   public void worldPositionToLocalVoxelPosition(Vector3 in, Vector3i out) {
-    out.set(MathUtils.floor(in.x / tileSize.x), MathUtils.floor(in.y / tileSize.y), MathUtils.floor(in.z / tileSize.z));
+    out.set(MathUtils.floor(in.x / voxelSize.x), MathUtils.floor(in.y / voxelSize.y), MathUtils.floor(in.z / voxelSize.z));
   }
 
   public void localVoxelPositionToWorldPosition(Vector3i in, Vector3 out) {
-    out.set(in.x * tileSize.x, in.y * tileSize.y, in.z * tileSize.z);
+    out.set(in.x * voxelSize.x, in.y * voxelSize.y, in.z * voxelSize.z);
   }
 
   public VoxelMaterial getMaterialForPosition(int x, int y, int z) {

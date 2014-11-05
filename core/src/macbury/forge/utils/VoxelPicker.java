@@ -34,7 +34,7 @@ public class VoxelPicker {
       if (map.isSolid(localVoxelPosition)) {
         map.localVoxelPositionToWorldPosition(localVoxelPosition, worldVoxelPosition);
         outVoxelIntersectPoint.replace.set(worldVoxelPosition);
-        worldVoxelPositionWithSize.set(worldVoxelPosition).add(map.tileSize);
+        worldVoxelPositionWithSize.set(worldVoxelPosition).add(map.voxelSize);
         voxelBoundingBox.set(worldVoxelPosition, worldVoxelPositionWithSize);
 
         if (Intersector.intersectRayBounds(pickRay, voxelBoundingBox, voxelBoxIntersection)) {
@@ -150,7 +150,7 @@ public class VoxelPicker {
       localVoxelPosition.set(x,y,z);
       map.localVoxelPositionToWorldPosition(localVoxelPosition, worldVoxelPosition);
       outVoxelIntersectPoint.replace.set(worldVoxelPosition);
-      worldVoxelPositionWithSize.set(worldVoxelPosition).add(map.tileSize);
+      worldVoxelPositionWithSize.set(worldVoxelPosition).add(map.voxelSize);
       voxelBoundingBox.set(worldVoxelPosition, worldVoxelPositionWithSize);
 
       if (Intersector.intersectRayBounds(pickRay, voxelBoundingBox, voxelBoxIntersection)) {
