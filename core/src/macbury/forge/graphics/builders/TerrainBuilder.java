@@ -19,6 +19,9 @@ import macbury.forge.utils.Vector3i;
  * Created by macbury on 16.10.14.
  */
 public class TerrainBuilder extends VoxelsAssembler {
+  private static final double SHADE_AO_AMPLUTUDE = 10;
+  private static final double SHADE_AO_FREQUENCY = 0.1;
+
   public enum Face {
     Left(Vector3i.LEFT), Right(Vector3i.RIGHT), Top(Vector3i.TOP), Bottom(Vector3i.BOTTOM), Front(Vector3i.FRONT), Back(Vector3i.BACK);
     public final Vector3i direction;
@@ -35,12 +38,15 @@ public class TerrainBuilder extends VoxelsAssembler {
   private Vector3 tempB = new Vector3();
   private Array<Face> facesToBuild = new Array<Face>();
   private final PerlinNoise perlinNoise;
-  private Color tempColor = new Color();
+  private Vector3i nextTileToCheck = new Vector3i();
+  private Color tempColor          = new Color();
+  private final VoxelDef voxelDef;
   public TerrainBuilder(VoxelMap voxelMap) {
     super();
-    this.map       = voxelMap;
-    this.cursor    = new TerrainCursor();
+    this.map         = voxelMap;
+    this.cursor      = new TerrainCursor();
     this.perlinNoise = new PerlinNoise(System.currentTimeMillis());
+    this.voxelDef    = new VoxelDef();
     //perlinNoise.setLacunarity(3);
     //perlinNoise.setPersistence(2);
     //perlinNoise.setOctaves(9);
@@ -52,6 +58,8 @@ public class TerrainBuilder extends VoxelsAssembler {
       for (int x = cursor.start.x; x < cursor.end.x; x++) {
         for (int z = cursor.start.z; z < cursor.end.z; z++) {
           if (map.isSolid(x, y, z)) {
+            voxelDef.reset();
+
             cursor.size.x = Math.max(x, cursor.size.x);
             cursor.size.y = Math.max(y, cursor.size.y);
             cursor.size.z = Math.max(z, cursor.size.z);
@@ -59,16 +67,17 @@ public class TerrainBuilder extends VoxelsAssembler {
             tempB.set(cursor.start.x, cursor.start.y, cursor.start.z).scl(map.voxelSize);
             tempA.set(x,y,z).scl(map.voxelSize).sub(tempB);
 
-            if (map.isEmptyNotOutOfBounds(x + checkTileInDirection.x,y + checkTileInDirection.y, z + checkTileInDirection.z)) {
-              VoxelMaterial material = map.getMaterialForPosition(x, y, z);
+            nextTileToCheck.set(x,y,z).add(checkTileInDirection);
+            voxelDef.position.set(tempA);
+            voxelDef.size.set(map.voxelSize);
 
-              tempColor.set(material);
-              float noise = (float)perlinNoise.simpleNoise(x,y,z, 10, 0.2) * 0.1f;
-              //Gdx.app.log(TAG, "n="+noise);
-              tempColor.sub(noise, noise, noise, 0);
+            if (map.isEmptyNotOutOfBounds(nextTileToCheck)) {
+              VoxelMaterial material = map.getMaterialForPosition(x, y, z);
+              voxelDef.material.set(material);
+              voxelDef.ao = (float)perlinNoise.simpleNoise(x,y,z, SHADE_AO_AMPLUTUDE, SHADE_AO_FREQUENCY);
               switch (face) {
                 case Top:
-                  top(tempA, map.voxelSize, tempColor);
+                  top(voxelDef);
                 break;
 
                 case Bottom:
@@ -80,7 +89,7 @@ public class TerrainBuilder extends VoxelsAssembler {
                 break;
 
                 case Back:
-                  back(tempA, map.voxelSize, tempColor);
+                  back(tempA, map.voxelSize, tempColor, voxelDef.ao);
                 break;
 
                 case Left:
@@ -121,7 +130,7 @@ public class TerrainBuilder extends VoxelsAssembler {
             VoxelMaterial material = map.getMaterialForPosition(x, y, z);
 
             if (map.isEmpty(x,y+1,z)) {
-              top(tempA, ChunkMap.TERRAIN_TILE_SIZE, material);
+              //top(tempA, ChunkMap.TERRAIN_TILE_SIZE, material, 0);
             }
 
             if (map.isEmpty(x,y-1,z)) {
@@ -141,7 +150,7 @@ public class TerrainBuilder extends VoxelsAssembler {
             }
 
             if (map.isEmpty(x,y,z-1)) {
-              back(tempA, ChunkMap.TERRAIN_TILE_SIZE, material);
+              back(tempA, ChunkMap.TERRAIN_TILE_SIZE, material, 0);
             }
           }
         }
@@ -190,7 +199,7 @@ public class TerrainBuilder extends VoxelsAssembler {
     if (ForgE.config.generateWireframe)
       renderable.wireframe           = this.wireframe();
     renderable.triangleCount         = triangleArrayList.size();
-    renderable.mesh = this.mesh(MeshVertexInfo.AttributeType.Position, MeshVertexInfo.AttributeType.Normal, MeshVertexInfo.AttributeType.Color);
+    renderable.mesh = this.mesh(MeshVertexInfo.AttributeType.Position, MeshVertexInfo.AttributeType.Normal, MeshVertexInfo.AttributeType.Color, MeshVertexInfo.AttributeType.Material);
 
     return renderable;
   }

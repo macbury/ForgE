@@ -59,6 +59,7 @@ public class MeshAssembler implements Disposable {
     boolean usingNormal   = false;
     boolean usingTexture  = false;
     boolean usingColor    = false;
+    boolean usingMaterial = false;
 
     for (MeshVertexInfo.AttributeType attr : attributtes) {
       vertiesArraySize        += attr.size();
@@ -76,6 +77,10 @@ public class MeshAssembler implements Disposable {
         break;
         case Color:
           usingColor = true;
+        break;
+
+        case Material:
+          usingMaterial = true;
         break;
       }
     }
@@ -114,12 +119,16 @@ public class MeshAssembler implements Disposable {
       if (usingColor) {
         verties[cursor++] = vertex.color();
       }
+
+      if (usingMaterial) {
+        verties[cursor++] = vertex.material();
+      }
     }
 
     Mesh mesh = new Mesh(true, verties.length, indices.length, meshAttributtes);
     mesh.setVertices(verties);
     mesh.setIndices(indices);
-    mesh.setAutoBind(true);
+    mesh.setAutoBind(false);
 
     clear();
     return mesh;

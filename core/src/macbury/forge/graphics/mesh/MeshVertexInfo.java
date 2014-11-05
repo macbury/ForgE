@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Pool;
@@ -12,15 +13,22 @@ import com.badlogic.gdx.utils.Pool;
  * Created by macbury on 30.08.14.
  */
 public class MeshVertexInfo implements Pool.Poolable {
+  private static final float BASE_AO = 0.5f;
+  public float specular;
+  public float ao;
   public Vector3 position;
   public Vector3 normal;
   public Vector2 uv;
   public Color   color;
   public short index;
 
+  private final Color tempColor = new Color();
+
+
   public static enum AttributeType {
     Position(VertexAttributes.Usage.Position, 3,ShaderProgram.POSITION_ATTRIBUTE),
     Normal(VertexAttributes.Usage.Normal, 3, ShaderProgram.NORMAL_ATTRIBUTE),
+    Material(VertexAttributes.Usage.ColorPacked, 4, "a_material"),
     TextureCord(VertexAttributes.Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE+"0"),
     Color(VertexAttributes.Usage.ColorPacked, 4, ShaderProgram.COLOR_ATTRIBUTE); // probably should be 4 not 1
 
@@ -45,6 +53,8 @@ public class MeshVertexInfo implements Pool.Poolable {
     this.position = new Vector3();
     this.normal   = new Vector3();
     this.color    = new Color(Color.WHITE);
+    this.ao       = 0.0f;
+    this.specular = 0.0f;
     this.uv       = new Vector2();
     this.index    = 0;
     reset();
@@ -135,9 +145,30 @@ public class MeshVertexInfo implements Pool.Poolable {
     return Color.toFloatBits(color.r, color.g, color.b, color.a);
   }
 
+  /**
+   * Return material propeties as color
+   * Red is ambient occulsion
+   * Green is specular value
+   * @return
+   */
+  public float material() {
+    return Color.toFloatBits(ao, specular, 0f, 0f);
+  }
 
   public MeshVertexInfo color(Color nc) {
     this.color.set(nc);
+    return this;
+  }
+
+  public MeshVertexInfo baseAo() {
+    this.ao += BASE_AO;
+    this.ao = MathUtils.clamp(ao, 0.0f, 1.0f);
+    return this;
+  }
+
+  public MeshVertexInfo ao(float incrBy) {
+    this.ao += incrBy;
+    this.ao = MathUtils.clamp(ao, 0.0f, 1.0f);
     return this;
   }
 
@@ -148,5 +179,6 @@ public class MeshVertexInfo implements Pool.Poolable {
     set(0,0,0);
     normal(0,0,0);
     index = 0;
+    ao = 0.0f;
   }
 }

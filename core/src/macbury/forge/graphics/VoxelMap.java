@@ -147,4 +147,8 @@ public class VoxelMap implements Disposable {
   public void setEmptyForPosition(Vector3i voxelPosition) {
     setEmptyForPosition(voxelPosition.x, voxelPosition.y, voxelPosition.z);
   }
+
+  public boolean isEmptyNotOutOfBounds(Vector3i voxelPosition) {
+    return isEmptyNotOutOfBounds(voxelPosition.x, voxelPosition.y, voxelPosition.z);
+  }
 }
