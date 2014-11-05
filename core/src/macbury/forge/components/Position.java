@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Pool;
-import macbury.forge.level.map.ChunkMap;
+import macbury.forge.voxel.ChunkMap;
 import macbury.forge.octree.OctreeNode;
 import macbury.forge.octree.OctreeObject;
 

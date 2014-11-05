@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.math.collision.Ray;
-import macbury.forge.graphics.VoxelMap;
+import macbury.forge.voxel.VoxelMap;
 
 /**
  * Created by macbury on 29.10.14.

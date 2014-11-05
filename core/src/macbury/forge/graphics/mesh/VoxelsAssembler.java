@@ -1,7 +1,5 @@
 package macbury.forge.graphics.mesh;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Vector3;
 import macbury.forge.graphics.builders.VoxelDef;
 
 /**
@@ -11,106 +9,137 @@ public class VoxelsAssembler extends MeshAssembler {
   public void top(VoxelDef voxelDef) {
     MeshVertexInfo vert1 = this.vertex(voxelDef.position.x, voxelDef.position.y + voxelDef.size.y, voxelDef.position.z); //top left
     vert1.normalUp().color(voxelDef.material).ao(voxelDef.ao);
+
+    if (voxelDef.shadeTopLeftCorner) {
+      vert1.applyAoShade();
+    }
+
     MeshVertexInfo vert2 = this.vertex(voxelDef.position.x, voxelDef.position.y  + voxelDef.size.y , voxelDef.position.z + voxelDef.size.z); // bottom left
     vert2.normalUp().color(voxelDef.material).ao(voxelDef.ao);
+    if (voxelDef.shadeBottomLeftCorner) {
+      vert2.applyAoShade();
+    }
 
     MeshVertexInfo vert3 = this.vertex(voxelDef.position.x + voxelDef.size.x, voxelDef.position.y  + voxelDef.size.y, voxelDef.position.z); //top right
     vert3.normalUp().color(voxelDef.material).ao(voxelDef.ao);
+
+    if (voxelDef.shadeTopRightCorner) {
+      vert3.applyAoShade();
+    }
 
     triangle(vert1, vert2, vert3);
 
     vert1 = this.vertex(voxelDef.position.x + voxelDef.size.x, voxelDef.position.y  + voxelDef.size.y, voxelDef.position.z + voxelDef.size.z); //bottom right
     vert1.normalUp().color(voxelDef.material).ao(voxelDef.ao);
 
+    if (voxelDef.shadeBottomRightCorner) {
+      vert1.applyAoShade();
+    }
+
     triangle(vert3, vert2, vert1);
   }
 
-  public void bottom(Vector3 position, Vector3 size, Color color) {
-    MeshVertexInfo vert1 = this.vertex(position.x, position.y, position.z); //top left
-    vert1.normalBottom().color(color);
+  public void bottom(VoxelDef voxelDef) {
+    MeshVertexInfo vert1 = this.vertex(voxelDef.position.x, voxelDef.position.y, voxelDef.position.z); //top left
+    vert1.normalBottom().color(voxelDef.material).ao(voxelDef.ao);
 
-    MeshVertexInfo vert2 = this.vertex(position.x, position.y , position.z + size.z); // bottom left
-    vert2.normalBottom().color(color);
+    MeshVertexInfo vert2 = this.vertex(voxelDef.position.x, voxelDef.position.y , voxelDef.position.z + voxelDef.size.z); // bottom left
+    vert2.normalBottom().color(voxelDef.material).ao(voxelDef.ao);
 
-    MeshVertexInfo vert3 = this.vertex(position.x + size.x, position.y, position.z); //top right
-    vert3.normalBottom().color(color);
+    MeshVertexInfo vert3 = this.vertex(voxelDef.position.x + voxelDef.size.x, voxelDef.position.y, voxelDef.position.z); //top right
+    vert3.normalBottom().color(voxelDef.material).ao(voxelDef.ao);
 
     triangle(vert3, vert2, vert1);
 
-    vert1 = this.vertex(position.x + size.x, position.y, position.z + size.z); //bottom right
-    vert1.normalBottom().color(color);
+    vert1 = this.vertex(voxelDef.position.x + voxelDef.size.x, voxelDef.position.y, voxelDef.position.z + voxelDef.size.z); //bottom right
+    vert1.normalBottom().color(voxelDef.material).ao(voxelDef.ao);
 
     triangle(vert1, vert2, vert3);
   }
 
-  public void front(Vector3 position, Vector3 size, Color color) {
-    MeshVertexInfo vert1 = this.vertex(position.x, position.y, position.z + size.z); //bottom left
-    vert1.normalFront().color(color);
+  public void front(VoxelDef voxelDef) {
+    MeshVertexInfo vert1 = this.vertex(voxelDef.position.x, voxelDef.position.y, voxelDef.position.z + voxelDef.size.z); //bottom left
+    vert1.normalFront().color(voxelDef.material).ao(voxelDef.ao);
 
-    MeshVertexInfo vert2 = this.vertex(position.x + size.x, position.y, position.z + size.z); // bottom right
-    vert2.normalFront().color(color);
+    MeshVertexInfo vert2 = this.vertex(voxelDef.position.x + voxelDef.size.x, voxelDef.position.y, voxelDef.position.z + voxelDef.size.z); // bottom right
+    vert2.normalFront().color(voxelDef.material).ao(voxelDef.ao);
 
-    MeshVertexInfo vert3 = this.vertex(position.x + size.x, position.y + size.y, position.z + size.z); //top right
-    vert3.normalFront().color(color);
+    MeshVertexInfo vert3 = this.vertex(voxelDef.position.x + voxelDef.size.x, voxelDef.position.y + voxelDef.size.y, voxelDef.position.z + voxelDef.size.z); //top right
+    vert3.normalFront().color(voxelDef.material).ao(voxelDef.ao);
 
     triangle(vert1, vert2, vert3);
 
-    MeshVertexInfo vert4 = this.vertex(position.x, position.y + size.y, position.z + size.z); //top left
-    vert4.normalFront().color(color);
+    MeshVertexInfo vert4 = this.vertex(voxelDef.position.x, voxelDef.position.y + voxelDef.size.y, voxelDef.position.z + voxelDef.size.z); //top left
+    vert4.normalFront().color(voxelDef.material).ao(voxelDef.ao);
 
     triangle(vert4, vert1, vert3);
   }
 
-  public void back(Vector3 position, Vector3 size, Color color, float ao) {
-    MeshVertexInfo vert1 = this.vertex(position.x, position.y, position.z); //bottom left
-    vert1.normalBack().color(color).ao(ao).baseAo();
+  public void back(VoxelDef voxelDef) {
+    MeshVertexInfo vert1 = this.vertex(voxelDef.position.x, voxelDef.position.y, voxelDef.position.z); //bottom left
+    vert1.normalBack().color(voxelDef.material).ao(voxelDef.ao);
 
-    MeshVertexInfo vert2 = this.vertex(position.x + size.x, position.y, position.z); // bottom right
-    vert2.normalBack().color(color).ao(ao).baseAo();
+    if (voxelDef.shadeBottomLeftCorner) {
+      vert1.applyAoShade();
+    }
 
-    MeshVertexInfo vert3 = this.vertex(position.x + size.x, position.y + size.y, position.z); //top right
-    vert3.normalBack().color(color).ao(ao);
+    MeshVertexInfo vert2 = this.vertex(voxelDef.position.x + voxelDef.size.x, voxelDef.position.y, voxelDef.position.z); // bottom right
+    vert2.normalBack().color(voxelDef.material).ao(voxelDef.ao);
+
+    if (voxelDef.shadeBottomRightCorner) {
+      vert2.applyAoShade();
+    }
+
+    MeshVertexInfo vert3 = this.vertex(voxelDef.position.x + voxelDef.size.x, voxelDef.position.y + voxelDef.size.y, voxelDef.position.z); //top right
+    vert3.normalBack().color(voxelDef.material).ao(voxelDef.ao);
+
+    if (voxelDef.shadeTopRightCorner) {
+      vert3.applyAoShade();
+    }
 
     triangle(vert3, vert2, vert1);
 
-    MeshVertexInfo vert4 = this.vertex(position.x, position.y + size.y, position.z); //top left
-    vert4.normalBack().color(color).ao(ao);
+    MeshVertexInfo vert4 = this.vertex(voxelDef.position.x, voxelDef.position.y + voxelDef.size.y, voxelDef.position.z); //top left
+    vert4.normalBack().color(voxelDef.material).ao(voxelDef.ao);
+    if (voxelDef.shadeTopLeftCorner) {
+      vert3.applyAoShade();
+    }
 
     triangle(vert3, vert1, vert4);
   }
 
-  public void left(Vector3 position, Vector3 size, Color color) {
-    MeshVertexInfo vert1 = this.vertex(position.x, position.y, position.z); //bottom left
-    vert1.normalLeft().color(color);
+  public void left(VoxelDef voxelDef) {
+    MeshVertexInfo vert1 = this.vertex(voxelDef.position.x, voxelDef.position.y, voxelDef.position.z); //bottom left
+    vert1.normalLeft().color(voxelDef.material).ao(voxelDef.ao);
 
-    MeshVertexInfo vert2 = this.vertex(position.x, position.y, position.z + size.z); // bottom right
-    vert2.normalLeft().color(color);
+    MeshVertexInfo vert2 = this.vertex(voxelDef.position.x, voxelDef.position.y, voxelDef.position.z + voxelDef.size.z); // bottom right
+    vert2.normalLeft().color(voxelDef.material).ao(voxelDef.ao);
 
-    MeshVertexInfo vert3 = this.vertex(position.x, position.y + size.y, position.z + size.z); //top right
-    vert3.normalLeft().color(color);
+    MeshVertexInfo vert3 = this.vertex(voxelDef.position.x, voxelDef.position.y + voxelDef.size.y, voxelDef.position.z + voxelDef.size.z); //top right
+    vert3.normalLeft().color(voxelDef.material).ao(voxelDef.ao);
 
     triangle(vert1, vert2, vert3);
 
-    MeshVertexInfo vert4 = this.vertex(position.x, position.y + size.y, position.z); //top left
-    vert4.normalLeft().color(color);
+    MeshVertexInfo vert4 = this.vertex(voxelDef.position.x, voxelDef.position.y + voxelDef.size.y, voxelDef.position.z); //top left
+    vert4.normalLeft().color(voxelDef.material).ao(voxelDef.ao);
 
     triangle(vert4, vert1, vert3);
   }
 
-  public void right(Vector3 position, Vector3 size, Color color) {
-    MeshVertexInfo vert1 = this.vertex(position.x+size.x, position.y, position.z); //bottom left
-    vert1.normalRight().color(color);
+  public void right(VoxelDef voxelDef) {
+    MeshVertexInfo vert1 = this.vertex(voxelDef.position.x+voxelDef.size.x, voxelDef.position.y, voxelDef.position.z); //bottom left
+    vert1.normalRight().color(voxelDef.material).ao(voxelDef.ao);
 
-    MeshVertexInfo vert2 = this.vertex(position.x+size.x, position.y, position.z + size.z); // bottom right
-    vert2.normalRight().color(color);
+    MeshVertexInfo vert2 = this.vertex(voxelDef.position.x+voxelDef.size.x, voxelDef.position.y, voxelDef.position.z + voxelDef.size.z); // bottom right
+    vert2.normalRight().color(voxelDef.material).ao(voxelDef.ao);
 
-    MeshVertexInfo vert3 = this.vertex(position.x+size.x, position.y + size.y, position.z + size.z); //top right
-    vert3.normalRight().color(color);
+    MeshVertexInfo vert3 = this.vertex(voxelDef.position.x+voxelDef.size.x, voxelDef.position.y + voxelDef.size.y, voxelDef.position.z + voxelDef.size.z); //top right
+    vert3.normalRight().color(voxelDef.material).ao(voxelDef.ao);
 
     triangle(vert3, vert2, vert1);
 
-    MeshVertexInfo vert4 = this.vertex(position.x+size.x, position.y + size.y, position.z); //top left
-    vert4.normalRight().color(color);
+    MeshVertexInfo vert4 = this.vertex(voxelDef.position.x+voxelDef.size.x, voxelDef.position.y + voxelDef.size.y, voxelDef.position.z); //top left
+    vert4.normalRight().color(voxelDef.material).ao(voxelDef.ao);
 
     triangle(vert3, vert1, vert4);
   }

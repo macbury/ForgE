@@ -24,6 +24,10 @@ public class Vector3i {
     this(0,0,0);
   }
 
+  public Vector3i(Vector3i other) {
+    this(other.x, other.y, other.z);
+  }
+
   public Vector3i set(int nx, int ny, int nz){
     this.x = nx;
     this.y = ny;
@@ -87,5 +91,12 @@ public class Vector3i {
 
   public void applyTo(Vector3 vectorToApply) {
     vectorToApply.set(x,y,z);
+  }
+
+  public Vector3i sub(Vector3i other) {
+    x -= other.x;
+    y -= other.y;
+    z -= other.z;
+    return this;
   }
 }

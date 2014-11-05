@@ -6,14 +6,13 @@ import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import macbury.forge.ForgE;
-import macbury.forge.graphics.VoxelMap;
-import macbury.forge.graphics.VoxelMaterial;
 import macbury.forge.graphics.batch.renderable.VoxelFaceRenderable;
 import macbury.forge.graphics.mesh.MeshVertexInfo;
 import macbury.forge.graphics.mesh.VoxelsAssembler;
-import macbury.forge.level.map.ChunkMap;
 import macbury.forge.procedular.PerlinNoise;
 import macbury.forge.utils.Vector3i;
+import macbury.forge.voxel.VoxelMap;
+import macbury.forge.voxel.VoxelMaterial;
 
 /**
  * Created by macbury on 16.10.14.
@@ -21,6 +20,7 @@ import macbury.forge.utils.Vector3i;
 public class TerrainBuilder extends VoxelsAssembler {
   private static final double SHADE_AO_AMPLUTUDE = 10;
   private static final double SHADE_AO_FREQUENCY = 0.1;
+  private float[][][] aoArray;
 
   public enum Face {
     Left(Vector3i.LEFT), Right(Vector3i.RIGHT), Top(Vector3i.TOP), Bottom(Vector3i.BOTTOM), Front(Vector3i.FRONT), Back(Vector3i.BACK);
@@ -46,11 +46,24 @@ public class TerrainBuilder extends VoxelsAssembler {
     this.map         = voxelMap;
     this.cursor      = new TerrainCursor();
     this.perlinNoise = new PerlinNoise(System.currentTimeMillis());
-    this.voxelDef    = new VoxelDef();
+    this.voxelDef    = new VoxelDef(map);
+
+    generatePrettyShadeArray();
     //perlinNoise.setLacunarity(3);
     //perlinNoise.setPersistence(2);
     //perlinNoise.setOctaves(9);
 
+  }
+
+  private void generatePrettyShadeArray() {
+    this.aoArray = new float[map.getWidth()][map.getHeight()][map.getDepth()];
+    for (int y = 0; y < map.getHeight(); y++) {
+      for (int x = 0; x < map.getWidth(); x++) {
+        for (int z = 0; z < map.getDepth(); z++) {
+          aoArray[x][y][z] = (float)perlinNoise.simpleNoise(x,y,z, SHADE_AO_AMPLUTUDE, SHADE_AO_FREQUENCY);
+        }
+      }
+    }
   }
 
   private void buildFace(Vector3i checkTileInDirection, Face face) {
@@ -69,35 +82,36 @@ public class TerrainBuilder extends VoxelsAssembler {
 
             nextTileToCheck.set(x,y,z).add(checkTileInDirection);
             voxelDef.position.set(tempA);
+            voxelDef.voxelPosition.set(x,y,z);
             voxelDef.size.set(map.voxelSize);
 
             if (map.isEmptyNotOutOfBounds(nextTileToCheck)) {
               VoxelMaterial material = map.getMaterialForPosition(x, y, z);
               voxelDef.material.set(material);
-              voxelDef.ao = (float)perlinNoise.simpleNoise(x,y,z, SHADE_AO_AMPLUTUDE, SHADE_AO_FREQUENCY);
+              voxelDef.calculateAoFor(aoArray[x][y][z], face);
               switch (face) {
                 case Top:
                   top(voxelDef);
                 break;
 
                 case Bottom:
-                  bottom(tempA, map.voxelSize, tempColor);
+                  bottom(voxelDef);
                 break;
 
                 case Front:
-                  front(tempA, map.voxelSize, tempColor);
+                  front(voxelDef);
                 break;
 
                 case Back:
-                  back(tempA, map.voxelSize, tempColor, voxelDef.ao);
+                  back(voxelDef);
                 break;
 
                 case Left:
-                  left(tempA, map.voxelSize, tempColor);
+                  left(voxelDef);
                 break;
 
                 case Right:
-                  right(tempA, map.voxelSize, tempColor);
+                  right(voxelDef);
                 break;
               }
 
@@ -128,7 +142,7 @@ public class TerrainBuilder extends VoxelsAssembler {
             tempA.set(x,y,z);
             Gdx.app.log(TAG, tempA.toString());
             VoxelMaterial material = map.getMaterialForPosition(x, y, z);
-
+            /*
             if (map.isEmpty(x,y+1,z)) {
               //top(tempA, ChunkMap.TERRAIN_TILE_SIZE, material, 0);
             }
@@ -151,7 +165,7 @@ public class TerrainBuilder extends VoxelsAssembler {
 
             if (map.isEmpty(x,y,z-1)) {
               back(tempA, ChunkMap.TERRAIN_TILE_SIZE, material, 0);
-            }
+            }*/
           }
         }
       }

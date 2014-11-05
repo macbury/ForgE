@@ -3,8 +3,8 @@ package macbury.forge.level;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
-import macbury.forge.graphics.VoxelMaterial;
-import macbury.forge.level.map.ChunkMap;
+import macbury.forge.voxel.VoxelMaterial;
+import macbury.forge.voxel.ChunkMap;
 
 /**
  * Created by macbury on 19.10.14.
@@ -27,7 +27,7 @@ public class LevelState {
     state.id                = uid();
     state.name              = MAP_NAME_PREFIX + state.id;
 
-    state.terrainMap.initialize(50,20,50);
+    state.terrainMap.initialize(1000,50,1000);
     state.terrainMap.buildFloor();
     return state;
   }

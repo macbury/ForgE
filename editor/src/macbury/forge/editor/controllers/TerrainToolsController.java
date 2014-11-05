@@ -9,7 +9,7 @@ import macbury.forge.editor.selection.SingleBlockSelection;
 import macbury.forge.editor.systems.SelectionSystem;
 import macbury.forge.editor.undo_redo.ChangeManager;
 import macbury.forge.editor.undo_redo.actions.ApplyRangeBlock;
-import macbury.forge.level.map.ChunkMap;
+import macbury.forge.voxel.ChunkMap;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

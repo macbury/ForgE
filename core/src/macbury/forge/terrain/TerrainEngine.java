@@ -12,7 +12,7 @@ import macbury.forge.graphics.builders.Chunk;
 import macbury.forge.graphics.builders.TerrainBuilder;
 import macbury.forge.graphics.camera.GameCamera;
 import macbury.forge.level.Level;
-import macbury.forge.level.map.ChunkMap;
+import macbury.forge.voxel.ChunkMap;
 import macbury.forge.octree.OctreeNode;
 import macbury.forge.octree.OctreeObject;
 import macbury.forge.octree.query.FrustrumClassFilterOctreeQuery;

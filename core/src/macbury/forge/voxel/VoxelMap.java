@@ -1,4 +1,4 @@
-package macbury.forge.graphics;
+package macbury.forge.voxel;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;

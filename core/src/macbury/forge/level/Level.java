@@ -7,7 +7,7 @@ import macbury.forge.ForgE;
 import macbury.forge.graphics.batch.VoxelBatch;
 import macbury.forge.graphics.camera.GameCamera;
 import macbury.forge.graphics.frustrum.FrustrumDebugAndRenderer;
-import macbury.forge.level.map.ChunkMap;
+import macbury.forge.voxel.ChunkMap;
 import macbury.forge.octree.OctreeNode;
 import macbury.forge.systems.engine.LevelEntityEngine;
 import macbury.forge.terrain.TerrainEngine;

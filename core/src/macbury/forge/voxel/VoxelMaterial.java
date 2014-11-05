@@ -1,4 +1,4 @@
-package macbury.forge.graphics;
+package macbury.forge.voxel;
 
 import com.badlogic.gdx.graphics.Color;
 

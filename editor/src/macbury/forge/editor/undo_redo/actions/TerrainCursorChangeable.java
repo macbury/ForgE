@@ -1,7 +1,7 @@
 package macbury.forge.editor.undo_redo.actions;
 
 import macbury.forge.editor.selection.AbstractSelection;
-import macbury.forge.graphics.VoxelMap;
+import macbury.forge.voxel.VoxelMap;
 
 /**
  * Created by macbury on 03.11.14.

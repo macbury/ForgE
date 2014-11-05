@@ -17,7 +17,7 @@ import macbury.forge.graphics.batch.renderable.TerrainChunkRenderable;
 import macbury.forge.graphics.builders.Chunk;
 import macbury.forge.graphics.builders.TerrainBuilder;
 import macbury.forge.graphics.mesh.MeshVertexInfo;
-import macbury.forge.level.map.ChunkMap;
+import macbury.forge.voxel.ChunkMap;
 import macbury.forge.systems.engine.LevelEntityEngine;
 
 import java.util.HashMap;

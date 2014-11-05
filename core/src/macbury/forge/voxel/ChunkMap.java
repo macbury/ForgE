@@ -1,10 +1,9 @@
-package macbury.forge.level.map;
+package macbury.forge.voxel;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import macbury.forge.graphics.VoxelMap;
-import macbury.forge.graphics.VoxelMaterial;
 import macbury.forge.graphics.builders.Chunk;
 import macbury.forge.utils.Vector3i;
 
@@ -12,7 +11,7 @@ import macbury.forge.utils.Vector3i;
  * Created by macbury on 19.10.14.
  */
 public class ChunkMap extends VoxelMap {
-  public static final int CHUNK_SIZE         = 10;
+  public static final int CHUNK_SIZE         = 20;
   public static final int CHUNK_ARRAY_SIZE    = CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE;
   public static final Vector3 TERRAIN_TILE_SIZE = new Vector3(1,1,1);
   private static final String TAG = "ChunkMap";
@@ -38,6 +37,7 @@ public class ChunkMap extends VoxelMap {
   }
 
   public void buildFloor() {
+    Gdx.app.log(TAG, "Building floor");
     VoxelMaterial grass1 = new VoxelMaterial(44f/255f,159f/255f,93f/255f,1);
     VoxelMaterial grass2 = new VoxelMaterial(82f/255f,198f/255f,152f/255f,1);
     VoxelMaterial grass3 = new VoxelMaterial(14f/255f,123f/255f,34f/255f,1);
@@ -58,6 +58,7 @@ public class ChunkMap extends VoxelMap {
     materials.addAll(m);
     VoxelMaterial rock = new VoxelMaterial(186f/255f,191f/255f,186f/255f,1);
     materials.add(rock);
+    Gdx.app.log(TAG, "Builded all floor");
   }
 
   public Vector3i voxelPositionToChunkPosition(int x, int y, int z){
@@ -148,6 +149,7 @@ public class ChunkMap extends VoxelMap {
   }
 
   private void splitIntoChunks() {
+    Gdx.app.log(TAG, "Splitting into chunks");
     this.countChunksX = width / CHUNK_SIZE;
     this.countChunksY = height / CHUNK_SIZE;
     this.countChunksZ = depth / CHUNK_SIZE;
@@ -164,6 +166,7 @@ public class ChunkMap extends VoxelMap {
         }
       }
     }
+    Gdx.app.log(TAG, "Total chunks: " + chunks.size);
   }
 
   private void addToRebuild(Chunk chunk) {

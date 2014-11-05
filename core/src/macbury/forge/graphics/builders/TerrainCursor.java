@@ -1,7 +1,7 @@
 package macbury.forge.graphics.builders;
 
 import com.badlogic.gdx.math.Vector3;
-import macbury.forge.graphics.VoxelMap;
+import macbury.forge.voxel.VoxelMap;
 import macbury.forge.utils.Vector3i;
 
 /**
