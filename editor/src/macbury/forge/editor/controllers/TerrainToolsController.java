@@ -29,6 +29,7 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
   private SelectionSystem selectionSystem;
   private ChangeManager changeManager;
   private ChunkMap map;
+  private EditorScreen screen;
 
   public TerrainToolsController(JToolBar terrainToolsToolbar) {
     toolbar          = terrainToolsToolbar;
@@ -44,6 +45,15 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
     buildToogleButton("draw_airbrush", toolsGroup);
     buildToogleButton("draw_elipsis", toolsGroup);
     buildToogleButton("draw_eraser", toolsGroup);
+    updateUI();
+  }
+
+  private void updateUI() {
+    boolean interfaceEnabled = screen != null;
+
+    toolbar.setEnabled(interfaceEnabled);
+    drawPencilButton.setEnabled(interfaceEnabled);
+    drawRectButton.setEnabled(interfaceEnabled);
   }
 
   private JToggleButton buildToogleButton(String iconName, ButtonGroup buttonGroup) {
@@ -62,6 +72,7 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
   public void onNewMap(ProjectController controller, EditorScreen screen) {
     drawPencilButton.setSelected(true);
     unbind();
+    this.screen          = screen;
     selectionSystem      = screen.selectionSystem;
     changeManager        = screen.changeManager;
     map                  = screen.level.terrainMap;
@@ -72,6 +83,7 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
     selectionSystem.addListener(this);
 
     setCurrentSelection(singleBlockSelection);
+    updateUI();
   }
 
   private void unbind() {

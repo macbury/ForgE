@@ -3,8 +3,8 @@ package macbury.forge.editor.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import macbury.forge.ForgE;
-import macbury.forge.editor.undo_redo.ChangeManager;
 import macbury.forge.editor.systems.SelectionSystem;
+import macbury.forge.editor.undo_redo.ChangeManager;
 import macbury.forge.graphics.camera.RTSCameraController;
 import macbury.forge.level.Level;
 import macbury.forge.level.LevelState;
@@ -17,6 +17,7 @@ import macbury.forge.ui.Overlay;
 public class EditorScreen extends AbstractScreen {
   private static final String TAG = "EditorScreen";
   private static final float LEVEL_EDITOR_FAR_CAMERA = 200;
+  private final LevelState state;
   public Level level;
   private Stage stage;
   private RTSCameraController cameraController;
@@ -24,15 +25,19 @@ public class EditorScreen extends AbstractScreen {
   public SelectionSystem selectionSystem;
   public ChangeManager changeManager;
 
+  public EditorScreen(LevelState state) {
+    super();
+    this.state = state;
+  }
+
   @Override
   protected void initialize() {
     this.overlay              = new Overlay();
     this.stage                = new Stage();
     this.changeManager        = new ChangeManager();
-    this.level                = new Level(LevelState.blank());
+    this.level                = new Level(state);
     this.selectionSystem      = new SelectionSystem(level);
     this.cameraController     = new RTSCameraController();
-
     level.camera.far          = LEVEL_EDITOR_FAR_CAMERA;
 
     cameraController.setCenter(level.terrainMap.getWidth() / 2, level.terrainMap.getDepth() / 2);

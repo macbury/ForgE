@@ -10,6 +10,5 @@ public class ProgressTaskDialog extends JFrame {
     setTitle("Working...");
     pack();
     setAlwaysOnTop(true);
-
   }
 }

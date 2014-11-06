@@ -21,13 +21,13 @@ public class LevelState {
    * Initialize blank new level. Mainly use for editor functionality
    * @return
    */
-  public static LevelState blank() {
+  public static LevelState blank(int width, int height, int depth) {
     LevelState state        = new LevelState();
     state.terrainMap        = new ChunkMap(ChunkMap.TERRAIN_TILE_SIZE);
     state.id                = uid();
     state.name              = MAP_NAME_PREFIX + state.id;
 
-    state.terrainMap.initialize(1000,50,1000);
+    state.terrainMap.initialize(width,height,depth);
     state.terrainMap.buildFloor();
     return state;
   }
