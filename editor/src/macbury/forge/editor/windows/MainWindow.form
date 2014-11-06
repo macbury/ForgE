@@ -151,7 +151,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <tabbedpane id="28bf8" binding="tabbedPane1" default-binding="true">
+                  <tabbedpane id="28bf8" binding="toolsPane">
                     <constraints border-constraint="Center"/>
                     <properties/>
                     <border type="none"/>
@@ -213,6 +213,14 @@
                             <properties/>
                           </component>
                         </children>
+                      </grid>
+                      <grid id="207bd" layout-manager="BorderLayout" hgap="0" vgap="0">
+                        <constraints>
+                          <tabbedpane title="Map" icon="icons/map_settings.png"/>
+                        </constraints>
+                        <properties/>
+                        <border type="none"/>
+                        <children/>
                       </grid>
                     </children>
                   </tabbedpane>

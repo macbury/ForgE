@@ -1,7 +1,6 @@
 package macbury.forge.screens;
 
 import macbury.forge.ForgE;
-import macbury.forge.screens.AbstractScreen;
 
 /**
  * Created by macbury on 15.10.14.
@@ -22,5 +21,13 @@ public class ScreenManager {
 
   public AbstractScreen current() {
     return currentScreen;
+  }
+
+  public void disposeCurrentScreen() {
+    if (currentScreen != null) {
+      currentScreen.dispose();
+    }
+    engine.setScreen(null);
+    currentScreen = null;
   }
 }

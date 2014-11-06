@@ -75,9 +75,23 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
   }
 
   @Override
+  public void onCloseMap(ProjectController controller, EditorScreen screen) {
+    if (selectionSystem != null) {
+      selectionSystem.removeListener(this);
+    }
+
+    this.screen           = null;
+    this.changeManager    = null;
+    this.selectionSystem  = null;
+    this.map              = null;
+    this.jobs             = null;
+
+    updateUI();
+  }
+
+  @Override
   public void onNewMap(ProjectController controller, EditorScreen screen) {
     drawPencilButton.setSelected(true);
-    unbind();
     this.screen          = screen;
     selectionSystem      = screen.selectionSystem;
     changeManager        = screen.changeManager;
@@ -92,12 +106,6 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
 
     setCurrentSelection(singleBlockSelection);
     updateUI();
-  }
-
-  private void unbind() {
-    if (selectionSystem != null) {
-      selectionSystem.removeListener(this);
-    }
   }
 
   @Override

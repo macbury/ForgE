@@ -61,6 +61,11 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
   }
 
   @Override
+  public void onCloseMap(ProjectController controller, EditorScreen screen) {
+    setScreen(null);
+  }
+
+  @Override
   public void onNewMap(ProjectController controller, EditorScreen screen) {
     setScreen(screen);
   }
@@ -83,9 +88,12 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
   public void setScreen(EditorScreen newScreen) {
     if (this.screen != null) {
       this.screen.changeManager.removeListener(this);
+      this.screen = null;
     }
-    this.screen = newScreen;
-    screen.changeManager.addListener(this);
+    if (newScreen != null) {
+      this.screen = newScreen;
+      screen.changeManager.addListener(this);
+    }
     updateRedoUndoButtons();
   }
 

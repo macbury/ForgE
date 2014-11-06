@@ -1,5 +1,6 @@
 package macbury.forge.editor.controllers;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import macbury.forge.ForgE;
 import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
@@ -57,20 +58,39 @@ public class ProjectController implements JobListener, ShaderReloadListener {
   }
 
   public void newMap() {
+    closeMap();
+
     NewLevelJob job = new NewLevelJob();
     job.setCallback(this, LEVEL_STATE_LOADED_CALLBACK);
     jobs.enqueue(job);
   }
 
+  public void closeMap() {
+    if (editorScreen != null) {
+      for (OnMapChangeListener listener : onMapChangeListenerArray) {
+        listener.onCloseMap(ProjectController.this, ProjectController.this.editorScreen);
+      }
+      ForgE.screens.disposeCurrentScreen();
+    }
+
+    editorScreen = null;
+  }
+
   public void onLevelStateLoaded(LevelState state, NewLevelJob job) {
     mainWindow.setTitle("[ForgE] - New project");
     this.editorScreen = new EditorScreen(state);
-    ForgE.screens.set(editorScreen);
-    updateUI();
+    Gdx.app.postRunnable(new Runnable() {
+      @Override
+      public void run() {
+        ForgE.screens.set(editorScreen);
 
-    for (OnMapChangeListener listener : onMapChangeListenerArray) {
-      listener.onNewMap(this, this.editorScreen);
-    }
+        updateUI();
+
+        for (OnMapChangeListener listener : onMapChangeListenerArray) {
+          listener.onNewMap(ProjectController.this, ProjectController.this.editorScreen);
+        }
+      }
+    });
   }
 
   public void setStatusLabel(JLabel statusLabel, JLabel statusMemoryLabel, JLabel statusRenderablesLabel, JLabel mapCursorPositionLabel, JLabel statusTriangleCountLabel) {
@@ -107,10 +127,10 @@ public class ProjectController implements JobListener, ShaderReloadListener {
   public void onJobFinish(Job job) {
     if (job.isBlockingUI()) {
       progressTaskDialog.setVisible(false);
-      mainWindow.setEnabled(true);
     } else {
       jobProgressBar.setVisible(false);
     }
+    mainWindow.setEnabled(true);
   }
 
   @Override

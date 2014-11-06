@@ -175,6 +175,11 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
   }
 
   @Override
+  public void onCloseMap(ProjectController controller, EditorScreen screen) {
+    setEditor(null);
+  }
+
+  @Override
   public void onNewMap(ProjectController controller, EditorScreen screen) {
     setEditor(screen);
   }

@@ -24,7 +24,7 @@ public class NewLevelJob extends Job<LevelState> {
 
   @Override
   public LevelState perform() {
-    LevelState newLevelState = LevelState.blank(500, 100, 500);
+    LevelState newLevelState = LevelState.blank(1000, 100, 1000);
     return newLevelState;
   }
 }

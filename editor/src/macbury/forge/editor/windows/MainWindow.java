@@ -35,7 +35,7 @@ public class MainWindow extends JFrame implements ForgEBootListener {
   private JLabel mapCursorPositionLabel;
   private JLabel statusTriangleCountLabel;
   private JTree tree1;
-  private JTabbedPane tabbedPane1;
+  private JTabbedPane toolsPane;
   private JTextArea filterEvents;
   private JList list1;
   private JToolBar terrainToolsToolbar;

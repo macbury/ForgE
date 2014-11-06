@@ -32,6 +32,7 @@ project(":editor") {
     dependencies {
       compile project(":desktop")
       compile 'net.contentobjects.jnotify:jnotify:0.94+'
+      compile 'org.nuiton.thirdparty:l2fprod-common:0.1'
     }
 }
 
