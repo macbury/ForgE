@@ -11,6 +11,7 @@ import macbury.forge.editor.controllers.TerrainToolsController;
 import macbury.forge.editor.parell.JobManager;
 import macbury.forge.editor.reloader.ShaderFileChangeListener;
 import macbury.forge.editor.views.MainMenu;
+import macbury.forge.editor.views.MapPropertySheet;
 
 import javax.swing.*;
 import java.awt.*;
@@ -41,6 +42,7 @@ public class MainWindow extends JFrame implements ForgEBootListener {
   private JToolBar terrainToolsToolbar;
   public JProgressBar jobProgressBar;
   private JList list2;
+  private JPanel mapSettingsPanel;
   private ShaderFileChangeListener shaderFileChangeListener;
 
   public MainWindow() {
@@ -76,6 +78,9 @@ public class MainWindow extends JFrame implements ForgEBootListener {
     projectController.addOnMapChangeListener(mainMenu);
     projectController.addOnMapChangeListener(mainToolbarController);
     projectController.addOnMapChangeListener(terrainToolsController);
+
+    MapPropertySheet inspectorSheetPanel = new MapPropertySheet();
+    mapSettingsPanel.add(inspectorSheetPanel);
   }
 
   @Override

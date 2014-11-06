@@ -111,8 +111,8 @@
       <splitpane id="5e439">
         <constraints border-constraint="Center"/>
         <properties>
-          <continuousLayout value="true"/>
-          <dividerLocation value="320"/>
+          <continuousLayout value="false"/>
+          <dividerLocation value="360"/>
         </properties>
         <border type="none"/>
         <children>
@@ -132,7 +132,7 @@
             </constraints>
             <properties>
               <continuousLayout value="true"/>
-              <dividerLocation value="271"/>
+              <dividerLocation value="399"/>
               <orientation value="0"/>
               <resizeWeight value="0.5"/>
             </properties>
@@ -214,7 +214,7 @@
                           </component>
                         </children>
                       </grid>
-                      <grid id="207bd" layout-manager="BorderLayout" hgap="0" vgap="0">
+                      <grid id="207bd" binding="mapSettingsPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
                         <constraints>
                           <tabbedpane title="Map" icon="icons/map_settings.png"/>
                         </constraints>
