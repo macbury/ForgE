@@ -40,6 +40,7 @@ public class MainWindow extends JFrame implements ForgEBootListener {
   private JList list1;
   private JToolBar terrainToolsToolbar;
   public JProgressBar jobProgressBar;
+  private JList list2;
   private ShaderFileChangeListener shaderFileChangeListener;
 
   public MainWindow() {

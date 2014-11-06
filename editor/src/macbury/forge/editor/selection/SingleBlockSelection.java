@@ -39,6 +39,7 @@ public class SingleBlockSelection extends AbstractSelection {
     selecting = false;
   }
 
+
   @Override
   protected void getMaximum(Vector3 out) {
     if(isAppendSelectType()) {

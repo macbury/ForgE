@@ -1,6 +1,7 @@
 package macbury.forge.editor.controllers;
 
 import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
+import macbury.forge.editor.parell.JobManager;
 import macbury.forge.editor.screens.EditorScreen;
 import macbury.forge.editor.selection.AbstractSelection;
 import macbury.forge.editor.selection.BoxSelection;
@@ -8,6 +9,8 @@ import macbury.forge.editor.selection.SelectionInterface;
 import macbury.forge.editor.selection.SingleBlockSelection;
 import macbury.forge.editor.systems.SelectionSystem;
 import macbury.forge.editor.undo_redo.ChangeManager;
+import macbury.forge.editor.undo_redo.Changeable;
+import macbury.forge.editor.undo_redo.actions.ApplyBlock;
 import macbury.forge.editor.undo_redo.actions.ApplyRangeBlock;
 import macbury.forge.voxel.ChunkMap;
 
@@ -30,6 +33,7 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
   private ChangeManager changeManager;
   private ChunkMap map;
   private EditorScreen screen;
+  private JobManager jobs;
 
   public TerrainToolsController(JToolBar terrainToolsToolbar) {
     toolbar          = terrainToolsToolbar;
@@ -45,6 +49,8 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
     buildToogleButton("draw_airbrush", toolsGroup);
     buildToogleButton("draw_elipsis", toolsGroup);
     buildToogleButton("draw_eraser", toolsGroup);
+
+    toolbar.addSeparator();
     updateUI();
   }
 
@@ -76,6 +82,8 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
     selectionSystem      = screen.selectionSystem;
     changeManager        = screen.changeManager;
     map                  = screen.level.terrainMap;
+
+    jobs                 = controller.jobs;
 
     singleBlockSelection.setVoxelSize(map.voxelSize);
     boxSelection.setVoxelSize(map.voxelSize);
@@ -113,7 +121,17 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
 
   @Override
   public void onSelectionEnd(AbstractSelection selection) {
-    changeManager.addChangeable(new ApplyRangeBlock(selection, map)).apply();
+    createTaskForSelection(selection);
+  }
+
+  private void createTaskForSelection(AbstractSelection selection) {
+    Changeable task = null;
+    if (selection == singleBlockSelection) {
+      task = new ApplyBlock(selection, map);
+    } else if (selection == boxSelection) {
+      task = new ApplyRangeBlock(selection, map);
+    }
+    changeManager.addChangeable(task).apply();
   }
 
   private void setCurrentSelection(AbstractSelection currentSelection) {

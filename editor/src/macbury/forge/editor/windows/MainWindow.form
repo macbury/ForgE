@@ -164,20 +164,26 @@
                         <border type="none"/>
                         <children>
                           <toolbar id="10c61" binding="terrainToolsToolbar">
-                            <constraints border-constraint="North"/>
+                            <constraints border-constraint="West"/>
                             <properties>
-                              <borderPainted value="true"/>
+                              <background swing-color="List.background"/>
+                              <borderPainted value="false"/>
                               <floatable value="false"/>
-                              <rollover value="true"/>
+                              <orientation value="1"/>
+                              <rollover value="false"/>
                             </properties>
                             <clientProperties>
-                              <JToolBar.isRollover class="java.lang.Boolean" value="true"/>
+                              <JToolBar.isRollover class="java.lang.Boolean" value="false"/>
                             </clientProperties>
                             <border type="none">
                               <font/>
                             </border>
                             <children/>
                           </toolbar>
+                          <component id="ac192" class="javax.swing.JList" binding="list2" default-binding="true">
+                            <constraints border-constraint="Center"/>
+                            <properties/>
+                          </component>
                         </children>
                       </grid>
                       <grid id="8907d" layout-manager="BorderLayout" hgap="0" vgap="0">

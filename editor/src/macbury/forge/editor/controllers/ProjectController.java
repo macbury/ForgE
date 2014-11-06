@@ -29,7 +29,7 @@ public class ProjectController implements JobListener, ShaderReloadListener {
   private MainWindow mainWindow;
   public EditorScreen editorScreen;
   private Array<OnMapChangeListener> onMapChangeListenerArray = new Array<OnMapChangeListener>();
-  private JobManager jobs;
+  public JobManager jobs;
   private ProgressTaskDialog progressTaskDialog;
   private JProgressBar jobProgressBar;
 
