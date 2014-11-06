@@ -16,6 +16,7 @@ import java.awt.event.KeyEvent;
  * Created by macbury on 19.10.14.
  */
 public class MainMenu extends JPopupMenu implements OnMapChangeListener {
+  private final ProjectController controller;
   public JCheckBoxMenuItem debugRenderDynamicOctree;
   public JCheckBoxMenuItem debugBoundingBox;
   public JRadioButtonMenuItem debugWireframeItem;
@@ -26,8 +27,10 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
   private JRadioButtonMenuItem debugNormalsItem;
   private JRadioButtonMenuItem debugLightingItem;
 
-  public MainMenu() {
+  public MainMenu(ProjectController projectController) {
     super();
+
+    this.controller = projectController;
 
     createProjectMenu();
     addSeparator();
@@ -35,6 +38,7 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
 
     //add(Box.createRigidArea(new Dimension(320,28)));
   }
+
 
   /**
    * Set Editor screen and refresh menu
@@ -163,6 +167,13 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
     JMenu projectMenu         = new JMenu("Project");
     JMenuItem newProjectItem  = new JMenuItem("New");
     JMenuItem openProjectItem = new JMenuItem("Open");
+
+    newProjectItem.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        controller.newMap();
+      }
+    });
 
     projectMenu.add(newProjectItem);
     projectMenu.add(openProjectItem);

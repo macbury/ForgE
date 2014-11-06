@@ -2,6 +2,7 @@ package macbury.forge.editor.systems;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -71,8 +72,7 @@ public class SelectionSystem extends EntitySystem {
   }
 
   private boolean getCurrentVoxelCursor(float screenX, float screenY) {
-    mousePosition.set(screenX, screenY);
-    Ray pickRay              = camera.getPickRay(mousePosition.x, mousePosition.y);
+    Ray pickRay              = camera.getPickRay(Gdx.input.getX(), Gdx.input.getY());
     return voxelPicker.getVoxelPositionForPickRay(pickRay, camera.far, voxelCursor);
   }
 
@@ -82,6 +82,7 @@ public class SelectionSystem extends EntitySystem {
 
       @Override
       public boolean mouseMoved(InputEvent event, float x, float y) {
+
         if (getCurrentVoxelCursor(x,y)) {
           selection.reset(voxelCursor);
           return true;

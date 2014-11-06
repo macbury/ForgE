@@ -50,6 +50,8 @@ public class ProjectController implements JobListener, ShaderReloadListener {
 
   private void updateUI() {
     boolean editorScreenEnabled = editorScreen != null;
+
+    mainWindow.mainSplitPane.setVisible(editorScreenEnabled);
     //mainWindow.openGlContainer.setVisible(editorScreenEnabled);
   }
 
@@ -110,9 +112,9 @@ public class ProjectController implements JobListener, ShaderReloadListener {
       progressTaskDialog.setLocationRelativeTo(mainWindow);
       progressTaskDialog.setVisible(true);
       mainWindow.setEnabled(false);
-    } else {
-      jobProgressBar.setVisible(true);
     }
+
+    jobProgressBar.setVisible(true);
   }
 
   @Override
@@ -125,12 +127,14 @@ public class ProjectController implements JobListener, ShaderReloadListener {
 
   @Override
   public void onJobFinish(Job job) {
-    if (job.isBlockingUI()) {
-      progressTaskDialog.setVisible(false);
-    } else {
-      jobProgressBar.setVisible(false);
-    }
-    mainWindow.setEnabled(true);
+    SwingUtilities.invokeLater(new Runnable() {
+      @Override
+      public void run() {
+        jobProgressBar.setVisible(false);
+        progressTaskDialog.setVisible(false);
+        mainWindow.setEnabled(true);
+      }
+    });
   }
 
   @Override

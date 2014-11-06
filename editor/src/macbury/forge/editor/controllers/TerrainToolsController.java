@@ -3,15 +3,13 @@ package macbury.forge.editor.controllers;
 import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
 import macbury.forge.editor.parell.JobManager;
 import macbury.forge.editor.screens.EditorScreen;
-import macbury.forge.editor.selection.AbstractSelection;
-import macbury.forge.editor.selection.BoxSelection;
-import macbury.forge.editor.selection.SelectionInterface;
-import macbury.forge.editor.selection.SingleBlockSelection;
+import macbury.forge.editor.selection.*;
 import macbury.forge.editor.systems.SelectionSystem;
 import macbury.forge.editor.undo_redo.ChangeManager;
 import macbury.forge.editor.undo_redo.Changeable;
 import macbury.forge.editor.undo_redo.actions.ApplyBlock;
 import macbury.forge.editor.undo_redo.actions.ApplyRangeBlock;
+import macbury.forge.editor.undo_redo.actions.EraserBlock;
 import macbury.forge.voxel.ChunkMap;
 
 import javax.swing.*;
@@ -26,7 +24,12 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
   private final ButtonGroup toolsGroup;
   private final JToggleButton drawPencilButton;
   private final SingleBlockSelection singleBlockSelection;
-  private final BoxSelection boxSelection;
+  private final BoxSelection rectSelection;
+  private final ButtonGroup modifyGroup;
+  private final JToggleButton appendBlocksButton;
+  private final JToggleButton replaceBlocksButton;
+  private final EreaseSelection ereaseSelection;
+  private final JToggleButton ereaserButton;
   private AbstractSelection currentSelection;
   private final JToggleButton drawRectButton;
   private SelectionSystem selectionSystem;
@@ -34,13 +37,16 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
   private ChunkMap map;
   private EditorScreen screen;
   private JobManager jobs;
+  private SelectType currentSelectType;
 
   public TerrainToolsController(JToolBar terrainToolsToolbar) {
     toolbar          = terrainToolsToolbar;
     this.toolsGroup  = new ButtonGroup();
+    this.modifyGroup = new ButtonGroup();
 
     this.singleBlockSelection = new SingleBlockSelection();
-    this.boxSelection         = new BoxSelection();
+    this.rectSelection        = new BoxSelection();
+    this.ereaseSelection      = new EreaseSelection();
 
     drawPencilButton          = buildToogleButton("draw_pencil", toolsGroup);
     drawRectButton            = buildToogleButton("draw_rect", toolsGroup);
@@ -48,18 +54,28 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
 
     buildToogleButton("draw_airbrush", toolsGroup);
     buildToogleButton("draw_elipsis", toolsGroup);
-    buildToogleButton("draw_eraser", toolsGroup);
+    ereaserButton = buildToogleButton("draw_eraser", toolsGroup);
 
     toolbar.addSeparator();
+
+    appendBlocksButton  = buildToogleButton("append_blocks", modifyGroup);
+    replaceBlocksButton = buildToogleButton("replace_blocks", modifyGroup);
     updateUI();
   }
 
   private void updateUI() {
     boolean interfaceEnabled = screen != null;
+    boolean showAppend       = !ereaserButton.isSelected();
+
+    appendBlocksButton.setVisible(showAppend);
+    replaceBlocksButton.setVisible(showAppend);
 
     toolbar.setEnabled(interfaceEnabled);
     drawPencilButton.setEnabled(interfaceEnabled);
     drawRectButton.setEnabled(interfaceEnabled);
+
+    appendBlocksButton.setEnabled(interfaceEnabled);
+    replaceBlocksButton.setEnabled(interfaceEnabled);
   }
 
   private JToggleButton buildToogleButton(String iconName, ButtonGroup buttonGroup) {
@@ -92,6 +108,8 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
   @Override
   public void onNewMap(ProjectController controller, EditorScreen screen) {
     drawPencilButton.setSelected(true);
+    appendBlocksButton.setSelected(true);
+    currentSelectType    = SelectType.Append;
     this.screen          = screen;
     selectionSystem      = screen.selectionSystem;
     changeManager        = screen.changeManager;
@@ -100,7 +118,7 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
     jobs                 = controller.jobs;
 
     singleBlockSelection.setVoxelSize(map.voxelSize);
-    boxSelection.setVoxelSize(map.voxelSize);
+    rectSelection.setVoxelSize(map.voxelSize);
 
     selectionSystem.addListener(this);
 
@@ -113,7 +131,17 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
     if (e.getSource() == drawPencilButton) {
       setCurrentSelection(singleBlockSelection);
     } else if (e.getSource() == drawRectButton) {
-      setCurrentSelection(boxSelection);
+      setCurrentSelection(rectSelection);
+    } else if (e.getSource() == ereaserButton) {
+      setCurrentSelection(ereaseSelection);
+    }
+
+    if (e.getSource() == replaceBlocksButton) {
+      currentSelectType = SelectType.Replace;
+      setCurrentSelection(currentSelection);
+    } else if (e.getSource() == appendBlocksButton) {
+      currentSelectType = SelectType.Append;
+      setCurrentSelection(currentSelection);
     }
   }
 
@@ -136,14 +164,18 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
     Changeable task = null;
     if (selection == singleBlockSelection) {
       task = new ApplyBlock(selection, map);
-    } else if (selection == boxSelection) {
+    } else if (selection == rectSelection) {
       task = new ApplyRangeBlock(selection, map);
+    } else if (selection == ereaseSelection) {
+      task = new EraserBlock(selection, map);
     }
     changeManager.addChangeable(task).apply();
   }
 
   private void setCurrentSelection(AbstractSelection currentSelection) {
     this.currentSelection = currentSelection;
+    currentSelection.setSelectType(currentSelectType);
     this.selectionSystem.setSelection(currentSelection);
+    updateUI();
   }
 }

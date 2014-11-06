@@ -31,7 +31,7 @@ public class VoxelPicker {
       pickRay.getEndPoint(rayEndPoint, j);
       map.worldPositionToLocalVoxelPosition(rayEndPoint, localVoxelPosition);
 
-      if (map.isSolid(localVoxelPosition)) {
+      if (map.isSolid(localVoxelPosition) || localVoxelPosition.y == 0) {
         map.localVoxelPositionToWorldPosition(localVoxelPosition, worldVoxelPosition);
         outVoxelIntersectPoint.replace.set(worldVoxelPosition);
         worldVoxelPositionWithSize.set(worldVoxelPosition).add(map.voxelSize);

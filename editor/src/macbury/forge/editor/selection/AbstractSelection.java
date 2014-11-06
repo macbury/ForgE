@@ -42,11 +42,11 @@ public abstract class AbstractSelection {
   }
 
   public boolean isAppendSelectType() {
-    return this.selectType == SelectType.Append;
+    return getSelectType() == SelectType.Append;
   }
 
   public boolean isReplaceSelectType() {
-    return this.selectType == SelectType.Replace;
+    return getSelectType() == SelectType.Replace;
   }
 
   public BoundingBox getBoundingBox() {

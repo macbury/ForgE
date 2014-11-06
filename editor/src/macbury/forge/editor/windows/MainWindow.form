@@ -108,7 +108,7 @@
         <border type="none"/>
         <children/>
       </toolbar>
-      <splitpane id="5e439">
+      <splitpane id="5e439" binding="mainSplitPane">
         <constraints border-constraint="Center"/>
         <properties>
           <continuousLayout value="false"/>

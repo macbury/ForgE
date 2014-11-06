@@ -1,17 +1,16 @@
 package macbury.forge.editor.undo_redo.actions;
 
 import macbury.forge.editor.selection.AbstractSelection;
-import macbury.forge.editor.selection.SelectType;
 import macbury.forge.voxel.VoxelMap;
 import macbury.forge.voxel.VoxelMaterial;
 
 /**
- * Created by macbury on 03.11.14.
+ * Created by macbury on 06.11.14.
  */
-public class ApplyRangeBlock extends TerrainCursorChangeable {
+public class EraserBlock extends TerrainCursorChangeable {
   private VoxelMaterial oldMaterials[][][];
 
-  public ApplyRangeBlock(AbstractSelection selection, VoxelMap map) {
+  public EraserBlock(AbstractSelection selection, VoxelMap map) {
     super(selection, map);
   }
 
@@ -40,16 +39,10 @@ public class ApplyRangeBlock extends TerrainCursorChangeable {
     for (int x = (int)applyBox.min.x; x < applyBox.max.x; x++) {
       for (int y = (int)applyBox.min.y; y < applyBox.max.y; y++) {
         for (int z = (int)applyBox.min.z; z < applyBox.max.z; z++) {
-
-          if (selectType == SelectType.Append) {
-            if (!map.isEmpty(x,y,z)) {
-              oldMaterials[x - (int)applyBox.min.x][y - (int)applyBox.min.y][z - (int)applyBox.min.z] = map.getMaterialForPosition(x,y,z);
-            }
-            map.setMaterialForPosition(map.materials.get(4), x,y,z);
-          } else if (!map.isEmpty(x,y,z)) {
-            map.setMaterialForPosition(map.materials.get(4), x,y,z);
+          if (!map.isEmpty(x,y,z)) {
+            oldMaterials[x - (int)applyBox.min.x][y - (int)applyBox.min.y][z - (int)applyBox.min.z] = map.getMaterialForPosition(x,y,z);
           }
-
+          map.setEmptyForPosition(x,y,z);
         }
       }
     }

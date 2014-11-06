@@ -63,7 +63,7 @@ public class EditorScreen extends AbstractScreen {
 
     level.resize(width, height);
     stage.getViewport().update(width,height);
-    overlay.invalidateHierarchy();
+    overlay.invalidate();
   }
 
   @Override

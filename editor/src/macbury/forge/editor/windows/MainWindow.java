@@ -1,7 +1,7 @@
 package macbury.forge.editor.windows;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.backends.lwjgl.LwjglAWTCanvas;
+import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
 import macbury.forge.Config;
 import macbury.forge.ForgE;
 import macbury.forge.ForgEBootListener;
@@ -18,7 +18,7 @@ import java.awt.*;
 
 
 public class MainWindow extends JFrame implements ForgEBootListener {
-  private LwjglAWTCanvas openGLCanvas;
+  private LwjglCanvas openGLCanvas;
   private ForgE engine;
   private ProjectController projectController;
   private MainMenu mainMenu;
@@ -43,6 +43,7 @@ public class MainWindow extends JFrame implements ForgEBootListener {
   public JProgressBar jobProgressBar;
   private JList list2;
   private JPanel mapSettingsPanel;
+  public JSplitPane mainSplitPane;
   private ShaderFileChangeListener shaderFileChangeListener;
 
   public MainWindow() {
@@ -64,15 +65,13 @@ public class MainWindow extends JFrame implements ForgEBootListener {
     engine                    = new ForgE(config);
     engine.setBootListener(this);
 
-    mainMenu                  = new MainMenu();
+    projectController        = new ProjectController();
 
-    openGLCanvas              = new LwjglAWTCanvas(engine);
-    openGlContainer.add(openGLCanvas.getCanvas(), BorderLayout.CENTER);
+    mainMenu                 = new MainMenu(projectController);
 
     terrainToolsController   = new TerrainToolsController(terrainToolsToolbar);
     mainToolbarController    = new MainToolbarController(mainToolbar, mainMenu);
 
-    projectController         = new ProjectController();
     projectController.setStatusLabel(statusFpsLabel, statusMemoryLabel, statusRenderablesLabel, mapCursorPositionLabel, statusTriangleCountLabel);
 
     projectController.addOnMapChangeListener(mainMenu);
@@ -81,6 +80,10 @@ public class MainWindow extends JFrame implements ForgEBootListener {
 
     MapPropertySheet inspectorSheetPanel = new MapPropertySheet();
     mapSettingsPanel.add(inspectorSheetPanel);
+
+
+    openGLCanvas             = new LwjglCanvas(engine);
+    openGlContainer.add(openGLCanvas.getCanvas(), BorderLayout.CENTER);
   }
 
   @Override
@@ -88,7 +91,7 @@ public class MainWindow extends JFrame implements ForgEBootListener {
     Gdx.graphics.setVSync(true);
     shaderFileChangeListener  = new ShaderFileChangeListener();
     projectController.setMainWindow(this);
-    projectController.newMap();
+    //projectController.newMap();
   }
 
   private void createUIComponents() {

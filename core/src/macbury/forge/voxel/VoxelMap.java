@@ -151,4 +151,8 @@ public class VoxelMap implements Disposable {
   public boolean isEmptyNotOutOfBounds(Vector3i voxelPosition) {
     return isEmptyNotOutOfBounds(voxelPosition.x, voxelPosition.y, voxelPosition.z);
   }
+
+  public boolean isOutOfBounds(Vector3i voxelPosition) {
+    return isOutOfBounds(voxelPosition.x, voxelPosition.y, voxelPosition.z);
+  }
 }

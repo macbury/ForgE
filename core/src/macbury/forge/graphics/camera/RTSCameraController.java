@@ -160,12 +160,12 @@ public class RTSCameraController {
         if (button == Input.Buttons.RIGHT) {
           dragMouseButtonPressed = true;
           //HashBot.ui.grabCursor();
-          mouseDrag.set(screenX, screenY);
+          mouseDrag.set(Gdx.input.getX(), Gdx.input.getY());
           return true;
         } else if (button == Input.Buttons.MIDDLE) {
           rotateMouseButtonPressed = true;
           //HashBot.ui.grabCursor();
-          mouseRotationDrag.set(screenX, screenY);
+          mouseRotationDrag.set(Gdx.input.getX(), Gdx.input.getY());
           return true;
         } else {
           return false;
