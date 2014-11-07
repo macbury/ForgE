@@ -3,6 +3,7 @@ package macbury.forge;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import macbury.forge.assets.AssetsManager;
+import macbury.forge.db.GameDatabase;
 import macbury.forge.graphics.GraphicsUtils;
 import macbury.forge.input.InputManager;
 import macbury.forge.screens.ScreenManager;
@@ -14,8 +15,9 @@ public class ForgE extends Game {
   public static AssetsManager assets;
   public static ShadersManager shaders;
   public static Config config;
-  public static InputManager input;
+  public static GameDatabase db;
 
+  public static InputManager input;
   private ForgEBootListener bootListener;
 
 
@@ -26,6 +28,7 @@ public class ForgE extends Game {
 
   @Override
   public void create () {
+    db       = new GameDatabase();
     graphics = new GraphicsUtils();
     screens  = new ScreenManager(this);
     assets   = new AssetsManager();
