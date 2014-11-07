@@ -34,7 +34,7 @@ public class Level implements Disposable {
   public final LevelEnv env;
 
   public Level(LevelState state) {
-    this.env                 = new LevelEnv();
+    this.env                 = state.env;
     this.state               = state;
     this.terrainMap          = state.terrainMap;
     this.renderContext       = new RenderContext(new DefaultTextureBinder(DefaultTextureBinder.WEIGHTED, 1));

@@ -14,6 +14,7 @@ public class LevelState {
   private static final String MAP_NAME_PREFIX = "MAP_";
   private static int uid = 0;
 
+  public LevelEnv env;
   public ChunkMap terrainMap;
   public int id;
   public String name;
@@ -26,7 +27,7 @@ public class LevelState {
     state.terrainMap        = new ChunkMap(ChunkMap.TERRAIN_TILE_SIZE);
     state.id                = uid();
     state.name              = MAP_NAME_PREFIX + state.id;
-
+    state.env               = new LevelEnv();
     state.terrainMap.initialize(width,height,depth);
     state.terrainMap.buildFloor();
     return state;
