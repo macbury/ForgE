@@ -68,6 +68,7 @@ public class ProjectController implements JobListener, ShaderReloadListener {
   }
 
   public void closeMap() {
+    mainWindow.setTitle("");
     if (editorScreen != null) {
       for (OnMapChangeListener listener : onMapChangeListenerArray) {
         listener.onCloseMap(ProjectController.this, ProjectController.this.editorScreen);
@@ -79,7 +80,7 @@ public class ProjectController implements JobListener, ShaderReloadListener {
   }
 
   public void onLevelStateLoaded(LevelState state, NewLevelJob job) {
-    mainWindow.setTitle("[ForgE] - New project");
+    mainWindow.setTitle(state.name);
     this.editorScreen = new EditorScreen(state);
     Gdx.app.postRunnable(new Runnable() {
       @Override
@@ -107,14 +108,19 @@ public class ProjectController implements JobListener, ShaderReloadListener {
   }
 
   @Override
-  public void onJobStart(Job job) {
-    if (job.isBlockingUI()) {
-      progressTaskDialog.setLocationRelativeTo(mainWindow);
-      progressTaskDialog.setVisible(true);
-      mainWindow.setEnabled(false);
-    }
+  public void onJobStart(final Job job) {
+    SwingUtilities.invokeLater(new Runnable() {
+      @Override
+      public void run() {
+        if (job.isBlockingUI()) {
+          progressTaskDialog.setLocationRelativeTo(mainWindow);
+          progressTaskDialog.setVisible(true);
+          mainWindow.setEnabled(false);
+        }
 
-    jobProgressBar.setVisible(true);
+        jobProgressBar.setVisible(true);
+      }
+    });
   }
 
   @Override

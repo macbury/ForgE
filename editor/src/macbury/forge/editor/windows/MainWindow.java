@@ -54,7 +54,7 @@ public class MainWindow extends JFrame implements ForgEBootListener {
     setExtendedState(JFrame.MAXIMIZED_BOTH);
     setVisible(true);
     setDefaultCloseOperation(EXIT_ON_CLOSE);
-
+    setTitle(null);
 
     Config config             = new Config();
     config.generateWireframe  = true;
@@ -92,6 +92,15 @@ public class MainWindow extends JFrame implements ForgEBootListener {
     shaderFileChangeListener  = new ShaderFileChangeListener();
     projectController.setMainWindow(this);
     //projectController.newMap();
+  }
+
+  @Override
+  public void setTitle(String title) {
+    if (title == null || title.length() == 0) {
+      super.setTitle("ForgE");
+    } else {
+      super.setTitle("ForgE - " + title);
+    }
   }
 
   private void createUIComponents() {
