@@ -1,5 +1,6 @@
 package macbury.forge.editor.controllers;
 
+import macbury.forge.editor.Utils;
 import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
 import macbury.forge.editor.parell.JobManager;
 import macbury.forge.editor.screens.EditorScreen;
@@ -80,10 +81,10 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
 
   private JToggleButton buildToogleButton(String iconName, ButtonGroup buttonGroup) {
     JToggleButton button = new JToggleButton();
-    ImageIcon icon = new ImageIcon(getClass().getResource("/icons/"+iconName+".png"));
+    //ImageIcon icon = new ImageIcon(getClass().getResource("/icons/"+iconName+".png"));
     button.setFocusable(false);
     button.setHorizontalTextPosition(SwingConstants.LEADING);
-    button.setIcon(icon);
+    button.setIcon(Utils.getIcon(iconName));
     toolbar.add(button);
     buttonGroup.add(button);
     button.addActionListener(this);

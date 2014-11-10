@@ -1,5 +1,7 @@
 package macbury.forge.editor.views;
 
+import macbury.forge.editor.Utils;
+
 import javax.swing.*;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
@@ -17,10 +19,9 @@ public class MoreToolbarButton extends JToggleButton implements PopupMenuListene
   public MoreToolbarButton(JPopupMenu menu) {
     super();
     this.menu      = menu;
-    ImageIcon icon = new ImageIcon(getClass().getResource("/icons/nav_icon.png"));
     setFocusable(false);
     setHorizontalTextPosition(SwingConstants.LEADING);
-    setIcon(icon);
+    setIcon(Utils.getIcon("nav_icon"));
     menu.addPopupMenuListener(this);
     addItemListener(this);
     menu.setMinimumSize(new Dimension(320, 24));

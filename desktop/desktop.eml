@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component inheritJdk="true">
+	<output-test url="file://$MODULE_DIR$/build/classes/test"/>
+	<exclude-output/>
+	<contentEntry url="file://$MODULE_DIR$">
+		<testFolder url="file://$MODULE_DIR$/src/test/java"/>
+		<testFolder url="file://$MODULE_DIR$/src/test/resources"/>
+		<excludeFolder url="file://$MODULE_DIR$/.gradle"/>
+		<excludeFolder url="file://$MODULE_DIR$/build"/>
+	</contentEntry>
+	<levels>
+		<level name="Gradle: org.lwjgl.lwjgl:lwjgl:2.9.1" value="project"/>
+		<level name="Gradle: org.lwjgl.lwjgl:lwjgl_util:2.9.1" value="project"/>
+		<level name="Gradle: com.badlogicgames.jlayer:jlayer:1.0.1-gdx" value="project"/>
+		<level name="Gradle: org.jcraft:jorbis:0.0.17" value="project"/>
+		<level name="Gradle: org.lwjgl.lwjgl:lwjgl-platform:2.9.1" value="project"/>
+		<level name="Gradle: net.java.jinput:jinput:2.0.5" value="project"/>
+		<level name="Gradle: net.java.jutils:jutils:1.0.0" value="project"/>
+		<level name="Gradle: net.java.jinput:jinput-platform:2.0.5" value="project"/>
+		<level name="Gradle: com.badlogicgames.gdx:gdx-backend-lwjgl:1.4.1" value="project"/>
+		<level name="Gradle: com.badlogicgames.gdx:gdx-platform:1.4.1" value="project"/>
+		<level name="Gradle: com.badlogicgames.gdx:gdx-freetype-platform:1.4.1" value="project"/>
+		<level name="Gradle: com.badlogicgames.gdx:gdx-tools:1.4.1" value="project"/>
+		<level name="Gradle: com.badlogicgames.gdx:gdx:1.4.1" value="project"/>
+	</levels>
+</component>

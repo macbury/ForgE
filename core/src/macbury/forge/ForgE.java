@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import macbury.forge.assets.AssetsManager;
 import macbury.forge.db.GameDatabase;
+import macbury.forge.storage.StorageManager;
 import macbury.forge.graphics.GraphicsUtils;
 import macbury.forge.input.InputManager;
 import macbury.forge.screens.ScreenManager;
@@ -15,11 +16,11 @@ public class ForgE extends Game {
   public static AssetsManager assets;
   public static ShadersManager shaders;
   public static Config config;
+  public static StorageManager storage;
   public static GameDatabase db;
 
   public static InputManager input;
   private ForgEBootListener bootListener;
-
 
   public ForgE(Config config) {
     super();
@@ -28,12 +29,15 @@ public class ForgE extends Game {
 
   @Override
   public void create () {
-    db       = new GameDatabase();
+    storage  = new StorageManager();
+
+    db       = storage.loadOrInitializeDB();
     graphics = new GraphicsUtils();
     screens  = new ScreenManager(this);
     assets   = new AssetsManager();
     shaders  = new ShadersManager();
     input    = new InputManager();
+
     Gdx.input.setInputProcessor(input);
     if (bootListener != null) {
       bootListener.afterEngineCreate(this);

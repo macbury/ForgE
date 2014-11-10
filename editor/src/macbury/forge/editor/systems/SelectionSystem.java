@@ -14,7 +14,6 @@ import macbury.forge.components.Cursor;
 import macbury.forge.components.Position;
 import macbury.forge.editor.selection.AbstractSelection;
 import macbury.forge.editor.selection.SelectionInterface;
-import macbury.forge.editor.utils.MousePosition;
 import macbury.forge.graphics.camera.GameCamera;
 import macbury.forge.level.Level;
 import macbury.forge.voxel.ChunkMap;
@@ -35,7 +34,6 @@ public class SelectionSystem extends EntitySystem {
   private final ShapeRenderer shapeRenderer;
   private final RenderContext renderContext;
   private Overlay overlay;
-  private final MousePosition mousePosition;
   public final VoxelCursor voxelCursor = new VoxelCursor();
   private AbstractSelection selection;
   private Array<SelectionInterface> listeners;
@@ -45,7 +43,6 @@ public class SelectionSystem extends EntitySystem {
     this.listeners               = new Array<SelectionInterface>();
     this.voxelPicker             = new VoxelPicker(level.terrainMap);
     this.camera                  = level.camera;
-    this.mousePosition           = new MousePosition(camera);
     this.map                     = level.terrainMap;
     this.shapeRenderer           = level.batch.shapeRenderer;
     this.renderContext           = level.renderContext;

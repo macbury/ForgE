@@ -9,7 +9,6 @@ public class ProgressTaskDialog extends JWindow {
     setContentPane(contentPane);
     pack();
     setAlwaysOnTop(true);
-    getRootPane().setWindowDecorationStyle(JRootPane.NONE);
   }
 
   @Override

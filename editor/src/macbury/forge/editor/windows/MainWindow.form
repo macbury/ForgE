@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="macbury.forge.editor.windows.MainWindow">
-  <grid id="cbd77" binding="contentPane" layout-manager="BorderLayout" hgap="0" vgap="0">
+  <grid id="cbd77" binding="mainContentPane" layout-manager="BorderLayout" hgap="0" vgap="0">
     <constraints>
-      <xy x="48" y="54" width="1119" height="440"/>
+      <xy x="48" y="54" width="1119" height="970"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -10,12 +10,16 @@
       <grid id="83958" binding="statusBarPanel" layout-manager="GridLayoutManager" row-count="1" column-count="11" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="5" left="5" bottom="5" right="10"/>
         <constraints border-constraint="South"/>
-        <properties/>
+        <properties>
+          <minimumSize width="646" height="32"/>
+        </properties>
         <border type="none"/>
         <children>
           <component id="b4f70" class="javax.swing.JLabel" binding="statusRenderablesLabel">
             <constraints>
-              <grid row="0" column="8" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="8" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="62" height="26"/>
+              </grid>
             </constraints>
             <properties>
               <text value="Voxels: 6"/>
@@ -23,12 +27,16 @@
           </component>
           <hspacer id="d7a2e">
             <constraints>
-              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                <preferred-size width="14" height="26"/>
+              </grid>
             </constraints>
           </hspacer>
           <component id="d7623" class="javax.swing.JToolBar$Separator">
             <constraints>
-              <grid row="0" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                <preferred-size width="10" height="26"/>
+              </grid>
             </constraints>
             <properties>
               <orientation value="1"/>
@@ -36,7 +44,9 @@
           </component>
           <component id="d1c7f" class="javax.swing.JToolBar$Separator">
             <constraints>
-              <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                <preferred-size width="10" height="26"/>
+              </grid>
             </constraints>
             <properties>
               <orientation value="1"/>
@@ -44,7 +54,9 @@
           </component>
           <component id="5b2f3" class="javax.swing.JLabel" binding="statusMemoryLabel">
             <constraints>
-              <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="138" height="26"/>
+              </grid>
             </constraints>
             <properties>
               <text value="Memory: 6GB/10GB"/>
@@ -52,15 +64,19 @@
           </component>
           <component id="a5f16" class="javax.swing.JLabel" binding="statusFpsLabel">
             <constraints>
-              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="59" height="26"/>
+              </grid>
             </constraints>
             <properties>
-              <text value="FPS: 60"/>
+              <text value="FPS: 60s"/>
             </properties>
           </component>
           <component id="382a0" class="javax.swing.JToolBar$Separator">
             <constraints>
-              <grid row="0" column="9" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="9" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                <preferred-size width="10" height="26"/>
+              </grid>
             </constraints>
             <properties>
               <orientation value="1"/>
@@ -68,7 +84,9 @@
           </component>
           <component id="5fe6f" class="javax.swing.JLabel" binding="mapCursorPositionLabel">
             <constraints>
-              <grid row="0" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="46" height="26"/>
+              </grid>
             </constraints>
             <properties>
               <text value="0x0x0"/>
@@ -76,7 +94,9 @@
           </component>
           <component id="6f161" class="javax.swing.JToolBar$Separator">
             <constraints>
-              <grid row="0" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                <preferred-size width="10" height="26"/>
+              </grid>
             </constraints>
             <properties>
               <orientation value="1"/>
@@ -84,7 +104,9 @@
           </component>
           <component id="65cb8" class="javax.swing.JLabel" binding="statusTriangleCountLabel">
             <constraints>
-              <grid row="0" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="112" height="26"/>
+              </grid>
             </constraints>
             <properties>
               <text value="Triangle count: 0"/>
@@ -92,7 +114,9 @@
           </component>
           <component id="b451d" class="javax.swing.JProgressBar" binding="jobProgressBar">
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="146" height="26"/>
+              </grid>
             </constraints>
             <properties>
               <indeterminate value="true"/>
@@ -132,18 +156,12 @@
             </constraints>
             <properties>
               <continuousLayout value="true"/>
-              <dividerLocation value="399"/>
+              <dividerLocation value="618"/>
               <orientation value="0"/>
               <resizeWeight value="0.5"/>
             </properties>
             <border type="none"/>
             <children>
-              <component id="303cd" class="javax.swing.JTree" binding="tree1" default-binding="true">
-                <constraints>
-                  <splitpane position="right"/>
-                </constraints>
-                <properties/>
-              </component>
               <grid id="36bd0" layout-manager="BorderLayout" hgap="0" vgap="0">
                 <constraints>
                   <splitpane position="left"/>
@@ -158,7 +176,9 @@
                     <children>
                       <grid id="c58e8" layout-manager="BorderLayout" hgap="0" vgap="0">
                         <constraints>
-                          <tabbedpane title="Terrain" icon="icons/soil_layers.png"/>
+                          <tabbedpane title="" icon="icons/soil_layers.png">
+                            <tooltip value="Terrain"/>
+                          </tabbedpane>
                         </constraints>
                         <properties/>
                         <border type="none"/>
@@ -188,7 +208,9 @@
                       </grid>
                       <grid id="8907d" layout-manager="BorderLayout" hgap="0" vgap="0">
                         <constraints>
-                          <tabbedpane title="Objects" icon="icons/places.png"/>
+                          <tabbedpane title="" icon="icons/places.png">
+                            <tooltip value="Objects"/>
+                          </tabbedpane>
                         </constraints>
                         <properties/>
                         <border type="none"/>
@@ -196,7 +218,9 @@
                       </grid>
                       <grid id="81fbb" layout-manager="BorderLayout" hgap="0" vgap="0">
                         <constraints>
-                          <tabbedpane title="Events" icon="icons/ice_cube.png"/>
+                          <tabbedpane title="" icon="icons/ice_cube.png">
+                            <tooltip value="Events"/>
+                          </tabbedpane>
                         </constraints>
                         <properties/>
                         <border type="none"/>
@@ -216,7 +240,9 @@
                       </grid>
                       <grid id="207bd" binding="mapSettingsPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
                         <constraints>
-                          <tabbedpane title="Map" icon="icons/map_settings.png"/>
+                          <tabbedpane title="" icon="icons/map_settings.png">
+                            <tooltip value="Map"/>
+                          </tabbedpane>
                         </constraints>
                         <properties/>
                         <border type="none"/>
@@ -226,6 +252,19 @@
                   </tabbedpane>
                 </children>
               </grid>
+              <scrollpane id="78059">
+                <constraints>
+                  <splitpane position="right"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="303cd" class="javax.swing.JTree" binding="tree1" default-binding="true">
+                    <constraints/>
+                    <properties/>
+                  </component>
+                </children>
+              </scrollpane>
             </children>
           </splitpane>
         </children>
