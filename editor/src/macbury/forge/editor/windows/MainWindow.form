@@ -200,10 +200,20 @@
                             </border>
                             <children/>
                           </toolbar>
-                          <component id="ac192" class="javax.swing.JList" binding="list2" default-binding="true">
+                          <scrollpane id="ad796">
                             <constraints border-constraint="Center"/>
                             <properties/>
-                          </component>
+                            <border type="empty"/>
+                            <children>
+                              <component id="ac192" class="javax.swing.JList" binding="blockList">
+                                <constraints/>
+                                <properties>
+                                  <layoutOrientation value="1"/>
+                                  <selectionMode value="0"/>
+                                </properties>
+                              </component>
+                            </children>
+                          </scrollpane>
                         </children>
                       </grid>
                       <grid id="8907d" layout-manager="BorderLayout" hgap="0" vgap="0">

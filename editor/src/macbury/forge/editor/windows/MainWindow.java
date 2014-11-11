@@ -5,11 +5,12 @@ import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
 import macbury.forge.Config;
 import macbury.forge.ForgE;
 import macbury.forge.ForgEBootListener;
+import macbury.forge.editor.controllers.BlocksController;
 import macbury.forge.editor.controllers.MainToolbarController;
 import macbury.forge.editor.controllers.ProjectController;
 import macbury.forge.editor.controllers.TerrainToolsController;
 import macbury.forge.editor.parell.JobManager;
-import macbury.forge.editor.reloader.ShaderFileChangeListener;
+import macbury.forge.editor.reloader.AssetsChangeWatcher;
 import macbury.forge.editor.views.MainMenu;
 import macbury.forge.editor.views.MapPropertySheet;
 
@@ -18,6 +19,7 @@ import java.awt.*;
 
 public class MainWindow extends JFrame implements ForgEBootListener {
   private static final String WINDOW_MAIN_NAME = "ForgE";
+  private final BlocksController blocksController;
   private LwjglCanvas openGLCanvas;
   private ForgE engine;
   private ProjectController projectController;
@@ -28,8 +30,6 @@ public class MainWindow extends JFrame implements ForgEBootListener {
   public final JobManager jobs;
   private JPanel mainContentPane;
   private JPanel statusBarPanel;
-
-
   public JPanel openGlContainer;
   private JLabel statusRenderablesLabel;
   private JLabel statusFpsLabel;
@@ -43,10 +43,10 @@ public class MainWindow extends JFrame implements ForgEBootListener {
   private JList list1;
   private JToolBar terrainToolsToolbar;
   public JProgressBar jobProgressBar;
-  private JList list2;
+  private JList blockList;
   private JPanel mapSettingsPanel;
   public JSplitPane mainSplitPane;
-  private ShaderFileChangeListener shaderFileChangeListener;
+  private AssetsChangeWatcher shaderFileChangeListener;
 
   public MainWindow() {
     super();
@@ -67,6 +67,7 @@ public class MainWindow extends JFrame implements ForgEBootListener {
 
     engine                               = new ForgE(config);
     engine.setBootListener(this);
+    blocksController                     = new BlocksController(blockList);
     this.progressTaskDialog              = new ProgressTaskDialog();
     projectController                    = new ProjectController();
     mainMenu                             = new MainMenu(projectController);
@@ -74,6 +75,8 @@ public class MainWindow extends JFrame implements ForgEBootListener {
     mainToolbarController                = new MainToolbarController(mainToolbar, mainMenu);
     MapPropertySheet inspectorSheetPanel = new MapPropertySheet();
     openGLCanvas                         = new LwjglCanvas(engine);
+
+
     mapSettingsPanel.add(inspectorSheetPanel);
     openGlContainer.add(openGLCanvas.getCanvas(), BorderLayout.CENTER);
 
@@ -82,14 +85,14 @@ public class MainWindow extends JFrame implements ForgEBootListener {
     projectController.addOnMapChangeListener(mainMenu);
     projectController.addOnMapChangeListener(mainToolbarController);
     projectController.addOnMapChangeListener(terrainToolsController);
-
-
+    projectController.addOnMapChangeListener(blocksController);
+    invalidate();
   }
 
   @Override
   public void afterEngineCreate(ForgE engine) {
     Gdx.graphics.setVSync(true);
-    shaderFileChangeListener  = new ShaderFileChangeListener();
+    shaderFileChangeListener  = new AssetsChangeWatcher(jobs);
     projectController.setMainWindow(this);
     //projectController.newMap();
   }

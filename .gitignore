@@ -1,5 +1,6 @@
 ## Java
-
+textures/tilemap.atlas
+textures/tilemap.png
 *.class
 *.war
 *.ear

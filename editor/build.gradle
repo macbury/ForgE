@@ -12,6 +12,12 @@ task run(dependsOn: classes, type: JavaExec) {
     standardInput = System.in
     workingDir = project.assetsDir
     ignoreExitValue = true
+
+}
+
+task copyRTP(type: Copy) {
+  from "../core/assets/";
+  into "../dist/game/";
 }
 
 task dist(type: Jar) {

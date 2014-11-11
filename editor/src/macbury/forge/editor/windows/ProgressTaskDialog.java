@@ -7,8 +7,8 @@ public class ProgressTaskDialog extends JWindow {
   private JProgressBar progressBar1;
   public ProgressTaskDialog() {
     setContentPane(contentPane);
-    pack();
     setAlwaysOnTop(true);
+    pack();
   }
 
   @Override

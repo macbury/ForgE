@@ -1,0 +1,10 @@
+{
+  solid: true,
+  shadeAO: true,
+  envAO: true,
+  textures: {
+    top: "grass_top",
+    bottom: "dirt",
+    side: "grass_side"
+  }
+}

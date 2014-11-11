@@ -4,6 +4,7 @@ import macbury.forge.Config;
 import macbury.forge.ForgE;
 import macbury.forge.editor.controllers.ProjectController;
 import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
+import macbury.forge.editor.parell.jobs.BuildBlocksTexture;
 import macbury.forge.editor.screens.EditorScreen;
 
 import javax.swing.*;
@@ -35,10 +36,10 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
     createProjectMenu();
     addSeparator();
     createDebugWindow();
-
+    addSeparator();
+    createPiplineMenu();
     //add(Box.createRigidArea(new Dimension(320,28)));
   }
-
 
   /**
    * Set Editor screen and refresh menu
@@ -73,6 +74,21 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
         break;
       }
     }
+  }
+
+  private void createPiplineMenu() {
+    JMenu assetsMenu          = new JMenu("Assets");
+    JMenuItem rebuild         = new JMenuItem("Rebuild blocks");
+
+    rebuild.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        controller.jobs.enqueue(new BuildBlocksTexture());
+      }
+    });
+
+    assetsMenu.add(rebuild);
+    add(assetsMenu);
   }
 
   private void createDebugWindow() {

@@ -7,10 +7,10 @@ import macbury.forge.ForgE;
 import macbury.forge.graphics.batch.VoxelBatch;
 import macbury.forge.graphics.camera.GameCamera;
 import macbury.forge.graphics.frustrum.FrustrumDebugAndRenderer;
-import macbury.forge.voxel.ChunkMap;
 import macbury.forge.octree.OctreeNode;
 import macbury.forge.systems.engine.LevelEntityEngine;
 import macbury.forge.terrain.TerrainEngine;
+import macbury.forge.voxel.ChunkMap;
 
 /**
  * Created by macbury on 18.10.14.
@@ -31,7 +31,7 @@ public class Level implements Disposable {
   public final RenderContext            renderContext;
   public final FrustrumDebugAndRenderer frustrumDebugger;
   public final TerrainEngine            terrainEngine;
-  public final LevelEnv env;
+  public final LevelEnv                 env;
 
   public Level(LevelState state) {
     this.env                 = state.env;

@@ -6,7 +6,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import macbury.forge.db.GameDatabase;
-import macbury.forge.storage.serializers.GameDatabseSerializer;
+import macbury.forge.storage.serializers.GameDatabaseSerializer;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -17,7 +17,7 @@ import java.io.FileOutputStream;
 public class StorageManager extends Kryo {
   public StorageManager() {
     super();
-    register(GameDatabase.class, new GameDatabseSerializer());
+    register(GameDatabase.class, new GameDatabaseSerializer());
   }
 
   public GameDatabase loadOrInitializeDB() {
