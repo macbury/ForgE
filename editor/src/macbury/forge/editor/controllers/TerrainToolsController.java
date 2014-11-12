@@ -31,6 +31,7 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
   private final JToggleButton replaceBlocksButton;
   private final EreaseSelection ereaseSelection;
   private final JToggleButton ereaserButton;
+  private final BlocksController blocksController;
   private AbstractSelection currentSelection;
   private final JToggleButton drawRectButton;
   private SelectionSystem selectionSystem;
@@ -40,10 +41,11 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
   private JobManager jobs;
   private SelectType currentSelectType;
 
-  public TerrainToolsController(JToolBar terrainToolsToolbar) {
-    toolbar          = terrainToolsToolbar;
-    this.toolsGroup  = new ButtonGroup();
-    this.modifyGroup = new ButtonGroup();
+  public TerrainToolsController(JToolBar terrainToolsToolbar, BlocksController blocksController) {
+    toolbar               = terrainToolsToolbar;
+    this.blocksController = blocksController;
+    this.toolsGroup       = new ButtonGroup();
+    this.modifyGroup      = new ButtonGroup();
 
     this.singleBlockSelection = new SingleBlockSelection();
     this.rectSelection        = new BoxSelection();
@@ -164,9 +166,9 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
   private void createTaskForSelection(AbstractSelection selection) {
     Changeable task = null;
     if (selection == singleBlockSelection) {
-      task = new ApplyBlock(selection, map);
+      task = new ApplyBlock(selection, map, blocksController.getCurrentBlock());
     } else if (selection == rectSelection) {
-      task = new ApplyRangeBlock(selection, map);
+      task = new ApplyRangeBlock(selection, map, blocksController.getCurrentBlock());
     } else if (selection == ereaseSelection) {
       task = new EraserBlock(selection, map);
     }

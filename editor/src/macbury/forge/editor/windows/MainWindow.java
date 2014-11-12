@@ -72,7 +72,7 @@ public class MainWindow extends JFrame implements ForgEBootListener {
     this.progressTaskDialog              = new ProgressTaskDialog();
     projectController                    = new ProjectController();
     mainMenu                             = new MainMenu(projectController);
-    terrainToolsController               = new TerrainToolsController(terrainToolsToolbar);
+    terrainToolsController               = new TerrainToolsController(terrainToolsToolbar, blocksController);
     mainToolbarController                = new MainToolbarController(mainToolbar, mainMenu);
     shadersController                    = new ShadersController(directoryWatcher);
     MapPropertySheet inspectorSheetPanel = new MapPropertySheet();

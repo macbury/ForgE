@@ -11,7 +11,7 @@ public abstract class RenderableBaseShader<T extends BaseRenderable> extends Bas
   protected Mesh currentMesh;
   public final String UNIFORM_WORLD_TRANSFORM = "u_worldTransform";
   public final String UNIFORM_DIFFUSE_TEXTURE = "u_normalMatrix";
-  public final String UNIFORM_NORMAL_MATRIX   = "u_diffuseTexture";
+  public final String UNIFORM_NORMAL_MATRIX   = "u_normalMatrix";
 
   public final String UNIFORM_SKY_COLOR              = "u_skyColor";
   public final String UNIFORM_AMBIENT_LIGHT          = "u_ambientLight";

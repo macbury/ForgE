@@ -10,7 +10,7 @@ uniform mat4   u_worldTransform;
 uniform DirectionalLight u_mainLight;
 uniform vec4             u_ambientLight;
 
-varying vec4   v_color;
+varying vec4   v_lightDiffuse;
 varying vec3   v_normal;
 varying vec4   v_position;
 varying vec2   v_textCoord;
@@ -18,19 +18,8 @@ varying vec2   v_textCoord;
 void main() {
   v_normal          = normalize(u_normalMatrix * a_normal);
   float ao          = a_material.r;
-
   vec3 lightDiffuse = u_ambientLight.rgb + directionalLightDiffuse(u_mainLight, v_normal) - vec3(ao, ao, ao);
-  v_color           = vec4(lightDiffuse, 1f) ;
-
-  #ifdef normalsDebugFlag
-    v_color.rgb = v_normal;
-  #endif
-  #ifdef lightingDebugFlag
-    v_color.rgb = lightDiffuse;
-  #endif
-  #ifdef materialDebugFlag
-    v_color = a_material;
-  #endif
+  v_lightDiffuse    = vec4(lightDiffuse, 1f);
   v_textCoord       = a_texCoord0;
   v_position        = u_worldTransform * a_position;
   gl_Position       = u_projectionMatrix * v_position;

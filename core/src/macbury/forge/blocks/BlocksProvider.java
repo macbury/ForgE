@@ -60,6 +60,7 @@ public class BlocksProvider implements Disposable {
   public void loadTilemap() {
     if (textureAtlas != null) {
       textureAtlas.dispose();
+      textureAtlas = null;
     }
 
     FileHandle textureAtlasFile = getTextureAtlasFile();
@@ -96,6 +97,9 @@ public class BlocksProvider implements Disposable {
   }
 
   public GLTexture getTerrainTexture() {
-    return textureAtlas.getTextures().first();
+    if (textureAtlas != null)
+      return textureAtlas.getTextures().first();
+    else
+      return null;
   }
 }

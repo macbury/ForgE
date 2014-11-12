@@ -18,6 +18,8 @@ import macbury.forge.editor.views.BlockListRenderer;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -26,7 +28,7 @@ import java.io.IOException;
 /**
  * Created by macbury on 11.11.14.
  */
-public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.DirectoryWatchJobListener, ForgEBootListener {
+public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.DirectoryWatchJobListener, ForgEBootListener, ListSelectionListener {
   private static final int TILE_SIZE = 32;
   private static final String TAG = "BlocksController";
   private final BlockListRenderer blockListRenderer;
@@ -66,7 +68,12 @@ public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.
 
     blockList.setModel(blocksModel);
     blockList.setSelectedIndex(currentSelectedBlock);
-    //TODO: clear undo manager
+    blockList.addListSelectionListener(this);
+  }
+
+  public Block getCurrentBlock() {
+    BlockListItem item = (BlockListItem) blocksModel.get(currentSelectedBlock);
+    return item.block;
   }
 
   @Override
@@ -96,8 +103,10 @@ public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.
 
   public void onRebuildTextures(Boolean success, BuildBlocksTexture buildBlocksTexture) {
     reload();
-    if (controller != null)
+    if (controller != null) {
       controller.rebuildChunks();
+      controller.clearUndoRedo();
+    }
   }
 
   @Override
@@ -105,6 +114,11 @@ public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.
     if (!ForgE.blocks.getTextureAtlasFile().exists()) {
       rebuildTileset();
     }
+  }
+
+  @Override
+  public void valueChanged(ListSelectionEvent e) {
+    currentSelectedBlock = blockList.getSelectedIndex();
   }
 
   public class BlockListItem {

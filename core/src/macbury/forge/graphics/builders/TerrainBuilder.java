@@ -61,7 +61,7 @@ public class TerrainBuilder extends VoxelsAssembler {
     for (int y = 0; y < map.getHeight(); y++) {
       for (int x = 0; x < map.getWidth(); x++) {
         for (int z = 0; z < map.getDepth(); z++) {
-          aoArray[x][y][z] = (float)perlinNoise.simpleNoise(x,y,z, SHADE_AO_AMPLUTUDE, SHADE_AO_FREQUENCY) * SHADE_AO_FACTOR;
+          aoArray[x][y][z] = (float)perlinNoise.simpleNoise(x,y,z, SHADE_AO_AMPLUTUDE, SHADE_AO_FREQUENCY);
         }
       }
     }

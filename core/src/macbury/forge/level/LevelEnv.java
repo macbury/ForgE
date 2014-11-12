@@ -14,7 +14,7 @@ public class LevelEnv {
   public LevelEnv() {
     skyColor     = Color.valueOf("3498db");
     mainLight    = new DirectionalLight();
-    mainLight.set(1.0f, 1.0f, 1.0f,-1, -1, 0.5f);
+    mainLight.set(0.8f, 0.8f, 0.8f,-1, -1, 0.5f);
 
     ambientLight = Color.valueOf("cccccc");
   }

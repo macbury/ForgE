@@ -158,13 +158,14 @@ public class ProjectController implements JobListener, ShaderReloadListener {
 
   public void rebuildChunks() {
     if (editorScreen != null) {
-      Gdx.app.postRunnable(new Runnable() {
-        @Override
-        public void run() {
-          editorScreen.level.terrainMap.rebuildAll();
-        }
-      });
+      editorScreen.level.terrainMap.rebuildAll();
     }
 
+  }
+
+  public void clearUndoRedo() {
+    if (editorScreen != null) {
+      editorScreen.changeManager.clear();
+    }
   }
 }
