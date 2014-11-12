@@ -70,16 +70,17 @@ public class MainWindow extends JFrame implements ForgEBootListener {
     config.debug                         = true;
 
     engine                               = new ForgE(config);
-    engine.setBootListener(this);
     blocksController                     = new BlocksController(blockList, directoryWatcher, jobs);
     this.progressTaskDialog              = new ProgressTaskDialog();
     projectController                    = new ProjectController();
     mainMenu                             = new MainMenu(projectController);
     terrainToolsController               = new TerrainToolsController(terrainToolsToolbar);
     mainToolbarController                = new MainToolbarController(mainToolbar, mainMenu);
-    MapPropertySheet inspectorSheetPanel = new MapPropertySheet();
-    openGLCanvas                         = new LwjglCanvas(engine);
 
+    MapPropertySheet inspectorSheetPanel = new MapPropertySheet();
+    engine.addBootListener(this);
+    engine.addBootListener(blocksController);
+    openGLCanvas                         = new LwjglCanvas(engine);
 
     mapSettingsPanel.add(inspectorSheetPanel);
     openGlContainer.add(openGLCanvas.getCanvas(), BorderLayout.CENTER);
@@ -98,7 +99,6 @@ public class MainWindow extends JFrame implements ForgEBootListener {
     Gdx.graphics.setVSync(true);
     projectController.setMainWindow(this);
     directoryWatcher.start();
-    //projectController.newMap();
   }
 
   @Override

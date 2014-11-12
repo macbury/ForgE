@@ -61,11 +61,19 @@ public class BlocksProvider implements Disposable {
       textureAtlas.dispose();
     }
 
-    this.textureAtlas = new TextureAtlas(Gdx.files.internal(TILEMAP_PATH));
+    FileHandle textureAtlasFile = getTextureAtlasFile();
 
-    for (int i = 1; i < blocks.length; i++) {
-      blocks[i].createUVMapping(textureAtlas);
+    if (textureAtlasFile.exists()) {
+      this.textureAtlas = new TextureAtlas();
+
+      for (int i = 1; i < blocks.length; i++) {
+        blocks[i].createUVMapping(textureAtlas);
+      }
     }
+  }
+
+  public FileHandle getTextureAtlasFile() {
+    return Gdx.files.internal(TILEMAP_PATH);
   }
 
   public Block find(byte blockId) {

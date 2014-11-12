@@ -3,6 +3,7 @@ package macbury.forge.editor.controllers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import macbury.forge.ForgE;
+import macbury.forge.ForgEBootListener;
 import macbury.forge.blocks.AirBlock;
 import macbury.forge.blocks.Block;
 import macbury.forge.blocks.BlocksProvider;
@@ -25,7 +26,7 @@ import java.io.IOException;
 /**
  * Created by macbury on 11.11.14.
  */
-public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.DirectoryWatchJobListener {
+public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.DirectoryWatchJobListener, ForgEBootListener {
   private static final int TILE_SIZE = 32;
   private static final String TAG = "BlocksController";
   private final BlockListRenderer blockListRenderer;
@@ -82,15 +83,27 @@ public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.
   public void onFileInDirectoryChange(FileHandle handle) {
     if (handle.extension().equalsIgnoreCase(BlocksProvider.BLOCK_EXT)) {
       Gdx.app.log(TAG, "Change in: " + handle.name());
-      BuildBlocksTexture job = new BuildBlocksTexture();
-      job.setCallback(this, "onRebuildTextures");
-      jobs.enqueue(job);
+      rebuildTileset();
     }
+  }
+
+  private void rebuildTileset() {
+    BuildBlocksTexture job = new BuildBlocksTexture();
+    job.setCallback(this, "onRebuildTextures");
+    jobs.enqueue(job);
   }
 
   public void onRebuildTextures(Boolean success, BuildBlocksTexture buildBlocksTexture) {
     reload();
-    controller.rebuildChunks();
+    if (controller != null)
+      controller.rebuildChunks();
+  }
+
+  @Override
+  public void afterEngineCreate(ForgE engine) {
+    if (!ForgE.blocks.getTextureAtlasFile().exists()) {
+      rebuildTileset();
+    }
   }
 
   public class BlockListItem {

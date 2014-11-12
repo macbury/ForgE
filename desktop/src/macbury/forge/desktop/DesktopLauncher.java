@@ -14,7 +14,7 @@ public class DesktopLauncher {
     config.width     = 1360;
     config.height    = 768;
     ForgE engine     = new ForgE(new Config());
-    engine.setBootListener(new ForgEBootListener() {
+    engine.addBootListener(new ForgEBootListener() {
       @Override
       public void afterEngineCreate(ForgE engine) {
         ForgE.screens.set(new TestMeshScreen());
