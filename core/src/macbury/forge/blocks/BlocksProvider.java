@@ -2,6 +2,7 @@ package macbury.forge.blocks;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.GLTexture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
@@ -40,7 +41,7 @@ public class BlocksProvider implements Disposable {
     for (FileHandle blockFile : blocksFiles) {
       Block block           = json.fromJson(Block.class, blockFile.readString());
       block.name            = blockFile.nameWithoutExtension().split("_")[1];
-      block.id              = Integer.valueOf(blockFile.nameWithoutExtension().split("_")[0]);
+      block.id              = Byte.valueOf(blockFile.nameWithoutExtension().split("_")[0]);
       if (this.blocks[block.id] != null) {
         throw new GdxRuntimeException("Block with id "+block.id+" already added!");
       }
@@ -64,7 +65,7 @@ public class BlocksProvider implements Disposable {
     FileHandle textureAtlasFile = getTextureAtlasFile();
 
     if (textureAtlasFile.exists()) {
-      this.textureAtlas = new TextureAtlas();
+      this.textureAtlas = new TextureAtlas(textureAtlasFile);
 
       for (int i = 1; i < blocks.length; i++) {
         blocks[i].createUVMapping(textureAtlas);
@@ -80,6 +81,10 @@ public class BlocksProvider implements Disposable {
     return blocks[blockId];
   }
 
+  public Block find(int blockId) {
+    return blocks[blockId];
+  }
+
   @Override
   public void dispose() {
     textureAtlas.dispose();
@@ -88,5 +93,9 @@ public class BlocksProvider implements Disposable {
 
   public Block[] list() {
     return blocks;
+  }
+
+  public GLTexture getTerrainTexture() {
+    return textureAtlas.getTextures().first();
   }
 }

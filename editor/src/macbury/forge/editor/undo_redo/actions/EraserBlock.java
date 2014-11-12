@@ -2,13 +2,12 @@ package macbury.forge.editor.undo_redo.actions;
 
 import macbury.forge.editor.selection.AbstractSelection;
 import macbury.forge.voxel.VoxelMap;
-import macbury.forge.voxel.VoxelMaterial;
 
 /**
  * Created by macbury on 06.11.14.
  */
 public class EraserBlock extends TerrainCursorChangeable {
-  private VoxelMaterial oldMaterials[][][];
+  private byte oldMaterials[][][];
 
   public EraserBlock(AbstractSelection selection, VoxelMap map) {
     super(selection, map);
@@ -19,13 +18,8 @@ public class EraserBlock extends TerrainCursorChangeable {
     for (int x = (int)applyBox.min.x; x < applyBox.max.x; x++) {
       for (int y = (int)applyBox.min.y; y < applyBox.max.y; y++) {
         for (int z = (int)applyBox.min.z; z < applyBox.max.z; z++) {
-          VoxelMaterial mat = oldMaterials[x - (int)applyBox.min.x][y - (int)applyBox.min.y][z - (int)applyBox.min.z];
-          if (mat == null) {
-            map.setEmptyForPosition(x,y,z);
-          } else {
-            map.setMaterialForPosition(mat, x,y,z);
-          }
-
+          byte blockId = oldMaterials[x - (int)applyBox.min.x][y - (int)applyBox.min.y][z - (int)applyBox.min.z];
+          map.setBlockIdForPosition(blockId, x,y,z);
         }
       }
     }
@@ -35,12 +29,12 @@ public class EraserBlock extends TerrainCursorChangeable {
 
   @Override
   public void apply() {
-    this.oldMaterials = new VoxelMaterial[(int)applyBox.getWidth()][(int)applyBox.getHeight()][(int)applyBox.getDepth()];
+    this.oldMaterials = new byte[(int)applyBox.getWidth()][(int)applyBox.getHeight()][(int)applyBox.getDepth()];
     for (int x = (int)applyBox.min.x; x < applyBox.max.x; x++) {
       for (int y = (int)applyBox.min.y; y < applyBox.max.y; y++) {
         for (int z = (int)applyBox.min.z; z < applyBox.max.z; z++) {
           if (!map.isEmpty(x,y,z)) {
-            oldMaterials[x - (int)applyBox.min.x][y - (int)applyBox.min.y][z - (int)applyBox.min.z] = map.getMaterialForPosition(x,y,z);
+            oldMaterials[x - (int)applyBox.min.x][y - (int)applyBox.min.y][z - (int)applyBox.min.z] = map.getBlockIdForPosition(x,y,z);
           }
           map.setEmptyForPosition(x,y,z);
         }

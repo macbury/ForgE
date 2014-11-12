@@ -3,6 +3,7 @@ package macbury.forge.graphics.mesh;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -13,7 +14,7 @@ import com.badlogic.gdx.utils.Pool;
  * Created by macbury on 30.08.14.
  */
 public class MeshVertexInfo implements Pool.Poolable {
-  private static final float BASE_AO = 0.3f;
+  private static final float BASE_AO = 0.1f;
   public float specular;
   public float ao;
   public Vector3 position;
@@ -23,7 +24,6 @@ public class MeshVertexInfo implements Pool.Poolable {
   public short index;
 
   private final Color tempColor = new Color();
-
 
   public static enum AttributeType {
     Position(VertexAttributes.Usage.Position, 3,ShaderProgram.POSITION_ATTRIBUTE),
@@ -123,6 +123,28 @@ public class MeshVertexInfo implements Pool.Poolable {
 
   public MeshVertexInfo uv(float u, float v) {
     this.uv.set(u,v);
+    return this;
+  }
+
+
+  public MeshVertexInfo uv(TextureAtlas.AtlasRegion region) {
+    uv(region.getU(), region.getV());
+    return this;
+  }
+
+
+  public MeshVertexInfo u2v2(TextureAtlas.AtlasRegion region) {
+    uv(region.getU2(), region.getV2());
+    return this;
+  }
+
+  public MeshVertexInfo u2v(TextureAtlas.AtlasRegion region) {
+    uv(region.getU2(), region.getV());
+    return this;
+  }
+
+  public MeshVertexInfo uv2(TextureAtlas.AtlasRegion region) {
+    uv(region.getU(), region.getV2());
     return this;
   }
 

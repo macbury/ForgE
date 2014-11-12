@@ -66,6 +66,7 @@ public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.
 
     blockList.setModel(blocksModel);
     blockList.setSelectedIndex(currentSelectedBlock);
+    //TODO: clear undo manager
   }
 
   @Override

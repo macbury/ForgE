@@ -3,31 +3,28 @@ package macbury.forge.voxel;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.GdxRuntimeException;
+import macbury.forge.blocks.Block;
+import macbury.forge.blocks.BlocksProvider;
 import macbury.forge.utils.Vector3i;
 
 /**
  * Created by macbury on 17.10.14.
  */
 public class VoxelMap implements Disposable {
-  private final VoxelMaterial airMaterial;
   private final BoundingBox boundingBox;
   private final Vector3 temp = new Vector3();
   public final Vector3 voxelSize;
-  public final Array<VoxelMaterial> materials;
+  protected BlocksProvider blocks;
   protected byte[][][] voxelMap;
   protected int width;
   protected int height;
   protected int depth;
 
-  public VoxelMap(Vector3 voxelSize) {
-    this.voxelSize = voxelSize;
-    materials   = new Array<VoxelMaterial>();
-    airMaterial = VoxelMaterial.air();
-    boundingBox = new BoundingBox();
-    materials.add(airMaterial);
+  public VoxelMap(Vector3 voxelSize, BlocksProvider blocksProvider) {
+    this.voxelSize  = voxelSize;
+    boundingBox     = new BoundingBox();
+    this.blocks     = blocksProvider;
   }
 
   public void initialize(int width, int height, int depth) {
@@ -37,11 +34,19 @@ public class VoxelMap implements Disposable {
     voxelMap    = new byte[width][height][depth];
   }
 
-  public byte getColorIndexForPosition(int x, int y, int z) {
+  public byte getBlockIdForPosition(int x, int y, int z) {
     if (isOutOfBounds(x,y,z)) {
       return 0;
     } else {
       return voxelMap[x][y][z];
+    }
+  }
+
+  public Block getBlockForPosition(int x, int y, int z) {
+    if (isOutOfBounds(x,y,z)) {
+      return blocks.find(0);
+    } else {
+      return blocks.find(voxelMap[x][y][z]);
     }
   }
 
@@ -53,34 +58,25 @@ public class VoxelMap implements Disposable {
     out.set(in.x * voxelSize.x, in.y * voxelSize.y, in.z * voxelSize.z);
   }
 
-  public VoxelMaterial getMaterialForPosition(int x, int y, int z) {
-    int index = getColorIndexForPosition(x,y,z);
-    return materials.get(index);
+  public void setBlockIdForPosition(byte blockId, int x, int y, int z) {
+    if (!isOutOfBounds(x,y,z)) {
+      voxelMap[x][y][z] = blockId;
+    }
   }
 
-  public void setMaterialForPosition(VoxelMaterial color, int x, int y, int z) {
-    int index = materials.indexOf(color, true);
-    if (index == -1) {
-      materials.add(color);
-      index = materials.size-1;
-    }
-
-    if (index > 255) {
-      throw new GdxRuntimeException("Maximum materials for color pallete is finished!");
-    }
+  public void setBlockForPosition(Block block, int x, int y, int z) {
     if (!isOutOfBounds(x,y,z)) {
-      voxelMap[x][y][z] = (byte)index;
+      voxelMap[x][y][z] = block.id;
     }
-
   }
 
   public void setEmptyForPosition(int x, int y, int z) {
-    setMaterialForPosition(airMaterial,x,y,z);
+    setBlockForPosition(blocks.find(0), x, y, z);
   }
 
   public boolean isEmpty(int x, int y, int z) {
-    VoxelMaterial mat = getMaterialForPosition(x,y,z);
-    return mat == null || mat.isAir();
+    Block block = getBlockForPosition(x,y,z);
+    return block == null || block.isAir() || !block.solid;
   }
 
   public boolean isEmptyNotOutOfBounds(int x, int y, int z) {
@@ -132,12 +128,12 @@ public class VoxelMap implements Disposable {
     return isSolid(Math.round(position.x), Math.round(position.y), Math.round(position.z));
   }
 
-  public void setMaterialForPosition(VoxelMaterial voxelMaterial, Vector3i voxelPosition) {
-    setMaterialForPosition(voxelMaterial, voxelPosition.x, voxelPosition.y, voxelPosition.z);
+  public void setBlockForPosition(Block block, Vector3i voxelPosition) {
+    setBlockForPosition(block, voxelPosition.x, voxelPosition.y, voxelPosition.z);
   }
 
-  public VoxelMaterial getMaterialForPosition(Vector3i voxelPosition) {
-    return getMaterialForPosition(voxelPosition.x, voxelPosition.y, voxelPosition.z);
+  public Block getBlockForPosition(Vector3i voxelPosition) {
+    return getBlockForPosition(voxelPosition.x, voxelPosition.y, voxelPosition.z);
   }
 
   public boolean isEmpty(Vector3i voxelPosition) {
@@ -154,5 +150,13 @@ public class VoxelMap implements Disposable {
 
   public boolean isOutOfBounds(Vector3i voxelPosition) {
     return isOutOfBounds(voxelPosition.x, voxelPosition.y, voxelPosition.z);
+  }
+
+  public void setBlockIdForPosition(byte blockId, Vector3i voxelPosition) {
+    setBlockIdForPosition(blockId, voxelPosition.x, voxelPosition.y, voxelPosition.z);
+  }
+
+  public byte getBlockIdForPosition(Vector3i voxelPosition) {
+    return getBlockIdForPosition(voxelPosition.x, voxelPosition.y, voxelPosition.z);
   }
 }

@@ -1,14 +1,14 @@
 package macbury.forge.editor.undo_redo.actions;
 
+import macbury.forge.ForgE;
 import macbury.forge.editor.selection.AbstractSelection;
 import macbury.forge.voxel.VoxelMap;
-import macbury.forge.voxel.VoxelMaterial;
 
 /**
  * Created by macbury on 03.11.14.
  */
 public class ApplyBlock extends TerrainCursorChangeable {
-  private VoxelMaterial oldVoxelMaterial;
+  private byte oldBlockId;
 
   public ApplyBlock(AbstractSelection selection, VoxelMap map) {
     super(selection, map);
@@ -16,21 +16,13 @@ public class ApplyBlock extends TerrainCursorChangeable {
 
   @Override
   public void revert() {
-    if (oldVoxelMaterial == null) {
-      map.setEmptyForPosition(from);
-    } else {
-      map.setMaterialForPosition(oldVoxelMaterial, from);
-    }
+    map.setBlockIdForPosition(oldBlockId, from);
   }
 
   @Override
   public void apply() {
-    if (map.isEmpty(from)){
-      oldVoxelMaterial = null;
-    } else {
-      oldVoxelMaterial = map.getMaterialForPosition(from);
-    }
-
-    map.setMaterialForPosition(map.materials.get(3), from);
+    oldBlockId = map.getBlockIdForPosition(from);
+    //TODO: get values from picker!
+    map.setBlockForPosition(ForgE.blocks.find(2), from);
   }
 }

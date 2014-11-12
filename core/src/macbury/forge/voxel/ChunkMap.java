@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import macbury.forge.blocks.Block;
+import macbury.forge.blocks.BlocksProvider;
 import macbury.forge.graphics.builders.Chunk;
 import macbury.forge.utils.Vector3i;
 
@@ -24,8 +26,8 @@ public class ChunkMap extends VoxelMap {
 
   private Vector3i tempA = new Vector3i();
   private Vector3i tempB = new Vector3i();
-  public ChunkMap(Vector3 tileSize) {
-    super(tileSize);
+  public ChunkMap(Vector3 tileSize, BlocksProvider blocksProvider) {
+    super(tileSize, blocksProvider);
     chunks         = new Array<Chunk>();
     chunkToRebuild = new Array<Chunk>();
   }
@@ -38,26 +40,14 @@ public class ChunkMap extends VoxelMap {
 
   public void buildFloor() {
     Gdx.app.log(TAG, "Building floor");
-    VoxelMaterial grass1 = new VoxelMaterial(44f/255f,159f/255f,93f/255f,1);
-    VoxelMaterial grass2 = new VoxelMaterial(82f/255f,198f/255f,152f/255f,1);
-    VoxelMaterial grass3 = new VoxelMaterial(14f/255f,123f/255f,34f/255f,1);
-
-    Array<VoxelMaterial> m = new Array<VoxelMaterial>();
-    m.add(grass1);
-    m.add(grass2);
-    m.add(grass3);
-
+    Block mainBlock = blocks.find(1);
     for(int y = 0; y < 1; y++) {
       for(int x = 0; x < width; x++) {
         for(int z = 0; z < depth; z++) {
-          setMaterialForPosition(grass1, x,y,z);
+          setBlockIdForPosition(mainBlock.id, x, y, z);
         }
       }
     }
-
-    materials.addAll(m);
-    VoxelMaterial rock = new VoxelMaterial(186f/255f,191f/255f,186f/255f,1);
-    materials.add(rock);
     Gdx.app.log(TAG, "Builded all floor");
   }
 
@@ -74,8 +64,14 @@ public class ChunkMap extends VoxelMap {
   }
 
   @Override
-  public void setMaterialForPosition(VoxelMaterial color, int x, int y, int z) {
-    super.setMaterialForPosition(color, x, y, z);
+  public void setBlockIdForPosition(byte blockId, int x, int y, int z) {
+    super.setBlockIdForPosition(blockId, x, y, z);
+    rebuildChunkAroundPosition(x, y, z);
+  }
+
+  @Override
+  public void setBlockForPosition(Block block, int x, int y, int z) {
+    super.setBlockForPosition(block, x, y, z);
     rebuildChunkAroundPosition(x, y, z);
   }
 

@@ -1,9 +1,10 @@
 package macbury.forge.graphics.builders;
 
 import com.badlogic.gdx.graphics.Color;
-import macbury.forge.voxel.VoxelMap;
-import macbury.forge.voxel.VoxelMaterial;
+import macbury.forge.blocks.Block;
 import macbury.forge.utils.Vector3i;
+import macbury.forge.voxel.VoxelMap;
+
 
 /**
  * Created by macbury on 05.11.14.
@@ -13,7 +14,8 @@ public class VoxelDef {
   public Vector3i size          = new Vector3i();
   public Vector3i position      = new Vector3i();
   public Vector3i voxelPosition = new Vector3i();
-  public VoxelMaterial material = new VoxelMaterial(1,1,1,1);
+  public Color material         = new Color(Color.WHITE);
+  public Block block;
   public float ao               = 0.0f;
 
   public boolean shadeBottomLeftCorner = true;
@@ -36,7 +38,6 @@ public class VoxelDef {
 
   public void reset() {
     ao = 0.0f;
-    material.set(Color.WHITE);
     position.setZero();
     voxelPosition.setZero();
     size.setZero();

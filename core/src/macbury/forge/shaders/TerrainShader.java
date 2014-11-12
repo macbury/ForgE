@@ -3,6 +3,7 @@ package macbury.forge.shaders;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.math.Matrix3;
+import macbury.forge.ForgE;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
 import macbury.forge.graphics.batch.renderable.TerrainChunkRenderable;
 import macbury.forge.graphics.batch.renderable.VoxelFaceRenderable;
@@ -26,6 +27,7 @@ public class TerrainShader extends RenderableBaseShader<VoxelFaceRenderable> {
     setUniformSkyColor();
     setUniformSun();
     setUniformEyePosition();
+    setUniformDiffuseTexture(ForgE.blocks.getTerrainTexture());
   }
 
   @Override

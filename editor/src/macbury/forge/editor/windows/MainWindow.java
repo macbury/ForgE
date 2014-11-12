@@ -5,10 +5,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
 import macbury.forge.Config;
 import macbury.forge.ForgE;
 import macbury.forge.ForgEBootListener;
-import macbury.forge.editor.controllers.BlocksController;
-import macbury.forge.editor.controllers.MainToolbarController;
-import macbury.forge.editor.controllers.ProjectController;
-import macbury.forge.editor.controllers.TerrainToolsController;
+import macbury.forge.editor.controllers.*;
 import macbury.forge.editor.parell.JobManager;
 import macbury.forge.editor.reloader.DirectoryWatcher;
 import macbury.forge.editor.views.MainMenu;
@@ -21,6 +18,7 @@ public class MainWindow extends JFrame implements ForgEBootListener {
   private static final String WINDOW_MAIN_NAME = "ForgE";
   private final BlocksController blocksController;
   private final DirectoryWatcher directoryWatcher;
+  private final ShadersController shadersController;
   private LwjglCanvas openGLCanvas;
   private ForgE engine;
   private ProjectController projectController;
@@ -76,7 +74,7 @@ public class MainWindow extends JFrame implements ForgEBootListener {
     mainMenu                             = new MainMenu(projectController);
     terrainToolsController               = new TerrainToolsController(terrainToolsToolbar);
     mainToolbarController                = new MainToolbarController(mainToolbar, mainMenu);
-
+    shadersController                    = new ShadersController(directoryWatcher);
     MapPropertySheet inspectorSheetPanel = new MapPropertySheet();
     engine.addBootListener(this);
     engine.addBootListener(blocksController);

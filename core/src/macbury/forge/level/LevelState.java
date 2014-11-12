@@ -20,7 +20,7 @@ public class LevelState {
    */
   public static LevelState blank(int width, int height, int depth) {
     LevelState state        = new LevelState();
-    state.terrainMap        = new ChunkMap(ChunkMap.TERRAIN_TILE_SIZE);
+    state.terrainMap        = new ChunkMap(ChunkMap.TERRAIN_TILE_SIZE, ForgE.blocks);
     state.id                = ForgE.db.uid();
     state.name              = MAP_NAME_PREFIX + state.id;
     state.env               = new LevelEnv();

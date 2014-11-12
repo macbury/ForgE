@@ -9,13 +9,14 @@ import java.util.HashMap;
  * Created by macbury on 11.11.14.
  */
 public class Block {
+
   public enum Side {
     all, top, left, right, back, front, bottom, side
   }
   /**
    * Unique block id
    */
-  public int id = 0;
+  public byte id = 0;
   /**
    * Debug name
    */
@@ -49,7 +50,26 @@ public class Block {
       String sideName                 = textures.get(side);
       TextureAtlas.AtlasRegion region = textureAtlas.findRegion(sideName);
 
-      uvs.put(Side.valueOf(side), region);
+      Side currentSide = Side.valueOf(side);
+      switch (currentSide) {
+        case all:
+          uvs.put(Side.front, region);
+          uvs.put(Side.top, region);
+          uvs.put(Side.bottom, region);
+          uvs.put(Side.back, region);
+          uvs.put(Side.left, region);
+          uvs.put(Side.right, region);
+        break;
+
+        case side:
+          uvs.put(Side.front, region);
+          uvs.put(Side.back, region);
+          uvs.put(Side.left, region);
+          uvs.put(Side.right, region);
+        break;
+      }
+
+      uvs.put(currentSide, region);
     }
   }
 
@@ -62,6 +82,14 @@ public class Block {
       return textures.get(Side.top.toString());
     }
     throw new GdxRuntimeException("No default side found!");
+  }
+
+  public boolean isAir() {
+    return AirBlock.class.isInstance(this);
+  }
+
+  public TextureAtlas.AtlasRegion getRegionForSide(Side side) {
+    return uvs.get(side);
   }
 
   @Override

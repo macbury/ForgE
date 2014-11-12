@@ -6,13 +6,13 @@ import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import macbury.forge.ForgE;
+import macbury.forge.blocks.Block;
 import macbury.forge.graphics.batch.renderable.VoxelFaceRenderable;
 import macbury.forge.graphics.mesh.MeshVertexInfo;
 import macbury.forge.graphics.mesh.VoxelsAssembler;
 import macbury.forge.procedular.PerlinNoise;
 import macbury.forge.utils.Vector3i;
 import macbury.forge.voxel.VoxelMap;
-import macbury.forge.voxel.VoxelMaterial;
 
 /**
  * Created by macbury on 16.10.14.
@@ -20,6 +20,7 @@ import macbury.forge.voxel.VoxelMaterial;
 public class TerrainBuilder extends VoxelsAssembler {
   private static final double SHADE_AO_AMPLUTUDE = 10;
   private static final double SHADE_AO_FREQUENCY = 0.1;
+  private static final float SHADE_AO_FACTOR = 0.3f;
   private float[][][] aoArray;
 
   public enum Face {
@@ -60,7 +61,7 @@ public class TerrainBuilder extends VoxelsAssembler {
     for (int y = 0; y < map.getHeight(); y++) {
       for (int x = 0; x < map.getWidth(); x++) {
         for (int z = 0; z < map.getDepth(); z++) {
-          aoArray[x][y][z] = (float)perlinNoise.simpleNoise(x,y,z, SHADE_AO_AMPLUTUDE, SHADE_AO_FREQUENCY);
+          aoArray[x][y][z] = (float)perlinNoise.simpleNoise(x,y,z, SHADE_AO_AMPLUTUDE, SHADE_AO_FREQUENCY) * SHADE_AO_FACTOR;
         }
       }
     }
@@ -86,8 +87,8 @@ public class TerrainBuilder extends VoxelsAssembler {
             voxelDef.size.set(map.voxelSize);
 
             if (map.isEmptyNotOutOfBounds(nextTileToCheck)) {
-              VoxelMaterial material = map.getMaterialForPosition(x, y, z);
-              voxelDef.material.set(material);
+              Block block = map.getBlockForPosition(x,y,z);
+              voxelDef.block = block;
               voxelDef.calculateAoFor(aoArray[x][y][z], face);
               switch (face) {
                 case Top:
@@ -141,7 +142,7 @@ public class TerrainBuilder extends VoxelsAssembler {
 
             tempA.set(x,y,z);
             Gdx.app.log(TAG, tempA.toString());
-            VoxelMaterial material = map.getMaterialForPosition(x, y, z);
+            //VoxelMaterial material = map.getMaterialForPosition(x, y, z);
             /*
             if (map.isEmpty(x,y+1,z)) {
               //top(tempA, ChunkMap.TERRAIN_TILE_SIZE, material, 0);
@@ -213,7 +214,7 @@ public class TerrainBuilder extends VoxelsAssembler {
     if (ForgE.config.generateWireframe)
       renderable.wireframe           = this.wireframe();
     renderable.triangleCount         = triangleArrayList.size();
-    renderable.mesh = this.mesh(MeshVertexInfo.AttributeType.Position, MeshVertexInfo.AttributeType.Normal, MeshVertexInfo.AttributeType.Color, MeshVertexInfo.AttributeType.Material);
+    renderable.mesh = this.mesh(MeshVertexInfo.AttributeType.Position, MeshVertexInfo.AttributeType.Normal, MeshVertexInfo.AttributeType.TextureCord, MeshVertexInfo.AttributeType.Material);
 
     return renderable;
   }
