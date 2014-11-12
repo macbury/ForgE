@@ -26,8 +26,13 @@ public class BuildBlocksTexture extends Job<Boolean> {
 
   @Override
   public Boolean perform() {
-    ForgE.blocks.reload();
     TexturePacker.process(Gdx.files.internal("textures/blocks").path(), Gdx.files.internal("textures/").path(), "tilemap.atlas");
+    try {
+      Thread.sleep(1000);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+    ForgE.blocks.reload();
     return true;
   }
 }

@@ -33,7 +33,8 @@ public class AssetsChangeWatcher implements JNotifyListener, Disposable {
 
   public void fileModified(int wd, String rootPath, String name) {
     print("modified " + rootPath + " : " + name);
-    reloadShaders();
+
+    //reloadShaders();
   }
 
   private void reloadShaders() {

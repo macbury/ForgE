@@ -1,4 +1,6 @@
 ## Java
+core/assets/textures/tilemap.atlas
+core/assets/textures/tilemap.png
 textures/tilemap.atlas
 textures/tilemap.png
 *.class

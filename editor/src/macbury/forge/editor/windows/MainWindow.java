@@ -10,7 +10,7 @@ import macbury.forge.editor.controllers.MainToolbarController;
 import macbury.forge.editor.controllers.ProjectController;
 import macbury.forge.editor.controllers.TerrainToolsController;
 import macbury.forge.editor.parell.JobManager;
-import macbury.forge.editor.reloader.AssetsChangeWatcher;
+import macbury.forge.editor.reloader.DirectoryWatcher;
 import macbury.forge.editor.views.MainMenu;
 import macbury.forge.editor.views.MapPropertySheet;
 
@@ -20,6 +20,7 @@ import java.awt.*;
 public class MainWindow extends JFrame implements ForgEBootListener {
   private static final String WINDOW_MAIN_NAME = "ForgE";
   private final BlocksController blocksController;
+  private final DirectoryWatcher directoryWatcher;
   private LwjglCanvas openGLCanvas;
   private ForgE engine;
   private ProjectController projectController;
@@ -46,7 +47,6 @@ public class MainWindow extends JFrame implements ForgEBootListener {
   private JList blockList;
   private JPanel mapSettingsPanel;
   public JSplitPane mainSplitPane;
-  private AssetsChangeWatcher shaderFileChangeListener;
 
   public MainWindow() {
     super();
@@ -58,6 +58,7 @@ public class MainWindow extends JFrame implements ForgEBootListener {
     setTitle(null);
     setVisible(true);
 
+    this.directoryWatcher                = new DirectoryWatcher();
     this.jobs                            = new JobManager();
     Config config                        = new Config();
     config.generateWireframe             = true;
@@ -67,7 +68,7 @@ public class MainWindow extends JFrame implements ForgEBootListener {
 
     engine                               = new ForgE(config);
     engine.setBootListener(this);
-    blocksController                     = new BlocksController(blockList);
+    blocksController                     = new BlocksController(blockList, directoryWatcher, jobs);
     this.progressTaskDialog              = new ProgressTaskDialog();
     projectController                    = new ProjectController();
     mainMenu                             = new MainMenu(projectController);
@@ -92,8 +93,8 @@ public class MainWindow extends JFrame implements ForgEBootListener {
   @Override
   public void afterEngineCreate(ForgE engine) {
     Gdx.graphics.setVSync(true);
-    shaderFileChangeListener  = new AssetsChangeWatcher(jobs);
     projectController.setMainWindow(this);
+    directoryWatcher.start();
     //projectController.newMap();
   }
 
@@ -110,8 +111,6 @@ public class MainWindow extends JFrame implements ForgEBootListener {
   @Override
   public void dispose() {
     super.dispose();
-    if (shaderFileChangeListener != null) {
-      shaderFileChangeListener.dispose();
-    }
+    directoryWatcher.dispose();
   }
 }

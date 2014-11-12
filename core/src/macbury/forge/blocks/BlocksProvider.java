@@ -14,9 +14,10 @@ import java.io.FilenameFilter;
  * Created by macbury on 11.11.14.
  */
 public class BlocksProvider implements Disposable {
-  private final static String BLOCKS_PATH = "blocks/";
-  private final static String BLOCK_EXT = ".block";
+  public final static String BLOCKS_PATH = "blocks/";
+  public final static String BLOCK_EXT = "block";
   private static final String TAG = "BlocksProvider";
+  private static final String TILEMAP_PATH = "textures/tilemap.atlas";
   private Block[] blocks;
   private TextureAtlas textureAtlas;
 
@@ -29,7 +30,7 @@ public class BlocksProvider implements Disposable {
     FileHandle[] blocksFiles = Gdx.files.internal(BLOCKS_PATH).list(new FilenameFilter() {
       @Override
       public boolean accept(File dir, String name) {
-        return name.endsWith(BLOCK_EXT);
+        return name.endsWith("."+BLOCK_EXT);
       }
     });
 
@@ -60,16 +61,21 @@ public class BlocksProvider implements Disposable {
       textureAtlas.dispose();
     }
 
-    this.textureAtlas = new TextureAtlas(Gdx.files.internal("textures/tilemap.atlas"));
+    this.textureAtlas = new TextureAtlas(Gdx.files.internal(TILEMAP_PATH));
 
     for (int i = 1; i < blocks.length; i++) {
       blocks[i].createUVMapping(textureAtlas);
     }
   }
 
+  public Block find(byte blockId) {
+    return blocks[blockId];
+  }
+
   @Override
   public void dispose() {
     textureAtlas.dispose();
+    blocks = null;
   }
 
   public Block[] list() {
