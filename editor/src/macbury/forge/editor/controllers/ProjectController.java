@@ -155,4 +155,13 @@ public class ProjectController implements JobListener, ShaderReloadListener {
       "Shader Error",
       JOptionPane.ERROR_MESSAGE);
   }
+
+  public void rebuildChunks() {
+    Gdx.app.postRunnable(new Runnable() {
+      @Override
+      public void run() {
+        editorScreen.level.terrainMap.rebuildAll();
+      }
+    });
+  }
 }

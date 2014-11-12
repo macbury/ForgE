@@ -33,6 +33,7 @@ public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.
   private final JobManager jobs;
   private DefaultListModel blocksModel;
   private int currentSelectedBlock = 0;
+  private ProjectController controller;
 
   public BlocksController(JList blockList, DirectoryWatcher directoryWatcher, JobManager jobs) {
     this.blockList         = blockList;
@@ -73,6 +74,7 @@ public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.
 
   @Override
   public void onNewMap(ProjectController controller, EditorScreen screen) {
+    this.controller = controller;
     reload();
   }
 
@@ -88,6 +90,7 @@ public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.
 
   public void onRebuildTextures(Boolean success, BuildBlocksTexture buildBlocksTexture) {
     reload();
+    controller.rebuildChunks();
   }
 
   public class BlockListItem {

@@ -3,6 +3,6 @@
   shadeAO: true,
   envAO: true,
   textures: {
-    all: "dirt"
+    all: "stonebrick"
   }
 }

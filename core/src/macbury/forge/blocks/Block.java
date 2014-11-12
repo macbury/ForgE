@@ -33,6 +33,10 @@ public class Block {
    */
   public boolean envAO = false;
   /**
+   * Should render transparent
+   */
+  public boolean transparent = false;
+  /**
    * Textures names for block
    */
   private HashMap<String, String> textures;

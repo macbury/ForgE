@@ -26,7 +26,9 @@ public class BuildBlocksTexture extends Job<Boolean> {
 
   @Override
   public Boolean perform() {
-    TexturePacker.process(Gdx.files.internal("textures/blocks").path(), Gdx.files.internal("textures/").path(), "tilemap.atlas");
+    TexturePacker.Settings settings = new TexturePacker.Settings();
+    settings.grid = true;
+    TexturePacker.process(settings, Gdx.files.internal("textures/blocks").path(), Gdx.files.internal("textures/").path(), "tilemap.atlas");
     try {
       Thread.sleep(1000);
     } catch (InterruptedException e) {

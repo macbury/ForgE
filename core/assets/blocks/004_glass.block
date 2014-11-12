@@ -1,0 +1,9 @@
+{
+  solid: true,
+  shadeAO: false,
+  envAO: false,
+  transparent: true,
+  textures: {
+    all: "glass"
+  }
+}

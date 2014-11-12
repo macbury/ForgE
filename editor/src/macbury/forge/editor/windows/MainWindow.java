@@ -50,6 +50,9 @@ public class MainWindow extends JFrame implements ForgEBootListener {
 
   public MainWindow() {
     super();
+    Toolkit kit      = Toolkit.getDefaultToolkit();
+    Image mainIcon   = kit.createImage(ClassLoader.getSystemResource("icons/main.ico"));
+    setIconImage(mainIcon);
     setContentPane(mainContentPane);
 
     setSize(1360, 760);

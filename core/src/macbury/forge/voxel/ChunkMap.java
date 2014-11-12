@@ -82,6 +82,11 @@ public class ChunkMap extends VoxelMap {
   private void rebuildChunkAroundPosition(int x, int y, int z) {
     Vector3i chunkPosition = voxelPositionToChunkPosition(x, y, z);
     Chunk    centerChunk   = findForChunkPosition(chunkPosition);
+
+    if (centerChunk == null) {
+      return;
+    }
+
     addToRebuild(centerChunk);
 
     if (centerChunk.start.x == x) {
@@ -185,4 +190,7 @@ public class ChunkMap extends VoxelMap {
     chunkToRebuild.clear();
   }
 
+  public void rebuildAll() {
+    chunkToRebuild.addAll(chunks);
+  }
 }
