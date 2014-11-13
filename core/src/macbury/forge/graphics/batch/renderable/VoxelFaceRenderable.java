@@ -14,6 +14,7 @@ public class VoxelFaceRenderable extends BaseRenderable implements Disposable {
   public BoundingBox boundingBox = new BoundingBox();
 
 
+
   @Override
   public void dispose() {
     if (mesh != null) {

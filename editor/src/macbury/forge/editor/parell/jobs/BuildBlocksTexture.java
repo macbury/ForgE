@@ -28,6 +28,9 @@ public class BuildBlocksTexture extends Job<Boolean> {
   public Boolean perform() {
     TexturePacker.Settings settings = new TexturePacker.Settings();
     settings.grid = true;
+    settings.square = true;
+    settings.paddingX = 2;
+    settings.paddingY = 2;
     TexturePacker.process(settings, Gdx.files.internal("textures/blocks").path(), Gdx.files.internal("textures/").path(), "tilemap.atlas");
     try {
       Thread.sleep(1000);

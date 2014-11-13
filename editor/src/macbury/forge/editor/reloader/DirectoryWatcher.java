@@ -17,6 +17,9 @@ public class DirectoryWatcher implements Disposable {
     for (DirectoryWatchJob job : directories) {
       job.start();
     }
+
+    CallbackInvoker invoker = new CallbackInvoker();
+    invoker.start();
   }
 
   private DirectoryWatchJob find(String path) {
@@ -25,7 +28,6 @@ public class DirectoryWatcher implements Disposable {
         return job;
       }
     }
-
     return null;
   }
 
@@ -43,7 +45,6 @@ public class DirectoryWatcher implements Disposable {
     DirectoryWatchJob job = find(path);
     if (job != null) {
       job.removeListener(listener);
-
     }
   }
 
@@ -56,4 +57,24 @@ public class DirectoryWatcher implements Disposable {
     directories.clear();
   }
 
+  private class CallbackInvoker extends Thread {
+    @Override
+    public void run() {
+      while(true) {
+        try {
+          Thread.sleep(1000);
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+
+        for (DirectoryWatchJob job : directories) {
+          try {
+            job.process();
+          } catch (Exception e) {
+            e.printStackTrace();
+          }
+        }
+      }
+    }
+  }
 }

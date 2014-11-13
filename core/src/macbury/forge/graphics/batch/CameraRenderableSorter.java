@@ -21,10 +21,14 @@ public class CameraRenderableSorter implements Comparator<BaseRenderable> {
   }
 
   public int compare (final BaseRenderable o1, final BaseRenderable o2) {
+    final boolean b1 = o1.haveTransparency;
+    final boolean b2 = o2.haveTransparency;
+    if (b1 != b2) return b1 ? 1 : -1;
+
     o1.worldTransform.getTranslation(tmpV1);
     o2.worldTransform.getTranslation(tmpV2);
     final float dst = (int)(1000f * camera.position.dst2(tmpV1)) - (int)(1000f * camera.position.dst2(tmpV2));
     final int result = dst < 0 ? -1 : (dst > 0 ? 1 : 0);
-    return result;
+    return b1 ? -result : result;
   }
 }

@@ -40,5 +40,11 @@ public class TerrainShader extends RenderableBaseShader<VoxelFaceRenderable> {
     tempNormalMatrix.set(renderable.worldTransform).inv().transpose();
     shader.setUniformMatrix(UNIFORM_WORLD_TRANSFORM, renderable.worldTransform);
     shader.setUniformMatrix(UNIFORM_NORMAL_MATRIX, tempNormalMatrix);
+    if (renderable.haveTransparency) {
+      context.setBlending(true, GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+    } else {
+      context.setBlending(false, GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+    }
+
   }
 }

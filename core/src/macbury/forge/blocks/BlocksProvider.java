@@ -21,7 +21,7 @@ public class BlocksProvider implements Disposable {
   private static final String TILEMAP_PATH = "textures/tilemap.atlas";
   private Block[] blocks;
   private TextureAtlas textureAtlas;
-
+  private boolean reloadAtlas;
   public BlocksProvider() {
     reload();
   }
@@ -49,12 +49,7 @@ public class BlocksProvider implements Disposable {
       Gdx.app.log(TAG, "Loaded block: " +block.toString());
     }
 
-    Gdx.app.postRunnable(new Runnable() {
-      @Override
-      public void run() {
-        loadTilemap();
-      }
-    });
+    reloadAtlas = true;
   }
 
   public void loadTilemap() {
@@ -72,6 +67,8 @@ public class BlocksProvider implements Disposable {
         blocks[i].createUVMapping(textureAtlas);
       }
     }
+
+    reloadAtlas = false;
   }
 
   public FileHandle getTextureAtlasFile() {
@@ -92,14 +89,18 @@ public class BlocksProvider implements Disposable {
     blocks = null;
   }
 
+  public void loadAtlasAndUvsIfNull() {
+    if (textureAtlas == null || reloadAtlas) {
+      loadTilemap();
+    }
+  }
+
   public Block[] list() {
     return blocks;
   }
 
   public GLTexture getTerrainTexture() {
-    if (textureAtlas != null)
-      return textureAtlas.getTextures().first();
-    else
-      return null;
+    loadAtlasAndUvsIfNull();
+    return textureAtlas.getTextures().first();
   }
 }

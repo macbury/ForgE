@@ -78,13 +78,19 @@ public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.
 
   @Override
   public void onCloseMap(ProjectController controller, EditorScreen screen) {
-
+    resetSelectedItem();
   }
 
   @Override
   public void onNewMap(ProjectController controller, EditorScreen screen) {
     this.controller = controller;
     reload();
+    resetSelectedItem();
+  }
+
+  private void resetSelectedItem() {
+    blockList.setSelectedIndex(0);
+    currentSelectedBlock = 0;
   }
 
   @Override
@@ -107,6 +113,7 @@ public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.
       controller.rebuildChunks();
       controller.clearUndoRedo();
     }
+    resetSelectedItem();
   }
 
   @Override

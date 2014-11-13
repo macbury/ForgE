@@ -48,7 +48,14 @@ public class VoxelDef {
   }
 
   public void calculateAoFor(float baseAo, TerrainBuilder.Face face) {
-    this.ao = baseAo;
+    if (block.envAO) {
+      this.ao = baseAo;
+    }
+
+    if (!block.shadeAO) {
+      return;
+    }
+
     if (face == TerrainBuilder.Face.Back) {
       if (haveAO(Vector3i.BACK, Vector3i.BACK)) {
         shadeTopLeftCorner = shadeTopRightCorner = true;

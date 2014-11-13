@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import macbury.forge.ForgE;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
 import macbury.forge.graphics.batch.renderable.BaseRenderableProvider;
 import macbury.forge.graphics.batch.renderable.VoxelFaceRenderable;
@@ -121,6 +122,7 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
    */
   private boolean rebuild() {
     if (map.chunkToRebuild.size > 0) {
+      ForgE.blocks.loadAtlasAndUvsIfNull();
       Gdx.app.log(TAG, "Chunks to rebuild: " + map.chunkToRebuild.size);
       int i = 10;
       while(map.chunkToRebuild.size > 0) {

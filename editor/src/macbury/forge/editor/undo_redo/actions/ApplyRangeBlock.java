@@ -40,11 +40,10 @@ public class ApplyRangeBlock extends TerrainCursorChangeable {
         for (int z = (int)applyBox.min.z; z < applyBox.max.z; z++) {
 
           if (selectType == SelectType.Append) {
-            if (!map.isEmpty(x,y,z)) {
-              oldMaterials[x - (int)applyBox.min.x][y - (int)applyBox.min.y][z - (int)applyBox.min.z] = map.getBlockIdForPosition(x, y, z);
-            }
+            oldMaterials[x - (int)applyBox.min.x][y - (int)applyBox.min.y][z - (int)applyBox.min.z] = map.getBlockIdForPosition(x, y, z);
             map.setBlockForPosition(block, x, y, z);
           } else if (!map.isEmpty(x,y,z)) {
+            oldMaterials[x - (int)applyBox.min.x][y - (int)applyBox.min.y][z - (int)applyBox.min.z] = map.getBlockIdForPosition(x, y, z);
             map.setBlockForPosition(block, x,y,z);
           }
 

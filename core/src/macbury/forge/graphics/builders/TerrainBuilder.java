@@ -22,6 +22,7 @@ public class TerrainBuilder extends VoxelsAssembler {
   private static final double SHADE_AO_FREQUENCY = 0.1;
   private static final float SHADE_AO_FACTOR = 0.3f;
   private float[][][] aoArray;
+  private boolean haveTransparency;
 
   public enum Face {
     Left(Vector3i.LEFT), Right(Vector3i.RIGHT), Top(Vector3i.TOP), Bottom(Vector3i.BOTTOM), Front(Vector3i.FRONT), Back(Vector3i.BACK);
@@ -86,7 +87,7 @@ public class TerrainBuilder extends VoxelsAssembler {
             voxelDef.voxelPosition.set(x,y,z);
             voxelDef.size.set(map.voxelSize);
 
-            if (map.isEmptyNotOutOfBounds(nextTileToCheck)) {
+            if (map.isEmptyNotOutOfBounds(nextTileToCheck) || map.isTransparent(nextTileToCheck)) {
               Block block = map.getBlockForPosition(x,y,z);
               voxelDef.block = block;
               voxelDef.calculateAoFor(aoArray[x][y][z], face);
@@ -183,6 +184,7 @@ public class TerrainBuilder extends VoxelsAssembler {
     super.begin();
     facesToBuild.clear();
     facesToBuild.addAll(Face.values());
+    haveTransparency = false;
   }
 
   public boolean next() {
@@ -191,6 +193,7 @@ public class TerrainBuilder extends VoxelsAssembler {
 
   public VoxelFaceRenderable buildFaceForChunk(Chunk chunk) {
     Face face = facesToBuild.pop();
+    haveTransparency = false;
     buildFace(face.direction, face);
 
     if (isEmpty()) {
@@ -198,6 +201,7 @@ public class TerrainBuilder extends VoxelsAssembler {
     } else {
       VoxelFaceRenderable renderable = getRenderable();
       renderable.worldTransform.idt();
+      renderable.haveTransparency = haveTransparency;
       renderable.worldTransform.translate(chunk.worldPosition);
       renderable.direction.set(face.direction.x, face.direction.y, face.direction.z);
       renderable.mesh.calculateBoundingBox(renderable.boundingBox);

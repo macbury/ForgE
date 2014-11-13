@@ -76,7 +76,7 @@ public class VoxelMap implements Disposable {
 
   public boolean isEmpty(int x, int y, int z) {
     Block block = getBlockForPosition(x,y,z);
-    return block == null || block.isAir() || !block.solid;
+    return block == null || block.isAir();
   }
 
   public boolean isEmptyNotOutOfBounds(int x, int y, int z) {
@@ -111,7 +111,11 @@ public class VoxelMap implements Disposable {
   }
 
   public boolean isSolid(int x, int y, int z) {
-    return !isEmpty(x,y,z);
+    return getBlockForPosition(x,y,z).solid;
+  }
+
+  public boolean isTransparent(int x, int y, int z) {
+    return getBlockForPosition(x,y,z).transparent;
   }
 
   public BoundingBox getBounds(Vector3 voxelSize) {
@@ -158,5 +162,9 @@ public class VoxelMap implements Disposable {
 
   public byte getBlockIdForPosition(Vector3i voxelPosition) {
     return getBlockIdForPosition(voxelPosition.x, voxelPosition.y, voxelPosition.z);
+  }
+
+  public boolean isTransparent(Vector3i voxelPosition) {
+    return isTransparent(voxelPosition.x, voxelPosition.y, voxelPosition.z);
   }
 }

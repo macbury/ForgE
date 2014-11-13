@@ -21,9 +21,11 @@ public class MeshVertexInfo implements Pool.Poolable {
   public Vector3 normal;
   public Vector2 uv;
   public Color   color;
+  public Material material;
   public short index;
 
   private final Color tempColor = new Color();
+
 
   public static enum AttributeType {
     Position(VertexAttributes.Usage.Position, 3,ShaderProgram.POSITION_ATTRIBUTE),
@@ -57,6 +59,7 @@ public class MeshVertexInfo implements Pool.Poolable {
     this.specular = 0.0f;
     this.uv       = new Vector2();
     this.index    = 0;
+    this.material = new Material();
     reset();
   }
 
@@ -174,7 +177,7 @@ public class MeshVertexInfo implements Pool.Poolable {
    * @return
    */
   public float material() {
-    return Color.toFloatBits(ao, specular, 0f, 0f);
+    return Color.toFloatBits(material.r, material.g, material.b, material.a);
   }
 
   public MeshVertexInfo color(Color nc) {
@@ -185,22 +188,29 @@ public class MeshVertexInfo implements Pool.Poolable {
   public MeshVertexInfo applyAoShade() {
     this.ao += BASE_AO;
     this.ao = MathUtils.clamp(ao, 0.0f, 1.0f);
+    material.setAO(ao);
     return this;
   }
 
   public MeshVertexInfo ao(float incrBy) {
     this.ao += incrBy;
     this.ao = MathUtils.clamp(ao, 0.0f, 1.0f);
+    material.setAO(ao);
     return this;
   }
 
+  public MeshVertexInfo transparent(boolean transparent) {
+    material.setTransparent(transparent);
+    return this;
+  }
 
   @Override
   public void reset() {
     uv(0,0);
-    set(0,0,0);
-    normal(0,0,0);
+    set(0, 0, 0);
+    normal(0, 0, 0);
+    ao = 0;
     index = 0;
-    ao = 0.0f;
+    material.reset();
   }
 }

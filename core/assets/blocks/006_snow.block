@@ -2,8 +2,9 @@
   solid: true,
   shadeAO: true,
   envAO: true,
-  transparent: false,
   textures: {
-    all: "dirt"
+    top: "snow",
+    bottom: "dirt",
+    side: "grass_side_snowed"
   }
 }

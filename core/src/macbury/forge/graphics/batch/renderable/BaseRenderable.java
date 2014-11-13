@@ -15,4 +15,5 @@ public class BaseRenderable {
   public int primitiveType;
   public Matrix4 worldTransform = new Matrix4();
   public int triangleCount = 0;
+  public boolean haveTransparency;
 }

@@ -14,10 +14,14 @@ varying vec4   v_lightDiffuse;
 varying vec3   v_normal;
 varying vec4   v_position;
 varying vec2   v_textCoord;
+varying float  v_transparent;
 
 void main() {
   v_normal          = normalize(u_normalMatrix * a_normal);
   float ao          = a_material.r;
+  float specular    = a_material.g;
+  v_transparent     = a_material.b;
+
   vec3 lightDiffuse = u_ambientLight.rgb + directionalLightDiffuse(u_mainLight, v_normal) - vec3(ao, ao, ao);
   v_lightDiffuse    = vec4(lightDiffuse, 1f);
   v_textCoord       = a_texCoord0;
