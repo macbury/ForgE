@@ -3,7 +3,6 @@ package macbury.forge.editor.views;
 import macbury.forge.editor.controllers.BlocksController;
 
 import javax.swing.*;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
@@ -26,12 +25,7 @@ public class BlockListRenderer extends DefaultListCellRenderer {
     label.setToolTipText(item.block.name);
     label.setIcon(item.icon);
 
-    if (isSelected || cellHasFocus) {
-      label.setBorder(new BevelBorder(BORDER_SIZE, Color.black, Color.black));
-    } else {
-      label.setBorder(new EmptyBorder(BORDER_SIZE,BORDER_SIZE,BORDER_SIZE,BORDER_SIZE));
-    }
-
+    label.setBorder(new EmptyBorder(BORDER_SIZE,BORDER_SIZE,BORDER_SIZE,BORDER_SIZE));
 
     return label;
   }

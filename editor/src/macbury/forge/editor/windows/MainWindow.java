@@ -6,19 +6,24 @@ import macbury.forge.Config;
 import macbury.forge.ForgE;
 import macbury.forge.ForgEBootListener;
 import macbury.forge.editor.controllers.*;
+import macbury.forge.editor.input.GdxSwingInputProcessor;
 import macbury.forge.editor.parell.JobManager;
 import macbury.forge.editor.reloader.DirectoryWatcher;
+import macbury.forge.editor.views.ImagePanel;
 import macbury.forge.editor.views.MainMenu;
 import macbury.forge.editor.views.MapPropertySheet;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
-public class MainWindow extends JFrame implements ForgEBootListener {
+public class MainWindow extends JFrame implements ForgEBootListener, FocusListener {
   private static final String WINDOW_MAIN_NAME = "ForgE";
   private final BlocksController blocksController;
   private final DirectoryWatcher directoryWatcher;
   private final ShadersController shadersController;
+  private final GdxSwingInputProcessor inputProcessor;
   private LwjglCanvas openGLCanvas;
   private ForgE engine;
   private ProjectController projectController;
@@ -36,17 +41,16 @@ public class MainWindow extends JFrame implements ForgEBootListener {
   private JToolBar mainToolbar;
   private JLabel mapCursorPositionLabel;
   private JLabel statusTriangleCountLabel;
-  private JTree tree1;
+  private JTree mapTree;
   private JTabbedPane toolsPane;
-  private JTextArea filterEvents;
   private JList list1;
   private JToolBar terrainToolsToolbar;
   public JProgressBar jobProgressBar;
   private JList blockList;
   private JPanel mapSettingsPanel;
   public JSplitPane mainSplitPane;
-  private JButton button1;
-  private JButton button2;
+  private JPanel panelPrimaryBlock;
+  private JPanel panelSecondaryBlock;
 
   public MainWindow() {
     super();
@@ -61,6 +65,7 @@ public class MainWindow extends JFrame implements ForgEBootListener {
     setTitle(null);
     setVisible(true);
 
+    this.inputProcessor                  = new GdxSwingInputProcessor();
     this.directoryWatcher                = new DirectoryWatcher();
     this.jobs                            = new JobManager();
     Config config                        = new Config();
@@ -70,7 +75,7 @@ public class MainWindow extends JFrame implements ForgEBootListener {
     config.debug                         = true;
 
     engine                               = new ForgE(config);
-    blocksController                     = new BlocksController(blockList, directoryWatcher, jobs);
+    blocksController                     = new BlocksController(blockList, directoryWatcher, jobs, (ImagePanel)panelPrimaryBlock, (ImagePanel)panelSecondaryBlock);
     this.progressTaskDialog              = new ProgressTaskDialog();
     projectController                    = new ProjectController();
     mainMenu                             = new MainMenu(projectController);
@@ -84,19 +89,22 @@ public class MainWindow extends JFrame implements ForgEBootListener {
 
     mapSettingsPanel.add(inspectorSheetPanel);
     openGlContainer.add(openGLCanvas.getCanvas(), BorderLayout.CENTER);
-
     projectController.setStatusLabel(statusFpsLabel, statusMemoryLabel, statusRenderablesLabel, mapCursorPositionLabel, statusTriangleCountLabel);
 
     projectController.addOnMapChangeListener(mainMenu);
     projectController.addOnMapChangeListener(mainToolbarController);
     projectController.addOnMapChangeListener(terrainToolsController);
     projectController.addOnMapChangeListener(blocksController);
+    mainContentPane.setFocusTraversalKeysEnabled(false);
+    mainContentPane.addKeyListener(inputProcessor);
+    mainContentPane.addFocusListener(this);
     invalidate();
   }
 
   @Override
   public void afterEngineCreate(ForgE engine) {
     Gdx.graphics.setVSync(true);
+    ForgE.input.addProcessor(inputProcessor);
     projectController.setMainWindow(this);
     directoryWatcher.start();
   }
@@ -115,5 +123,22 @@ public class MainWindow extends JFrame implements ForgEBootListener {
   public void dispose() {
     super.dispose();
     directoryWatcher.dispose();
+  }
+
+  @Override
+  public void focusGained(FocusEvent e) {
+
+  }
+
+  @Override
+  public void focusLost(FocusEvent e) {
+    Gdx.app.log("TAG", "lost focus");
+    mainContentPane.setFocusable(true);
+    mainContentPane.grabFocus();
+  }
+
+  private void createUIComponents() {
+    panelSecondaryBlock = new ImagePanel();
+    panelPrimaryBlock   = new ImagePanel();
   }
 }

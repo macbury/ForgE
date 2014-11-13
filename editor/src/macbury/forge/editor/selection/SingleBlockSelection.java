@@ -1,5 +1,6 @@
 package macbury.forge.editor.selection;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector3;
 import macbury.forge.utils.VoxelCursor;
 
@@ -37,6 +38,11 @@ public class SingleBlockSelection extends AbstractSelection {
     endPostion.set(voxelCursor);
 
     selecting = false;
+  }
+
+  @Override
+  public boolean shouldProcessMouseButton(int mouseButton) {
+    return (Input.Buttons.LEFT == mouseButton || Input.Buttons.RIGHT == mouseButton);
   }
 
 

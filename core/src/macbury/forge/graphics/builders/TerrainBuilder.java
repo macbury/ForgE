@@ -87,7 +87,7 @@ public class TerrainBuilder extends VoxelsAssembler {
             voxelDef.voxelPosition.set(x,y,z);
             voxelDef.size.set(map.voxelSize);
 
-            if (map.isEmptyNotOutOfBounds(nextTileToCheck) || map.isTransparent(nextTileToCheck)) {
+            if (map.isEmptyNotOutOfBounds(nextTileToCheck)) {
               Block block = map.getBlockForPosition(x,y,z);
               voxelDef.block = block;
               voxelDef.calculateAoFor(aoArray[x][y][z], face);

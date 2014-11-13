@@ -3,6 +3,8 @@
   shadeAO: true,
   envAO: true,
   textures: {
-    all: "stone"
+    top: "stone",
+    bottom: "stonebrick",
+    side: "stonebrick"
   }
 }

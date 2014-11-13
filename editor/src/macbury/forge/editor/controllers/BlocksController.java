@@ -14,6 +14,7 @@ import macbury.forge.editor.reloader.DirectoryWatchJob;
 import macbury.forge.editor.reloader.DirectoryWatcher;
 import macbury.forge.editor.screens.EditorScreen;
 import macbury.forge.editor.views.BlockListRenderer;
+import macbury.forge.editor.views.ImagePanel;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -21,6 +22,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -34,14 +37,19 @@ public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.
   private final BlockListRenderer blockListRenderer;
   private final JList blockList;
   private final JobManager jobs;
+  private final ImagePanel panelPrimaryBlock;
+  private final ImagePanel panelSecondaryBlock;
   private DefaultListModel blocksModel;
-  private int currentSelectedBlock = 0;
+  private int currentPrimarySelectedBlock = 0;
+  private int currentSecondarySelectedBlock = 0;
   private ProjectController controller;
 
-  public BlocksController(JList blockList, DirectoryWatcher directoryWatcher, JobManager jobs) {
-    this.blockList         = blockList;
-    this.blockListRenderer = new BlockListRenderer();
-    this.jobs              = jobs;
+  public BlocksController(JList blockList, DirectoryWatcher directoryWatcher, JobManager jobs, ImagePanel panelPrimaryBlock, ImagePanel panelSecondaryBlock) {
+    this.panelPrimaryBlock   = panelPrimaryBlock;
+    this.panelSecondaryBlock = panelSecondaryBlock;
+    this.blockList           = blockList;
+    this.blockListRenderer   = new BlockListRenderer();
+    this.jobs                = jobs;
     blockList.setFixedCellWidth(TILE_SIZE);
     blockList.setFixedCellHeight(TILE_SIZE);
     blockList.setValueIsAdjusting(true);
@@ -51,6 +59,26 @@ public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.
     blockList.setBorder(new EmptyBorder(1, 1, 1, 1));
 
     directoryWatcher.addListener(BlocksProvider.BLOCKS_PATH, this);
+    blockList.addListSelectionListener(this);
+    blockList.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mousePressed(MouseEvent e) {
+        if ( SwingUtilities.isRightMouseButton(e) ) {
+          JList list = (JList)e.getSource();
+          int row = list.locationToIndex(e.getPoint());
+          setSecondarySelectedIndex(row);
+        }
+      }
+    });
+  }
+
+  private void setSecondarySelectedIndex(int row) {
+    currentSecondarySelectedBlock = row;
+    if (currentSecondarySelectedBlock != -1) {
+      BlockListItem item = (BlockListItem) blocksModel.get(currentSecondarySelectedBlock);
+      panelSecondaryBlock.setIcon(item.image);
+    }
+
   }
 
   private void reload() {
@@ -67,12 +95,15 @@ public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.
     }
 
     blockList.setModel(blocksModel);
-    blockList.setSelectedIndex(currentSelectedBlock);
-    blockList.addListSelectionListener(this);
   }
 
-  public Block getCurrentBlock() {
-    BlockListItem item = (BlockListItem) blocksModel.get(currentSelectedBlock);
+  public Block getCurrentPrimaryBlock() {
+    BlockListItem item = (BlockListItem) blocksModel.get(currentPrimarySelectedBlock);
+    return item.block;
+  }
+
+  public Block getCurrentSecondaryBlock() {
+    BlockListItem item = (BlockListItem) blocksModel.get(currentSecondarySelectedBlock);
     return item.block;
   }
 
@@ -90,7 +121,7 @@ public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.
 
   private void resetSelectedItem() {
     blockList.setSelectedIndex(0);
-    currentSelectedBlock = 0;
+    setSecondarySelectedIndex(1);
   }
 
   @Override
@@ -125,12 +156,19 @@ public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.
 
   @Override
   public void valueChanged(ListSelectionEvent e) {
-    currentSelectedBlock = blockList.getSelectedIndex();
+    currentPrimarySelectedBlock = blockList.getSelectedIndex();
+    if (currentPrimarySelectedBlock != -1) {
+      BlockListItem item = (BlockListItem) blocksModel.get(currentPrimarySelectedBlock);
+      panelPrimaryBlock.setIcon(item.image);
+    }
+
   }
 
   public class BlockListItem {
     public Block block;
     public Icon icon;
+    public Image image;
+
     public void loadIcon(String iconPath) {
       BufferedImage img = null;
       try {
@@ -139,9 +177,9 @@ public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.
         e.printStackTrace();
       }
 
-      Image dimg = img.getScaledInstance(TILE_SIZE, TILE_SIZE, Image.SCALE_FAST);
+      this.image = img.getScaledInstance(TILE_SIZE, TILE_SIZE, Image.SCALE_FAST);
 
-      this.icon  = new ImageIcon(dimg);
+      this.icon  = new ImageIcon(image);
     }
   }
 }

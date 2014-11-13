@@ -80,10 +80,10 @@ public class Block {
   public String getIconName() {
     if (textures.containsKey(Side.all.toString())) {
       return textures.get(Side.all.toString());
-    } else if (textures.containsKey(Side.side.toString())) {
-      return textures.get(Side.side.toString());
     } else if (textures.containsKey(Side.top.toString())) {
       return textures.get(Side.top.toString());
+    } else if (textures.containsKey(Side.side.toString())) {
+      return textures.get(Side.side.toString());
     }
     throw new GdxRuntimeException("No default side found!");
   }

@@ -3,7 +3,6 @@ package macbury.forge.editor.systems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.collision.Ray;
@@ -16,10 +15,10 @@ import macbury.forge.editor.selection.AbstractSelection;
 import macbury.forge.editor.selection.SelectionInterface;
 import macbury.forge.graphics.camera.GameCamera;
 import macbury.forge.level.Level;
-import macbury.forge.voxel.ChunkMap;
 import macbury.forge.ui.Overlay;
 import macbury.forge.utils.VoxelCursor;
 import macbury.forge.utils.VoxelPicker;
+import macbury.forge.voxel.ChunkMap;
 
 /**
  * Created by macbury on 19.10.14.
@@ -89,7 +88,7 @@ public class SelectionSystem extends EntitySystem {
 
       @Override
       public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-        if (button == Input.Buttons.LEFT && getCurrentVoxelCursor(x,y)) {
+        if (selection.shouldProcessMouseButton(button) && getCurrentVoxelCursor(x,y)) {
           selection.start(voxelCursor);
           for (SelectionInterface listener : listeners) {
             listener.onSelectionStart(selection);
@@ -112,7 +111,8 @@ public class SelectionSystem extends EntitySystem {
 
       @Override
       public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-        if (button == Input.Buttons.LEFT && getCurrentVoxelCursor(x,y)) {
+        if (selection.shouldProcessMouseButton(button) && getCurrentVoxelCursor(x,y)) {
+          selection.setSelectedMouseButton(button);
           selection.end(voxelCursor);
           for (SelectionInterface listener : listeners) {
             listener.onSelectionEnd(selection);

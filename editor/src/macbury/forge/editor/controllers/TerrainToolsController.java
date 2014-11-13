@@ -1,5 +1,7 @@
 package macbury.forge.editor.controllers;
 
+import com.badlogic.gdx.Input;
+import macbury.forge.blocks.Block;
 import macbury.forge.editor.Utils;
 import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
 import macbury.forge.editor.parell.JobManager;
@@ -56,6 +58,7 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
     buildToogleButton("draw_bucket", toolsGroup);
 
     buildToogleButton("draw_airbrush", toolsGroup);
+    buildToogleButton("draw_tree", toolsGroup);
     buildToogleButton("draw_elipsis", toolsGroup);
     ereaserButton = buildToogleButton("draw_eraser", toolsGroup);
 
@@ -165,10 +168,11 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
 
   private void createTaskForSelection(AbstractSelection selection) {
     Changeable task = null;
+    Block blockToDraw = selection.getSelectedMouseButton() == Input.Buttons.LEFT ? blocksController.getCurrentPrimaryBlock() : blocksController.getCurrentSecondaryBlock();
     if (selection == singleBlockSelection) {
-      task = new ApplyBlock(selection, map, blocksController.getCurrentBlock());
+      task = new ApplyBlock(selection, map, blockToDraw);
     } else if (selection == rectSelection) {
-      task = new ApplyRangeBlock(selection, map, blocksController.getCurrentBlock());
+      task = new ApplyRangeBlock(selection, map, blockToDraw);
     } else if (selection == ereaseSelection) {
       task = new EraserBlock(selection, map);
     }

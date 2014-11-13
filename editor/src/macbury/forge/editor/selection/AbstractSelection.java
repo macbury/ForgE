@@ -1,5 +1,6 @@
 package macbury.forge.editor.selection;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import macbury.forge.utils.Vector3i;
@@ -13,7 +14,7 @@ public abstract class AbstractSelection {
   protected VoxelCursor endPostion    = new VoxelCursor();
   protected BoundingBox tempBox       = new BoundingBox();
   protected SelectType selectType     = SelectType.Append;
-
+  protected byte selectedMouseButton  = Input.Buttons.LEFT;
   private static final Vector3 tempA = new Vector3();
   private static final Vector3 tempB = new Vector3();
 
@@ -49,11 +50,21 @@ public abstract class AbstractSelection {
     return getSelectType() == SelectType.Replace;
   }
 
+  public abstract boolean shouldProcessMouseButton(int mouseButton);
+
   public BoundingBox getBoundingBox() {
     getMinimum(tempA);
     getMaximum(tempB);
     tempBox.set(tempB, tempA);
     return tempBox;
+  }
+
+  public void setSelectedMouseButton(int selectedMouseButton) {
+    this.selectedMouseButton = (byte)selectedMouseButton;
+  }
+
+  public byte getSelectedMouseButton() {
+    return selectedMouseButton;
   }
 
   protected abstract void getMaximum(Vector3 out);

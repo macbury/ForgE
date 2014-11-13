@@ -135,7 +135,7 @@
       <splitpane id="5e439" binding="mainSplitPane">
         <constraints border-constraint="Center"/>
         <properties>
-          <continuousLayout value="false"/>
+          <continuousLayout value="true"/>
           <dividerLocation value="360"/>
         </properties>
         <border type="none"/>
@@ -214,27 +214,45 @@
                               </component>
                             </children>
                           </scrollpane>
-                          <grid id="7fa5e" layout-manager="BorderLayout" hgap="0" vgap="0">
+                          <grid id="7fa5e" layout-manager="GridBagLayout">
                             <constraints border-constraint="South"/>
                             <properties>
                               <focusCycleRoot value="true"/>
                               <minimumSize width="0" height="34"/>
                               <preferredSize width="60" height="48"/>
                             </properties>
-                            <border type="bevel-lowered" title-justification="2"/>
+                            <border type="none" title-justification="2"/>
                             <children>
-                              <component id="78c7a" class="javax.swing.JButton" binding="button1" default-binding="true">
-                                <constraints border-constraint="Center"/>
+                              <hspacer id="1fed7">
+                                <constraints>
+                                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                                  <gridbag weightx="0.0" weighty="0.0"/>
+                                </constraints>
+                              </hspacer>
+                              <grid id="804d9" binding="panelPrimaryBlock" custom-create="true" layout-manager="BorderLayout" hgap="0" vgap="0">
+                                <constraints>
+                                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                                  <gridbag weightx="0.0" weighty="0.0"/>
+                                </constraints>
                                 <properties>
-                                  <text value="Button"/>
+                                  <background color="-65794"/>
+                                  <preferredSize width="32" height="32"/>
                                 </properties>
-                              </component>
-                              <component id="c6c87" class="javax.swing.JButton" binding="button2" default-binding="true">
-                                <constraints border-constraint="East"/>
+                                <border type="bevel-lowered"/>
+                                <children/>
+                              </grid>
+                              <grid id="6ea57" binding="panelSecondaryBlock" custom-create="true" layout-manager="BorderLayout" hgap="0" vgap="0">
+                                <constraints>
+                                  <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                                  <gridbag weightx="0.0" weighty="0.0"/>
+                                </constraints>
                                 <properties>
-                                  <text value="Button"/>
+                                  <background color="-65794"/>
+                                  <preferredSize width="32" height="32"/>
                                 </properties>
-                              </component>
+                                <border type="bevel-lowered"/>
+                                <children/>
+                              </grid>
                             </children>
                           </grid>
                         </children>
@@ -258,13 +276,6 @@
                         <properties/>
                         <border type="none"/>
                         <children>
-                          <component id="375df" class="javax.swing.JTextArea" binding="filterEvents">
-                            <constraints border-constraint="North"/>
-                            <properties/>
-                            <clientProperties>
-                              <caretAspectRatio class="java.lang.Float" value="0.04"/>
-                            </clientProperties>
-                          </component>
                           <component id="9abbd" class="javax.swing.JList" binding="list1" default-binding="true">
                             <constraints border-constraint="Center"/>
                             <properties/>
@@ -292,7 +303,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="303cd" class="javax.swing.JTree" binding="tree1" default-binding="true">
+                  <component id="303cd" class="javax.swing.JTree" binding="mapTree">
                     <constraints/>
                     <properties/>
                   </component>
