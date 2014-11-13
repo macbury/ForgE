@@ -3,6 +3,7 @@
   shadeAO: false,
   envAO: false,
   transparent: true,
+  backFace: true,
   textures: {
     all: "glass"
   }

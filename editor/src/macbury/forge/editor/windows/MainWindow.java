@@ -45,6 +45,8 @@ public class MainWindow extends JFrame implements ForgEBootListener {
   private JList blockList;
   private JPanel mapSettingsPanel;
   public JSplitPane mainSplitPane;
+  private JButton button1;
+  private JButton button2;
 
   public MainWindow() {
     super();

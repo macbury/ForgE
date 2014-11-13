@@ -1,0 +1,10 @@
+{
+  solid: true,
+  shadeAO: true,
+  envAO: true,
+  textures: {
+    top: "log_big_oak_top",
+    bottom: "log_big_oak_top",
+    side: "log_big_oak"
+  }
+}

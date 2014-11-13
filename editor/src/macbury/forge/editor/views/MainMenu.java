@@ -181,8 +181,7 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
 
   private void createProjectMenu() {
     JMenu projectMenu         = new JMenu("Project");
-    JMenuItem newProjectItem  = new JMenuItem("New");
-    JMenuItem openProjectItem = new JMenuItem("Open");
+    JMenuItem newProjectItem  = new JMenuItem("New map");
 
     newProjectItem.addActionListener(new ActionListener() {
       @Override
@@ -192,7 +191,6 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
     });
 
     projectMenu.add(newProjectItem);
-    projectMenu.add(openProjectItem);
 
     add(projectMenu);
   }

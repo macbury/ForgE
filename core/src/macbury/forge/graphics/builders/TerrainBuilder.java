@@ -20,7 +20,7 @@ import macbury.forge.voxel.VoxelMap;
 public class TerrainBuilder extends VoxelsAssembler {
   private static final double SHADE_AO_AMPLUTUDE = 10;
   private static final double SHADE_AO_FREQUENCY = 0.1;
-  private static final float SHADE_AO_FACTOR = 0.3f;
+  private static final float SHADE_AO_FACTOR = 0.35f;
   private float[][][] aoArray;
   private boolean haveTransparency;
 
@@ -62,7 +62,7 @@ public class TerrainBuilder extends VoxelsAssembler {
     for (int y = 0; y < map.getHeight(); y++) {
       for (int x = 0; x < map.getWidth(); x++) {
         for (int z = 0; z < map.getDepth(); z++) {
-          aoArray[x][y][z] = (float)perlinNoise.simpleNoise(x,y,z, SHADE_AO_AMPLUTUDE, SHADE_AO_FREQUENCY);
+          aoArray[x][y][z] = (float)perlinNoise.simpleNoise(x,y,z, SHADE_AO_AMPLUTUDE, SHADE_AO_FREQUENCY) * SHADE_AO_FACTOR;
         }
       }
     }

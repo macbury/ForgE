@@ -11,6 +11,7 @@ import macbury.forge.voxel.VoxelMap;
  */
 public class VoxelPicker {
   private static final String TAG = "VoxelPicker";
+  private static final float CURSOR_TRESHOLD = 0.016f;
   private final VoxelMap map;
   private Vector3  rayEndPoint         = new Vector3();
   private Vector3i localVoxelPosition  = new Vector3i();
@@ -19,6 +20,7 @@ public class VoxelPicker {
   private BoundingBox voxelBoundingBox = new BoundingBox();
   private Vector3  voxelBoxIntersection  = new Vector3();
   private Vector3 dir = new Vector3();
+  private Vector3 finalDir = new Vector3();
   private Vector3 sign = new Vector3();
   private Vector3i originVoxelPosition = new Vector3i();
 
@@ -44,8 +46,12 @@ public class VoxelPicker {
           sign.y = (dir.y > 0) ? 1 : (dir.y < 0 ? -1 : 0);
           sign.z = (dir.z > 0) ? 1 : (dir.z < 0 ? -1 : 0);
 
-          dir.set(Math.round(Math.abs(dir.x)), Math.round(Math.abs(dir.y)), Math.round(Math.abs(dir.z))).scl(sign);
-          worldVoxelPosition.sub(dir);
+          dir.set(Math.abs(dir.x), Math.abs(dir.y), Math.abs(dir.z)).add(CURSOR_TRESHOLD, CURSOR_TRESHOLD, CURSOR_TRESHOLD);
+
+          //Gdx.app.log(TAG, dir.toString());
+
+          finalDir.set(Math.round(dir.x), Math.round(dir.y), Math.round(dir.z));
+          worldVoxelPosition.sub(finalDir.scl(sign));
 
           outVoxelIntersectPoint.append.set(worldVoxelPosition);
         }

@@ -34,9 +34,13 @@ public class Block {
    */
   public boolean envAO = false;
   /**
-   * Should render transparent
+   * Should render transparent with alpha support
    */
   public boolean transparent = false;
+  /**
+   * Should render backFace
+   */
+  public boolean backFace = false;
   /**
    * Textures names for block
    */
