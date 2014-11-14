@@ -1,24 +1,30 @@
 package macbury.forge.editor.input;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
-
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import com.badlogic.gdx.utils.Array;
 
 /**
  * Created by macbury on 13.11.14.
  */
-public class GdxSwingInputProcessor extends InputAdapter implements KeyListener {
+public class GdxSwingInputProcessor extends InputAdapter {
+  private final Array<KeyShortcutMapping> mappings;
   private boolean catchedShortcut = false;
+
+  public GdxSwingInputProcessor() {
+    this.mappings = new Array<KeyShortcutMapping>();
+  }
+
+  public void addMapping(KeyShortcutMapping mapping) {
+    this.mappings.add(mapping);
+  }
+
   @Override
   public boolean keyDown(int keycode) {
-    Gdx.app.log("gdx", "key pressed: " + keycode);
-    if (keycode == Input.Keys.Z && Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
-      Gdx.app.log("gdx", "undo pressed: " + keycode);
-      catchedShortcut = true;
-      return true;
+    for (KeyShortcutMapping mapping : mappings) {
+      if (mapping.canHandle(keycode)) {
+        catchedShortcut = true;
+        return true;
+      }
     }
     return super.keyUp(keycode);
   }
@@ -37,22 +43,4 @@ public class GdxSwingInputProcessor extends InputAdapter implements KeyListener 
     return false;
   }
 
-  @Override
-  public void keyTyped(KeyEvent e) {
-
-  }
-
-  @Override
-  public void keyPressed(KeyEvent e) {
-    Gdx.app.log("swing", "key: "+e.getKeyCode());
-  }
-
-  @Override
-  public void keyReleased(KeyEvent e) {
-
-  }
-
-  public class GdxSwingMapping {
-
-  }
 }

@@ -1,7 +1,10 @@
 package macbury.forge.editor.controllers;
 
+import com.badlogic.gdx.Input;
 import macbury.forge.editor.Utils;
 import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
+import macbury.forge.editor.input.GdxSwingInputProcessor;
+import macbury.forge.editor.input.KeyShortcutMapping;
 import macbury.forge.editor.undo_redo.ChangeManager;
 import macbury.forge.editor.undo_redo.ChangeManagerListener;
 import macbury.forge.editor.screens.EditorScreen;
@@ -15,16 +18,18 @@ import java.awt.event.ActionListener;
 /**
  * Created by macbury on 25.10.14.
  */
-public class MainToolbarController implements OnMapChangeListener, ChangeManagerListener, ActionListener {
+public class MainToolbarController implements OnMapChangeListener, ChangeManagerListener, ActionListener, KeyShortcutMapping.KeyShortcutListener {
   private final ButtonGroup editorModeButtonGroup;
   private final JToolBar mainToolbar;
   private final MoreToolbarButton moreButton;
   private final JButton editorRedoButton;
   private final JButton editorUndoButton;
+  private final KeyShortcutMapping undoMapping;
+  private final KeyShortcutMapping redoMapping;
   private EditorScreen screen;
 
 
-  public MainToolbarController(JToolBar mainToolbar, MainMenu mainMenu) {
+  public MainToolbarController(JToolBar mainToolbar, MainMenu mainMenu, GdxSwingInputProcessor inputProcessor) {
     this.editorModeButtonGroup = new ButtonGroup();
     this.mainToolbar           = mainToolbar;
     moreButton                 = new MoreToolbarButton(mainMenu);
@@ -32,6 +37,15 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
 
     this.editorRedoButton        = buildButton("redo");
     this.editorUndoButton        = buildButton("undo");
+
+    undoMapping                  = new KeyShortcutMapping(Input.Keys.CONTROL_LEFT, Input.Keys.Z);
+    redoMapping                  = new KeyShortcutMapping(Input.Keys.CONTROL_LEFT, Input.Keys.Y);
+
+    inputProcessor.addMapping(undoMapping);
+    inputProcessor.addMapping(redoMapping);
+
+    undoMapping.addListener(this);
+    redoMapping.addListener(this);
 
     mainToolbar.add(moreButton);
     mainToolbar.addSeparator();
@@ -100,11 +114,33 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
   @Override
   public void actionPerformed(ActionEvent e) {
     if (e.getSource() == editorUndoButton) {
-      screen.changeManager.undo();
+      undo();
     }
 
     if (e.getSource() == editorRedoButton) {
+      redo();
+    }
+  }
+
+  private void undo() {
+    if (screen != null && screen.changeManager.canUndo()) {
+      screen.changeManager.undo();
+    }
+  }
+
+  private void redo() {
+    if (screen != null && screen.changeManager.canRedo()) {
       screen.changeManager.redo();
+    }
+  }
+
+  @Override
+  public void onKeyShortcut(KeyShortcutMapping shortcutMapping) {
+    if (undoMapping == shortcutMapping) {
+      undo();
+    }
+    if (redoMapping == shortcutMapping) {
+      redo();
     }
   }
 }

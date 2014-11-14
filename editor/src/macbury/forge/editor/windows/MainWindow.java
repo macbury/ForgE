@@ -1,7 +1,8 @@
 package macbury.forge.editor.windows;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
+import com.badlogic.gdx.backends.lwjgl.LwjglAWTCanvas;
+import com.badlogic.gdx.backends.lwjgl.LwjglAWTInput;
 import macbury.forge.Config;
 import macbury.forge.ForgE;
 import macbury.forge.ForgEBootListener;
@@ -24,7 +25,8 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
   private final DirectoryWatcher directoryWatcher;
   private final ShadersController shadersController;
   private final GdxSwingInputProcessor inputProcessor;
-  private LwjglCanvas openGLCanvas;
+  private final LwjglAWTInput input;
+  private LwjglAWTCanvas openGLCanvas;
   private ForgE engine;
   private ProjectController projectController;
   private MainMenu mainMenu;
@@ -63,6 +65,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     setExtendedState(JFrame.MAXIMIZED_BOTH);
     setDefaultCloseOperation(EXIT_ON_CLOSE);
     setTitle(null);
+
     setVisible(true);
 
     this.inputProcessor                  = new GdxSwingInputProcessor();
@@ -80,12 +83,22 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     projectController                    = new ProjectController();
     mainMenu                             = new MainMenu(projectController);
     terrainToolsController               = new TerrainToolsController(terrainToolsToolbar, blocksController);
-    mainToolbarController                = new MainToolbarController(mainToolbar, mainMenu);
+    mainToolbarController                = new MainToolbarController(mainToolbar, mainMenu, inputProcessor);
     shadersController                    = new ShadersController(directoryWatcher);
     MapPropertySheet inspectorSheetPanel = new MapPropertySheet();
+
     engine.addBootListener(this);
     engine.addBootListener(blocksController);
-    openGLCanvas                         = new LwjglCanvas(engine);
+
+    openGLCanvas                         = new LwjglAWTCanvas(engine);
+    input                                = (LwjglAWTInput)openGLCanvas.getInput();
+
+    mainContentPane.addMouseListener(input);
+    mainContentPane.addKeyListener(input);
+    mainContentPane.setFocusTraversalKeysEnabled(false);
+    mainContentPane.setFocusable(true);
+    mainContentPane.grabFocus();
+    mainContentPane.addFocusListener(this);
 
     mapSettingsPanel.add(inspectorSheetPanel);
     openGlContainer.add(openGLCanvas.getCanvas(), BorderLayout.CENTER);
@@ -95,9 +108,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     projectController.addOnMapChangeListener(mainToolbarController);
     projectController.addOnMapChangeListener(terrainToolsController);
     projectController.addOnMapChangeListener(blocksController);
-    mainContentPane.setFocusTraversalKeysEnabled(false);
-    mainContentPane.addKeyListener(inputProcessor);
-    mainContentPane.addFocusListener(this);
+
     invalidate();
   }
 
@@ -125,6 +136,12 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     directoryWatcher.dispose();
   }
 
+
+  private void createUIComponents() {
+    panelSecondaryBlock = new ImagePanel();
+    panelPrimaryBlock   = new ImagePanel();
+  }
+
   @Override
   public void focusGained(FocusEvent e) {
 
@@ -132,13 +149,6 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
 
   @Override
   public void focusLost(FocusEvent e) {
-    Gdx.app.log("TAG", "lost focus");
-    mainContentPane.setFocusable(true);
     mainContentPane.grabFocus();
-  }
-
-  private void createUIComponents() {
-    panelSecondaryBlock = new ImagePanel();
-    panelPrimaryBlock   = new ImagePanel();
   }
 }
