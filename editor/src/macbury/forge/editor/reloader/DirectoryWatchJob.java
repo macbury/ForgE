@@ -46,7 +46,7 @@ public class DirectoryWatchJob implements Disposable, JNotifyListener {
   private void triggerListener(String path, String file) {
     FileHandle handle = Gdx.files.internal(path + file);
 
-    if (handle.extension().endsWith("___jb_bak___") || handle.extension().endsWith("___jb_old___")) {
+    if (handle.extension().endsWith("___jb_bak___") || handle.extension().endsWith("___jb_old___") || handle.extension().endsWith("~")) {
       Gdx.app.log(TAG, "Skipping: " + handle.name());
     } else {
       currentHandle = handle;

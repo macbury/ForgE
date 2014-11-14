@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.GLTexture;
 import com.badlogic.gdx.math.Matrix3;
+import com.badlogic.gdx.math.Vector3;
 import macbury.forge.ForgE;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
 import macbury.forge.graphics.batch.renderable.TerrainChunkRenderable;
@@ -15,6 +16,8 @@ import macbury.forge.shaders.utils.RenderableBaseShader;
  */
 public class TerrainShader extends RenderableBaseShader<VoxelFaceRenderable> {
   private final Matrix3 tempNormalMatrix = new Matrix3();
+  private final Vector3 mapSize          = new Vector3();
+  private final String  UNIFORM_MAP_SIZE = "u_mapSize";
   @Override
   public boolean canRender(BaseRenderable instance) {
     return TerrainChunkRenderable.class.isInstance(instance);
@@ -28,6 +31,7 @@ public class TerrainShader extends RenderableBaseShader<VoxelFaceRenderable> {
     setUniformSkyColor();
     setUniformSun();
     setUniformEyePosition();
+    shader.setUniformf(UNIFORM_MAP_SIZE, 100, 100);
     GLTexture terrainTexture = ForgE.blocks.getTerrainTexture();
     if (terrainTexture != null) {
       setUniformDiffuseTexture(terrainTexture);

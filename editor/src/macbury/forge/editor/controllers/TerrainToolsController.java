@@ -4,6 +4,8 @@ import com.badlogic.gdx.Input;
 import macbury.forge.blocks.Block;
 import macbury.forge.editor.Utils;
 import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
+import macbury.forge.editor.input.GdxSwingInputProcessor;
+import macbury.forge.editor.input.KeyShortcutMapping;
 import macbury.forge.editor.parell.JobManager;
 import macbury.forge.editor.screens.EditorScreen;
 import macbury.forge.editor.selection.*;
@@ -34,6 +36,7 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
   private final EreaseSelection ereaseSelection;
   private final JToggleButton ereaserButton;
   private final BlocksController blocksController;
+  private final GdxSwingInputProcessor inputProcessor;
   private AbstractSelection currentSelection;
   private final JToggleButton drawRectButton;
   private SelectionSystem selectionSystem;
@@ -43,9 +46,10 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
   private JobManager jobs;
   private SelectType currentSelectType;
 
-  public TerrainToolsController(JToolBar terrainToolsToolbar, BlocksController blocksController) {
+  public TerrainToolsController(JToolBar terrainToolsToolbar, BlocksController blocksController, GdxSwingInputProcessor inputProcessor) {
     toolbar               = terrainToolsToolbar;
     this.blocksController = blocksController;
+    this.inputProcessor   = inputProcessor;
     this.toolsGroup       = new ButtonGroup();
     this.modifyGroup      = new ButtonGroup();
 
@@ -53,19 +57,20 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
     this.rectSelection        = new BoxSelection();
     this.ereaseSelection      = new EreaseSelection();
 
-    drawPencilButton          = buildToogleButton("draw_pencil", toolsGroup);
-    drawRectButton            = buildToogleButton("draw_rect", toolsGroup);
-    buildToogleButton("draw_bucket", toolsGroup);
+    drawPencilButton          = buildToogleButton("draw_pencil", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.D);
+    drawRectButton            = buildToogleButton("draw_rect", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.R);
 
-    buildToogleButton("draw_airbrush", toolsGroup);
-    buildToogleButton("draw_tree", toolsGroup);
-    buildToogleButton("draw_elipsis", toolsGroup);
-    ereaserButton = buildToogleButton("draw_eraser", toolsGroup);
+    buildToogleButton("draw_bucket", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.F);
+
+    buildToogleButton("draw_airbrush", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.A);
+    buildToogleButton("draw_tree", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.T);
+    buildToogleButton("draw_elipsis", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.Q);
+    ereaserButton = buildToogleButton("draw_eraser", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.E);
 
     toolbar.addSeparator();
 
-    appendBlocksButton  = buildToogleButton("append_blocks", modifyGroup);
-    replaceBlocksButton = buildToogleButton("replace_blocks", modifyGroup);
+    appendBlocksButton  = buildToogleButton("append_blocks", modifyGroup, Input.Keys.ALT_LEFT, Input.Keys.A);
+    replaceBlocksButton = buildToogleButton("replace_blocks", modifyGroup, Input.Keys.ALT_LEFT, Input.Keys.R);
     updateUI();
   }
 
@@ -84,8 +89,8 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
     replaceBlocksButton.setEnabled(interfaceEnabled);
   }
 
-  private JToggleButton buildToogleButton(String iconName, ButtonGroup buttonGroup) {
-    JToggleButton button = new JToggleButton();
+  private JToggleButton buildToogleButton(String iconName, ButtonGroup buttonGroup, int modifier, int keycode) {
+    final JToggleButton button = new JToggleButton();
     //ImageIcon icon = new ImageIcon(getClass().getResource("/icons/"+iconName+".png"));
     button.setFocusable(false);
     button.setHorizontalTextPosition(SwingConstants.LEADING);
@@ -93,6 +98,14 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
     toolbar.add(button);
     buttonGroup.add(button);
     button.addActionListener(this);
+    button.setToolTipText(iconName);
+    inputProcessor.registerMapping(modifier, keycode, new KeyShortcutMapping.KeyShortcutListener() {
+      @Override
+      public void onKeyShortcut(KeyShortcutMapping shortcutMapping) {
+        button.doClick();
+      }
+    });
+
     return button;
   }
 

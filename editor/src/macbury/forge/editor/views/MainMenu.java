@@ -10,8 +10,6 @@ import macbury.forge.editor.screens.EditorScreen;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
 
 /**
  * Created by macbury on 19.10.14.
@@ -106,10 +104,6 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
     group.add(debugLightingItem);
     group.add(debugNormalsItem);
 
-    debugTexturedItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0, InputEvent.SHIFT_DOWN_MASK));
-    debugWireframeItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, InputEvent.SHIFT_DOWN_MASK));
-    debugNormalsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, InputEvent.SHIFT_DOWN_MASK));
-    debugLightingItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_3, InputEvent.SHIFT_DOWN_MASK));
 
     viewModeMenu.add(debugTexturedItem);
     viewModeMenu.add(debugWireframeItem);

@@ -38,11 +38,8 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
     this.editorRedoButton        = buildButton("redo");
     this.editorUndoButton        = buildButton("undo");
 
-    undoMapping                  = new KeyShortcutMapping(Input.Keys.CONTROL_LEFT, Input.Keys.Z);
-    redoMapping                  = new KeyShortcutMapping(Input.Keys.CONTROL_LEFT, Input.Keys.Y);
-
-    inputProcessor.addMapping(undoMapping);
-    inputProcessor.addMapping(redoMapping);
+    undoMapping = inputProcessor.registerMapping(Input.Keys.CONTROL_LEFT, Input.Keys.Z, this);
+    redoMapping = inputProcessor.registerMapping(Input.Keys.CONTROL_LEFT, Input.Keys.Y, this);
 
     undoMapping.addListener(this);
     redoMapping.addListener(this);

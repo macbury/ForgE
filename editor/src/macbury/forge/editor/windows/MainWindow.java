@@ -82,7 +82,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     this.progressTaskDialog              = new ProgressTaskDialog();
     projectController                    = new ProjectController();
     mainMenu                             = new MainMenu(projectController);
-    terrainToolsController               = new TerrainToolsController(terrainToolsToolbar, blocksController);
+    terrainToolsController               = new TerrainToolsController(terrainToolsToolbar, blocksController, inputProcessor);
     mainToolbarController                = new MainToolbarController(mainToolbar, mainMenu, inputProcessor);
     shadersController                    = new ShadersController(directoryWatcher);
     MapPropertySheet inspectorSheetPanel = new MapPropertySheet();
@@ -149,6 +149,6 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
 
   @Override
   public void focusLost(FocusEvent e) {
-    mainContentPane.grabFocus();
+    //mainContentPane.grabFocus();
   }
 }

@@ -3,7 +3,7 @@
   fragment: "terrain",
   vertex:   "terrain",
   helpers: {
-    vertex: ["directional_light"],
+    vertex: ["directional_light", "fog"],
     fragment: ["fog"]
   }
 }

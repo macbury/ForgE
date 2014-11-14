@@ -1,6 +1,7 @@
 package macbury.forge.editor.input;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.lwjgl.LwjglInput;
 import com.badlogic.gdx.utils.Array;
 
 /**
@@ -35,6 +36,13 @@ public class KeyShortcutMapping {
   public void removeListener(KeyShortcutListener listener) {
     listeners.add(listener);
   }
+
+  public String prettyName() {
+    String s = "";
+    LwjglInput.getLwjglKeyCode(modifier);
+    return s;
+  }
+
 
   public interface KeyShortcutListener {
     public void onKeyShortcut(KeyShortcutMapping shortcutMapping);

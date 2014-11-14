@@ -14,8 +14,11 @@ public class GdxSwingInputProcessor extends InputAdapter {
     this.mappings = new Array<KeyShortcutMapping>();
   }
 
-  public void addMapping(KeyShortcutMapping mapping) {
+  public KeyShortcutMapping registerMapping(int modifier, int keycode, KeyShortcutMapping.KeyShortcutListener listener) {
+    KeyShortcutMapping mapping = new KeyShortcutMapping(modifier, keycode);
     this.mappings.add(mapping);
+    mapping.addListener(listener);
+    return mapping;
   }
 
   @Override
