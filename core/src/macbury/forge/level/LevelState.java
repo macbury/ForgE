@@ -24,8 +24,10 @@ public class LevelState {
     state.id                = ForgE.db.uid();
     state.name              = MAP_NAME_PREFIX + state.id;
     state.env               = new LevelEnv();
+
     state.terrainMap.initialize(width,height,depth);
     state.terrainMap.buildFloor();
+    state.env.terrainMap    = state.terrainMap;
     return state;
   }
 

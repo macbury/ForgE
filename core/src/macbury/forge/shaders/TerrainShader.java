@@ -31,7 +31,8 @@ public class TerrainShader extends RenderableBaseShader<VoxelFaceRenderable> {
     setUniformSkyColor();
     setUniformSun();
     setUniformEyePosition();
-    shader.setUniformf(UNIFORM_MAP_SIZE, 100, 100);
+
+    shader.setUniformf(UNIFORM_MAP_SIZE, env.terrainMap.getWidth(), env.terrainMap.getDepth());
     GLTexture terrainTexture = ForgE.blocks.getTerrainTexture();
     if (terrainTexture != null) {
       setUniformDiffuseTexture(terrainTexture);
