@@ -103,24 +103,12 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
       Chunk visibleChunk = (Chunk) tempObjects.pop();
       if (visibleChunk.renderables.size > 0) {
         visibleChunks.add(visibleChunk);
-        boolean visibleFront = false;
-        //TODO:  if i can see front face, that means i cant see back face, if i can see right face that means i cant see left face
         for (int i = 0; i < visibleChunk.renderables.size; i++) {
           VoxelFaceRenderable renderable = visibleChunk.renderables.get(i);
-          /*if (renderable.direction.epsilonEquals(TerrainBuilder.Face.Front.direction, 0.1f)) {
-            visibleFront = true;
-          }
-
-          if (visibleFront && renderable.direction.equals(TerrainBuilder.Face.Back)) {
-
-          } else {
-            visibleFaces.add(renderable);
-          }*/
-
-          if (camera.boundsInFrustum(renderable.boundingBox)) {
+          //http://www.gamasutra.com/view/feature/131773/a_compact_method_for_backface_.php?print=1
+          if (camera.boundsInFrustum(renderable.boundingBox) && tempA.set(camera.normalOrDebugPosition()).sub(visibleChunk.worldPosition).dot(renderable.direction) >= 0f) {
             visibleFaces.add(renderable);
           }
-          //visibleFaces.add(renderable);
         }
       }
     }
