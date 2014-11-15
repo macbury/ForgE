@@ -149,6 +149,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
 
   @Override
   public void focusLost(FocusEvent e) {
-    //mainContentPane.grabFocus();
+    mainContentPane.grabFocus();
+    //mainContentPane.setFocusable(true);
   }
 }

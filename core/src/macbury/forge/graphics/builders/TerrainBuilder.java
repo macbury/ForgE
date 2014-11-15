@@ -17,12 +17,15 @@ import macbury.forge.voxel.VoxelMap;
 /**
  * Created by macbury on 16.10.14.
  */
-public class TerrainBuilder extends VoxelsAssembler {
+public class TerrainBuilder {
   private static final double SHADE_AO_AMPLUTUDE = 10;
   private static final double SHADE_AO_FREQUENCY = 0.1;
   private static final float SHADE_AO_FACTOR = 0.35f;
+  private final VoxelsAssembler solidVoxelAssembler;
+  private final VoxelsAssembler transparentVoxelAssembler;
   private float[][][] aoArray;
   private boolean haveTransparency;
+
 
   public enum Face {
     Left(Vector3i.LEFT), Right(Vector3i.RIGHT), Top(Vector3i.TOP), Bottom(Vector3i.BOTTOM), Front(Vector3i.FRONT), Back(Vector3i.BACK);
@@ -49,11 +52,9 @@ public class TerrainBuilder extends VoxelsAssembler {
     this.cursor      = new TerrainCursor();
     this.perlinNoise = new PerlinNoise(System.currentTimeMillis());
     this.voxelDef    = new VoxelDef(map);
-
+    this.solidVoxelAssembler       = new VoxelsAssembler();
+    this.transparentVoxelAssembler = new VoxelsAssembler();
     generatePrettyShadeArray();
-    //perlinNoise.setLacunarity(3);
-    //perlinNoise.setPersistence(2);
-    //perlinNoise.setOctaves(9);
 
   }
 
@@ -87,33 +88,33 @@ public class TerrainBuilder extends VoxelsAssembler {
             voxelDef.voxelPosition.set(x,y,z);
             voxelDef.size.set(map.voxelSize);
 
-            if (map.isEmptyNotOutOfBounds(nextTileToCheck)) {
+            if (map.isTransparent(nextTileToCheck) || map.isEmptyNotOutOfBounds(nextTileToCheck)) {
               Block block = map.getBlockForPosition(x,y,z);
               voxelDef.block = block;
               voxelDef.calculateAoFor(aoArray[x][y][z], face);
               switch (face) {
                 case Top:
-                  top(voxelDef);
+                  solidVoxelAssembler.top(voxelDef);
                 break;
 
                 case Bottom:
-                  bottom(voxelDef);
+                  solidVoxelAssembler.bottom(voxelDef);
                 break;
 
                 case Front:
-                  front(voxelDef);
+                  solidVoxelAssembler.front(voxelDef);
                 break;
 
                 case Back:
-                  back(voxelDef);
+                  solidVoxelAssembler.back(voxelDef);
                 break;
 
                 case Left:
-                  left(voxelDef);
+                  solidVoxelAssembler.left(voxelDef);
                 break;
 
                 case Right:
-                  right(voxelDef);
+                  solidVoxelAssembler.right(voxelDef);
                 break;
               }
 
@@ -179,12 +180,17 @@ public class TerrainBuilder extends VoxelsAssembler {
     facesForPart(new Vector3i(0,0,0), new Vector3i(map.getWidth(), map.getHeight(), map.getDepth()), new Vector3());
   }
 
-  @Override
   public void begin() {
-    super.begin();
+    solidVoxelAssembler.begin();
+    transparentVoxelAssembler.begin();
     facesToBuild.clear();
     facesToBuild.addAll(Face.values());
     haveTransparency = false;
+  }
+
+  public void end() {
+    solidVoxelAssembler.end();
+    transparentVoxelAssembler.end();
   }
 
   public boolean next() {
@@ -196,7 +202,7 @@ public class TerrainBuilder extends VoxelsAssembler {
     haveTransparency = false;
     buildFace(face.direction, face);
 
-    if (isEmpty()) {
+    if (solidVoxelAssembler.isEmpty()) {
       return null;
     } else {
       VoxelFaceRenderable renderable = getRenderable();
@@ -216,12 +222,15 @@ public class TerrainBuilder extends VoxelsAssembler {
     renderable.primitiveType         = GL30.GL_TRIANGLES;
 
     if (ForgE.config.generateWireframe)
-      renderable.wireframe           = this.wireframe();
-    renderable.triangleCount         = triangleArrayList.size();
-    renderable.mesh = this.mesh(MeshVertexInfo.AttributeType.Position, MeshVertexInfo.AttributeType.Normal, MeshVertexInfo.AttributeType.TextureCord, MeshVertexInfo.AttributeType.Material);
+      renderable.wireframe           = solidVoxelAssembler.wireframe();
+    renderable.triangleCount         = solidVoxelAssembler.getTriangleCount();
+    renderable.mesh                  = solidVoxelAssembler.mesh(MeshVertexInfo.AttributeType.Position, MeshVertexInfo.AttributeType.Normal, MeshVertexInfo.AttributeType.TextureCord, MeshVertexInfo.AttributeType.Material);
 
     return renderable;
   }
 
-
+  public void dispose() {
+    solidVoxelAssembler.dispose();
+    transparentVoxelAssembler.dispose();
+  }
 }
