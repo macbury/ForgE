@@ -149,10 +149,7 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
       builder.cursor.set(chunk);
 
       while(builder.next()) {
-        VoxelFaceRenderable faceRenderable = builder.buildFaceForChunk(chunk);
-        if (faceRenderable != null) {
-          chunk.addFace(faceRenderable);
-        }
+        builder.buildFaceForChunk(chunk);
       }
     } builder.end();
 

@@ -52,9 +52,9 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
   public JProgressBar jobProgressBar;
   private JList blockList;
   private JPanel mapSettingsPanel;
-  public JSplitPane mainSplitPane;
   private JPanel panelPrimaryBlock;
   private JPanel panelSecondaryBlock;
+  public JPanel mainSplitPane;
   private boolean bruteFocus;
 
   public MainWindow() {
@@ -156,7 +156,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
   @Override
   public void focusLost(FocusEvent e) {
     if (bruteFocus) {
-      mainContentPane.grabFocus();
+      //mainContentPane.grabFocus();
     }
 
     //mainContentPane.setFocusable(true);

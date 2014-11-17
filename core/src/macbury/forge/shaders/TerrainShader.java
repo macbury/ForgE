@@ -25,9 +25,6 @@ public class TerrainShader extends RenderableBaseShader<VoxelFaceRenderable> {
 
   @Override
   public void afterBegin() {
-    context.setCullFace(GL30.GL_BACK);
-    context.setDepthTest(GL20.GL_LEQUAL);
-
     setUniformSkyColor();
     setUniformSun();
     setUniformEyePosition();
@@ -47,8 +44,12 @@ public class TerrainShader extends RenderableBaseShader<VoxelFaceRenderable> {
     shader.setUniformMatrix(UNIFORM_NORMAL_MATRIX, tempNormalMatrix);
     if (renderable.haveTransparency) {
       context.setBlending(true, GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+      context.setCullFace(GL30.GL_NONE);
+      context.setDepthTest(GL20.GL_LEQUAL);
     } else {
       context.setBlending(false, GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+      context.setCullFace(GL30.GL_BACK);
+      context.setDepthTest(GL20.GL_LEQUAL);
     }
 
   }

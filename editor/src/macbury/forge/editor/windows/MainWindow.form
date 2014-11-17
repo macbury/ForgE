@@ -132,32 +132,18 @@
         <border type="none"/>
         <children/>
       </toolbar>
-      <splitpane id="5e439" binding="mainSplitPane">
+      <grid id="13af9" binding="mainSplitPane" layout-manager="BorderLayout" hgap="0" vgap="0">
         <constraints border-constraint="Center"/>
-        <properties>
-          <continuousLayout value="true"/>
-          <dividerLocation value="360"/>
-        </properties>
+        <properties/>
         <border type="none"/>
         <children>
-          <grid id="31e25" binding="openGlContainer" layout-manager="BorderLayout" hgap="0" vgap="0">
-            <constraints>
-              <splitpane position="right"/>
-            </constraints>
-            <properties>
-              <background color="-16711423"/>
-            </properties>
-            <border type="none"/>
-            <children/>
-          </grid>
           <splitpane id="63177">
-            <constraints>
-              <splitpane position="left"/>
-            </constraints>
+            <constraints border-constraint="West"/>
             <properties>
               <continuousLayout value="true"/>
               <dividerLocation value="618"/>
               <orientation value="0"/>
+              <preferredSize width="320" height="527"/>
               <resizeWeight value="0.5"/>
             </properties>
             <border type="none"/>
@@ -311,8 +297,16 @@
               </scrollpane>
             </children>
           </splitpane>
+          <grid id="31e25" binding="openGlContainer" layout-manager="BorderLayout" hgap="0" vgap="0">
+            <constraints border-constraint="Center"/>
+            <properties>
+              <background color="-16711423"/>
+            </properties>
+            <border type="none"/>
+            <children/>
+          </grid>
         </children>
-      </splitpane>
+      </grid>
     </children>
   </grid>
 </form>

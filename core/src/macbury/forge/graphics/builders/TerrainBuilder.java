@@ -24,8 +24,6 @@ public class TerrainBuilder {
   private final VoxelsAssembler solidVoxelAssembler;
   private final VoxelsAssembler transparentVoxelAssembler;
   private float[][][] aoArray;
-  private boolean haveTransparency;
-
 
   public enum Face {
     Left(Vector3i.LEFT), Right(Vector3i.RIGHT), Top(Vector3i.TOP), Bottom(Vector3i.BOTTOM), Front(Vector3i.FRONT), Back(Vector3i.BACK);
@@ -88,36 +86,14 @@ public class TerrainBuilder {
             voxelDef.voxelPosition.set(x,y,z);
             voxelDef.size.set(map.voxelSize);
 
-            if (map.isTransparent(nextTileToCheck) || map.isEmptyNotOutOfBounds(nextTileToCheck)) {
-              Block block = map.getBlockForPosition(x,y,z);
-              voxelDef.block = block;
-              voxelDef.calculateAoFor(aoArray[x][y][z], face);
-              switch (face) {
-                case Top:
-                  solidVoxelAssembler.top(voxelDef);
-                break;
 
-                case Bottom:
-                  solidVoxelAssembler.bottom(voxelDef);
-                break;
-
-                case Front:
-                  solidVoxelAssembler.front(voxelDef);
-                break;
-
-                case Back:
-                  solidVoxelAssembler.back(voxelDef);
-                break;
-
-                case Left:
-                  solidVoxelAssembler.left(voxelDef);
-                break;
-
-                case Right:
-                  solidVoxelAssembler.right(voxelDef);
-                break;
-              }
-
+            Block block = map.getBlockForPosition(x,y,z);
+            if (block.transparent && !map.isTransparent(nextTileToCheck)) {
+              addTrianglesForFace(block, face, transparentVoxelAssembler);
+            } else if (!block.transparent && map.isTransparent(nextTileToCheck))  {
+              addTrianglesForFace(block, face, solidVoxelAssembler);
+            } else if (map.isEmptyNotOutOfBounds(nextTileToCheck)) {
+              addTrianglesForFace(block, face, solidVoxelAssembler);
             }
           }
         }
@@ -125,6 +101,36 @@ public class TerrainBuilder {
     }
     tempA.set(cursor.start.x, cursor.start.y, cursor.start.z).scl(map.voxelSize);
     cursor.size.scl(map.voxelSize).sub(tempA);
+  }
+
+  private void addTrianglesForFace(Block block, Face face, VoxelsAssembler assembler) {
+    voxelDef.block = block;
+    voxelDef.calculateAoFor(aoArray[voxelDef.voxelPosition.x][voxelDef.voxelPosition.y][voxelDef.voxelPosition.z], face);
+    switch (face) {
+      case Top:
+        assembler.top(voxelDef);
+        break;
+
+      case Bottom:
+        assembler.bottom(voxelDef);
+        break;
+
+      case Front:
+        assembler.front(voxelDef);
+        break;
+
+      case Back:
+        assembler.back(voxelDef);
+        break;
+
+      case Left:
+        assembler.left(voxelDef);
+        break;
+
+      case Right:
+        assembler.right(voxelDef);
+        break;
+    }
   }
 
   public void facesForChunk(Chunk chunk) {
@@ -185,7 +191,6 @@ public class TerrainBuilder {
     transparentVoxelAssembler.begin();
     facesToBuild.clear();
     facesToBuild.addAll(Face.values());
-    haveTransparency = false;
   }
 
   public void end() {
@@ -197,15 +202,25 @@ public class TerrainBuilder {
     return facesToBuild.size > 0;
   }
 
-  public VoxelFaceRenderable buildFaceForChunk(Chunk chunk) {
+  public void buildFaceForChunk(Chunk chunk) {
     Face face = facesToBuild.pop();
-    haveTransparency = false;
     buildFace(face.direction, face);
 
-    if (solidVoxelAssembler.isEmpty()) {
-      return null;
-    } else {
-      VoxelFaceRenderable renderable = getRenderable();
+    buildFaceForChunkWithAssembler(chunk, solidVoxelAssembler, false, face);
+    buildFaceForChunkWithAssembler(chunk, transparentVoxelAssembler, true, face);
+  }
+
+  private void buildFaceForChunkWithAssembler(Chunk chunk, VoxelsAssembler assembler, boolean haveTransparency, Face face) {
+    if (!assembler.isEmpty()) {
+
+      VoxelFaceRenderable renderable   = new VoxelFaceRenderable();
+      renderable.primitiveType         = GL30.GL_TRIANGLES;
+
+      if (ForgE.config.generateWireframe)
+        renderable.wireframe           = assembler.wireframe();
+      renderable.triangleCount         = assembler.getTriangleCount();
+      renderable.mesh                  = assembler.mesh(MeshVertexInfo.AttributeType.Position, MeshVertexInfo.AttributeType.Normal, MeshVertexInfo.AttributeType.TextureCord, MeshVertexInfo.AttributeType.Material);
+
       renderable.worldTransform.idt();
       renderable.haveTransparency = haveTransparency;
       renderable.worldTransform.translate(chunk.worldPosition);
@@ -213,21 +228,11 @@ public class TerrainBuilder {
       renderable.mesh.calculateBoundingBox(renderable.boundingBox);
       renderable.boundingBox.min.add(chunk.worldPosition);
       renderable.boundingBox.max.add(chunk.worldPosition);
-      return renderable;
+
+      chunk.addFace(renderable);
     }
   }
 
-  private VoxelFaceRenderable getRenderable() {
-    VoxelFaceRenderable renderable   = new VoxelFaceRenderable();
-    renderable.primitiveType         = GL30.GL_TRIANGLES;
-
-    if (ForgE.config.generateWireframe)
-      renderable.wireframe           = solidVoxelAssembler.wireframe();
-    renderable.triangleCount         = solidVoxelAssembler.getTriangleCount();
-    renderable.mesh                  = solidVoxelAssembler.mesh(MeshVertexInfo.AttributeType.Position, MeshVertexInfo.AttributeType.Normal, MeshVertexInfo.AttributeType.TextureCord, MeshVertexInfo.AttributeType.Material);
-
-    return renderable;
-  }
 
   public void dispose() {
     solidVoxelAssembler.dispose();
