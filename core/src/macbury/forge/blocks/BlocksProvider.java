@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.Json;
-import com.sun.deploy.util.StringUtils;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -43,8 +42,7 @@ public class BlocksProvider implements Disposable {
     for (FileHandle blockFile : blocksFiles) {
       Block block            = json.fromJson(Block.class, blockFile.readString());
       String[] nameParts     = blockFile.nameWithoutExtension().split("_");
-
-      block.name             = StringUtils.join(Arrays.asList(Arrays.copyOfRange(nameParts, 1, nameParts.length)), " ");
+      block.name             = String.join(" ", Arrays.asList(Arrays.copyOfRange(nameParts, 1, nameParts.length)));
       block.id               = Byte.valueOf(nameParts[0]);
       if (this.blocks[block.id] != null) {
         throw new GdxRuntimeException("Block with id "+block.id+" already added!");

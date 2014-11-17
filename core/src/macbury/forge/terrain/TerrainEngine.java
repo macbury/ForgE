@@ -1,6 +1,7 @@
 package macbury.forge.terrain;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Array;
@@ -36,6 +37,7 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
   public  final Array<Chunk>      chunks;
   public  final Array<VoxelFaceRenderable> visibleFaces;
   public  final Array<OctreeObject> tempObjects;
+  public  final Matrix4 tempMat = new Matrix4();
   public  final Vector3 tempA  = new Vector3();
   public  final Vector3 tempC  = new Vector3();
   public  final Vector3 tempD  = new Vector3();
@@ -99,6 +101,8 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
     frustrumOctreeQuery.setFrustum(camera.normalOrDebugFrustrum());
     octree.retrieve(tempObjects, frustrumOctreeQuery);
 
+    tempC.set(camera.normalOrDebugPosition());
+
     while(tempObjects.size > 0) {
       Chunk visibleChunk = (Chunk) tempObjects.pop();
       if (visibleChunk.renderables.size > 0) {
@@ -106,7 +110,8 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
         for (int i = 0; i < visibleChunk.renderables.size; i++) {
           VoxelFaceRenderable renderable = visibleChunk.renderables.get(i);
           //http://www.gamasutra.com/view/feature/131773/a_compact_method_for_backface_.php?print=1
-          if (camera.boundsInFrustum(renderable.boundingBox) && tempA.set(camera.normalOrDebugPosition()).sub(visibleChunk.worldPosition).dot(renderable.direction) >= 0f) {
+          //tempA.set(renderable.boundingBox.getCenter());
+          if (camera.boundsInFrustum(renderable.boundingBox) /*&& tempA.sub(tempC).scl(camera.direction).nor().dot(renderable.direction) >= 0f*/) {
             visibleFaces.add(renderable);
           }
         }

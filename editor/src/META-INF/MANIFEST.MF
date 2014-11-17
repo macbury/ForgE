@@ -1,3 +1,5 @@
 Manifest-Version: 1.0
+Classpath: com.sun.net
+Class-Path: com.sun.net
 Main-Class: macbury.forge.editor.DesktopLauncher
 

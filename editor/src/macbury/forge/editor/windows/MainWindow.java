@@ -18,8 +18,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 
-public class MainWindow extends JFrame implements ForgEBootListener, FocusListener {
+public class MainWindow extends JFrame implements ForgEBootListener, FocusListener, WindowFocusListener {
   private static final String WINDOW_MAIN_NAME = "ForgE";
   private final BlocksController blocksController;
   private final DirectoryWatcher directoryWatcher;
@@ -53,6 +55,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
   public JSplitPane mainSplitPane;
   private JPanel panelPrimaryBlock;
   private JPanel panelSecondaryBlock;
+  private boolean bruteFocus;
 
   public MainWindow() {
     super();
@@ -64,8 +67,8 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     setSize(1360, 760);
     setExtendedState(JFrame.MAXIMIZED_BOTH);
     setDefaultCloseOperation(EXIT_ON_CLOSE);
-    setTitle(null);
 
+    setTitle(null);
     setVisible(true);
 
     this.inputProcessor                  = new GdxSwingInputProcessor();
@@ -102,6 +105,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
 
     mapSettingsPanel.add(inspectorSheetPanel);
     openGlContainer.add(openGLCanvas.getCanvas(), BorderLayout.CENTER);
+
     projectController.setStatusLabel(statusFpsLabel, statusMemoryLabel, statusRenderablesLabel, mapCursorPositionLabel, statusTriangleCountLabel);
 
     projectController.addOnMapChangeListener(mainMenu);
@@ -110,11 +114,13 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     projectController.addOnMapChangeListener(blocksController);
 
     invalidate();
+    addWindowFocusListener(this);
   }
 
   @Override
   public void afterEngineCreate(ForgE engine) {
     Gdx.graphics.setVSync(true);
+    mainSplitPane.setVisible(false);
     ForgE.input.addProcessor(inputProcessor);
     projectController.setMainWindow(this);
     directoryWatcher.start();
@@ -149,7 +155,21 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
 
   @Override
   public void focusLost(FocusEvent e) {
-    mainContentPane.grabFocus();
+    if (bruteFocus) {
+      mainContentPane.grabFocus();
+    }
+
     //mainContentPane.setFocusable(true);
+  }
+
+  @Override
+  public void windowGainedFocus(WindowEvent e) {
+    bruteFocus = true;
+    //mainContentPane.grabFocus();
+  }
+
+  @Override
+  public void windowLostFocus(WindowEvent e) {
+    bruteFocus = false;
   }
 }
