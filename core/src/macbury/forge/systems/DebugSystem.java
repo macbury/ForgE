@@ -87,12 +87,12 @@ public class DebugSystem extends IteratingSystem {
       if (ForgE.config.renderBoundingBox) {
         batch.shapeRenderer.identity();
         for (int i = 0; i < terrain.chunks.size; i++) {
-          batch.shapeRenderer.setColor(BOUNDING_BOX_COLOR);
+          //batch.shapeRenderer.setColor(BOUNDING_BOX_COLOR);
           Chunk chunk = terrain.chunks.get(i);
           chunk.getBoundingBox(tempBox);
 
-          DebugShape.draw(batch.shapeRenderer, tempBox);
-          batch.shapeRenderer.setColor(Color.NAVY);
+          //DebugShape.draw(batch.shapeRenderer, tempBox);
+          //batch.shapeRenderer.setColor(Color.NAVY);
           for (int j = 0; j < chunk.renderables.size; j++) {
             VoxelFaceRenderable renderable = chunk.renderables.get(j);
             DebugShape.draw(batch.shapeRenderer, renderable.boundingBox);

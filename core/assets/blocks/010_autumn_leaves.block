@@ -1,0 +1,9 @@
+{
+  solid: true,
+  shadeAO: true,
+  envAO: true,
+  transparent: true,
+  textures: {
+    all: "autumn_leaves"
+  }
+}

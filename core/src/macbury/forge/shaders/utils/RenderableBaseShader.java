@@ -36,6 +36,10 @@ public abstract class RenderableBaseShader<T extends BaseRenderable> extends Bas
       currentMesh = renderable.mesh;
       currentMesh.bind(shader);
     }
+    renderWithCurrentMesh(renderable);
+  }
+
+  protected void renderWithCurrentMesh(final T renderable) {
     currentMesh.render(shader, renderable.primitiveType, 0, currentMesh.getMaxIndices() > 0 ? currentMesh.getMaxIndices() : currentMesh.getMaxVertices(), false);
   }
 

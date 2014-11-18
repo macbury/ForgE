@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.Pool;
  * Created by macbury on 30.08.14.
  */
 public class MeshVertexInfo implements Pool.Poolable {
-  private static final float BASE_AO = 0.1f;
+  private static final float BASE_AO = 0.2f;
   public float specular;
   public float ao;
   public Vector3 position;

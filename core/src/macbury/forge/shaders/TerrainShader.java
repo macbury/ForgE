@@ -35,6 +35,7 @@ public class TerrainShader extends RenderableBaseShader<VoxelFaceRenderable> {
       setUniformDiffuseTexture(terrainTexture);
     }
 
+    context.setDepthTest(GL20.GL_LEQUAL);
   }
 
   @Override
@@ -45,12 +46,10 @@ public class TerrainShader extends RenderableBaseShader<VoxelFaceRenderable> {
     if (renderable.haveTransparency) {
       context.setBlending(true, GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
       context.setCullFace(GL30.GL_NONE);
-      context.setDepthTest(GL20.GL_LEQUAL);
     } else {
       context.setBlending(false, GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
       context.setCullFace(GL30.GL_BACK);
-      context.setDepthTest(GL20.GL_LEQUAL);
     }
-
   }
+
 }

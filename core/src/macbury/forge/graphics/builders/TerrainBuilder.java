@@ -20,17 +20,22 @@ import macbury.forge.voxel.VoxelMap;
 public class TerrainBuilder {
   private static final double SHADE_AO_AMPLUTUDE = 10;
   private static final double SHADE_AO_FREQUENCY = 0.1;
-  private static final float SHADE_AO_FACTOR = 0.35f;
+  private static final float SHADE_AO_FACTOR = 0.85f;
   private final VoxelsAssembler solidVoxelAssembler;
   private final VoxelsAssembler transparentVoxelAssembler;
   private float[][][] aoArray;
 
   public enum Face {
-    Left(Vector3i.LEFT), Right(Vector3i.RIGHT), Top(Vector3i.TOP), Bottom(Vector3i.BOTTOM), Front(Vector3i.FRONT), Back(Vector3i.BACK);
+    Back(Vector3i.BACK),
+    Bottom(Vector3i.BOTTOM),
+    Left(Vector3i.LEFT),
+    Right(Vector3i.RIGHT),
+    Front(Vector3i.FRONT),
+    Top(Vector3i.TOP);
     public final Vector3i direction;
 
     Face(Vector3i direction) {
-      this.direction = direction;
+      this.direction  = direction;
     }
   }
   private static final String TAG = "TerrainBuilder";
@@ -68,15 +73,13 @@ public class TerrainBuilder {
   }
 
   private void buildFace(Vector3i checkTileInDirection, Face face) {
+    boolean updateCursorSize = false;
     for (int y = cursor.start.y; y < cursor.end.y; y++) {
       for (int x = cursor.start.x; x < cursor.end.x; x++) {
         for (int z = cursor.start.z; z < cursor.end.z; z++) {
           if (map.isSolid(x, y, z)) {
             voxelDef.reset();
-
-            cursor.size.x = Math.max(x, cursor.size.x);
-            cursor.size.y = Math.max(y, cursor.size.y);
-            cursor.size.z = Math.max(z, cursor.size.z);
+            updateCursorSize = false;
 
             tempB.set(cursor.start.x, cursor.start.y, cursor.start.z).scl(map.voxelSize);
             tempA.set(x,y,z).scl(map.voxelSize).sub(tempB);
@@ -90,10 +93,19 @@ public class TerrainBuilder {
             Block block = map.getBlockForPosition(x,y,z);
             if (block.transparent && !map.isTransparent(nextTileToCheck)) {
               addTrianglesForFace(block, face, transparentVoxelAssembler);
+              updateCursorSize = true;
             } else if (!block.transparent && map.isTransparent(nextTileToCheck))  {
               addTrianglesForFace(block, face, solidVoxelAssembler);
+              updateCursorSize = true;
             } else if (map.isEmptyNotOutOfBounds(nextTileToCheck)) {
               addTrianglesForFace(block, face, solidVoxelAssembler);
+              updateCursorSize = true;
+            }
+
+            if (updateCursorSize) {
+              cursor.size.x = Math.max(x, cursor.size.x);
+              cursor.size.y = Math.max(y, cursor.size.y);
+              cursor.size.z = Math.max(z, cursor.size.z);
             }
           }
         }
@@ -228,7 +240,7 @@ public class TerrainBuilder {
       renderable.mesh.calculateBoundingBox(renderable.boundingBox);
       renderable.boundingBox.min.add(chunk.worldPosition);
       renderable.boundingBox.max.add(chunk.worldPosition);
-
+      //Gdx.app.log(TAG, "Bounding box for renderable: " + cursor.size.toString());
       chunk.addFace(renderable);
     }
   }
