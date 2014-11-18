@@ -1,13 +1,14 @@
 package macbury.forge.editor.controllers;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import macbury.forge.editor.Utils;
 import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
 import macbury.forge.editor.input.GdxSwingInputProcessor;
 import macbury.forge.editor.input.KeyShortcutMapping;
+import macbury.forge.editor.screens.EditorScreen;
 import macbury.forge.editor.undo_redo.ChangeManager;
 import macbury.forge.editor.undo_redo.ChangeManagerListener;
-import macbury.forge.editor.screens.EditorScreen;
 import macbury.forge.editor.views.MainMenu;
 import macbury.forge.editor.views.MoreToolbarButton;
 
@@ -19,6 +20,7 @@ import java.awt.event.ActionListener;
  * Created by macbury on 25.10.14.
  */
 public class MainToolbarController implements OnMapChangeListener, ChangeManagerListener, ActionListener, KeyShortcutMapping.KeyShortcutListener {
+  private static final String TAG = "MainToolbarController";
   private final ButtonGroup editorModeButtonGroup;
   private final JToolBar mainToolbar;
   private final MoreToolbarButton moreButton;
@@ -133,10 +135,10 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
 
   @Override
   public void onKeyShortcut(KeyShortcutMapping shortcutMapping) {
+    Gdx.app.log(TAG, "Undo redo shortcut!");
     if (undoMapping == shortcutMapping) {
       undo();
-    }
-    if (redoMapping == shortcutMapping) {
+    } else if (redoMapping == shortcutMapping) {
       redo();
     }
   }

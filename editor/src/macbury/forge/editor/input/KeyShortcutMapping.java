@@ -20,17 +20,27 @@ public class KeyShortcutMapping {
 
   public boolean canHandle(int keycode) {
     if ((this.keycode == keycode && Gdx.input.isKeyPressed(modifier))) {
-      for (KeyShortcutListener listener : listeners) {
-        listener.onKeyShortcut(this);
-      }
+      trigger();
       return true;
     } else {
       return false;
     }
   }
 
+  public boolean isKeycode(int otherKeycode) {
+    return this.keycode == otherKeycode;
+  }
+
+  public void trigger() {
+    for (KeyShortcutListener listener : listeners) {
+      listener.onKeyShortcut(this);
+    }
+  }
+
   public void addListener(KeyShortcutListener listener) {
-    listeners.add(listener);
+    if (listeners.indexOf(listener, true) == -1) {
+      listeners.add(listener);
+    }
   }
 
   public void removeListener(KeyShortcutListener listener) {

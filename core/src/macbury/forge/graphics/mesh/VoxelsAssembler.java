@@ -8,6 +8,8 @@ import macbury.forge.graphics.builders.VoxelDef;
  * Created by macbury on 16.10.14.
  */
 public class VoxelsAssembler extends MeshAssembler {
+
+
   public void top(VoxelDef voxelDef) {
     TextureAtlas.AtlasRegion sideRegion = voxelDef.block.getRegionForSide(Block.Side.top);
     MeshVertexInfo vert1                = this.vertex(voxelDef.position.x, voxelDef.position.y + voxelDef.size.y, voxelDef.position.z); //top left

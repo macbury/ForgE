@@ -1,5 +1,6 @@
 package macbury.forge.editor.input;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.utils.Array;
 
@@ -7,8 +8,9 @@ import com.badlogic.gdx.utils.Array;
  * Created by macbury on 13.11.14.
  */
 public class GdxSwingInputProcessor extends InputAdapter {
+  private static final String TAG = "GdxSwingInputProcessor";
   private final Array<KeyShortcutMapping> mappings;
-  private boolean catchedShortcut = false;
+  private KeyShortcutMapping currentMapping;
 
   public GdxSwingInputProcessor() {
     this.mappings = new Array<KeyShortcutMapping>();
@@ -23,24 +25,29 @@ public class GdxSwingInputProcessor extends InputAdapter {
 
   @Override
   public boolean keyDown(int keycode) {
-    for (KeyShortcutMapping mapping : mappings) {
-      if (mapping.canHandle(keycode)) {
-        catchedShortcut = true;
-        return true;
+    if (currentMapping != null) {
+      return true;
+    } else {
+      Gdx.app.log(TAG, "Triggered keycode: " + keycode);
+      for (KeyShortcutMapping mapping : mappings) {
+        if (mapping.canHandle(keycode)) {
+          currentMapping = mapping;
+          return true;
+        }
       }
+      return false;
     }
-    return super.keyUp(keycode);
   }
 
   @Override
   public boolean keyTyped(char character) {
-    return catchedShortcut;
+    return currentMapping != null;
   }
 
   @Override
   public boolean keyUp(int keycode) {
-    if (catchedShortcut) {
-      catchedShortcut = false;
+    if (currentMapping != null) {
+      currentMapping = null;
       return true;
     }
     return false;
