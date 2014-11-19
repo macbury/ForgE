@@ -68,6 +68,11 @@ public class MeshVertexInfo implements Pool.Poolable {
     return this;
   }
 
+  public MeshVertexInfo normal(Vector3 in) {
+    this.normal.set(in);
+    return this;
+  }
+
   /**
    * Sets Normals to X-
    * @return

@@ -33,6 +33,8 @@ public class BlocksProvider implements Disposable {
   }
 
   public void reload() {
+    Gdx.app.log(TAG, "Reloading blocks...");
+
     loadShapes();
     loadBlocks();
 
@@ -74,6 +76,12 @@ public class BlocksProvider implements Disposable {
       Block block            = json.fromJson(Block.class, blockFile.readString());
       String[] nameParts     = blockFile.nameWithoutExtension().split("_");
       block.name             = String.join(" ", Arrays.asList(Arrays.copyOfRange(nameParts, 1, nameParts.length)));
+      if (shapes.containsKey(block.shape)) {
+        block.blockShape       = shapes.get(block.shape);
+      } else {
+        throw new GdxRuntimeException("Could not find shape with name: "+block.shape + " for " + block.name);
+      }
+
       block.id               = Byte.valueOf(nameParts[0]);
       if (this.blocks[block.id] != null) {
         throw new GdxRuntimeException("Block with id "+block.id+" already added!");

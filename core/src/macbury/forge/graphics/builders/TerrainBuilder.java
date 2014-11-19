@@ -88,7 +88,7 @@ public class TerrainBuilder {
             voxelDef.position.set(tempA);
             voxelDef.voxelPosition.set(x,y,z);
             voxelDef.size.set(map.voxelSize);
-
+            voxelDef.center.set(map.voxelSize.x / 2f, map.voxelSize.y / 2f, map.voxelSize.z / 2f);
 
             Block block = map.getBlockForPosition(x,y,z);
             if (block.transparent && !map.isTransparent(nextTileToCheck)) {

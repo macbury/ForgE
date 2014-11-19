@@ -44,6 +44,10 @@ public class MeshAssembler implements Disposable {
     return vertex(vec.x, vec.y, vec.z);
   }
 
+  public MeshVertexInfo vertex() {
+    return vertex(Vector3.Zero);
+  }
+
   public MeshTriangle triangle(MeshVertexInfo vertex1, MeshVertexInfo vertex2, MeshVertexInfo vertex3) {
     MeshTriangle triangle = trianglesPool.obtain();
     triangle.set(vertex1, vertex2, vertex3);

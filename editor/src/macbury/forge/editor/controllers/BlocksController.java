@@ -59,6 +59,7 @@ public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.
     blockList.setBorder(new EmptyBorder(1, 1, 1, 1));
 
     directoryWatcher.addListener(BlocksProvider.BLOCKS_PATH, this);
+    directoryWatcher.addListener(BlocksProvider.BLOCKS_SHAPE_PATH, this);
     blockList.addListSelectionListener(this);
     blockList.addMouseListener(new MouseAdapter() {
       @Override
@@ -126,7 +127,7 @@ public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.
 
   @Override
   public void onFileInDirectoryChange(FileHandle handle) {
-    if (handle.extension().equalsIgnoreCase(BlocksProvider.BLOCK_EXT)) {
+    if (handle.extension().equalsIgnoreCase(BlocksProvider.BLOCK_EXT) || handle.extension().equalsIgnoreCase(BlocksProvider.SHAPE_EXT)) {
       Gdx.app.log(TAG, "Change in: " + handle.name());
       rebuildTileset();
     }

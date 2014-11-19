@@ -157,10 +157,10 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
   @Override
   public void focusLost(FocusEvent e) {
     if (bruteFocus) {
-      mainContentPane.grabFocus();
+      //mainContentPane.grabFocus();
     }
 
-    mainContentPane.setFocusable(true);
+    //mainContentPane.setFocusable(true);
   }
 
   @Override
@@ -180,5 +180,6 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
       e.getMessage(),
       "Insane error",
       JOptionPane.ERROR_MESSAGE);
+    e.printStackTrace();
   }
 }

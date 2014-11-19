@@ -21,6 +21,13 @@ public class Block {
    * Debug name
    */
   public String name = "";
+
+  /**
+   * Name of the BlockShape object
+   */
+  public String shape = "cube";
+  public BlockShape blockShape;
+
   /**
    * Is block solid and collidable
    */

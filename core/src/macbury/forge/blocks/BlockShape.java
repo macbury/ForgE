@@ -66,16 +66,6 @@ public class BlockShape implements Json.Serializable {
           }
         }
 
-        if (partValue.has(KEY_UVS)) {
-          for(JsonValue uvsValue : partValue.get(KEY_UVS)) {
-            float uvs[] = uvsValue.asFloatArray();
-            if (uvs.length != 2) {
-              throw new GdxRuntimeException("Normal should have 2 values!!!");
-            }
-            part.uvs.add(new Vector2(uvs[0], uvs[1]));
-          }
-        }
-
         if (partValue.has(KEY_TRIANGLES)) {
           for(JsonValue triangleValue : partValue.get(KEY_TRIANGLES)) {
             int triangles[] = triangleValue.asIntArray();
@@ -91,5 +81,9 @@ public class BlockShape implements Json.Serializable {
         throw new GdxRuntimeException(e);
       }
     }
+  }
+
+  public BlockShapePart get(Block.Side side) {
+    return parts.get(side);
   }
 }

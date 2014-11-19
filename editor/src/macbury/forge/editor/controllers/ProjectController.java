@@ -73,7 +73,14 @@ public class ProjectController implements JobListener, ShaderReloadListener {
       for (OnMapChangeListener listener : onMapChangeListenerArray) {
         listener.onCloseMap(ProjectController.this, ProjectController.this.editorScreen);
       }
-      ForgE.screens.disposeCurrentScreen();
+
+      Gdx.app.postRunnable(new Runnable() {
+        @Override
+        public void run() {
+          ForgE.screens.disposeCurrentScreen();
+        }
+      });
+
     }
 
     editorScreen = null;
