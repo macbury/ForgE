@@ -11,7 +11,7 @@ import java.util.HashMap;
 public class Block {
 
   public enum Side {
-    all, top, left, right, back, front, bottom, side
+    all, top, left, right, back, front, bottom, side;
   }
   /**
    * Unique block id

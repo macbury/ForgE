@@ -12,6 +12,7 @@ public class Vector3i {
   public static final Vector3i FRONT = new Vector3i(0, 0, 1);
   public static final Vector3i RIGHT = new Vector3i(1, 0, 0);
   public static final Vector3i LEFT = new Vector3i(-1,0,0);
+  public static final Vector3i ZERO = new Vector3i(0, 0, 0);
   public int x;
   public int y;
   public int z;

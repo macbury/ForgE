@@ -37,6 +37,24 @@ public class TerrainBuilder {
     Face(Vector3i direction) {
       this.direction  = direction;
     }
+
+    public Block.Side toSide() {
+      switch (this) {
+        case Back:
+          return Block.Side.back;
+        case Front:
+          return Block.Side.front;
+        case Left:
+          return Block.Side.left;
+        case Right:
+          return Block.Side.right;
+        case Top:
+          return Block.Side.top;
+        case Bottom:
+          return Block.Side.bottom;
+      }
+      return null;
+    }
   }
   private static final String TAG = "TerrainBuilder";
 
@@ -118,31 +136,7 @@ public class TerrainBuilder {
   private void addTrianglesForFace(Block block, Face face, VoxelsAssembler assembler) {
     voxelDef.block = block;
     voxelDef.calculateAoFor(aoArray[voxelDef.voxelPosition.x][voxelDef.voxelPosition.y][voxelDef.voxelPosition.z], face);
-    switch (face) {
-      case Top:
-        assembler.top(voxelDef);
-        break;
-
-      case Bottom:
-        assembler.bottom(voxelDef);
-        break;
-
-      case Front:
-        assembler.front(voxelDef);
-        break;
-
-      case Back:
-        assembler.back(voxelDef);
-        break;
-
-      case Left:
-        assembler.left(voxelDef);
-        break;
-
-      case Right:
-        assembler.right(voxelDef);
-        break;
-    }
+    assembler.face(voxelDef, face.toSide());
   }
 
   public void facesForChunk(Chunk chunk) {
