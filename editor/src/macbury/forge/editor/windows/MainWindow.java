@@ -116,6 +116,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
 
     invalidate();
     addWindowFocusListener(this);
+
   }
 
   @Override

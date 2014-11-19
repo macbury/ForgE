@@ -105,6 +105,6 @@ public class VoxelDef {
   }
 
   private boolean haveAO(Vector3i direction, Vector3i level) {
-    return map.isEmpty(tempB.set(voxelPosition).add(level)) && map.isSolid(tempA.set(voxelPosition).add(level).add(direction));
+    return map.isEmpty(tempB.set(voxelPosition).add(level)) && map.isNotAir(tempA.set(voxelPosition).add(level).add(direction));
   }
 }

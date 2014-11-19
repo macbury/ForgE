@@ -1,6 +1,5 @@
 package macbury.forge.editor.input;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.utils.Array;
 
@@ -28,7 +27,7 @@ public class GdxSwingInputProcessor extends InputAdapter {
     if (currentMapping != null) {
       return true;
     } else {
-      Gdx.app.log(TAG, "Triggered keycode: " + keycode);
+      //Gdx.app.log(TAG, "Triggered keycode: " + keycode);
       for (KeyShortcutMapping mapping : mappings) {
         if (mapping.canHandle(keycode)) {
           currentMapping = mapping;

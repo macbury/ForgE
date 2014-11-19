@@ -95,7 +95,7 @@ public class TerrainBuilder {
     for (int y = cursor.start.y; y < cursor.end.y; y++) {
       for (int x = cursor.start.x; x < cursor.end.x; x++) {
         for (int z = cursor.start.z; z < cursor.end.z; z++) {
-          if (map.isSolid(x, y, z)) {
+          if (map.isNotAir(x, y, z)) {
             voxelDef.reset();
             updateCursorSize = false;
 
@@ -109,8 +109,12 @@ public class TerrainBuilder {
             voxelDef.center.set(map.voxelSize.x / 2f, map.voxelSize.y / 2f, map.voxelSize.z / 2f);
 
             Block block = map.getBlockForPosition(x,y,z);
-            if (block.transparent && !map.isTransparent(nextTileToCheck)) {
-              addTrianglesForFace(block, face, transparentVoxelAssembler);
+            if (block.transparent) {
+              Block nextBlock = map.getBlockForPosition(nextTileToCheck);
+              if (!map.isTransparent(nextTileToCheck) || nextBlock == null || nextBlock.id != block.id || !block.blockShape.occulsion) {
+                addTrianglesForFace(block, face, transparentVoxelAssembler);
+              }
+
               updateCursorSize = true;
             } else if (!block.transparent && map.isTransparent(nextTileToCheck))  {
               addTrianglesForFace(block, face, solidVoxelAssembler);
@@ -149,7 +153,7 @@ public class TerrainBuilder {
     for (int x = start.x; x < end.x; x++) {
       for (int y = start.y; y < end.y; y++) {
         for (int z = start.z; z < end.z; z++) {
-          if (map.isSolid(x, y, z)) {
+          if (map.isNotAir(x, y, z)) {
             outSize.x = Math.max(x, outSize.x);
             outSize.y = Math.max(y, outSize.y);
             outSize.z = Math.max(z, outSize.z);

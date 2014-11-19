@@ -36,16 +36,21 @@ public class VoxelsAssembler extends MeshAssembler {
   }
 
   public void face(VoxelDef voxelDef, Block.Side side) {
-    TextureAtlas.AtlasRegion sideRegion = voxelDef.block.getRegionForSide(side);
     BlockShapePart blockShapePart       = voxelDef.block.blockShape.get(side);
 
-    for(BlockShapeTriangle triangle : blockShapePart.triangles) {
-      MeshVertexInfo vert1          = vertex(voxelDef, blockShapePart, triangle.index1, sideRegion);
-      MeshVertexInfo vert2          = vertex(voxelDef, blockShapePart, triangle.index2, sideRegion);
-      MeshVertexInfo vert3          = vertex(voxelDef, blockShapePart, triangle.index3, sideRegion);
+    if (blockShapePart != null) {
+      TextureAtlas.AtlasRegion sideRegion = voxelDef.block.getRegionForSide(side);
 
-      triangle(vert1, vert2, vert3);
+
+      for(BlockShapeTriangle triangle : blockShapePart.triangles) {
+        MeshVertexInfo vert1          = vertex(voxelDef, blockShapePart, triangle.index1, sideRegion);
+        MeshVertexInfo vert2          = vertex(voxelDef, blockShapePart, triangle.index2, sideRegion);
+        MeshVertexInfo vert3          = vertex(voxelDef, blockShapePart, triangle.index3, sideRegion);
+
+        triangle(vert1, vert2, vert3);
+      }
     }
+
   }
 
   public void top(VoxelDef voxelDef) {
