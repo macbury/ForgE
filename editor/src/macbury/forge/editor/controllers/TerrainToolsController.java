@@ -47,11 +47,11 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
   private SelectType currentSelectType;
 
   public TerrainToolsController(JToolBar terrainToolsToolbar, BlocksController blocksController, GdxSwingInputProcessor inputProcessor) {
-    toolbar               = terrainToolsToolbar;
-    this.blocksController = blocksController;
-    this.inputProcessor   = inputProcessor;
-    this.toolsGroup       = new ButtonGroup();
-    this.modifyGroup      = new ButtonGroup();
+    toolbar                   = terrainToolsToolbar;
+    this.blocksController     = blocksController;
+    this.inputProcessor       = inputProcessor;
+    this.toolsGroup           = new ButtonGroup();
+    this.modifyGroup          = new ButtonGroup();
 
     this.singleBlockSelection = new SingleBlockSelection();
     this.rectSelection        = new BoxSelection();

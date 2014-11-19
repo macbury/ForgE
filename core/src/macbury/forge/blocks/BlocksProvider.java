@@ -11,23 +11,54 @@ import com.badlogic.gdx.utils.Json;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.Arrays;
+import java.util.HashMap;
 
 /**
  * Created by macbury on 11.11.14.
  */
 public class BlocksProvider implements Disposable {
   public final static String BLOCKS_PATH = "blocks/";
+  public final static String BLOCKS_SHAPE_PATH = BLOCKS_PATH + "shapes/";
   public final static String BLOCK_EXT = "block";
+  public final static String SHAPE_EXT = "shape";
   private static final String TAG = "BlocksProvider";
   private static final String TILEMAP_PATH = "textures/tilemap.atlas";
   private Block[] blocks;
   private TextureAtlas textureAtlas;
   private boolean reloadAtlas;
+  private HashMap<String, BlockShape> shapes;
+
   public BlocksProvider() {
     reload();
   }
 
   public void reload() {
+    loadShapes();
+    loadBlocks();
+
+    reloadAtlas = true;
+  }
+
+  private void loadShapes() {
+    Json json = new Json();
+    FileHandle[] shapesFiles = Gdx.files.internal(BLOCKS_SHAPE_PATH).list(new FilenameFilter() {
+      @Override
+      public boolean accept(File dir, String name) {
+        return name.endsWith("."+SHAPE_EXT);
+      }
+    });
+
+    this.shapes = new HashMap<String, BlockShape>();
+
+    for (FileHandle blockShapeFile : shapesFiles) {
+      BlockShape blockShape = json.fromJson(BlockShape.class, blockShapeFile.readString());
+      blockShape.name       = blockShapeFile.nameWithoutExtension();
+      this.shapes.put(blockShape.name, blockShape);
+      Gdx.app.log(TAG, "Loaded block shape: " + blockShape.name);
+    }
+  }
+
+  private void loadBlocks() {
     Json json = new Json();
     FileHandle[] blocksFiles = Gdx.files.internal(BLOCKS_PATH).list(new FilenameFilter() {
       @Override
@@ -50,8 +81,6 @@ public class BlocksProvider implements Disposable {
       this.blocks[block.id] = block;
       Gdx.app.log(TAG, "Loaded block: " +block.toString());
     }
-
-    reloadAtlas = true;
   }
 
   public void loadTilemap() {

@@ -21,7 +21,7 @@ import java.awt.event.FocusListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 
-public class MainWindow extends JFrame implements ForgEBootListener, FocusListener, WindowFocusListener {
+public class MainWindow extends JFrame implements ForgEBootListener, FocusListener, WindowFocusListener, Thread.UncaughtExceptionHandler {
   private static final String WINDOW_MAIN_NAME = "ForgE";
   private final BlocksController blocksController;
   private final DirectoryWatcher directoryWatcher;
@@ -59,6 +59,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
 
   public MainWindow() {
     super();
+    Thread.setDefaultUncaughtExceptionHandler(this);
     Toolkit kit      = Toolkit.getDefaultToolkit();
     Image mainIcon   = kit.createImage(ClassLoader.getSystemResource("icons/main.ico"));
     setIconImage(mainIcon);
@@ -171,5 +172,13 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
   @Override
   public void windowLostFocus(WindowEvent e) {
     bruteFocus = false;
+  }
+
+  @Override
+  public void uncaughtException(Thread t, Throwable e) {
+    JOptionPane.showMessageDialog(this,
+      e.getMessage(),
+      "Insane error",
+      JOptionPane.ERROR_MESSAGE);
   }
 }
