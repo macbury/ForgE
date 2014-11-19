@@ -1,0 +1,10 @@
+{
+  shape: "foliage",
+  solid: false,
+  shadeAO: true,
+  envAO: true,
+  transparent: true,
+  textures: {
+    all: "flower_tulip_orange"
+  }
+}
