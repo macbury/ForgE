@@ -12,6 +12,7 @@ import macbury.forge.utils.Vector3i;
  * Created by macbury on 17.10.14.
  */
 public class VoxelMap implements Disposable {
+  private static final byte AIR_BLOCK_INDEX = 0;
   private final BoundingBox boundingBox;
   private final Vector3 temp = new Vector3();
   public final Vector3 voxelSize;
@@ -36,7 +37,7 @@ public class VoxelMap implements Disposable {
 
   public byte getBlockIdForPosition(int x, int y, int z) {
     if (isOutOfBounds(x,y,z) || voxelMap[x][y][z] == null) {
-      return 0;
+      return AIR_BLOCK_INDEX;
     } else {
       return voxelMap[x][y][z].blockId;
     }
@@ -56,7 +57,7 @@ public class VoxelMap implements Disposable {
 
   public void setBlockIdForPosition(byte blockId, int x, int y, int z) {
     if (!isOutOfBounds(x,y,z)) {
-      if (blockId == 0) {
+      if (blockId == AIR_BLOCK_INDEX) {
         voxelMap[x][y][z] = null;
       } else {
         if (voxelMap[x][y][z] == null) {
@@ -69,7 +70,12 @@ public class VoxelMap implements Disposable {
   }
 
   public void setBlockForPosition(Block block, int x, int y, int z) {
-    setBlockIdForPosition(block.id, x,y,z);
+    if (block == null) {
+      setBlockIdForPosition(AIR_BLOCK_INDEX, x, y, z);
+    } else {
+      setBlockIdForPosition(block.id, x,y,z);
+    }
+
   }
 
   public void setEmptyForPosition(int x, int y, int z) {

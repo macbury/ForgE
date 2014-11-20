@@ -108,9 +108,9 @@ public class TerrainBuilder {
             voxelDef.size.set(map.voxelSize);
             voxelDef.center.set(map.voxelSize.x / 2f, map.voxelSize.y / 2f, map.voxelSize.z / 2f);
 
-            Block block = map.getBlockForPosition(x,y,z);
+            Block block     = map.getBlockForPosition(x,y,z);
+            Block nextBlock = map.getBlockForPosition(nextTileToCheck);
             if (block.transparent) {
-              Block nextBlock = map.getBlockForPosition(nextTileToCheck);
               if (!map.isTransparent(nextTileToCheck) || nextBlock == null || nextBlock.id != block.id || !block.blockShape.occulsion) {
                 addTrianglesForFace(block, face, transparentVoxelAssembler);
               }
@@ -119,7 +119,7 @@ public class TerrainBuilder {
             } else if (!block.transparent && map.isTransparent(nextTileToCheck))  {
               addTrianglesForFace(block, face, solidVoxelAssembler);
               updateCursorSize = true;
-            } else if (map.isEmptyNotOutOfBounds(nextTileToCheck)) {
+            } else if (map.isEmptyNotOutOfBounds(nextTileToCheck) || (!nextBlock.isAir() && (nextBlock.blockShape != block.blockShape))) {
               addTrianglesForFace(block, face, solidVoxelAssembler);
               updateCursorSize = true;
             }

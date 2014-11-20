@@ -3,6 +3,7 @@ package macbury.forge.graphics.mesh;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import macbury.forge.blocks.Block;
 import macbury.forge.blocks.BlockShapePart;
 import macbury.forge.blocks.BlockShapeTriangle;
@@ -13,10 +14,17 @@ import macbury.forge.graphics.builders.VoxelDef;
  */
 public class VoxelsAssembler extends MeshAssembler {
   private Matrix4 transformMat = new Matrix4();
-
+  private Vector3 tempVec      = new Vector3();
   private MeshVertexInfo vertex(VoxelDef voxelDef, BlockShapePart part, int index, TextureAtlas.AtlasRegion sideRegion) {
     MeshVertexInfo vert = this.vertex().normal(part.normals.get(index)).ao(voxelDef.ao).transparent(voxelDef.block.transparent);
-    transformMat.idt().translate(part.verticies.get(index)).translate(voxelDef.center).translate(voxelDef.position.x, voxelDef.position.y, voxelDef.position.z).getTranslation(vert.position);
+
+    transformMat.idt();
+    transformMat.translate(voxelDef.position.x, voxelDef.position.y, voxelDef.position.z);
+    transformMat.translate(voxelDef.center);
+    //transformMat.rotate(Vector3.Y, 90);
+    transformMat.translate(part.verticies.get(index));
+
+    transformMat.getTranslation(vert.position);
 
     Vector2 uv = part.uvs.get(index);
 
@@ -50,7 +58,6 @@ public class VoxelsAssembler extends MeshAssembler {
         triangle(vert1, vert2, vert3);
       }
     }
-
   }
 
   public void top(VoxelDef voxelDef) {
