@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.SerializationException;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -73,21 +74,28 @@ public class BlocksProvider implements Disposable {
     this.blocks[0]  = new AirBlock();
 
     for (FileHandle blockFile : blocksFiles) {
-      Block block            = json.fromJson(Block.class, blockFile.readString());
-      String[] nameParts     = blockFile.nameWithoutExtension().split("_");
-      block.name             = String.join(" ", Arrays.asList(Arrays.copyOfRange(nameParts, 1, nameParts.length)));
-      if (shapes.containsKey(block.shape)) {
-        block.blockShape       = shapes.get(block.shape);
-      } else {
-        throw new GdxRuntimeException("Could not find shape with name: "+block.shape + " for " + block.name);
+      try {
+        Block block            = json.fromJson(Block.class, blockFile.readString());
+        String[] nameParts     = blockFile.nameWithoutExtension().split("_");
+        block.name             = String.join(" ", Arrays.asList(Arrays.copyOfRange(nameParts, 1, nameParts.length)));
+        if (shapes.containsKey(block.shape)) {
+          block.blockShape       = shapes.get(block.shape);
+        } else {
+          throw new GdxRuntimeException("Could not find shape with name: "+block.shape + " for " + block.name);
+        }
+
+        block.id               = Byte.valueOf(nameParts[0]);
+        if (this.blocks[block.id] != null) {
+          throw new GdxRuntimeException("Block with id "+block.id+" already added!");
+        }
+        this.blocks[block.id] = block;
+        Gdx.app.log(TAG, "Loaded block: " +block.toString());
+
+      } catch (SerializationException exception) {
+        throw new GdxRuntimeException("Could not load block: "+blockFile.name() + " because " + exception.getMessage());
       }
 
-      block.id               = Byte.valueOf(nameParts[0]);
-      if (this.blocks[block.id] != null) {
-        throw new GdxRuntimeException("Block with id "+block.id+" already added!");
-      }
-      this.blocks[block.id] = block;
-      Gdx.app.log(TAG, "Loaded block: " +block.toString());
+
     }
   }
 

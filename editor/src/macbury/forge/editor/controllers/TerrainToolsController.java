@@ -31,8 +31,6 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
   private final SingleBlockSelection singleBlockSelection;
   private final BoxSelection rectSelection;
   private final ButtonGroup modifyGroup;
-  private final JToggleButton appendBlocksButton;
-  private final JToggleButton replaceBlocksButton;
   private final EreaseSelection ereaseSelection;
   private final JToggleButton ereaserButton;
   private final BlocksController blocksController;
@@ -44,7 +42,6 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
   private ChunkMap map;
   private EditorScreen screen;
   private JobManager jobs;
-  private SelectType currentSelectType;
 
   public TerrainToolsController(JToolBar terrainToolsToolbar, BlocksController blocksController, GdxSwingInputProcessor inputProcessor) {
     toolbar                   = terrainToolsToolbar;
@@ -69,8 +66,6 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
 
     toolbar.addSeparator();
 
-    appendBlocksButton  = buildToogleButton("append_blocks", modifyGroup, Input.Keys.ALT_LEFT, Input.Keys.A);
-    replaceBlocksButton = buildToogleButton("replace_blocks", modifyGroup, Input.Keys.ALT_LEFT, Input.Keys.R);
     updateUI();
   }
 
@@ -78,15 +73,11 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
     boolean interfaceEnabled = screen != null;
     boolean showAppend       = !ereaserButton.isSelected();
 
-    appendBlocksButton.setVisible(showAppend);
-    replaceBlocksButton.setVisible(showAppend);
 
     toolbar.setEnabled(interfaceEnabled);
     drawPencilButton.setEnabled(interfaceEnabled);
     drawRectButton.setEnabled(interfaceEnabled);
 
-    appendBlocksButton.setEnabled(interfaceEnabled);
-    replaceBlocksButton.setEnabled(interfaceEnabled);
   }
 
   private JToggleButton buildToogleButton(String iconName, ButtonGroup buttonGroup, int modifier, int keycode) {
@@ -127,8 +118,6 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
   @Override
   public void onNewMap(ProjectController controller, EditorScreen screen) {
     drawPencilButton.setSelected(true);
-    appendBlocksButton.setSelected(true);
-    currentSelectType    = SelectType.Append;
     this.screen          = screen;
     selectionSystem      = screen.selectionSystem;
     changeManager        = screen.changeManager;
@@ -155,13 +144,6 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
       setCurrentSelection(ereaseSelection);
     }
 
-    if (e.getSource() == replaceBlocksButton) {
-      currentSelectType = SelectType.Replace;
-      setCurrentSelection(currentSelection);
-    } else if (e.getSource() == appendBlocksButton) {
-      currentSelectType = SelectType.Append;
-      setCurrentSelection(currentSelection);
-    }
   }
 
   @Override
@@ -194,7 +176,6 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
 
   private void setCurrentSelection(AbstractSelection currentSelection) {
     this.currentSelection = currentSelection;
-    currentSelection.setSelectType(currentSelectType);
     this.selectionSystem.setSelection(currentSelection);
     updateUI();
   }

@@ -16,15 +16,40 @@ public class VoxelsAssembler extends MeshAssembler {
   private Matrix4 transformMat = new Matrix4();
   private Vector3 tempVec      = new Vector3();
   private MeshVertexInfo vertex(VoxelDef voxelDef, BlockShapePart part, int index, TextureAtlas.AtlasRegion sideRegion) {
-    MeshVertexInfo vert = this.vertex().normal(part.normals.get(index)).ao(voxelDef.ao).transparent(voxelDef.block.transparent);
+    MeshVertexInfo vert = this.vertex().ao(voxelDef.ao).transparent(voxelDef.block.transparent);
 
+    // Part first calculate position of vertex and rotate in the algiment path
     transformMat.idt();
     transformMat.translate(voxelDef.position.x, voxelDef.position.y, voxelDef.position.z);
     transformMat.translate(voxelDef.center);
-    //transformMat.rotate(Vector3.Y, 90);
-    transformMat.translate(part.verticies.get(index));
+    switch(voxelDef.block.rotation) {
+      case horizontal:
+        transformMat.rotate(Vector3.Y, -90);
+      break;
 
+      case alignToSurface:
+        transformMat.rotate(Vector3.Y, -90);
+      break;
+    }
+
+    transformMat.translate(part.verticies.get(index));
     transformMat.getTranslation(vert.position);
+
+    // Recalculate aligment normals too :P
+
+    transformMat.idt();
+    switch(voxelDef.block.rotation) {
+      case horizontal:
+        transformMat.rotate(Vector3.Y, -90);
+      break;
+
+      case alignToSurface:
+        transformMat.rotate(Vector3.Y, -90);
+      break;
+    }
+    transformMat.translate(part.normals.get(index));
+    transformMat.getTranslation(vert.normal);
+
 
     Vector2 uv = part.uvs.get(index);
 

@@ -3,6 +3,7 @@ package macbury.forge.editor.systems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.collision.Ray;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.utils.Array;
 import macbury.forge.components.Cursor;
 import macbury.forge.components.Position;
 import macbury.forge.editor.selection.AbstractSelection;
+import macbury.forge.editor.selection.SelectType;
 import macbury.forge.editor.selection.SelectionInterface;
 import macbury.forge.graphics.camera.GameCamera;
 import macbury.forge.level.Level;
@@ -65,6 +67,11 @@ public class SelectionSystem extends EntitySystem {
   @Override
   public void update(float deltaTime) {
     cursorComponent.set(selection.getBoundingBox());
+    if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
+      selection.setSelectType(SelectType.Replace);
+    } else {
+      selection.setSelectType(SelectType.Append);
+    }
   }
 
   private boolean getCurrentVoxelCursor(float screenX, float screenY) {

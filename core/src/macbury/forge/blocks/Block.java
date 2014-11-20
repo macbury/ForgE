@@ -13,6 +13,11 @@ public class Block {
   public enum Side {
     all, top, left, right, back, front, bottom, side;
   }
+
+  public enum Rotation {
+    none, horizontal, alignToSurface
+  }
+
   /**
    * Unique block id
    */
@@ -45,9 +50,9 @@ public class Block {
    */
   public boolean transparent = false;
   /**
-   * Should render backFace
+   * How block should algint itself to other blocks
    */
-  public boolean backFace = false;
+  public Rotation rotation = Rotation.none;
   /**
    * Textures names for block
    */

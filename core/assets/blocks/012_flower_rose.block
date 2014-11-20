@@ -4,6 +4,7 @@
   shadeAO: true,
   envAO: true,
   transparent: true,
+  rotation: "alignToSurface",
   textures: {
     all: "flower_tulip_orange"
   }
