@@ -4,6 +4,7 @@
   shadeAO: true,
   envAO: true,
   transparent: true,
+  rotation: "alignToSurface",
   textures: {
     all: "crops7"
   }

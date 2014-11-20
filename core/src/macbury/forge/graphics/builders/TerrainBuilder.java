@@ -3,6 +3,7 @@ package macbury.forge.graphics.builders;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import macbury.forge.ForgE;
@@ -32,6 +33,7 @@ public class TerrainBuilder {
   public final TerrainCursor cursor;
   private Vector3 tempA = new Vector3();
   private Vector3 tempB = new Vector3();
+  private Matrix4 tempMat = new Matrix4();
   private Array<Block.Side> facesToBuild = new Array<Block.Side>();
   private final PerlinNoise perlinNoise;
   private Vector3i nextTileToCheck = new Vector3i();
@@ -72,26 +74,38 @@ public class TerrainBuilder {
     return voxelB != null && (voxelB.getBlock().blockShape != voxelA.getBlock().blockShape);
   }
 
-  private void buildFace(Vector3i checkTileInDirection, Block.Side face) {
+  private void buildFace(Block.Side face) {
     boolean updateCursorSize = false;
     for (int y = cursor.start.y; y < cursor.end.y; y++) {
       for (int x = cursor.start.x; x < cursor.end.x; x++) {
         for (int z = cursor.start.z; z < cursor.end.z; z++) {
           if (map.isNotAir(x, y, z)) {
             voxelDef.reset();
+
+            Voxel currentVoxel     = map.getVoxelForPosition(x, y, z);
+
+            nextTileToCheck.set(x,y,z);
+            /*if (currentVoxel.alginTo != null && currentVoxel.getBlock().rotation != Block.Rotation.none) {
+              nextTileToCheck.sub(currentVoxel.alginTo.direction);
+            } else {
+              nextTileToCheck.add(face.direction);
+            }*/
+
+            nextTileToCheck.add(face.direction);
+
             updateCursorSize = false;
 
             tempB.set(cursor.start.x, cursor.start.y, cursor.start.z).scl(map.voxelSize);
             tempA.set(x,y,z).scl(map.voxelSize).sub(tempB);
 
-            nextTileToCheck.set(x,y,z).add(checkTileInDirection);
+
             voxelDef.position.set(tempA);
             voxelDef.voxelPosition.set(x,y,z);
             voxelDef.size.set(map.voxelSize);
 
             voxelDef.center.set(map.voxelSize.x / 2f, map.voxelSize.y / 2f, map.voxelSize.z / 2f);
 
-            Voxel currentVoxel     = map.getVoxelForPosition(x, y, z);
+
             Voxel nextVoxel        = map.getVoxelForPosition(nextTileToCheck);
 
             Block.Side side        = currentVoxel.getBlock().rotation.faceToSide(currentVoxel.alginTo);
@@ -107,7 +121,7 @@ public class TerrainBuilder {
             } else if (isVoxelTransparent(nextVoxel))  {
               addTrianglesForFace(currentVoxel, face, solidVoxelAssembler);
               updateCursorSize = true;
-            } else if (map.isEmptyNotOutOfBounds(nextTileToCheck) || doVoxelsDontHaveTheSameShape(currentVoxel, nextVoxel)) {
+            } else if (map.isEmptyNotOutOfBounds(nextTileToCheck) || doVoxelsDontHaveTheSameShape(currentVoxel, nextVoxel) || !isVoxelBlockHaveOcculsion(currentVoxel)) {
               addTrianglesForFace(currentVoxel, face, solidVoxelAssembler);
               updateCursorSize = true;
             }
@@ -204,7 +218,7 @@ public class TerrainBuilder {
   public void buildFaceForChunk(Chunk chunk) {
     Block.Side side = facesToBuild.pop();
     if (side != Block.Side.all || side != Block.Side.side) {
-      buildFace(side.direction, side);
+      buildFace(side);
 
       buildFaceForChunkWithAssembler(chunk, solidVoxelAssembler, false, side);
       buildFaceForChunkWithAssembler(chunk, transparentVoxelAssembler, true, side);
