@@ -1,5 +1,6 @@
 package macbury.forge.voxel;
 
+import macbury.forge.ForgE;
 import macbury.forge.blocks.Block;
 
 /**
@@ -15,4 +16,21 @@ public class Voxel {
    * Should terrain builder algin this block to specified side of other block;
    */
   public Block.Side alginTo;
+
+  /**
+   * Totaly need to change this, Shit storm ahead
+   * @return
+   */
+  public Block getBlock() {
+    return ForgE.blocks.find(blockId);
+  }
+
+  public Voxel() {
+
+  }
+
+  public Voxel(Voxel otherVoxel) {
+    this.blockId = otherVoxel.blockId;
+    this.alginTo = otherVoxel.alginTo;
+  }
 }

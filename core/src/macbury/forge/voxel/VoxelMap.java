@@ -180,4 +180,41 @@ public class VoxelMap implements Disposable {
   public boolean isNotAir(Vector3 position) {
     return isNotAir(Math.round(position.x), Math.round(position.y), Math.round(position.z));
   }
+
+  public Voxel getVoxelForPosition(int x, int y, int z) {
+    if (isOutOfBounds(x,y,z)) {
+      return null;
+    } else {
+      return voxelMap[x][y][z];
+    }
+  }
+
+  public Voxel getVoxelForPosition(Vector3i voxelPosition) {
+    return getVoxelForPosition(voxelPosition.x, voxelPosition.y, voxelPosition.z);
+  }
+
+  public void setAlignmentForPosition(Block.Side alignToSide, Vector3i voxelPosition) {
+    Voxel voxel = getVoxelForPosition(voxelPosition);
+    if (voxel != null) {
+      voxel.alginTo = alignToSide;
+    }
+  }
+
+  public void setVoxelForPosition(Voxel voxel, Vector3i voxelPosition) {
+    if (!isOutOfBounds(voxelPosition)) {
+      voxelMap[voxelPosition.x][voxelPosition.y][voxelPosition.z] = voxel;
+    }
+  }
+
+  public Voxel findOrInitializeVoxelForPosition(Vector3i voxelPosition) {
+    if (!isOutOfBounds(voxelPosition)) {
+      if (voxelMap[voxelPosition.x][voxelPosition.y][voxelPosition.z] == null) {
+        voxelMap[voxelPosition.x][voxelPosition.y][voxelPosition.z] = new Voxel();
+      }
+
+      return voxelMap[voxelPosition.x][voxelPosition.y][voxelPosition.z];
+    } else {
+      return null;
+    }
+  }
 }

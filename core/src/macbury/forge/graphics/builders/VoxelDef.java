@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
 import macbury.forge.blocks.Block;
 import macbury.forge.utils.Vector3i;
+import macbury.forge.voxel.Voxel;
 import macbury.forge.voxel.VoxelMap;
 
 
@@ -33,6 +34,7 @@ public class VoxelDef {
 
   private final Vector3i BACK_LEFT  = new Vector3i(Vector3i.BACK).add(Vector3i.LEFT);
   private final Vector3i BACK_RIGHT = new Vector3i(Vector3i.BACK).add(Vector3i.RIGHT);
+  public Voxel voxel;
 
   public VoxelDef(VoxelMap map) {
     this.map = map;
@@ -50,57 +52,13 @@ public class VoxelDef {
     shadeBottomRightCorner = false;
   }
 
-  public void calculateAoFor(float baseAo, TerrainBuilder.Face face) {
+  public void calculateAoFor(float baseAo) {
     if (block.envAO) {
       this.ao = baseAo;
     }
 
     if (!block.shadeAO) {
       return;
-    }
-
-    if (face == TerrainBuilder.Face.Back) {
-      if (haveAO(Vector3i.BACK, Vector3i.BACK)) {
-        shadeTopLeftCorner = shadeTopRightCorner = true;
-      }
-    }
-
-    if (face == TerrainBuilder.Face.Top) {
-      if (haveAO(Vector3i.BACK, Vector3i.TOP)) {
-        shadeTopLeftCorner = shadeTopRightCorner = true;
-      }
-
-      if (haveAO(Vector3i.FRONT, Vector3i.TOP)) {
-        shadeBottomRightCorner = shadeBottomLeftCorner = true;
-      }
-
-      if (haveAO(Vector3i.LEFT, Vector3i.TOP)) {
-        shadeBottomLeftCorner = true;
-        shadeTopLeftCorner    = true;
-      }
-
-      if (haveAO(Vector3i.RIGHT, Vector3i.TOP)) {
-        shadeBottomRightCorner = true;
-        shadeTopRightCorner    = true;
-      }
-
-      if (haveAO(FRONT_LEFT, Vector3i.TOP)) {
-        shadeBottomLeftCorner    = true;
-        // flip here rect
-      }
-
-      if (haveAO(FRONT_RIGHT, Vector3i.TOP)) {
-        shadeBottomRightCorner    = true;
-      }
-
-      if (haveAO(BACK_LEFT, Vector3i.TOP)) {
-        shadeTopLeftCorner    = true;
-      }
-
-      if (haveAO(BACK_RIGHT, Vector3i.TOP)) {
-        shadeTopRightCorner    = true;
-        // flip here rect
-      }
     }
   }
 

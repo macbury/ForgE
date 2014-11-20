@@ -3,6 +3,7 @@ package macbury.forge.editor.selection;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
+import macbury.forge.blocks.Block;
 import macbury.forge.utils.Vector3i;
 import macbury.forge.utils.VoxelCursor;
 
@@ -76,6 +77,18 @@ public abstract class AbstractSelection {
     } else {
       return startPosition.replace;
     }
+  }
+
+  private static Vector3i alginDir = new Vector3i();
+  public Block.Side getAlginSide() {
+    alginDir.set(startPosition.replace).sub(startPosition.append);
+
+    for (Block.Side side : Block.Side.values()) {
+      if (side.direction.equals(alginDir)) {
+        return side;
+      }
+    }
+    return Block.Side.all;
   }
 
   public Vector3i getEndPostion() {

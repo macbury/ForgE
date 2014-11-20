@@ -12,6 +12,7 @@ import macbury.forge.graphics.mesh.MeshVertexInfo;
 import macbury.forge.graphics.mesh.VoxelsAssembler;
 import macbury.forge.procedular.PerlinNoise;
 import macbury.forge.utils.Vector3i;
+import macbury.forge.voxel.Voxel;
 import macbury.forge.voxel.VoxelMap;
 
 /**
@@ -25,44 +26,13 @@ public class TerrainBuilder {
   private final VoxelsAssembler transparentVoxelAssembler;
   private float[][][] aoArray;
 
-  public enum Face {
-    Back(Vector3i.BACK),
-    Bottom(Vector3i.BOTTOM),
-    Left(Vector3i.LEFT),
-    Right(Vector3i.RIGHT),
-    Front(Vector3i.FRONT),
-    Top(Vector3i.TOP);
-    public final Vector3i direction;
-
-    Face(Vector3i direction) {
-      this.direction  = direction;
-    }
-
-    public Block.Side toSide() {
-      switch (this) {
-        case Back:
-          return Block.Side.back;
-        case Front:
-          return Block.Side.front;
-        case Left:
-          return Block.Side.left;
-        case Right:
-          return Block.Side.right;
-        case Top:
-          return Block.Side.top;
-        case Bottom:
-          return Block.Side.bottom;
-      }
-      return null;
-    }
-  }
   private static final String TAG = "TerrainBuilder";
 
   private final VoxelMap map;
   public final TerrainCursor cursor;
   private Vector3 tempA = new Vector3();
   private Vector3 tempB = new Vector3();
-  private Array<Face> facesToBuild = new Array<Face>();
+  private Array<Block.Side> facesToBuild = new Array<Block.Side>();
   private final PerlinNoise perlinNoise;
   private Vector3i nextTileToCheck = new Vector3i();
   private Color tempColor          = new Color();
@@ -90,7 +60,19 @@ public class TerrainBuilder {
     }
   }
 
-  private void buildFace(Vector3i checkTileInDirection, Face face) {
+  private boolean isVoxelTransparent(Voxel voxel) {
+    return voxel != null && voxel.getBlock().transparent;
+  }
+
+  private boolean isVoxelBlockHaveOcculsion(Voxel voxel) {
+    return voxel != null && voxel.getBlock().blockShape.occulsion;
+  }
+
+  private boolean doVoxelsDontHaveTheSameShape(Voxel voxelA, Voxel voxelB) {
+    return voxelB != null && (voxelB.getBlock().blockShape != voxelA.getBlock().blockShape);
+  }
+
+  private void buildFace(Vector3i checkTileInDirection, Block.Side face) {
     boolean updateCursorSize = false;
     for (int y = cursor.start.y; y < cursor.end.y; y++) {
       for (int x = cursor.start.x; x < cursor.end.x; x++) {
@@ -106,21 +88,27 @@ public class TerrainBuilder {
             voxelDef.position.set(tempA);
             voxelDef.voxelPosition.set(x,y,z);
             voxelDef.size.set(map.voxelSize);
+
             voxelDef.center.set(map.voxelSize.x / 2f, map.voxelSize.y / 2f, map.voxelSize.z / 2f);
 
-            Block block     = map.getBlockForPosition(x,y,z);
-            Block nextBlock = map.getBlockForPosition(nextTileToCheck);
-            if (block.transparent) {
-              if (!map.isTransparent(nextTileToCheck) || nextBlock == null || nextBlock.id != block.id || !block.blockShape.occulsion) {
-                addTrianglesForFace(block, face, transparentVoxelAssembler);
+            Voxel currentVoxel     = map.getVoxelForPosition(x, y, z);
+            Voxel nextVoxel        = map.getVoxelForPosition(nextTileToCheck);
+
+            Block.Side side        = currentVoxel.getBlock().rotation.faceToSide(currentVoxel.alginTo);
+
+            voxelDef.voxel         = currentVoxel;
+
+            if (isVoxelTransparent(currentVoxel)) {
+              if (!isVoxelTransparent(nextVoxel) || nextVoxel == null || nextVoxel.blockId != currentVoxel.blockId || !isVoxelBlockHaveOcculsion(currentVoxel)) {
+                addTrianglesForFace(currentVoxel, face, transparentVoxelAssembler);
               }
 
               updateCursorSize = true;
-            } else if (!block.transparent && map.isTransparent(nextTileToCheck))  {
-              addTrianglesForFace(block, face, solidVoxelAssembler);
+            } else if (isVoxelTransparent(nextVoxel))  {
+              addTrianglesForFace(currentVoxel, face, solidVoxelAssembler);
               updateCursorSize = true;
-            } else if (map.isEmptyNotOutOfBounds(nextTileToCheck) || (!nextBlock.isAir() && (nextBlock.blockShape != block.blockShape))) {
-              addTrianglesForFace(block, face, solidVoxelAssembler);
+            } else if (map.isEmptyNotOutOfBounds(nextTileToCheck) || doVoxelsDontHaveTheSameShape(currentVoxel, nextVoxel)) {
+              addTrianglesForFace(currentVoxel, face, solidVoxelAssembler);
               updateCursorSize = true;
             }
 
@@ -137,10 +125,11 @@ public class TerrainBuilder {
     cursor.size.scl(map.voxelSize).sub(tempA);
   }
 
-  private void addTrianglesForFace(Block block, Face face, VoxelsAssembler assembler) {
+  private void addTrianglesForFace(Voxel voxel, Block.Side side, VoxelsAssembler assembler) {
+    Block block    = voxel.getBlock();
     voxelDef.block = block;
-    voxelDef.calculateAoFor(aoArray[voxelDef.voxelPosition.x][voxelDef.voxelPosition.y][voxelDef.voxelPosition.z], face);
-    assembler.face(voxelDef, face.toSide());
+    voxelDef.calculateAoFor(aoArray[voxelDef.voxelPosition.x][voxelDef.voxelPosition.y][voxelDef.voxelPosition.z]);
+    assembler.face(voxelDef, side);
   }
 
   public void facesForChunk(Chunk chunk) {
@@ -200,7 +189,7 @@ public class TerrainBuilder {
     solidVoxelAssembler.begin();
     transparentVoxelAssembler.begin();
     facesToBuild.clear();
-    facesToBuild.addAll(Face.values());
+    facesToBuild.addAll(Block.Side.values());
   }
 
   public void end() {
@@ -213,14 +202,17 @@ public class TerrainBuilder {
   }
 
   public void buildFaceForChunk(Chunk chunk) {
-    Face face = facesToBuild.pop();
-    buildFace(face.direction, face);
+    Block.Side side = facesToBuild.pop();
+    if (side != Block.Side.all || side != Block.Side.side) {
+      buildFace(side.direction, side);
 
-    buildFaceForChunkWithAssembler(chunk, solidVoxelAssembler, false, face);
-    buildFaceForChunkWithAssembler(chunk, transparentVoxelAssembler, true, face);
+      buildFaceForChunkWithAssembler(chunk, solidVoxelAssembler, false, side);
+      buildFaceForChunkWithAssembler(chunk, transparentVoxelAssembler, true, side);
+    }
+
   }
 
-  private void buildFaceForChunkWithAssembler(Chunk chunk, VoxelsAssembler assembler, boolean haveTransparency, Face face) {
+  private void buildFaceForChunkWithAssembler(Chunk chunk, VoxelsAssembler assembler, boolean haveTransparency, Block.Side face) {
     if (!assembler.isEmpty()) {
 
       VoxelFaceRenderable renderable   = new VoxelFaceRenderable();

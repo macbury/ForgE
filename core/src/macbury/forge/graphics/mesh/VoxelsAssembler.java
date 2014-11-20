@@ -24,11 +24,11 @@ public class VoxelsAssembler extends MeshAssembler {
     transformMat.translate(voxelDef.center);
     switch(voxelDef.block.rotation) {
       case horizontal:
-        transformMat.rotate(Vector3.Y, -90);
+        transformMat.rotate(voxelDef.voxel.alginTo.rotationHorizontal);
       break;
 
       case alignToSurface:
-        transformMat.rotate(Vector3.Y, -90);
+        transformMat.rotate(voxelDef.voxel.alginTo.rotationAllSides);
       break;
     }
 
@@ -40,11 +40,11 @@ public class VoxelsAssembler extends MeshAssembler {
     transformMat.idt();
     switch(voxelDef.block.rotation) {
       case horizontal:
-        transformMat.rotate(Vector3.Y, -90);
+        transformMat.rotate(voxelDef.voxel.alginTo.rotationHorizontal);
       break;
 
       case alignToSurface:
-        transformMat.rotate(Vector3.Y, -90);
+        transformMat.rotate(voxelDef.voxel.alginTo.rotationAllSides);
       break;
     }
     transformMat.translate(part.normals.get(index));

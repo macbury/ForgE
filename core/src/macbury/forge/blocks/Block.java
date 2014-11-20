@@ -1,7 +1,10 @@
 package macbury.forge.blocks;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Quaternion;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import macbury.forge.utils.Vector3i;
 
 import java.util.HashMap;
 
@@ -9,13 +12,40 @@ import java.util.HashMap;
  * Created by macbury on 11.11.14.
  */
 public class Block {
-
+  /*
+  TODO: merge side with terrain builder.face :P
+   */
   public enum Side {
-    all, top, left, right, back, front, bottom, side;
+    all(Vector3i.ZERO, new Quaternion(), new Quaternion()),
+    top(Vector3i.TOP, new Quaternion(Vector3.Z, -180), new Quaternion()),
+    left(Vector3i.LEFT,  new Quaternion(Vector3.Z, -90), new Quaternion(Vector3.Y, -90)),
+    right(Vector3i.RIGHT, new Quaternion(Vector3.Z, 90), new Quaternion(Vector3.Y, 90)),
+    back(Vector3i.BACK, new Quaternion(Vector3.X, 90), new Quaternion(Vector3.Y, 180)),
+    front(Vector3i.FRONT, new Quaternion(Vector3.X, -90), new Quaternion()),
+    bottom(Vector3i.BOTTOM, new Quaternion(), new Quaternion()),
+    side(Vector3i.ZERO, new Quaternion(), new Quaternion());
+
+    public final Vector3i direction;
+    public final Quaternion rotationAllSides;
+    public final Quaternion rotationHorizontal;
+
+    Side(Vector3i direction, Quaternion rotationAllSides, Quaternion rotationHorizontal) {
+      this.direction          = new Vector3i(direction);
+      this.rotationAllSides   = new Quaternion(rotationAllSides);
+      this.rotationHorizontal = new Quaternion(rotationHorizontal);
+    }
   }
 
   public enum Rotation {
-    none, horizontal, alignToSurface
+    none, horizontal, alignToSurface;
+
+    public Side faceToSide(Side alginTo) {
+      if (this == none || alginTo == Side.all) {
+        return alginTo;
+      } else {
+        return Side.left;
+      }
+    }
   }
 
   /**

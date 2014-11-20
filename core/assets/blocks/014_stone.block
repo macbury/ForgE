@@ -1,0 +1,8 @@
+{
+  solid: true,
+  shadeAO: true,
+  envAO: true,
+  textures: {
+    all: "stone_andesite_smooth"
+  }
+}

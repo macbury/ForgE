@@ -144,6 +144,12 @@ public class ChunkMap extends VoxelMap {
   }
 
   @Override
+  public void setVoxelForPosition(Voxel voxel, Vector3i voxelPosition) {
+    super.setVoxelForPosition(voxel, voxelPosition);
+    rebuildChunkAroundPosition(voxelPosition.x, voxelPosition.y, voxelPosition.z);
+  }
+
+  @Override
   public void setEmptyForPosition(int x, int y, int z) {
     super.setEmptyForPosition(x, y, z);
     rebuildChunkAroundPosition(x, y, z);
