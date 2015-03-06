@@ -297,14 +297,51 @@
               </scrollpane>
             </children>
           </splitpane>
-          <grid id="31e25" binding="openGlContainer" layout-manager="BorderLayout" hgap="0" vgap="0">
+          <splitpane id="798a">
             <constraints border-constraint="Center"/>
             <properties>
-              <background color="-16711423"/>
+              <continuousLayout value="true"/>
+              <orientation value="0"/>
+              <resizeWeight value="0.8"/>
             </properties>
             <border type="none"/>
-            <children/>
-          </grid>
+            <children>
+              <grid id="31e25" binding="openGlContainer" layout-manager="BorderLayout" hgap="0" vgap="0">
+                <constraints>
+                  <splitpane position="left"/>
+                </constraints>
+                <properties>
+                  <background color="-16711423"/>
+                </properties>
+                <border type="none"/>
+                <children/>
+              </grid>
+              <scrollpane id="cfd7c">
+                <constraints>
+                  <splitpane position="right"/>
+                </constraints>
+                <properties>
+                  <verticalScrollBarPolicy value="20"/>
+                </properties>
+                <border type="bevel-lowered">
+                  <font/>
+                </border>
+                <children>
+                  <component id="61c8f" class="javax.swing.JTextArea" binding="logArea">
+                    <constraints/>
+                    <properties>
+                      <background color="-16777216"/>
+                      <editable value="false"/>
+                      <font name="Monospaced" size="14"/>
+                      <lineWrap value="true"/>
+                      <rows value="2"/>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                </children>
+              </scrollpane>
+            </children>
+          </splitpane>
         </children>
       </grid>
     </children>

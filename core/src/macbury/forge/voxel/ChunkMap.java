@@ -13,7 +13,7 @@ import macbury.forge.utils.Vector3i;
  * Created by macbury on 19.10.14.
  */
 public class ChunkMap extends VoxelMap {
-  public static final int CHUNK_SIZE         = 20;
+  public static final int CHUNK_SIZE          = 10;
   public static final int CHUNK_ARRAY_SIZE    = CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE;
   public static final Vector3 TERRAIN_TILE_SIZE = new Vector3(1,1,1);
   private static final String TAG = "ChunkMap";

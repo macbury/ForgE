@@ -1,6 +1,6 @@
 package macbury.forge.editor.views;
 
-import macbury.forge.editor.Utils;
+import icons.Utils;
 
 import javax.swing.*;
 import javax.swing.event.PopupMenuEvent;

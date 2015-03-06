@@ -28,6 +28,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
   private final ShadersController shadersController;
   private final GdxSwingInputProcessor inputProcessor;
   private final LwjglAWTInput input;
+  private final LogController logController;
   private LwjglAWTCanvas openGLCanvas;
   private ForgE engine;
   private ProjectController projectController;
@@ -55,14 +56,15 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
   private JPanel panelPrimaryBlock;
   private JPanel panelSecondaryBlock;
   public JPanel mainSplitPane;
+  private JTextArea logArea;
   private boolean bruteFocus;
 
   public MainWindow() {
     super();
     Thread.setDefaultUncaughtExceptionHandler(this);
     Toolkit kit      = Toolkit.getDefaultToolkit();
-    Image mainIcon   = kit.createImage(ClassLoader.getSystemResource("icons/main.ico"));
-    setIconImage(mainIcon);
+    //Image mainIcon   = kit.createImage(ClassLoader.getSystemResource("icons/main.ico"));
+    //setIconImage(mainIcon);
     setContentPane(mainContentPane);
 
     setSize(1360, 760);
@@ -84,6 +86,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     engine                               = new ForgE(config);
     blocksController                     = new BlocksController(blockList, directoryWatcher, jobs, (ImagePanel)panelPrimaryBlock, (ImagePanel)panelSecondaryBlock);
     this.progressTaskDialog              = new ProgressTaskDialog();
+    this.logController                   = new LogController(logArea);
     projectController                    = new ProjectController();
     mainMenu                             = new MainMenu(projectController);
     terrainToolsController               = new TerrainToolsController(terrainToolsToolbar, blocksController, inputProcessor);
