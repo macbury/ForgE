@@ -1,7 +1,9 @@
 package macbury.forge.level;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
+import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.voxel.ChunkMap;
 
 /**
@@ -12,6 +14,7 @@ public class LevelEnv {
   public final Color ambientLight;
   public final Color skyColor;
   public ChunkMap terrainMap;
+  public Texture  windDisplacementTexture;
 
   public LevelEnv() {
     skyColor     = Color.valueOf("3498db");
@@ -20,4 +23,5 @@ public class LevelEnv {
 
     ambientLight = Color.valueOf("cccccc");
   }
+
 }

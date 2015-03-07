@@ -15,9 +15,11 @@ import macbury.forge.shaders.utils.RenderableBaseShader;
  * Created by macbury on 18.10.14.
  */
 public class TerrainShader extends RenderableBaseShader<VoxelFaceRenderable> {
+  private static final String UNIFORM_WIND_DISPLACEMENT_TEXTURE = "u_windDisplacementTexture";
   private final Matrix3 tempNormalMatrix = new Matrix3();
   private final Vector3 mapSize          = new Vector3();
   private final String  UNIFORM_MAP_SIZE = "u_mapSize";
+
   @Override
   public boolean canRender(BaseRenderable instance) {
     return TerrainChunkRenderable.class.isInstance(instance);
@@ -28,11 +30,15 @@ public class TerrainShader extends RenderableBaseShader<VoxelFaceRenderable> {
     setUniformSkyColor();
     setUniformSun();
     setUniformEyePosition();
-
+    setUniformTime();
     shader.setUniformf(UNIFORM_MAP_SIZE, env.terrainMap.getWidth(), env.terrainMap.getDepth());
     GLTexture terrainTexture = ForgE.blocks.getTerrainTexture();
     if (terrainTexture != null) {
       setUniformDiffuseTexture(terrainTexture);
+    }
+
+    if (env.windDisplacementTexture != null) {
+      shader.setUniformi(UNIFORM_WIND_DISPLACEMENT_TEXTURE, context.textureBinder.bind(env.windDisplacementTexture));
     }
 
     context.setDepthTest(GL20.GL_LEQUAL);

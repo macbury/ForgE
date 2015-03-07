@@ -1,4 +1,5 @@
 {
+  shape: "foliage-cube",
   solid: true,
   shadeAO: true,
   envAO: true,

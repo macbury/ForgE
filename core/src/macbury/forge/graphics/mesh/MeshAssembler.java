@@ -64,7 +64,6 @@ public class MeshAssembler implements Disposable {
     boolean usingTexture  = false;
     boolean usingColor    = false;
     boolean usingMaterial = false;
-
     for (MeshVertexInfo.AttributeType attr : attributtes) {
       vertiesArraySize        += attr.size();
       meshAttributtes[cursor] = attr.attribute();

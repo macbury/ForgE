@@ -1,5 +1,7 @@
 package macbury.forge.level;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import macbury.forge.ForgE;
 import macbury.forge.voxel.ChunkMap;
 
@@ -19,7 +21,7 @@ public class LevelState {
    * @return
    */
   public static LevelState blank(int width, int height, int depth) {
-    LevelState state        = new LevelState();
+    final LevelState state        = new LevelState();
     state.terrainMap        = new ChunkMap(ChunkMap.TERRAIN_TILE_SIZE, ForgE.blocks);
     state.id                = ForgE.db.uid();
     state.name              = MAP_NAME_PREFIX + state.id;
@@ -28,6 +30,17 @@ public class LevelState {
     state.terrainMap.initialize(width,height,depth);
     state.terrainMap.buildFloor();
     state.env.terrainMap    = state.terrainMap;
+    //TODO: fix this
+    Gdx.app.postRunnable(new Runnable() {
+      @Override
+      public void run() {
+        ForgE.assets.load("textures/wind_bump.jpg", Texture.class);
+
+        ForgE.assets.finishLoading();
+        state.env.windDisplacementTexture = ForgE.assets.get("textures/wind_bump.jpg");
+        state.env.windDisplacementTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+      }
+    });
     return state;
   }
 

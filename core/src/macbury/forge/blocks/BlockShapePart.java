@@ -12,5 +12,5 @@ public class BlockShapePart {
   public Array<Vector3> normals              = new Array<Vector3>();
   public Array<Vector2> uvs                  = new Array<Vector2>();
   public Array<BlockShapeTriangle> triangles = new Array<BlockShapeTriangle>();
-
+  public float[]                   waviness  = null;
 }

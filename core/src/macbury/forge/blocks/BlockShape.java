@@ -18,6 +18,7 @@ public class BlockShape implements Json.Serializable {
   private static final String KEY_UVS       = "uvs";
   private static final String KEY_TRIANGLES = "triangles";
   private static final String KEY_OCCULSION = "occulsion";
+  private static final String KEY_WAVINESS  = "waviness";
   public String name;
   public boolean occulsion;
   private HashMap<Block.Side, BlockShapePart> parts;
@@ -76,6 +77,10 @@ public class BlockShape implements Json.Serializable {
             }
             part.triangles.add(new BlockShapeTriangle(triangles));
           }
+        }
+
+        if (partValue.has(KEY_WAVINESS)) {
+          part.waviness = partValue.get(KEY_WAVINESS).asFloatArray();
         }
 
         parts.put(side, part);

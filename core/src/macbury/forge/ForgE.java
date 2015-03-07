@@ -24,7 +24,6 @@ public class ForgE extends Game {
   public static InputManager    input;
   private Array<ForgEBootListener> bootListeners;
 
-
   public ForgE(Config config) {
     super();
     this.config = config;
@@ -46,6 +45,12 @@ public class ForgE extends Game {
     for (ForgEBootListener listener : bootListeners) {
       listener.afterEngineCreate(this);
     }
+  }
+
+  @Override
+  public void render() {
+    graphics.updateTime();
+    super.render();
   }
 
   public void addBootListener(ForgEBootListener bootListener) {

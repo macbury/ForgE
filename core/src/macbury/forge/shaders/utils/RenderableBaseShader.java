@@ -1,7 +1,10 @@
 package macbury.forge.shaders.utils;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GLTexture;
 import com.badlogic.gdx.graphics.Mesh;
+import macbury.forge.ForgE;
+import macbury.forge.graphics.GraphicsUtils;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
 
 /**
@@ -12,7 +15,7 @@ public abstract class RenderableBaseShader<T extends BaseRenderable> extends Bas
   public final String UNIFORM_WORLD_TRANSFORM = "u_worldTransform";
   public final String UNIFORM_DIFFUSE_TEXTURE = "u_normalMatrix";
   public final String UNIFORM_NORMAL_MATRIX   = "u_normalMatrix";
-
+  public final String UNIFORM_TIME            = "u_time";
   public final String UNIFORM_SKY_COLOR              = "u_skyColor";
   public final String UNIFORM_AMBIENT_LIGHT          = "u_ambientLight";
   public final String UNIFORM_MAIN_LIGHT_COLOR       = "u_mainLight.color";
@@ -41,6 +44,10 @@ public abstract class RenderableBaseShader<T extends BaseRenderable> extends Bas
 
   protected void renderWithCurrentMesh(final T renderable) {
     currentMesh.render(shader, renderable.primitiveType, 0, currentMesh.getMaxIndices() > 0 ? currentMesh.getMaxIndices() : currentMesh.getMaxVertices(), false);
+  }
+
+  public void setUniformTime() {
+    shader.setUniformf(UNIFORM_TIME, ForgE.graphics.getElapsedTime());
   }
 
   /**

@@ -15,6 +15,7 @@ import macbury.forge.graphics.builders.VoxelDef;
 public class VoxelsAssembler extends MeshAssembler {
   private Matrix4 transformMat = new Matrix4();
   private Vector3 tempVec      = new Vector3();
+
   private MeshVertexInfo vertex(VoxelDef voxelDef, BlockShapePart part, int index, TextureAtlas.AtlasRegion sideRegion) {
     MeshVertexInfo vert = this.vertex().ao(voxelDef.ao).transparent(voxelDef.block.transparent);
 
@@ -65,6 +66,10 @@ public class VoxelsAssembler extends MeshAssembler {
       vert.uv.y = sideRegion.getV2();
     }
 
+    if (part.waviness != null) {
+      vert.material.setWaviness(part.waviness[index]);
+    }
+
     return vert;
   }
 
@@ -73,7 +78,6 @@ public class VoxelsAssembler extends MeshAssembler {
 
     if (blockShapePart != null) {
       TextureAtlas.AtlasRegion sideRegion = voxelDef.block.getRegionForSide(side);
-
 
       for(BlockShapeTriangle triangle : blockShapePart.triangles) {
         MeshVertexInfo vert1          = vertex(voxelDef, blockShapePart, triangle.index1, sideRegion);

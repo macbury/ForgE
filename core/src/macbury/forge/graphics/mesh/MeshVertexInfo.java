@@ -30,7 +30,7 @@ public class MeshVertexInfo implements Pool.Poolable {
   public static enum AttributeType {
     Position(VertexAttributes.Usage.Position, 3,ShaderProgram.POSITION_ATTRIBUTE),
     Normal(VertexAttributes.Usage.Normal, 3, ShaderProgram.NORMAL_ATTRIBUTE),
-    Material(VertexAttributes.Usage.ColorPacked, 3, "a_material"),
+    Material(VertexAttributes.Usage.ColorPacked, 4, "a_material"),
     TextureCord(VertexAttributes.Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE+"0"),
     Color(VertexAttributes.Usage.ColorPacked, 4, ShaderProgram.COLOR_ATTRIBUTE); // probably should be 4 not 1
 

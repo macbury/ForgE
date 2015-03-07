@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.GL20;
  * Created by macbury on 15.10.14.
  */
 public class GraphicsUtils {
+  private float elapsedTime;
+
   /**
    * Clear GL20.GL_COLOR_BUFFER_BIT and GL20.GL_DEPTH_BUFFER_BIT with color
    * @param color - color to clear
@@ -30,5 +32,13 @@ public class GraphicsUtils {
     } else {
       Gdx.gl.glDisable(GL20.GL_DEPTH_TEST);
     }
+  }
+
+  public void updateTime() {
+    this.elapsedTime += Gdx.graphics.getDeltaTime();
+  }
+
+  public float getElapsedTime() {
+    return elapsedTime;
   }
 }

@@ -7,6 +7,10 @@ import com.badlogic.gdx.graphics.Color;
  */
 public class Material extends Color {
 
+  public void setWaviness(float waviness) {
+    this.a = waviness;
+  }
+
   public void setAO(float ao) {
     this.r = ao;
   }
@@ -20,7 +24,7 @@ public class Material extends Color {
   }
 
   public void reset() {
-    this.set(Color.BLACK);
+    this.set(Color.CLEAR);
   }
 
 }
