@@ -51,6 +51,7 @@ public class EditorScreen extends AbstractScreen {
 
   @Override
   public void render(float delta) {
+    ForgE.assets.loadPending();
     stage.act(delta);
     cameraController.update(delta);
     level.render(delta);

@@ -33,7 +33,6 @@ public class ForgE extends Game {
   @Override
   public void create () {
     storage  = new StorageManager();
-
     db       = storage.loadOrInitializeDB();
     graphics = new GraphicsUtils();
     screens  = new ScreenManager(this);

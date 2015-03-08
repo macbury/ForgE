@@ -33,11 +33,12 @@ void main() {
   v_textCoord       = a_texCoord0;
   v_position        = u_worldTransform * a_position;
 
-  if (v_waviness >= 0.1f) {
+  if (v_waviness >= 0.01f) {
     vec2 windUV  = vec2(v_position.x, v_position.z) / u_mapSize;
     vec4 texture = texture2D(u_windDisplacementTexture, vec2(windUV.x + u_time * 0.1f, windUV.y + u_time* 0.1f));
-    v_position.x += texture.r * v_waviness;
-    v_position.z += texture.g * v_waviness;
+    float hw     = v_waviness / 2f;
+    v_position.x += hw - texture.r * v_waviness;
+    v_position.z += hw - texture.g * v_waviness;
   }
 
   v_fogPower        = fogPowerByMapPosition(v_position, u_mapSize);

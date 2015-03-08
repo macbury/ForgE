@@ -37,8 +37,8 @@ public class TerrainShader extends RenderableBaseShader<VoxelFaceRenderable> {
       setUniformDiffuseTexture(terrainTexture);
     }
 
-    if (env.windDisplacementTexture != null) {
-      shader.setUniformi(UNIFORM_WIND_DISPLACEMENT_TEXTURE, context.textureBinder.bind(env.windDisplacementTexture));
+    if (env.windDisplacementTexture != null && env.windDisplacementTexture.isLoaded()) {
+      shader.setUniformi(UNIFORM_WIND_DISPLACEMENT_TEXTURE, context.textureBinder.bind(env.windDisplacementTexture.get()));
     }
 
     context.setDepthTest(GL20.GL_LEQUAL);
