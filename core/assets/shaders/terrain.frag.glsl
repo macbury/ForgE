@@ -8,7 +8,6 @@ varying vec4   v_position;
 varying vec2   v_textCoord;
 varying float  v_transparent;
 varying float  v_fogPower;
-varying float  v_waviness;
 void main() {
   vec4 texture = texture2D(u_diffuseTexture, v_textCoord);
   vec4 diffuse = v_lightDiffuse * texture;
@@ -24,8 +23,5 @@ void main() {
     discard;
   }
 
-  /*diffuse.r = v_waviness;
-  diffuse.g = v_waviness;
-  diffuse.b = v_waviness;*/
   gl_FragColor = mix(fog(diffuse, u_skyColor, u_eyePosition, v_position), u_skyColor, v_fogPower);
 }

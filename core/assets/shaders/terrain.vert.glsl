@@ -19,27 +19,19 @@ varying vec4   v_position;
 varying vec2   v_textCoord;
 varying float  v_fogPower;
 varying float  v_transparent;
-varying float  v_waviness;
 
 void main() {
   v_normal          = normalize(u_normalMatrix * a_normal);
   float ao          = a_material.r;
   float specular    = a_material.g;
-  v_waviness        = a_material.a;
+  float waviness    = a_material.a;
   v_transparent     = a_material.b;
 
   vec3 lightDiffuse = u_ambientLight.rgb + directionalLightDiffuse(u_mainLight, v_normal) - vec3(ao, ao, ao);
   v_lightDiffuse    = vec4(lightDiffuse, 1f);
   v_textCoord       = a_texCoord0;
   v_position        = u_worldTransform * a_position;
-
-  if (v_waviness >= 0.01f) {
-    vec2 windUV  = vec2(v_position.x, v_position.z) / u_mapSize;
-    vec4 texture = texture2D(u_windDisplacementTexture, vec2(windUV.x + u_time * 0.1f, windUV.y + u_time* 0.1f));
-    float hw     = v_waviness / 2f;
-    v_position.x += hw - texture.r * v_waviness;
-    v_position.z += hw - texture.g * v_waviness;
-  }
+  v_position        = applyWind(u_time, waviness, v_position, u_mapSize, u_windDisplacementTexture);
 
   v_fogPower        = fogPowerByMapPosition(v_position, u_mapSize);
 
