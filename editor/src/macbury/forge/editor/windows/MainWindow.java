@@ -90,7 +90,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     projectController                    = new ProjectController();
     mainMenu                             = new MainMenu(projectController);
     terrainToolsController               = new TerrainToolsController(terrainToolsToolbar, blocksController, inputProcessor);
-    mainToolbarController                = new MainToolbarController(mainToolbar, mainMenu, inputProcessor);
+    mainToolbarController                = new MainToolbarController(projectController, mainToolbar, mainMenu, inputProcessor);
     shadersController                    = new ShadersController(directoryWatcher);
     MapPropertySheet inspectorSheetPanel = new MapPropertySheet();
 

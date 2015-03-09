@@ -4,14 +4,17 @@ import javax.swing.*;
 import java.awt.event.*;
 
 public class MapCreationWindow extends JDialog {
+  private final Listener listener;
   private JPanel contentPane;
   private JButton buttonOK;
   private JButton buttonCancel;
   private JTextField textField1;
   private JSpinner spinner1;
   private JSpinner spinner2;
+  private JSpinner spinner3;
 
-  public MapCreationWindow() {
+  public MapCreationWindow(Listener listener) {
+    this.listener = listener;
     setContentPane(contentPane);
     setModal(true);
     getRootPane().setDefaultButton(buttonOK);
@@ -47,12 +50,16 @@ public class MapCreationWindow extends JDialog {
   }
 
   private void onOK() {
-// add your code here
+    listener.onMapCreationSuccess(this);
     dispose();
   }
 
   private void onCancel() {
 // add your code here if necessary
     dispose();
+  }
+
+  public interface Listener {
+    public void onMapCreationSuccess(MapCreationWindow window);
   }
 }

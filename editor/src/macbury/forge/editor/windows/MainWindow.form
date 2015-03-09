@@ -302,7 +302,7 @@
             <properties>
               <continuousLayout value="true"/>
               <orientation value="0"/>
-              <resizeWeight value="0.8"/>
+              <resizeWeight value="0.9"/>
             </properties>
             <border type="none"/>
             <children>

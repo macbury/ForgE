@@ -28,17 +28,22 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
   private final JButton editorUndoButton;
   private final KeyShortcutMapping undoMapping;
   private final KeyShortcutMapping redoMapping;
+  private final JButton newMapButton;
+  private final ProjectController projectController;
   private EditorScreen screen;
 
 
-  public MainToolbarController(JToolBar mainToolbar, MainMenu mainMenu, GdxSwingInputProcessor inputProcessor) {
+  public MainToolbarController(ProjectController projectController, JToolBar mainToolbar, MainMenu mainMenu, GdxSwingInputProcessor inputProcessor) {
     this.editorModeButtonGroup = new ButtonGroup();
     this.mainToolbar           = mainToolbar;
+    this.projectController     = projectController;
     moreButton                 = new MoreToolbarButton(mainMenu);
 
 
     this.editorRedoButton        = buildButton("redo");
     this.editorUndoButton        = buildButton("undo");
+
+    this.newMapButton            = buildButton("new");
 
     undoMapping = inputProcessor.registerMapping(Input.Keys.CONTROL_LEFT, Input.Keys.Z, this);
     redoMapping = inputProcessor.registerMapping(Input.Keys.CONTROL_LEFT, Input.Keys.Y, this);
@@ -47,6 +52,8 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
     redoMapping.addListener(this);
 
     mainToolbar.add(moreButton);
+    mainToolbar.addSeparator();
+    mainToolbar.add(newMapButton);
     mainToolbar.addSeparator();
     mainToolbar.add(editorUndoButton);
     mainToolbar.add(editorRedoButton);
@@ -112,6 +119,10 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
 
   @Override
   public void actionPerformed(ActionEvent e) {
+    if (e.getSource() == newMapButton) {
+      projectController.newMap();
+    }
+
     if (e.getSource() == editorUndoButton) {
       undo();
     }

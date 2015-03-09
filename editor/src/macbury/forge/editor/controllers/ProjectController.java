@@ -11,6 +11,7 @@ import macbury.forge.editor.parell.jobs.NewLevelJob;
 import macbury.forge.editor.runnables.UpdateStatusBar;
 import macbury.forge.editor.screens.EditorScreen;
 import macbury.forge.editor.windows.MainWindow;
+import macbury.forge.editor.windows.MapCreationWindow;
 import macbury.forge.editor.windows.ProgressTaskDialog;
 import macbury.forge.level.LevelState;
 import macbury.forge.shaders.utils.BaseShader;
@@ -25,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by macbury on 18.10.14.
  */
-public class ProjectController implements JobListener, ShaderReloadListener {
+public class ProjectController implements JobListener, ShaderReloadListener, MapCreationWindow.Listener {
   private static final String LEVEL_STATE_LOADED_CALLBACK = "onLevelStateLoaded";
   private MainWindow mainWindow;
   public EditorScreen editorScreen;
@@ -61,7 +62,12 @@ public class ProjectController implements JobListener, ShaderReloadListener {
 
   public void newMap() {
     closeMap();
+    MapCreationWindow newMapWindow = new MapCreationWindow(this);
+    newMapWindow.setVisible(true);
+  }
 
+  @Override
+  public void onMapCreationSuccess(MapCreationWindow window) {
     NewLevelJob job = new NewLevelJob();
     job.setCallback(this, LEVEL_STATE_LOADED_CALLBACK);
     jobs.enqueue(job);
@@ -175,4 +181,6 @@ public class ProjectController implements JobListener, ShaderReloadListener {
       editorScreen.changeManager.clear();
     }
   }
+
+
 }
