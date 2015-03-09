@@ -217,4 +217,16 @@ public class VoxelMap implements Disposable {
       return null;
     }
   }
+
+  public void setWidth(int width) {
+    this.width = width;
+  }
+
+  public void setHeight(int height) {
+    this.height = height;
+  }
+
+  public void setDepth(int depth) {
+    this.depth = depth;
+  }
 }

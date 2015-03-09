@@ -51,9 +51,10 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
 
   private void updateUI() {
     boolean editorScreenEnabled = editorScreen != null;
-
-    mainWindow.mainSplitPane.setVisible(editorScreenEnabled);
-    //mainWindow.openGlContainer.setVisible(editorScreenEnabled);
+    //TODO: change visibility of main ui
+    mainWindow.mainSplitPane.setVisible(true);
+    mainWindow.openGlContainer.setVisible(true);
+    mainWindow.toolsPane.setVisible(editorScreenEnabled);
   }
 
   public MainWindow getMainWindow() {

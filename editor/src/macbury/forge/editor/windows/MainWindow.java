@@ -47,7 +47,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
   private JLabel mapCursorPositionLabel;
   private JLabel statusTriangleCountLabel;
   private JTree mapTree;
-  private JTabbedPane toolsPane;
+  public JTabbedPane toolsPane;
   private JList list1;
   private JToolBar terrainToolsToolbar;
   public JProgressBar jobProgressBar;
