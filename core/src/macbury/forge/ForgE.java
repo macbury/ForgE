@@ -8,21 +8,24 @@ import macbury.forge.blocks.BlocksProvider;
 import macbury.forge.db.GameDatabase;
 import macbury.forge.graphics.GraphicsUtils;
 import macbury.forge.input.InputManager;
+import macbury.forge.level.LevelManager;
 import macbury.forge.screens.ScreenManager;
 import macbury.forge.shaders.utils.ShadersManager;
 import macbury.forge.storage.StorageManager;
+import sun.net.www.MimeTable;
 
 public class ForgE extends Game {
-  public static GraphicsUtils   graphics;
-  public static ScreenManager   screens;
-  public static AssetsManager   assets;
-  public static ShadersManager  shaders;
-  public static Config          config;
-  public static StorageManager  storage;
-  public static GameDatabase    db;
-  public static BlocksProvider  blocks;
-  public static InputManager    input;
-  private Array<ForgEBootListener> bootListeners;
+  public static GraphicsUtils       graphics;
+  public static ScreenManager       screens;
+  public static AssetsManager       assets;
+  public static ShadersManager      shaders;
+  public static Config              config;
+  public static StorageManager      storage;
+  public static GameDatabase        db;
+  public static BlocksProvider      blocks;
+  public static InputManager        input;
+  private Array<ForgEBootListener>  bootListeners;
+  public static LevelManager              levels;
 
   public ForgE(Config config) {
     super();
@@ -40,6 +43,7 @@ public class ForgE extends Game {
     shaders  = new ShadersManager();
     input    = new InputManager();
     blocks   = new BlocksProvider();
+    levels   = new LevelManager(storage);
     Gdx.input.setInputProcessor(input);
     for (ForgEBootListener listener : bootListeners) {
       listener.afterEngineCreate(this);

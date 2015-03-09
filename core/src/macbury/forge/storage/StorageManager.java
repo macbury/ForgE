@@ -22,8 +22,8 @@ import java.io.FileOutputStream;
  * Created by macbury on 07.11.14.
  */
 public class StorageManager {
-  private static final String TAG = "StorageManager";
-  private final KryoPool pool;
+  public static final String TAG = "StorageManager";
+  public final KryoPool pool;
 
   private KryoFactory factory = new KryoFactory() {
     public Kryo create () {
@@ -69,17 +69,5 @@ public class StorageManager {
     pool.release(kryo);
   }
 
-  public void saveLevelState(LevelState state) {
-    Kryo kryo          = pool.borrow();
-    FileHandle mapFile = Gdx.files.internal("maps/map_"+state.getId()+".level");
-    Gdx.app.log(TAG, "Saving map: " + mapFile.toString());
-    try {
-      Output output = new Output(new FileOutputStream(mapFile.file(), false));
-      kryo.writeObject(output, state, new FullLevelStateSerializer());
-      output.close();
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-    }
-    pool.release(kryo);
-  }
+
 }

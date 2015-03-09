@@ -11,7 +11,9 @@ import macbury.forge.voxel.ChunkMap;
  * For loading level from disk
  */
 public class LevelState {
-  private static final String MAP_NAME_PREFIX = "MAP_";
+  public static final String MAP_NAME_PREFIX = "MAP_";
+  public static final String FILE_EXT = ".level";
+  public static final String MAP_STORAGE_DIR = "maps/";
   private int width;
   private int depth;
   private int height;

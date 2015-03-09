@@ -29,7 +29,7 @@ public class NewLevelJob extends Job<LevelState> {
   @Override
   public LevelState perform() {
     state.bootstrap();
-    ForgE.storage.saveLevelState(state);
+    ForgE.levels.save(state);
     return state;
   }
 }
