@@ -16,6 +16,7 @@ import macbury.forge.shaders.utils.RenderableBaseShader;
  */
 public class TerrainShader extends RenderableBaseShader<VoxelFaceRenderable> {
   private static final String UNIFORM_WIND_DISPLACEMENT_TEXTURE = "u_windDisplacementTexture";
+  private static final String UNIFORM_WIND_DIR = "u_windDirection";
   private final Matrix3 tempNormalMatrix = new Matrix3();
   private final Vector3 mapSize          = new Vector3();
   private final String  UNIFORM_MAP_SIZE = "u_mapSize";
@@ -37,11 +38,16 @@ public class TerrainShader extends RenderableBaseShader<VoxelFaceRenderable> {
       setUniformDiffuseTexture(terrainTexture);
     }
 
-    if (env.windDisplacementTexture != null && env.windDisplacementTexture.isLoaded()) {
-      shader.setUniformi(UNIFORM_WIND_DISPLACEMENT_TEXTURE, context.textureBinder.bind(env.windDisplacementTexture.get()));
-    }
+    setUniformWind();
 
     context.setDepthTest(GL20.GL_LEQUAL);
+  }
+
+  private void setUniformWind() {
+    if (env.windDisplacementTexture != null && env.windDisplacementTexture.isLoaded()) {
+      shader.setUniformi(UNIFORM_WIND_DISPLACEMENT_TEXTURE, context.textureBinder.bind(env.windDisplacementTexture.get()));
+      shader.setUniformf(UNIFORM_WIND_DIR, env.windDirection);
+    }
   }
 
   @Override

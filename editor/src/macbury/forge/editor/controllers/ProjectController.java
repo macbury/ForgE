@@ -63,7 +63,7 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
   public void newMap() {
     closeMap();
     MapCreationWindow newMapWindow = new MapCreationWindow(this);
-    newMapWindow.setVisible(true);
+    newMapWindow.show(mainWindow);
   }
 
   @Override

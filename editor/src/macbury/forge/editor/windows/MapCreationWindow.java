@@ -12,11 +12,13 @@ public class MapCreationWindow extends JDialog {
   private JSpinner spinner1;
   private JSpinner spinner2;
   private JSpinner spinner3;
+  private JComboBox comboBox1;
 
   public MapCreationWindow(Listener listener) {
     this.listener = listener;
     setContentPane(contentPane);
     setModal(true);
+
     getRootPane().setDefaultButton(buttonOK);
     setTitle("Create new map:");
     buttonOK.addActionListener(new ActionListener() {
@@ -49,9 +51,21 @@ public class MapCreationWindow extends JDialog {
     }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
   }
 
+  public void show(JFrame relativeTo) {
+    this.setLocationRelativeTo(relativeTo);
+    this.setVisible(true);
+  }
+
   private void onOK() {
-    listener.onMapCreationSuccess(this);
-    dispose();
+    if (valid()) {
+      listener.onMapCreationSuccess(this);
+      dispose();
+    }
+
+  }
+
+  private boolean valid() {
+    return true;
   }
 
   private void onCancel() {

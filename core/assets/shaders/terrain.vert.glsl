@@ -12,6 +12,7 @@ uniform DirectionalLight u_mainLight;
 uniform vec4             u_ambientLight;
 
 uniform sampler2D u_windDisplacementTexture;
+uniform vec2      u_windDirection;
 
 varying vec4   v_lightDiffuse;
 varying vec3   v_normal;
@@ -31,7 +32,7 @@ void main() {
   v_lightDiffuse    = vec4(lightDiffuse, 1f);
   v_textCoord       = a_texCoord0;
   v_position        = u_worldTransform * a_position;
-  v_position        = applyWind(u_time, waviness, v_position, u_mapSize, u_windDisplacementTexture);
+  v_position        = applyWind(u_time, u_windDirection, waviness, v_position, u_mapSize, u_windDisplacementTexture);
 
   v_fogPower        = fogPowerByMapPosition(v_position, u_mapSize);
 

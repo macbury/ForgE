@@ -18,7 +18,7 @@ public class LevelEnv {
   public ChunkMap terrainMap;
 
   public TextureAsset windDisplacementTexture;
-  public Vector2 windDirection = new Vector2();
+  public Vector2 windDirection = new Vector2(0.1f,0);
 
   public LevelEnv() {
     skyColor     = Color.valueOf("3498db");
