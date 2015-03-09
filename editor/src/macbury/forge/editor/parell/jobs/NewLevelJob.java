@@ -8,8 +8,11 @@ import macbury.forge.level.LevelState;
  */
 public class NewLevelJob extends Job<LevelState> {
 
-  public NewLevelJob() {
+  private final LevelState state;
+
+  public NewLevelJob(LevelState state) {
     super(LevelState.class);
+    this.state = state;
   }
 
   @Override
@@ -24,7 +27,7 @@ public class NewLevelJob extends Job<LevelState> {
 
   @Override
   public LevelState perform() {
-    LevelState newLevelState = LevelState.blank(100, 50, 100);
-    return newLevelState;
+    state.bootstrap();
+    return state;
   }
 }

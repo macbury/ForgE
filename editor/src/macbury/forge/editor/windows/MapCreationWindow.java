@@ -1,21 +1,26 @@
 package macbury.forge.editor.windows;
 
+import macbury.forge.level.LevelState;
+import macbury.forge.voxel.ChunkMap;
+
 import javax.swing.*;
 import java.awt.event.*;
 
 public class MapCreationWindow extends JDialog {
   private final Listener listener;
+  private final LevelState state;
   private JPanel contentPane;
   private JButton buttonOK;
   private JButton buttonCancel;
-  private JTextField textField1;
-  private JSpinner spinner1;
-  private JSpinner spinner2;
-  private JSpinner spinner3;
-  private JComboBox comboBox1;
+  private JTextField mapNameTextField;
+  private JSpinner widthSpinner;
+  private JSpinner heightSpinner;
+  private JSpinner depthSpinner;
+  private JComboBox modeComboBox;
 
-  public MapCreationWindow(Listener listener) {
+  public MapCreationWindow(LevelState state, Listener listener) {
     this.listener = listener;
+    this.state    = state;
     setContentPane(contentPane);
     setModal(true);
 
@@ -32,6 +37,12 @@ public class MapCreationWindow extends JDialog {
         onCancel();
       }
     });
+
+    widthSpinner.setModel(new MapSizeModel(state.getWidth()));
+    heightSpinner.setModel(new MapSizeModel(state.getHeight()));
+    depthSpinner.setModel(new MapSizeModel(state.getDepth()));
+
+    mapNameTextField.setText(state.getName());
 
 // call onCancel() when cross is clicked
     setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -58,13 +69,17 @@ public class MapCreationWindow extends JDialog {
 
   private void onOK() {
     if (valid()) {
-      listener.onMapCreationSuccess(this);
+      listener.onMapCreationSuccess(this, state);
       dispose();
     }
 
   }
 
   private boolean valid() {
+    state.setDepth((Integer)depthSpinner.getValue());
+    state.setHeight((Integer)heightSpinner.getValue());
+    state.setWidth((Integer)widthSpinner.getValue());
+    state.setName(mapNameTextField.getText());
     return true;
   }
 
@@ -73,7 +88,18 @@ public class MapCreationWindow extends JDialog {
     dispose();
   }
 
+  private void createUIComponents() {
+    // TODO: place custom component creation code here
+  }
+
   public interface Listener {
-    public void onMapCreationSuccess(MapCreationWindow window);
+    public void onMapCreationSuccess(MapCreationWindow window, LevelState newState);
+  }
+
+  public class MapSizeModel extends SpinnerNumberModel {
+
+    public MapSizeModel(int value) {
+      super(value, ChunkMap.CHUNK_SIZE, 1000, ChunkMap.CHUNK_SIZE);
+    }
   }
 }

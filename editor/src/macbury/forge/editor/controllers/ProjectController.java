@@ -62,13 +62,14 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
 
   public void newMap() {
     closeMap();
-    MapCreationWindow newMapWindow = new MapCreationWindow(this);
+    LevelState newMapState         = new LevelState();
+    MapCreationWindow newMapWindow = new MapCreationWindow(newMapState, this);
     newMapWindow.show(mainWindow);
   }
 
   @Override
-  public void onMapCreationSuccess(MapCreationWindow window) {
-    NewLevelJob job = new NewLevelJob();
+  public void onMapCreationSuccess(MapCreationWindow window, LevelState state) {
+    NewLevelJob job = new NewLevelJob(state);
     job.setCallback(this, LEVEL_STATE_LOADED_CALLBACK);
     jobs.enqueue(job);
   }
@@ -93,6 +94,7 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
   }
 
   public void onLevelStateLoaded(LevelState state, NewLevelJob job) {
+    //TODO: save map here
     mainWindow.setTitle(state.name);
     this.editorScreen = new EditorScreen(state);
     Gdx.app.postRunnable(new Runnable() {

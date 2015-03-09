@@ -11,33 +11,73 @@ import macbury.forge.voxel.ChunkMap;
  */
 public class LevelState {
   private static final String MAP_NAME_PREFIX = "MAP_";
+  private int width;
+  private int depth;
+  private int height;
 
   public LevelEnv env;
   public ChunkMap terrainMap;
   public int id;
   public String name;
-  /**
-   * Initialize blank new level. Mainly use for editor functionality
-   * @return
-   */
-  public static LevelState blank(int width, int height, int depth) {
-    final LevelState state        = new LevelState();
-    state.terrainMap              = new ChunkMap(ChunkMap.TERRAIN_TILE_SIZE, ForgE.blocks);
-    state.id                      = ForgE.db.uid();
-    state.name                    = MAP_NAME_PREFIX + state.id;
-    state.env                     = new LevelEnv();
 
-    state.terrainMap.initialize(width,height,depth);
-    state.terrainMap.buildFloor();
-    state.env.terrainMap          = state.terrainMap;
-    //TODO: fix this
-    Gdx.app.postRunnable(new Runnable() {
-      @Override
-      public void run() {
-        state.env.windDisplacementTexture = ForgE.assets.getTexture("textures/wind_bump.jpg");
-      }
-    });
-    return state;
+
+  public LevelState() {
+    id     = ForgE.db.uid();
+    name   = MAP_NAME_PREFIX + id;
+    width  = ChunkMap.CHUNK_SIZE * 5;
+    depth  = ChunkMap.CHUNK_SIZE * 5;
+    height = ChunkMap.CHUNK_SIZE * 2;
+    env    = new LevelEnv();
   }
 
+  /**
+   * Initialize arrays and textures
+   */
+  public void bootstrap() {
+    terrainMap              = new ChunkMap(ChunkMap.TERRAIN_TILE_SIZE, ForgE.blocks);
+    terrainMap.initialize(width,height,depth);
+    terrainMap.buildFloor();
+    env.terrainMap              = terrainMap;
+    env.windDisplacementTexture = ForgE.assets.getTexture("textures/wind_bump.jpg");
+  }
+
+  public void setWidth(int width) {
+    this.width = width;
+  }
+
+  public void setDepth(int depth) {
+    this.depth = depth;
+  }
+
+  public void setHeight(int height) {
+    this.height = height;
+  }
+
+  public int getWidth() {
+    return width;
+  }
+
+  public int getDepth() {
+    return depth;
+  }
+
+  public int getHeight() {
+    return height;
+  }
+
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
 }
