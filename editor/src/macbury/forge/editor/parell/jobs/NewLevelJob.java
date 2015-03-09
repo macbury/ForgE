@@ -1,5 +1,6 @@
 package macbury.forge.editor.parell.jobs;
 
+import macbury.forge.ForgE;
 import macbury.forge.editor.parell.Job;
 import macbury.forge.level.LevelState;
 
@@ -28,6 +29,7 @@ public class NewLevelJob extends Job<LevelState> {
   @Override
   public LevelState perform() {
     state.bootstrap();
+    ForgE.storage.saveLevelState(state);
     return state;
   }
 }

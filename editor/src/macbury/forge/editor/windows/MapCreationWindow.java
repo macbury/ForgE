@@ -1,5 +1,6 @@
 package macbury.forge.editor.windows;
 
+import macbury.forge.ForgE;
 import macbury.forge.level.LevelState;
 import macbury.forge.voxel.ChunkMap;
 
@@ -60,6 +61,8 @@ public class MapCreationWindow extends JDialog {
         onCancel();
       }
     }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+
+    ForgE.storage.saveDB(ForgE.db);
   }
 
   public void show(JFrame relativeTo) {

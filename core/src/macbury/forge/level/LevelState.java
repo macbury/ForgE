@@ -3,6 +3,7 @@ package macbury.forge.level;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import macbury.forge.ForgE;
+import macbury.forge.db.GameDatabase;
 import macbury.forge.voxel.ChunkMap;
 
 /**
@@ -21,8 +22,8 @@ public class LevelState {
   public String name;
 
 
-  public LevelState() {
-    id     = ForgE.db.uid();
+  public LevelState(GameDatabase db) {
+    id     = db.uid();
     name   = MAP_NAME_PREFIX + id;
     width  = ChunkMap.CHUNK_SIZE * 5;
     depth  = ChunkMap.CHUNK_SIZE * 5;

@@ -62,7 +62,7 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
 
   public void newMap() {
     closeMap();
-    LevelState newMapState         = new LevelState();
+    LevelState newMapState         = new LevelState(ForgE.db);
     MapCreationWindow newMapWindow = new MapCreationWindow(newMapState, this);
     newMapWindow.show(mainWindow);
   }

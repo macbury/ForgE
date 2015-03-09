@@ -195,4 +195,28 @@ public class ChunkMap extends VoxelMap {
   public void rebuildAll() {
     chunkToRebuild.addAll(chunks);
   }
+
+  public int getCountChunksX() {
+    return countChunksX;
+  }
+
+  public void setCountChunksX(int countChunksX) {
+    this.countChunksX = countChunksX;
+  }
+
+  public int getCountChunksY() {
+    return countChunksY;
+  }
+
+  public void setCountChunksY(int countChunksY) {
+    this.countChunksY = countChunksY;
+  }
+
+  public int getCountChunksZ() {
+    return countChunksZ;
+  }
+
+  public void setCountChunksZ(int countChunksZ) {
+    this.countChunksZ = countChunksZ;
+  }
 }
