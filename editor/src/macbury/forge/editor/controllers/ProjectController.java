@@ -19,6 +19,8 @@ import macbury.forge.shaders.utils.ShaderReloadListener;
 import macbury.forge.shaders.utils.ShadersManager;
 
 import javax.swing.*;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -35,7 +37,7 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
   private ProgressTaskDialog progressTaskDialog;
   private JProgressBar jobProgressBar;
 
-  public void setMainWindow(MainWindow mainWindow) {
+  public void setMainWindow(final MainWindow mainWindow) {
     this.mainWindow         = mainWindow;
     this.jobs               = mainWindow.jobs;
 
@@ -45,6 +47,53 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
 
     ForgE.shaders.addOnShaderReloadListener(this);
     this.jobs.addListener(this);
+
+    mainWindow.addWindowListener(new WindowListener() {
+      @Override
+      public void windowOpened(WindowEvent e) {
+
+      }
+
+      @Override
+      public void windowClosing(WindowEvent e) {
+        if (closeAndSaveChangesMap()) {
+          while(jobs.haveJobs()) {
+            try {
+              Thread.sleep(1000);
+            } catch (InterruptedException e1) {
+              e1.printStackTrace();
+            }
+          }
+          mainWindow.dispose();
+          System.exit(0);
+        }
+      }
+
+      @Override
+      public void windowClosed(WindowEvent e) {
+
+      }
+
+      @Override
+      public void windowIconified(WindowEvent e) {
+
+      }
+
+      @Override
+      public void windowDeiconified(WindowEvent e) {
+
+      }
+
+      @Override
+      public void windowActivated(WindowEvent e) {
+
+      }
+
+      @Override
+      public void windowDeactivated(WindowEvent e) {
+
+      }
+    });
 
     updateUI();
   }
@@ -62,10 +111,12 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
   }
 
   public void newMap() {
-    closeMap();
-    LevelState newMapState         = new LevelState(ForgE.db);
-    MapCreationWindow newMapWindow = new MapCreationWindow(newMapState, this);
-    newMapWindow.show(mainWindow);
+    if (closeAndSaveChangesMap()) {
+      LevelState newMapState         = new LevelState(ForgE.db);
+      MapCreationWindow newMapWindow = new MapCreationWindow(newMapState, this);
+      newMapWindow.show(mainWindow);
+    }
+
   }
 
   @Override
@@ -73,6 +124,37 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
     NewLevelJob job = new NewLevelJob(state);
     job.setCallback(this, LEVEL_STATE_LOADED_CALLBACK);
     jobs.enqueue(job);
+  }
+
+  private void saveMap() {
+
+  }
+
+  public boolean closeAndSaveChangesMap() {
+    if (editorScreen != null && editorScreen.changeManager.canUndo()) {
+      int response = JOptionPane.showOptionDialog(mainWindow,
+          "There are changes in map. Do you want to save them?",
+          "Save map",
+          JOptionPane.YES_NO_CANCEL_OPTION,
+          JOptionPane.QUESTION_MESSAGE,
+          null,
+          null,
+          null);
+
+      if (response == 0) {
+        saveMap();
+        closeMap();
+        return true;
+      } else if (response == 1) {
+        closeMap();
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      closeMap();
+      return true;
+    }
   }
 
   public void closeMap() {
@@ -88,14 +170,13 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
           ForgE.screens.disposeCurrentScreen();
         }
       });
-
     }
 
     editorScreen = null;
+    updateUI();
   }
 
   public void onLevelStateLoaded(LevelState state, NewLevelJob job) {
-    //TODO: save map here
     mainWindow.setTitle(state.name);
     this.editorScreen = new EditorScreen(state);
     Gdx.app.postRunnable(new Runnable() {

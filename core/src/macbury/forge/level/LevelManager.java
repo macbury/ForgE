@@ -19,9 +19,10 @@ import java.util.HashMap;
 public class LevelManager {
   private static final String TAG = "LevelManager";
   private final StorageManager storageManager;
+  private final LevelStateBasicInfoSerializer basicLevelInfoSerializer;
   private HashMap<Integer, FileHandle> idToPathMap;
 
-  private FileFilter mapAndDirFileFilter = new FileFilter() {
+  public FileFilter mapAndDirFileFilter = new FileFilter() {
     @Override
     public boolean accept(File pathname) {
       return pathname.getName().endsWith(LevelState.FILE_EXT) || pathname.isDirectory();
@@ -31,8 +32,8 @@ public class LevelManager {
   public LevelManager(StorageManager storageManager) {
     this.storageManager = storageManager;
     this.idToPathMap    = new HashMap<Integer, FileHandle>();
+    this.basicLevelInfoSerializer = new LevelStateBasicInfoSerializer();
     reload();
-
   }
 
   public void save(LevelState state) {
@@ -42,6 +43,7 @@ public class LevelManager {
     try {
       Output output = new Output(new FileOutputStream(mapFile.file(), false));
       kryo.writeObject(output, state, new FullLevelStateSerializer());
+      output.flush();
       output.close();
     } catch (FileNotFoundException e) {
       e.printStackTrace();
@@ -63,23 +65,39 @@ public class LevelManager {
   public void reload() {
     Kryo kryo                                = storageManager.pool.borrow();
     Array<FileHandle> tempFiles              = new Array<FileHandle>();
-    LevelStateBasicInfoSerializer serializer = new LevelStateBasicInfoSerializer();
     getHandles(Gdx.files.internal(LevelState.MAP_STORAGE_DIR) ,tempFiles);
     for (FileHandle file : tempFiles) {
       if (!file.isDirectory()) {
-        Gdx.app.log(TAG, file.toString());
-        try {
-          Input input = new Input(new FileInputStream(file.file()));
-          LevelState levelState = kryo.readObject(input, LevelState.class, serializer);
-          Gdx.app.log(TAG, levelState.getName());
-          input.close();
-        } catch (FileNotFoundException e) {
-          e.printStackTrace();
-        }
+        int levelId = getLevelId(file);
+        idToPathMap.put(levelId, file);
       }
-
     }
     storageManager.pool.release(kryo);
   }
+
+  public LevelState loadBasicLevelStateInfo(int levelId) {
+    LevelState levelState = null;
+    Kryo kryo             = storageManager.pool.borrow();
+    FileHandle mapFile    = getLevelFileHandle(levelId);
+    Gdx.app.log(TAG, "Loading map: " + mapFile.toString());
+    try {
+      Input input = new Input(new FileInputStream(mapFile.file()));
+      levelState  = kryo.readObject(input, LevelState.class, basicLevelInfoSerializer);
+      input.close();
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    }
+    storageManager.pool.release(kryo);
+    return levelState;
+  }
+
+  private FileHandle getLevelFileHandle(int levelId) {
+    return idToPathMap.get(levelId);
+  }
+
+  public int getLevelId(FileHandle file) {
+    return Integer.valueOf(file.nameWithoutExtension().replaceAll(LevelState.MAP_NAME_PREFIX, ""));
+  }
+
 
 }

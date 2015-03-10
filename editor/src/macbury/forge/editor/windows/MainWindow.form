@@ -144,7 +144,7 @@
               <dividerLocation value="618"/>
               <orientation value="0"/>
               <preferredSize width="320" height="527"/>
-              <resizeWeight value="0.5"/>
+              <resizeWeight value="0.2"/>
             </properties>
             <border type="none"/>
             <children>
@@ -291,7 +291,10 @@
                 <children>
                   <component id="303cd" class="javax.swing.JTree" binding="mapTree">
                     <constraints/>
-                    <properties/>
+                    <properties>
+                      <rootVisible value="true"/>
+                      <showsRootHandles value="true"/>
+                    </properties>
                   </component>
                 </children>
               </scrollpane>

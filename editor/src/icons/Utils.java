@@ -5,7 +5,11 @@ import javax.swing.*;
  */
 public  class Utils {
   public static ImageIcon getIcon(String name) {
-
-    return new ImageIcon(Utils.class.getResource("./"+name+".png"));
+    try {
+      return new ImageIcon(Utils.class.getResource("./"+name+".png"));
+    } catch (Exception e) {
+      e.printStackTrace();
+      return null;
+    }
   }
 }

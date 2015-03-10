@@ -28,6 +28,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
   private final ShadersController shadersController;
   private final GdxSwingInputProcessor inputProcessor;
   private final LwjglAWTInput input;
+  private final MapTreeController mapTreeController;
   private LwjglAWTCanvas openGLCanvas;
   private ForgE engine;
   private ProjectController projectController;
@@ -64,11 +65,12 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     Toolkit kit      = Toolkit.getDefaultToolkit();
     //Image mainIcon   = kit.createImage(ClassLoader.getSystemResource("icons/main.ico"));
     //setIconImage(mainIcon);
-    setContentPane(mainContentPane);
 
+    setContentPane(mainContentPane);
+    mainContentPane.setVisible(false);
     setSize(1360, 760);
     setExtendedState(JFrame.MAXIMIZED_BOTH);
-    setDefaultCloseOperation(EXIT_ON_CLOSE);
+    setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
     setTitle(null);
     setVisible(true);
@@ -90,14 +92,15 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     terrainToolsController               = new TerrainToolsController(terrainToolsToolbar, blocksController, inputProcessor);
     mainToolbarController                = new MainToolbarController(projectController, mainToolbar, mainMenu, inputProcessor);
     shadersController                    = new ShadersController(directoryWatcher);
+    mapTreeController                    = new MapTreeController(mapTree, projectController);
     MapPropertySheet inspectorSheetPanel = new MapPropertySheet();
 
     engine.addBootListener(this);
     engine.addBootListener(blocksController);
+    engine.addBootListener(mapTreeController);
 
     openGLCanvas                         = new LwjglAWTCanvas(engine);
     input                                = (LwjglAWTInput)openGLCanvas.getInput();
-
     mainContentPane.addMouseListener(input);
     mainContentPane.addKeyListener(input);
     mainContentPane.setFocusTraversalKeysEnabled(false);
@@ -114,7 +117,8 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     projectController.addOnMapChangeListener(mainToolbarController);
     projectController.addOnMapChangeListener(terrainToolsController);
     projectController.addOnMapChangeListener(blocksController);
-
+    projectController.addOnMapChangeListener(mapTreeController);
+    mainContentPane.setVisible(true);
     invalidate();
     addWindowFocusListener(this);
 
@@ -127,6 +131,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     ForgE.input.addProcessor(inputProcessor);
     projectController.setMainWindow(this);
     directoryWatcher.start();
+    mainContentPane.setVisible(true);
   }
 
   @Override
@@ -184,4 +189,6 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
       JOptionPane.ERROR_MESSAGE);
     e.printStackTrace();
   }
+
+
 }

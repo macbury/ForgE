@@ -31,6 +31,8 @@ public class JobManager extends Thread {
     }
   }
 
+
+
   @Override
   public void run() {
     this.running = true;
@@ -47,6 +49,10 @@ public class JobManager extends Thread {
     }
   }
 
+  public boolean haveJobs() {
+    return pendingJobs.size() > 0 || currentJob != null;
+  }
+
   private boolean processJob() {
     boolean pushedJobs = false;
     while(!pendingJobs.isEmpty()) {
@@ -60,6 +66,7 @@ public class JobManager extends Thread {
         onJobError(currentJob, jobError);
       }
       onJobFinish(currentJob);
+      currentJob = null;
     }
     return pushedJobs;
   }
