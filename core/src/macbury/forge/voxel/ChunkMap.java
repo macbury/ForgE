@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import macbury.forge.ForgE;
 import macbury.forge.blocks.Block;
 import macbury.forge.blocks.BlocksProvider;
 import macbury.forge.graphics.builders.Chunk;
@@ -26,16 +27,11 @@ public class ChunkMap extends VoxelMap {
 
   private Vector3i tempA = new Vector3i();
   private Vector3i tempB = new Vector3i();
+
   public ChunkMap(Vector3 tileSize, BlocksProvider blocksProvider) {
     super(tileSize, blocksProvider);
     chunks         = new Array<Chunk>();
     chunkToRebuild = new Array<Chunk>();
-  }
-
-  @Override
-  public void initialize(int width, int height, int depth) {
-    super.initialize(width, height, depth);
-    splitIntoChunks();
   }
 
   public void buildFloor() {
@@ -61,6 +57,10 @@ public class ChunkMap extends VoxelMap {
         return chunk;
     }
     return null;
+  }
+
+  public void setQuickBlockIdForPosition(byte blockId, int x, int y, int z) {
+    setBlockIdForPosition(blockId, x, y, z);
   }
 
   @Override
@@ -143,6 +143,10 @@ public class ChunkMap extends VoxelMap {
     rebuildChunkForChunkPosition(chunkPosition);
   }
 
+  public void setQuietVoxelForPosition(Voxel voxel, Vector3i voxelPosition) {
+    super.setVoxelForPosition(voxel, voxelPosition);
+  }
+
   @Override
   public void setVoxelForPosition(Voxel voxel, Vector3i voxelPosition) {
     super.setVoxelForPosition(voxel, voxelPosition);
@@ -155,8 +159,9 @@ public class ChunkMap extends VoxelMap {
     rebuildChunkAroundPosition(x, y, z);
   }
 
-  private void splitIntoChunks() {
+  public void splitIntoChunks() {
     Gdx.app.log(TAG, "Splitting into chunks");
+    chunks.clear();
     this.countChunksX = width / CHUNK_SIZE;
     this.countChunksY = height / CHUNK_SIZE;
     this.countChunksZ = depth / CHUNK_SIZE;
@@ -170,6 +175,7 @@ public class ChunkMap extends VoxelMap {
           chunk.end.set(chunk.start).add(CHUNK_SIZE, CHUNK_SIZE, CHUNK_SIZE);
           chunk.size.set(CHUNK_SIZE, CHUNK_SIZE, CHUNK_SIZE).scl(voxelSize);
           chunks.add(chunk);
+
         }
       }
     }
@@ -218,5 +224,9 @@ public class ChunkMap extends VoxelMap {
 
   public void setCountChunksZ(int countChunksZ) {
     this.countChunksZ = countChunksZ;
+  }
+
+  public static ChunkMap build() {
+    return new ChunkMap(ChunkMap.TERRAIN_TILE_SIZE, ForgE.blocks);
   }
 }

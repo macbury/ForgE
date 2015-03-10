@@ -1,13 +1,16 @@
 package macbury.forge.editor.controllers;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import macbury.forge.ForgE;
 import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
 import macbury.forge.editor.parell.Job;
 import macbury.forge.editor.parell.JobListener;
 import macbury.forge.editor.parell.JobManager;
+import macbury.forge.editor.parell.jobs.LoadLevelJob;
 import macbury.forge.editor.parell.jobs.NewLevelJob;
+import macbury.forge.editor.parell.jobs.SaveLevelJob;
 import macbury.forge.editor.runnables.UpdateStatusBar;
 import macbury.forge.editor.screens.EditorScreen;
 import macbury.forge.editor.windows.MainWindow;
@@ -36,6 +39,7 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
   public JobManager jobs;
   private ProgressTaskDialog progressTaskDialog;
   private JProgressBar jobProgressBar;
+  private LevelState currentLevelState;
 
   public void setMainWindow(final MainWindow mainWindow) {
     this.mainWindow         = mainWindow;
@@ -116,7 +120,6 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
       MapCreationWindow newMapWindow = new MapCreationWindow(newMapState, this);
       newMapWindow.show(mainWindow);
     }
-
   }
 
   @Override
@@ -126,12 +129,25 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
     jobs.enqueue(job);
   }
 
-  private void saveMap() {
+  public boolean openMap(FileHandle fileHandle) {
+    if (closeAndSaveChangesMap()) {
+      LoadLevelJob job = new LoadLevelJob(fileHandle);
+      job.setCallback(this, LEVEL_STATE_LOADED_CALLBACK);
+      jobs.enqueue(job);
+      return true;
+    } else {
+      return false;
+    }
+  }
 
+  public void saveMap() {
+    SaveLevelJob job = new SaveLevelJob(editorScreen.level.state);
+    jobs.enqueue(job);
+    editorScreen.changeManager.clear();
   }
 
   public boolean closeAndSaveChangesMap() {
-    if (editorScreen != null && editorScreen.changeManager.canUndo()) {
+    if (editorScreen != null && editorScreen.changeManager != null && editorScreen.changeManager.canUndo()) {
       int response = JOptionPane.showOptionDialog(mainWindow,
           "There are changes in map. Do you want to save them?",
           "Save map",
@@ -158,6 +174,7 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
   }
 
   public void closeMap() {
+    currentLevelState = null;
     mainWindow.setTitle("");
     if (editorScreen != null) {
       for (OnMapChangeListener listener : onMapChangeListenerArray) {
@@ -176,7 +193,17 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
     updateUI();
   }
 
+
   public void onLevelStateLoaded(LevelState state, NewLevelJob job) {
+    setState(state);
+  }
+
+  public void onLevelStateLoaded(LevelState state, LoadLevelJob job) {
+    setState(state);
+  }
+
+  private void setState(LevelState state) {
+    currentLevelState = state;
     mainWindow.setTitle(state.name);
     this.editorScreen = new EditorScreen(state);
     Gdx.app.postRunnable(new Runnable() {
@@ -267,4 +294,7 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
   }
 
 
+  public LevelState getCurrentLevelState() {
+    return currentLevelState;
+  }
 }

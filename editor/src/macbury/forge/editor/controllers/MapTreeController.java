@@ -15,23 +15,29 @@ import macbury.forge.level.LevelState;
 import org.lwjgl.util.glu.Project;
 
 import javax.swing.*;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
 
 /**
  * Created by macbury on 10.03.15.
  */
-public class MapTreeController implements OnMapChangeListener, ForgEBootListener {
+public class MapTreeController implements OnMapChangeListener, ForgEBootListener, TreeSelectionListener {
   private static final String TAG = "MapTreeController";
   private final JTree mapTree;
   private final DefaultTreeCellRenderer treeCellRenderer;
+  private final ProjectController projectController;
   private MapNode root;
 
   public MapTreeController(JTree mapTree, ProjectController projectController) {
     this.mapTree = mapTree;
+    this.projectController = projectController;
     mapTree.setVisible(false);
+
     this.treeCellRenderer = new DefaultTreeCellRenderer() {
       private Icon projectIcon = Utils.getIcon("node_root");
       private Icon folderIcon  = Utils.getIcon("node_folder");
@@ -51,8 +57,9 @@ public class MapTreeController implements OnMapChangeListener, ForgEBootListener
       }
     };
     this.mapTree.setCellRenderer(treeCellRenderer);
+    mapTree.addTreeSelectionListener(this);
+    mapTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
   }
-
 
   private void reload() {
     ForgE.levels.reload();
@@ -94,6 +101,16 @@ public class MapTreeController implements OnMapChangeListener, ForgEBootListener
   public void afterEngineCreate(ForgE engine) {
     mapTree.setVisible(true);
     reload();
+  }
+
+  @Override
+  public void valueChanged(TreeSelectionEvent e) {
+    MapNode selectedNode = (MapNode)mapTree.getLastSelectedPathComponent();
+    if (selectedNode != null && selectedNode.getId() != -1) {
+      if (projectController.getCurrentLevelState() == null || projectController.getCurrentLevelState().getId() != selectedNode.getId()) {
+        projectController.openMap(ForgE.levels.getFileHandle(selectedNode.getId()));
+      }
+    }
   }
 
   public class MapNode extends DefaultMutableTreeNode {

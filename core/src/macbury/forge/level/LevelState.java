@@ -37,11 +37,18 @@ public class LevelState {
    * Initialize arrays and textures
    */
   public void bootstrap() {
-    terrainMap              = new ChunkMap(ChunkMap.TERRAIN_TILE_SIZE, ForgE.blocks);
-    terrainMap.initialize(width,height,depth);
+    terrainMap              = ChunkMap.build();
+    terrainMap.initialize(width, height, depth);
+    terrainMap.splitIntoChunks();
     terrainMap.buildFloor();
+    terrainMap.rebuildAll();
     env.terrainMap              = terrainMap;
     env.windDisplacementTexture = ForgE.assets.getTexture("textures/wind_bump.jpg");
+  }
+
+  public void setTerrainMap(ChunkMap chunkMap) {
+    env.terrainMap = chunkMap;
+    terrainMap     = chunkMap;
   }
 
   public void setWidth(int width) {
@@ -83,4 +90,6 @@ public class LevelState {
   public void setName(String name) {
     this.name = name;
   }
+
+
 }

@@ -30,6 +30,7 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
   private final KeyShortcutMapping redoMapping;
   private final JButton newMapButton;
   private final ProjectController projectController;
+  private final JButton saveMapButton;
   private EditorScreen screen;
 
 
@@ -44,7 +45,7 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
     this.editorUndoButton        = buildButton("undo");
 
     this.newMapButton            = buildButton("new");
-
+    this.saveMapButton           = buildButton("save");
     undoMapping = inputProcessor.registerMapping(Input.Keys.CONTROL_LEFT, Input.Keys.Z, this);
     redoMapping = inputProcessor.registerMapping(Input.Keys.CONTROL_LEFT, Input.Keys.Y, this);
 
@@ -54,6 +55,7 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
     mainToolbar.add(moreButton);
     mainToolbar.addSeparator();
     mainToolbar.add(newMapButton);
+    mainToolbar.add(saveMapButton);
     mainToolbar.addSeparator();
     mainToolbar.add(editorUndoButton);
     mainToolbar.add(editorRedoButton);
@@ -99,9 +101,11 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
     if (this.screen != null) {
       editorUndoButton.setEnabled(screen.changeManager.canUndo());
       editorRedoButton.setEnabled(screen.changeManager.canRedo());
+      saveMapButton.setEnabled(screen.changeManager.canUndo());
     } else {
       editorUndoButton.setEnabled(false);
       editorRedoButton.setEnabled(false);
+      saveMapButton.setEnabled(false);
     }
   }
 
@@ -129,6 +133,10 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
 
     if (e.getSource() == editorRedoButton) {
       redo();
+    }
+
+    if (e.getSource() == saveMapButton) {
+      projectController.saveMap();
     }
   }
 

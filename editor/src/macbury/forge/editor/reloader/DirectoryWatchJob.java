@@ -31,7 +31,7 @@ public class DirectoryWatchJob implements Disposable, JNotifyListener {
     try {
       JNotify.removeWatch(jnotifyWatchId);
     } catch (Exception e) {
-      e.printStackTrace();
+      //e.printStackTrace();
     }
   }
 

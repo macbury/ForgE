@@ -9,11 +9,9 @@ import com.esotericsoftware.kryo.pool.KryoFactory;
 import com.esotericsoftware.kryo.pool.KryoPool;
 import macbury.forge.db.GameDatabase;
 import macbury.forge.level.LevelState;
-import macbury.forge.storage.serializers.ChunkMapDataSerializer;
-import macbury.forge.storage.serializers.GameDatabaseSerializer;
-import macbury.forge.storage.serializers.FullLevelStateSerializer;
-import macbury.forge.storage.serializers.LevelStateBasicInfoSerializer;
+import macbury.forge.storage.serializers.*;
 import macbury.forge.voxel.ChunkMap;
+import macbury.forge.voxel.Voxel;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -29,9 +27,9 @@ public class StorageManager {
     public Kryo create () {
       Kryo kryo = new Kryo();
       kryo.register(GameDatabase.class, new GameDatabaseSerializer());
-      kryo.register(LevelState.class, new LevelStateBasicInfoSerializer());
       kryo.register(LevelState.class, new FullLevelStateSerializer());
       kryo.register(ChunkMap.class, new ChunkMapDataSerializer());
+      kryo.register(Voxel.class, new VoxelSerializer());
       return kryo;
     }
   };

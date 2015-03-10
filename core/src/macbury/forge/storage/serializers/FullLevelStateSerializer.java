@@ -21,7 +21,8 @@ public class FullLevelStateSerializer extends LevelStateBasicInfoSerializer {
   @Override
   public LevelState read(Kryo kryo, Input input, Class<LevelState> type) {
     LevelState state = super.read(kryo, input, type);
-    state.terrainMap = kryo.readObject(input, ChunkMap.class);
+    state.setTerrainMap(kryo.readObject(input, ChunkMap.class));
+    state.env.windDisplacementTexture = ForgE.assets.getTexture("textures/wind_bump.jpg");
     return state;
   }
 }

@@ -36,15 +36,34 @@ public class LevelManager {
     reload();
   }
 
+  public LevelState load(FileHandle mapFile) {
+    Kryo kryo             = storageManager.pool.borrow();
+    LevelState levelState = null;
+    Gdx.app.log(TAG, "Loading map: " + mapFile.toString());
+    try {
+      Input input = new Input(new FileInputStream(mapFile.file()));
+      levelState = kryo.readObject(input, LevelState.class, new FullLevelStateSerializer());
+      input.close();
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    }
+    storageManager.pool.release(kryo);
+    return levelState;
+  }
+
   public void save(LevelState state) {
     Kryo kryo          = storageManager.pool.borrow();
     FileHandle mapFile = Gdx.files.internal(LevelState.MAP_STORAGE_DIR+LevelState.MAP_NAME_PREFIX+state.getId()+LevelState.FILE_EXT);
+    if (mapFile.exists()) {
+      mapFile.file().delete();
+    }
     Gdx.app.log(TAG, "Saving map: " + mapFile.toString());
     try {
-      Output output = new Output(new FileOutputStream(mapFile.file(), false));
-      kryo.writeObject(output, state, new FullLevelStateSerializer());
-      output.flush();
-      output.close();
+      synchronized (state) {
+        Output output = new Output(new FileOutputStream(mapFile.file(), false));
+        kryo.writeObject(output, state, new FullLevelStateSerializer());
+        output.close();
+      }
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     }
@@ -100,4 +119,7 @@ public class LevelManager {
   }
 
 
+  public FileHandle getFileHandle(int id) {
+    return idToPathMap.get(id);
+  }
 }
