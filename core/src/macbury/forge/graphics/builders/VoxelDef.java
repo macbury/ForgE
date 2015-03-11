@@ -52,9 +52,9 @@ public class VoxelDef {
     shadeBottomRightCorner = false;
   }
 
-  public void calculateAoFor(float baseAo) {
+  public void calculateAoFor(byte baseAo) {
     if (block.envAO) {
-      this.ao = baseAo;
+      this.ao = (float)baseAo / 254f;
     }
 
     if (!block.shadeAO) {

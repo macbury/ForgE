@@ -17,27 +17,34 @@ import org.lwjgl.util.glu.Project;
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeSelectionModel;
+import javax.swing.tree.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 /**
  * Created by macbury on 10.03.15.
  */
-public class MapTreeController implements OnMapChangeListener, ForgEBootListener, TreeSelectionListener {
+public class MapTreeController implements OnMapChangeListener, ForgEBootListener {
   private static final String TAG = "MapTreeController";
   private final JTree mapTree;
   private final DefaultTreeCellRenderer treeCellRenderer;
   private final ProjectController projectController;
+  private final JPopupMenu mapsMenu;
   private MapNode root;
 
   public MapTreeController(JTree mapTree, ProjectController projectController) {
-    this.mapTree = mapTree;
+    this.mapTree           = mapTree;
     this.projectController = projectController;
+    mapTree.setDragEnabled(true);
+    mapTree.setDropMode(DropMode.ON_OR_INSERT);
     mapTree.setVisible(false);
 
+    this.mapsMenu = new JPopupMenu();
+    mapsMenu.add (new JMenuItem ( "New map" ));
+    mapsMenu.add (new JMenuItem ( "New folder" ));
+    mapsMenu.add (new JMenuItem ( "Delete map" ));
     this.treeCellRenderer = new DefaultTreeCellRenderer() {
       private Icon projectIcon = Utils.getIcon("node_root");
       private Icon folderIcon  = Utils.getIcon("node_folder");
@@ -57,8 +64,44 @@ public class MapTreeController implements OnMapChangeListener, ForgEBootListener
       }
     };
     this.mapTree.setCellRenderer(treeCellRenderer);
-    mapTree.addTreeSelectionListener(this);
+
+    MouseListener ml = new MouseAdapter() {
+      @Override
+      public void mousePressed(MouseEvent e) {
+        super.mousePressed(e);
+        showPopupFor(e);
+      }
+
+      @Override
+      public void mouseClicked(MouseEvent e) {
+        if (e.getClickCount() == 2) {
+          onMapSelected(e);
+        }
+      }
+    };
+
+    mapTree.addMouseListener(ml);
     mapTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+  }
+
+  private void showPopupFor(MouseEvent e) {
+    if ( SwingUtilities.isRightMouseButton ( e ) ) {
+      TreePath path = mapTree.getPathForLocation ( e.getX (), e.getY () );
+      Rectangle pathBounds = mapTree.getUI ().getPathBounds ( mapTree, path );
+      if ( pathBounds != null && pathBounds.contains ( e.getX (), e.getY () ) ) {
+
+        mapsMenu.show(mapTree, pathBounds.x, pathBounds.y + pathBounds.height);
+      }
+    }
+  }
+
+  private void onMapSelected(MouseEvent e) {
+    MapNode selectedNode = (MapNode)mapTree.getLastSelectedPathComponent();
+    if (selectedNode != null && selectedNode.getId() != -1) {
+      if (projectController.getCurrentLevelState() == null || projectController.getCurrentLevelState().getId() != selectedNode.getId()) {
+        projectController.openMap(ForgE.levels.getFileHandle(selectedNode.getId()));
+      }
+    }
   }
 
   private void reload() {
@@ -103,15 +146,6 @@ public class MapTreeController implements OnMapChangeListener, ForgEBootListener
     reload();
   }
 
-  @Override
-  public void valueChanged(TreeSelectionEvent e) {
-    MapNode selectedNode = (MapNode)mapTree.getLastSelectedPathComponent();
-    if (selectedNode != null && selectedNode.getId() != -1) {
-      if (projectController.getCurrentLevelState() == null || projectController.getCurrentLevelState().getId() != selectedNode.getId()) {
-        projectController.openMap(ForgE.levels.getFileHandle(selectedNode.getId()));
-      }
-    }
-  }
 
   public class MapNode extends DefaultMutableTreeNode {
     private int id;

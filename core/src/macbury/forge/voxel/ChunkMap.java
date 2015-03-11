@@ -8,15 +8,17 @@ import macbury.forge.ForgE;
 import macbury.forge.blocks.Block;
 import macbury.forge.blocks.BlocksProvider;
 import macbury.forge.graphics.builders.Chunk;
+import macbury.forge.procedular.PerlinNoise;
 import macbury.forge.utils.Vector3i;
 
 /**
  * Created by macbury on 19.10.14.
  */
 public class ChunkMap extends VoxelMap {
-  public static final int CHUNK_SIZE          = 10;
-  public static final int CHUNK_ARRAY_SIZE    = CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE;
-  public static final Vector3 TERRAIN_TILE_SIZE = new Vector3(1,1,1);
+
+  public static final int CHUNK_SIZE              = 10;
+  public static final int CHUNK_ARRAY_SIZE        = CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE;
+  public static final Vector3 TERRAIN_TILE_SIZE   = new Vector3(1,1,1);
   private static final String TAG = "ChunkMap";
   public final Array<Chunk> chunks;
   public final Array<Chunk> chunkToRebuild;
@@ -24,15 +26,15 @@ public class ChunkMap extends VoxelMap {
   private int countChunksX;
   private int countChunksY;
   private int countChunksZ;
-
   private Vector3i tempA = new Vector3i();
   private Vector3i tempB = new Vector3i();
 
   public ChunkMap(Vector3 tileSize, BlocksProvider blocksProvider) {
     super(tileSize, blocksProvider);
-    chunks         = new Array<Chunk>();
-    chunkToRebuild = new Array<Chunk>();
+    chunks                    = new Array<Chunk>();
+    chunkToRebuild            = new Array<Chunk>();
   }
+
 
   public void buildFloor() {
     Gdx.app.log(TAG, "Building floor");
@@ -64,9 +66,10 @@ public class ChunkMap extends VoxelMap {
   }
 
   @Override
-  public void setBlockIdForPosition(byte blockId, int x, int y, int z) {
-    super.setBlockIdForPosition(blockId, x, y, z);
+  public Voxel setBlockIdForPosition(byte blockId, int x, int y, int z) {
+    Voxel voxel = super.setBlockIdForPosition(blockId, x, y, z);
     rebuildChunkAroundPosition(x, y, z);
+    return voxel;
   }
 
   @Override
@@ -229,4 +232,5 @@ public class ChunkMap extends VoxelMap {
   public static ChunkMap build() {
     return new ChunkMap(ChunkMap.TERRAIN_TILE_SIZE, ForgE.blocks);
   }
+
 }

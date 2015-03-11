@@ -52,8 +52,6 @@ public class DirectoryWatchJob implements Disposable, JNotifyListener {
       currentHandle = handle;
       Gdx.app.log(TAG, "Change for: " + currentHandle.name());
     }
-
-
   }
 
   public void process() {

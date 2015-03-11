@@ -19,7 +19,7 @@ public class VoxelSerializer extends Serializer<Voxel> {
 
   @Override
   public Voxel read(Kryo kryo, Input input, Class<Voxel> type) {
-    Voxel voxel = new Voxel();
+    Voxel voxel   = new Voxel();
     voxel.blockId = input.readByte();
     voxel.alginTo = kryo.readObjectOrNull(input, Block.Side.class);
     return voxel;

@@ -13,6 +13,7 @@ import macbury.forge.graphics.mesh.MeshVertexInfo;
 import macbury.forge.graphics.mesh.VoxelsAssembler;
 import macbury.forge.procedular.PerlinNoise;
 import macbury.forge.utils.Vector3i;
+import macbury.forge.voxel.ChunkMap;
 import macbury.forge.voxel.Voxel;
 import macbury.forge.voxel.VoxelMap;
 
@@ -20,46 +21,30 @@ import macbury.forge.voxel.VoxelMap;
  * Created by macbury on 16.10.14.
  */
 public class TerrainBuilder {
-  private static final double SHADE_AO_AMPLUTUDE = 10;
-  private static final double SHADE_AO_FREQUENCY = 0.1;
-  private static final float SHADE_AO_FACTOR = 0.85f;
+
   private final VoxelsAssembler solidVoxelAssembler;
   private final VoxelsAssembler transparentVoxelAssembler;
-  private float[][][] aoArray;
 
   private static final String TAG = "TerrainBuilder";
 
-  private final VoxelMap map;
+  private final ChunkMap map;
   public final TerrainCursor cursor;
   private Vector3 tempA = new Vector3();
   private Vector3 tempB = new Vector3();
   private Matrix4 tempMat = new Matrix4();
   private Array<Block.Side> facesToBuild = new Array<Block.Side>();
-  private final PerlinNoise perlinNoise;
+
   private Vector3i nextTileToCheck = new Vector3i();
   private Color tempColor          = new Color();
   private final VoxelDef voxelDef;
-  public TerrainBuilder(VoxelMap voxelMap) {
+  public TerrainBuilder(ChunkMap voxelMap) {
     super();
-    this.map         = voxelMap;
-    this.cursor      = new TerrainCursor();
-    this.perlinNoise = new PerlinNoise(System.currentTimeMillis());
-    this.voxelDef    = new VoxelDef(map);
+    this.map                       = voxelMap;
+    this.cursor                    = new TerrainCursor();
+
+    this.voxelDef                  = new VoxelDef(map);
     this.solidVoxelAssembler       = new VoxelsAssembler();
     this.transparentVoxelAssembler = new VoxelsAssembler();
-    generatePrettyShadeArray();
-
-  }
-
-  private void generatePrettyShadeArray() {
-    this.aoArray = new float[map.getWidth()][map.getHeight()][map.getDepth()];
-    for (int y = 0; y < map.getHeight(); y++) {
-      for (int x = 0; x < map.getWidth(); x++) {
-        for (int z = 0; z < map.getDepth(); z++) {
-          aoArray[x][y][z] = (float)perlinNoise.simpleNoise(x,y,z, SHADE_AO_AMPLUTUDE, SHADE_AO_FREQUENCY) * SHADE_AO_FACTOR;
-        }
-      }
-    }
   }
 
   private boolean isVoxelTransparent(Voxel voxel) {
@@ -142,7 +127,6 @@ public class TerrainBuilder {
   private void addTrianglesForFace(Voxel voxel, Block.Side side, VoxelsAssembler assembler) {
     Block block    = voxel.getBlock();
     voxelDef.block = block;
-    voxelDef.calculateAoFor(aoArray[voxelDef.voxelPosition.x][voxelDef.voxelPosition.y][voxelDef.voxelPosition.z]);
     assembler.face(voxelDef, side);
   }
 

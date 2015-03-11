@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.blocks.Block;
 import macbury.forge.blocks.BlocksProvider;
+import macbury.forge.procedular.PerlinNoise;
 import macbury.forge.utils.Vector3i;
 
 /**
@@ -27,6 +28,7 @@ public class VoxelMap implements Disposable {
     boundingBox     = new BoundingBox();
     this.blocks     = blocksProvider;
   }
+
 
   public void initialize(int width, int height, int depth) {
     this.width  = width;
@@ -55,18 +57,21 @@ public class VoxelMap implements Disposable {
     out.set(in.x * voxelSize.x, in.y * voxelSize.y, in.z * voxelSize.z);
   }
 
-  public void setBlockIdForPosition(byte blockId, int x, int y, int z) {
+  public Voxel setBlockIdForPosition(byte blockId, int x, int y, int z) {
     if (!isOutOfBounds(x,y,z)) {
       if (blockId == AIR_BLOCK_INDEX) {
         voxelMap[x][y][z] = null;
+        return null;
       } else {
         if (voxelMap[x][y][z] == null) {
-          voxelMap[x][y][z] = new Voxel();
+          voxelMap[x][y][z]     = new Voxel();
         }
 
         voxelMap[x][y][z].blockId = blockId;
+        return voxelMap[x][y][z];
       }
     }
+    return null;
   }
 
   public void setBlockForPosition(Block block, int x, int y, int z) {
@@ -229,4 +234,5 @@ public class VoxelMap implements Disposable {
   public void setDepth(int depth) {
     this.depth = depth;
   }
+
 }

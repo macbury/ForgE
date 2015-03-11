@@ -46,6 +46,7 @@ public class LevelState {
     env.windDisplacementTexture = ForgE.assets.getTexture("textures/wind_bump.jpg");
   }
 
+
   public void setTerrainMap(ChunkMap chunkMap) {
     env.terrainMap = chunkMap;
     terrainMap     = chunkMap;

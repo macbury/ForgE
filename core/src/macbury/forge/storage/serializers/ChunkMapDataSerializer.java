@@ -26,6 +26,7 @@ public class ChunkMapDataSerializer extends Serializer<ChunkMap> {
       for (int x = 0; x < object.getWidth(); x++) {
         for (int y = 0; y < object.getHeight(); y++) {
           for (int z = 0; z < object.getDepth(); z++) {
+            tempA.set(x,y,z);
             Voxel voxel = object.getVoxelForPosition(x,y,z);
             kryo.writeObjectOrNull(output, voxel, Voxel.class);
           }
