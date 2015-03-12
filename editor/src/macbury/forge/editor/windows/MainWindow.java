@@ -7,6 +7,7 @@ import macbury.forge.Config;
 import macbury.forge.ForgE;
 import macbury.forge.ForgEBootListener;
 import macbury.forge.editor.controllers.*;
+import macbury.forge.editor.controllers.maps.MapTreeController;
 import macbury.forge.editor.input.GdxSwingInputProcessor;
 import macbury.forge.editor.parell.JobManager;
 import macbury.forge.editor.reloader.DirectoryWatcher;
