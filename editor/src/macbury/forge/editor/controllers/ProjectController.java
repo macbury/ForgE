@@ -114,17 +114,22 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
     return mainWindow;
   }
 
-  public void newMap() {
+  public void newMap(String storeDir) {
     if (closeAndSaveChangesMap()) {
-      LevelState newMapState         = new LevelState(ForgE.db);
-      MapCreationWindow newMapWindow = new MapCreationWindow(newMapState, this);
+      LevelState newMapState                 = new LevelState(ForgE.db);
+      MapCreationWindow.MapDocument document = new MapCreationWindow.MapDocument(newMapState, storeDir);
+      MapCreationWindow newMapWindow = new MapCreationWindow(document, this);
       newMapWindow.show(mainWindow);
     }
   }
 
+  public void newMap() {
+    newMap(null);
+  }
+
   @Override
-  public void onMapCreationSuccess(MapCreationWindow window, LevelState state) {
-    NewLevelJob job = new NewLevelJob(state);
+  public void onMapCreationSuccess(MapCreationWindow window, MapCreationWindow.MapDocument document) {
+    NewLevelJob job = new NewLevelJob(document.state, document.storeDir);
     job.setCallback(this, LEVEL_STATE_LOADED_CALLBACK);
     jobs.enqueue(job);
   }

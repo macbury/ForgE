@@ -13,6 +13,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
+import java.io.File;
 import java.util.HashMap;
 
 /**
@@ -119,7 +120,7 @@ public class MapTreeModel extends DefaultTreeModel implements TreeExpansionListe
 
   public abstract class BaseNode extends DefaultMutableTreeNode {
     private String name;
-    private final String path;
+    protected final String path;
     private int id;
 
     public BaseNode(String name, int id, FileHandle handle) {
@@ -133,6 +134,8 @@ public class MapTreeModel extends DefaultTreeModel implements TreeExpansionListe
       }
 
     }
+
+    public abstract String getDirectory();
 
     public String getPathFile() {
       return path;
@@ -156,17 +159,32 @@ public class MapTreeModel extends DefaultTreeModel implements TreeExpansionListe
     public MapNode(String name, int id, FileHandle handle) {
       super(name, id, handle);
     }
+
+    @Override
+    public String getDirectory() {
+      return new File(path).getParent();
+    }
   }
 
   public class FolderNode extends BaseNode {
     public FolderNode(String name, FileHandle handle) {
       super(name, -1, handle);
     }
+
+    @Override
+    public String getDirectory() {
+      return new File(path).getAbsolutePath();
+    }
   }
 
   public class ProjectNode extends BaseNode {
     public ProjectNode(String name) {
       super(name, -1, null);
+    }
+
+    @Override
+    public String getDirectory() {
+      return Gdx.files.internal(".").file().getAbsolutePath();
     }
   }
 }

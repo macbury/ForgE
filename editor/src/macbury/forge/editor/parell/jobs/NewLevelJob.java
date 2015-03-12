@@ -10,11 +10,14 @@ import macbury.forge.level.LevelState;
 public class NewLevelJob extends Job<LevelState> {
 
   private final LevelState state;
+  private final String storeDir;
 
-  public NewLevelJob(LevelState state) {
+  public NewLevelJob(LevelState state, String storeDir) {
     super(LevelState.class);
     this.state = state;
+    this.storeDir = storeDir;
   }
+
 
   @Override
   public boolean isBlockingUI() {
@@ -29,7 +32,7 @@ public class NewLevelJob extends Job<LevelState> {
   @Override
   public LevelState perform() {
     state.bootstrap();
-    ForgE.levels.save(state);
+    ForgE.levels.save(state, storeDir);
     return state;
   }
 }

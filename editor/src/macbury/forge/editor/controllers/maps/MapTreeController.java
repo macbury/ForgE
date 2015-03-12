@@ -36,7 +36,7 @@ public class MapTreeController implements OnMapChangeListener, ForgEBootListener
   private final MapTreeModel mapTreeModel;
 
   public MapTreeController(JTree mapTree, ProjectController projectController) {
-    this.popupController   = new MapTreePopupHandlerController(mapTree);
+    this.popupController   = new MapTreePopupHandlerController(mapTree, projectController);
     this.mapTree           = mapTree;
     this.projectController = projectController;
 
@@ -66,7 +66,6 @@ public class MapTreeController implements OnMapChangeListener, ForgEBootListener
     mapTree.addMouseListener(ml);
     mapTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
   }
-
 
   private void onMapSelected(MouseEvent e) {
     MapTreeModel.BaseNode selectedNode = (MapTreeModel.BaseNode)mapTree.getLastSelectedPathComponent();

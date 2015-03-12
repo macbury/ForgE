@@ -51,16 +51,16 @@ public class LevelManager {
     return levelState;
   }
 
-  public void save(LevelState state) {
+  public void save(LevelState state, String storeDir) {
     Kryo kryo          = storageManager.pool.borrow();
-    FileHandle mapFile = Gdx.files.internal(LevelState.MAP_STORAGE_DIR+LevelState.MAP_NAME_PREFIX+state.getId()+LevelState.FILE_EXT);
-    if (mapFile.exists()) {
-      mapFile.file().delete();
+    File file          = new File(storeDir + File.separator + LevelState.MAP_NAME_PREFIX+state.getId()+LevelState.FILE_EXT);
+    if (file.exists()) {
+      file.delete();
     }
-    Gdx.app.log(TAG, "Saving map: " + mapFile.toString());
+    Gdx.app.log(TAG, "Saving map: " + file.getAbsolutePath());
     try {
       synchronized (state) {
-        Output output = new Output(new FileOutputStream(mapFile.file(), false));
+        Output output = new Output(new FileOutputStream(file, false));
         kryo.writeObject(output, state, new FullLevelStateSerializer());
         output.close();
       }
@@ -68,6 +68,10 @@ public class LevelManager {
       e.printStackTrace();
     }
     storageManager.pool.release(kryo);
+  }
+
+  public void save(LevelState state) {
+    save(state, Gdx.files.internal(LevelState.MAP_STORAGE_DIR).file().getAbsolutePath());
   }
 
   private void getHandles(FileHandle begin, Array<FileHandle> handles)  {
@@ -122,4 +126,6 @@ public class LevelManager {
   public FileHandle getFileHandle(int id) {
     return idToPathMap.get(id);
   }
+
+
 }

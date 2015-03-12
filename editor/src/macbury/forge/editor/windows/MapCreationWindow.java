@@ -9,7 +9,7 @@ import java.awt.event.*;
 
 public class MapCreationWindow extends JDialog {
   private final Listener listener;
-  private final LevelState state;
+  private final MapDocument document;
   private JPanel contentPane;
   private JButton buttonOK;
   private JButton buttonCancel;
@@ -19,9 +19,9 @@ public class MapCreationWindow extends JDialog {
   private JSpinner depthSpinner;
   private JComboBox modeComboBox;
 
-  public MapCreationWindow(LevelState state, Listener listener) {
+  public MapCreationWindow(MapDocument document, Listener listener) {
     this.listener = listener;
-    this.state    = state;
+    this.document = document;
     setContentPane(contentPane);
     setModal(true);
 
@@ -39,11 +39,11 @@ public class MapCreationWindow extends JDialog {
       }
     });
 
-    widthSpinner.setModel(new MapSizeModel(state.getWidth()));
-    heightSpinner.setModel(new MapSizeModel(state.getHeight()));
-    depthSpinner.setModel(new MapSizeModel(state.getDepth()));
+    widthSpinner.setModel(new MapSizeModel(document.state.getWidth()));
+    heightSpinner.setModel(new MapSizeModel(document.state.getHeight()));
+    depthSpinner.setModel(new MapSizeModel(document.state.getDepth()));
 
-    mapNameTextField.setText(state.getName());
+    mapNameTextField.setText(document.state.getName());
 
 // call onCancel() when cross is clicked
     setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -72,17 +72,17 @@ public class MapCreationWindow extends JDialog {
 
   private void onOK() {
     if (valid()) {
-      listener.onMapCreationSuccess(this, state);
+      listener.onMapCreationSuccess(this, document);
       dispose();
     }
 
   }
 
   private boolean valid() {
-    state.setDepth((Integer)depthSpinner.getValue());
-    state.setHeight((Integer)heightSpinner.getValue());
-    state.setWidth((Integer)widthSpinner.getValue());
-    state.setName(mapNameTextField.getText());
+    document.state.setDepth((Integer)depthSpinner.getValue());
+    document.state.setHeight((Integer)heightSpinner.getValue());
+    document.state.setWidth((Integer)widthSpinner.getValue());
+    document.state.setName(mapNameTextField.getText());
     return true;
   }
 
@@ -96,11 +96,20 @@ public class MapCreationWindow extends JDialog {
   }
 
   public interface Listener {
-    public void onMapCreationSuccess(MapCreationWindow window, LevelState newState);
+    public void onMapCreationSuccess(MapCreationWindow window, MapDocument document);
+  }
+
+  public static class MapDocument {
+    public final LevelState state;
+    public final String storeDir;
+
+    public MapDocument(LevelState state, String storeDir) {
+      this.state    = state;
+      this.storeDir = storeDir;
+    }
   }
 
   public class MapSizeModel extends SpinnerNumberModel {
-
     public MapSizeModel(int value) {
       super(value, ChunkMap.CHUNK_SIZE, 1000, ChunkMap.CHUNK_SIZE);
     }
