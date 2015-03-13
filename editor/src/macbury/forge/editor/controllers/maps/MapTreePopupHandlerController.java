@@ -40,7 +40,7 @@ public class MapTreePopupHandlerController implements ActionListener {
     return item;
   }
 
-  public void showPopupFor(MouseEvent e) {
+  public boolean showPopupFor(MouseEvent e) {
     if (SwingUtilities.isRightMouseButton(e)) {
       TreePath path = tree.getPathForLocation( e.getX (), e.getY () );
       Rectangle pathBounds = tree.getUI().getPathBounds( tree, path );
@@ -48,6 +48,9 @@ public class MapTreePopupHandlerController implements ActionListener {
         setSelectedNode((MapTreeModel.BaseNode) path.getLastPathComponent());
         mapsMenu.show(tree, e.getX(), e.getY());
       }
+      return true;
+    } else {
+      return false;
     }
   }
 

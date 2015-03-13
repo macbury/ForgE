@@ -1,4 +1,3 @@
-
 buildscript {
     repositories {
         mavenCentral()
@@ -8,9 +7,11 @@ buildscript {
 }
 
 allprojects {
+    apply plugin: 'java'
     apply plugin: "idea"
     apply plugin: "eclipse"
-    version = '0.01'
+
+    version = '0.02'
     ext {
         appName         = 'ForgE'
         gdxVersion      = '1.4.0'
@@ -28,12 +29,14 @@ allprojects {
 }
 
 project(":editor") {
-  apply plugin: "java"
+    apply plugin: 'java'
 
   dependencies {
     compile project(":desktop")
     compile 'net.contentobjects.jnotify:jnotify:0.94+'
+      compile 'org.apache.commons:commons-io:1.3+'
     compile 'org.nuiton.thirdparty:l2fprod-common:0.1'
+
   }
 }
 

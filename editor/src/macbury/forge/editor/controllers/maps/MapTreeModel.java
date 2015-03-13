@@ -14,6 +14,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -29,7 +32,7 @@ public class MapTreeModel extends DefaultTreeModel implements TreeExpansionListe
 
   public MapTreeModel(JTree tree) {
     super(null);
-    this.pathNodesMap  = new HashMap<>();
+    this.pathNodesMap  = new HashMap<String, BaseNode>();
     this.tree          = tree;
     this.expandedNodes = new Array<String>();
     tree.addTreeExpansionListener(this);
@@ -120,11 +123,14 @@ public class MapTreeModel extends DefaultTreeModel implements TreeExpansionListe
     }
   }
 
-  public abstract class BaseNode extends DefaultMutableTreeNode {
+  public abstract class BaseNode extends DefaultMutableTreeNode implements Transferable {
     private String name;
     protected final String path;
     private int id;
-
+    public DataFlavor DEFAULT_MUTABLE_TREENODE_FLAVOR = new DataFlavor(
+        BaseNode.class, "BaseNode");
+    public DataFlavor flavors[] = {DEFAULT_MUTABLE_TREENODE_FLAVOR,
+        DataFlavor.stringFlavor};
     public BaseNode(String name, int id, FileHandle handle) {
       super(name);
       this.name   = name;
@@ -134,8 +140,11 @@ public class MapTreeModel extends DefaultTreeModel implements TreeExpansionListe
       } else {
         this.path   = handle.file().getAbsolutePath();
       }
-
     }
+
+    public abstract boolean isMovable();
+
+    public abstract boolean canAcceptFolderOrMap();
 
     public abstract String getDirectory();
 
@@ -155,6 +164,28 @@ public class MapTreeModel extends DefaultTreeModel implements TreeExpansionListe
       this.name = name;
       setUserObject(name);
     }
+
+    @Override
+    public DataFlavor[] getTransferDataFlavors() {
+      return  flavors;
+    }
+
+    @Override
+    public boolean isDataFlavorSupported(DataFlavor flavor) {
+      boolean returnValue = false;
+      for (int i = 0, n = flavors.length; i < n; i++) {
+        if (flavor.equals(flavors[i])) {
+          returnValue = true;
+          break;
+        }
+      }
+      return returnValue;
+    }
+
+    @Override
+    public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
+      return this;
+    }
   }
 
   public class MapNode extends BaseNode {
@@ -163,9 +194,21 @@ public class MapTreeModel extends DefaultTreeModel implements TreeExpansionListe
     }
 
     @Override
+    public boolean isMovable() {
+      return true;
+    }
+
+    @Override
+    public boolean canAcceptFolderOrMap() {
+      return false;
+    }
+
+    @Override
     public String getDirectory() {
       return new File(path).getParent();
     }
+
+
   }
 
   public class FolderNode extends BaseNode {
@@ -174,14 +217,39 @@ public class MapTreeModel extends DefaultTreeModel implements TreeExpansionListe
     }
 
     @Override
+    public boolean isMovable() {
+      return true;
+    }
+
+    @Override
+    public boolean canAcceptFolderOrMap() {
+      return true;
+    }
+
+    @Override
     public String getDirectory() {
-      return new File(path).getAbsolutePath();
+      try {
+        return new File(path).getCanonicalPath() + File.separator;
+      } catch (IOException e) {
+        e.printStackTrace();
+        return null;
+      }
     }
   }
 
   public class ProjectNode extends BaseNode {
     public ProjectNode(String name) {
       super(name, -1, null);
+    }
+
+    @Override
+    public boolean isMovable() {
+      return false;
+    }
+
+    @Override
+    public boolean canAcceptFolderOrMap() {
+      return true;
     }
 
     @Override
@@ -192,6 +260,11 @@ public class MapTreeModel extends DefaultTreeModel implements TreeExpansionListe
         e.printStackTrace();
         return null;
       }
+    }
+
+    @Override
+    public String getPathFile() {
+      return getDirectory();
     }
   }
 }

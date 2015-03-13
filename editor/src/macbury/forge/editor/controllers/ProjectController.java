@@ -25,6 +25,8 @@ import javax.swing.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -189,8 +191,13 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
 
       if (response == 0) {
         Gdx.app.log(TAG, "Removing dir: " + pathFile);
-        File file = new File(pathFile);
-        file.delete();
+        try {
+          Files.deleteIfExists(FileSystems.getDefault().getPath(pathFile));
+          //FileUtils.deleteDirectory(new File("directory"));
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+
         triggerMapStructureChange();
       }
     }
@@ -206,6 +213,25 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
         Gdx.app.log(TAG, "Creating directory" + file.getAbsolutePath());
         file.mkdirs();
         triggerMapStructureChange();
+      }
+    }
+  }
+
+  public void moveMap(String source, String target) {
+    if (closeAndSaveChangesMap()) {
+      jobs.waitForAllToComplete();
+
+
+      try {
+        Path sourcePath = FileSystems.getDefault().getPath(source);
+        Path targetPath = FileSystems.getDefault().getPath(target, sourcePath.getFileName().toString());
+
+        Gdx.app.log(TAG, "Move " + sourcePath + " to " + targetPath);
+        Files.move(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING);
+
+        triggerMapStructureChange();
+      } catch (IOException e) {
+        e.printStackTrace();
       }
     }
   }

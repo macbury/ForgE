@@ -1,25 +1,18 @@
 package macbury.forge.editor.controllers.maps;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.utils.Array;
-import icons.Utils;
 import macbury.forge.ForgE;
 import macbury.forge.ForgEBootListener;
 import macbury.forge.editor.controllers.ProjectController;
 import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
-import macbury.forge.editor.reloader.DirectoryWatchJob;
-import macbury.forge.editor.reloader.DirectoryWatcher;
 import macbury.forge.editor.screens.EditorScreen;
-import macbury.forge.level.LevelManager;
-import macbury.forge.level.LevelState;
-import org.lwjgl.util.glu.Project;
 
 import javax.swing.*;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.*;
-import java.awt.*;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DragGestureRecognizer;
+import java.awt.dnd.DragSource;
+import java.awt.dnd.DropTarget;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -27,22 +20,22 @@ import java.awt.event.MouseListener;
 /**
  * Created by macbury on 10.03.15.
  */
-public class MapTreeController implements OnMapChangeListener, ForgEBootListener {
+public class MapTreeController implements OnMapChangeListener, ForgEBootListener, MapNodeTreeMoveDragController.Listener {
   private static final String TAG = "MapTreeController";
   private final JTree mapTree;
   private final ProjectController projectController;
 
   private final MapTreePopupHandlerController popupController;
   private final MapTreeModel mapTreeModel;
+  private final DropTarget dropTarget;
 
-  public MapTreeController(JTree mapTree, ProjectController projectController) {
+  public MapTreeController(final JTree mapTree, ProjectController projectController) {
     this.popupController   = new MapTreePopupHandlerController(mapTree, projectController);
     this.mapTree           = mapTree;
     this.projectController = projectController;
 
-    mapTree.setDragEnabled(true);
-    mapTree.setDropMode(DropMode.ON_OR_INSERT);
     mapTree.setVisible(false);
+
 
     this.mapTree.setCellRenderer(new MapTreeCellRenderer());
 
@@ -62,6 +55,15 @@ public class MapTreeController implements OnMapChangeListener, ForgEBootListener
     };
 
     this.mapTreeModel = new MapTreeModel(mapTree);
+
+    //DragSource dragSource = DragSource.getDefaultDragSource();
+   // dragSource.createDefaultDragGestureRecognizer(mapTree, DnDConstants.ACTION_COPY_OR_MOVE, new MapNodeTreeMoveDragSource(mapTree));
+    DragSource dragSource                          = new DragSource();
+    MapNodeTreeMoveDragController dragSourceController = new MapNodeTreeMoveDragController(dragSource, mapTree, this);
+
+
+    DragGestureRecognizer dgr                      = dragSource.createDefaultDragGestureRecognizer(mapTree, DnDConstants.ACTION_MOVE, dragSourceController);
+    dropTarget                                     = new DropTarget(mapTree, dragSourceController);
 
     mapTree.addMouseListener(ml);
     mapTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
@@ -106,4 +108,8 @@ public class MapTreeController implements OnMapChangeListener, ForgEBootListener
     mapTree.setModel(mapTreeModel);
   }
 
+  @Override
+  public void onMapMoved(MapTreeModel.BaseNode target, MapTreeModel.BaseNode dragedNode) {
+    projectController.moveMap(dragedNode.getPathFile(), target.getPathFile());
+  }
 }
