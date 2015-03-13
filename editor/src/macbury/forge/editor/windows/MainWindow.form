@@ -141,10 +141,10 @@
             <constraints border-constraint="West"/>
             <properties>
               <continuousLayout value="true"/>
-              <dividerLocation value="618"/>
+              <dividerLocation value="619"/>
               <orientation value="0"/>
               <preferredSize width="320" height="527"/>
-              <resizeWeight value="0.2"/>
+              <resizeWeight value="0.5"/>
             </properties>
             <border type="none"/>
             <children>

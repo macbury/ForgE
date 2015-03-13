@@ -193,7 +193,6 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
       if (response == 0) {
         Gdx.app.log(TAG, "Removing dir: " + pathFile);
         try {
-          //Files.deleteIfExists(FileSystems.getDefault().getPath(pathFile));
           FileUtils.deleteDirectory(new File(pathFile));
         } catch (IOException e) {
           e.printStackTrace();
@@ -202,7 +201,6 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
         triggerMapStructureChange();
       }
     }
-
   }
 
   public void createFolder(String pathFile) {
@@ -221,7 +219,6 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
   public void moveMap(String source, String target) {
     if (closeAndSaveChangesMap()) {
       jobs.waitForAllToComplete();
-
 
       try {
         Path sourcePath = FileSystems.getDefault().getPath(source);
