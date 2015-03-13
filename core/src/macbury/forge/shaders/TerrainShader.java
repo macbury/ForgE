@@ -15,11 +15,7 @@ import macbury.forge.shaders.utils.RenderableBaseShader;
  * Created by macbury on 18.10.14.
  */
 public class TerrainShader extends RenderableBaseShader<VoxelFaceRenderable> {
-  private static final String UNIFORM_WIND_DISPLACEMENT_TEXTURE = "u_windDisplacementTexture";
-  private static final String UNIFORM_WIND_DIR = "u_windDirection";
   private final Matrix3 tempNormalMatrix = new Matrix3();
-  private final Vector3 mapSize          = new Vector3();
-  private final String  UNIFORM_MAP_SIZE = "u_mapSize";
 
   @Override
   public boolean canRender(BaseRenderable instance) {
@@ -28,33 +24,16 @@ public class TerrainShader extends RenderableBaseShader<VoxelFaceRenderable> {
 
   @Override
   public void afterBegin() {
-    setUniformSkyColor();
-    setUniformSun();
-    setUniformEyePosition();
-    setUniformTime();
-    shader.setUniformf(UNIFORM_MAP_SIZE, env.terrainMap.getWidth(), env.terrainMap.getDepth());
-    GLTexture terrainTexture = ForgE.blocks.getTerrainTexture();
-    if (terrainTexture != null) {
-      setUniformDiffuseTexture(terrainTexture);
-    }
-
-    setUniformWind();
-
     context.setDepthTest(GL20.GL_LEQUAL);
   }
 
-  private void setUniformWind() {
-    if (env.windDisplacementTexture != null && env.windDisplacementTexture.isLoaded()) {
-      shader.setUniformi(UNIFORM_WIND_DISPLACEMENT_TEXTURE, context.textureBinder.bind(env.windDisplacementTexture.get()));
-      shader.setUniformf(UNIFORM_WIND_DIR, env.windDirection);
-    }
-  }
 
   @Override
   public void beforeRender(VoxelFaceRenderable renderable) {
     tempNormalMatrix.set(renderable.worldTransform).inv().transpose();
     shader.setUniformMatrix(UNIFORM_WORLD_TRANSFORM, renderable.worldTransform);
     shader.setUniformMatrix(UNIFORM_NORMAL_MATRIX, tempNormalMatrix);
+
     if (renderable.haveTransparency) {
       context.setBlending(true, GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
       context.setCullFace(GL30.GL_NONE);

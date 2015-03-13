@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.ForgE;
 import macbury.forge.level.LevelEnv;
+import macbury.forge.shaders.uniforms.BaseUniform;
 
 import java.util.HashMap;
 
@@ -16,8 +17,6 @@ import java.util.HashMap;
  */
 public abstract class BaseShader implements Disposable {
   public static final String UNIFORM_PROJECTION_MATRIX = "u_projectionMatrix";
-  public static final String UNIFORM_EYE_POSITION      = "u_eyePosition";
-  public static final String UNIFORM_DEBUG_MODE        = "u_debugMode";
   private static final String VERTEX_HELPER_KEY        = "vertex";
   private static final String FRAGMENT_HELPER_KEY      = "fragment";
   private static final String TAG = "BaseShader";
@@ -28,15 +27,22 @@ public abstract class BaseShader implements Disposable {
   private String fragment;
   private String vertex;
   private HashMap<String, Array<String>> helpers;
+  private Array<String> uniforms;
+  private Array<BaseUniform> globalUniforms;
   protected LevelEnv env;
 
   public boolean load(ShadersManager manager) {
     ShaderProgram.pedantic = false;
-    
+    globalUniforms         = new Array<BaseUniform>();
+
     String fragmentSrc   = Gdx.files.internal(ShadersManager.SHADERS_PATH +fragment+".frag.glsl").readString();
     String   vertexSrc   = Gdx.files.internal(ShadersManager.SHADERS_PATH +vertex+".vert.glsl").readString();
     if (shader != null) {
       shader.dispose();
+    }
+
+    if (uniforms != null) {
+      loadGlobalUniforms();
     }
 
     fragmentSrc = applyDebugPrefixes() + loadHelpers(FRAGMENT_HELPER_KEY) + fragmentSrc;
@@ -54,6 +60,23 @@ public abstract class BaseShader implements Disposable {
       Gdx.app.error(TAG, "Vertex SRC ===" + vertex);
       Gdx.app.error(TAG, vertexSrc);
       return false;
+    }
+  }
+
+  private void loadGlobalUniforms() {
+    for (String uniformName : uniforms) {
+      try {
+        String uniformClassName = BaseUniform.CLASS_PREFIX+uniformName;
+        Gdx.app.log(TAG, "Adding uniform: "+uniformClassName);
+        BaseUniform uniform = (BaseUniform)Class.forName(uniformClassName).newInstance();
+        globalUniforms.add(uniform);
+      } catch (InstantiationException e) {
+        e.printStackTrace();
+      } catch (IllegalAccessException e) {
+        e.printStackTrace();
+      } catch (ClassNotFoundException e) {
+        e.printStackTrace();
+      }
     }
   }
 
@@ -97,17 +120,22 @@ public abstract class BaseShader implements Disposable {
    * @param camera
    * @param context
    */
-  public void begin (Camera camera, RenderContext context, LevelEnv env) {
+  public void begin(Camera camera, RenderContext context, LevelEnv env) {
     this.camera  = camera;
     this.context = context;
     this.env     = env;
     shader.begin();
     shader.setUniformMatrix(UNIFORM_PROJECTION_MATRIX, camera.combined);
     context.begin();
+    bindGlobalUniforms(camera, context, env);
     afterBegin();
   }
 
-
+  protected void bindGlobalUniforms(Camera camera, RenderContext context, LevelEnv env) {
+    for (BaseUniform uniform : globalUniforms) {
+      uniform.bind(shader, env, context, camera);
+    }
+  }
 
   /**
    * Setup global uniforms here

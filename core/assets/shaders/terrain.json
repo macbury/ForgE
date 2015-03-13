@@ -2,8 +2,18 @@
   class: macbury.forge.shaders.TerrainShader,
   fragment: "terrain",
   vertex:   "terrain",
+  uniforms: [
+    "DiffuseTerrainTexture",
+    "EyePosition",
+    "MapSize",
+    "Sky",
+    "Sun",
+    "Time",
+    "Wind"
+  ],
   helpers: {
     vertex: ["directional_light", "fog", "foliage"],
     fragment: ["fog"]
-  }
+  },
+  
 }
