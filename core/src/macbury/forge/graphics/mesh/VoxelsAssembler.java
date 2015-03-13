@@ -23,14 +23,17 @@ public class VoxelsAssembler extends MeshAssembler {
     transformMat.idt();
     transformMat.translate(voxelDef.position.x, voxelDef.position.y, voxelDef.position.z);
     transformMat.translate(voxelDef.center);
-    switch(voxelDef.block.rotation) {
-      case horizontal:
-        transformMat.rotate(voxelDef.voxel.alginTo.rotationHorizontal);
-      break;
 
-      case alignToSurface:
-        transformMat.rotate(voxelDef.voxel.alginTo.rotationAllSides);
-      break;
+    if (voxelDef.voxel.alginTo != null) {
+      switch (voxelDef.block.rotation) {
+        case horizontal:
+          transformMat.rotate(voxelDef.voxel.alginTo.rotationHorizontal);
+          break;
+
+        case alignToSurface:
+          transformMat.rotate(voxelDef.voxel.alginTo.rotationAllSides);
+          break;
+      }
     }
 
     transformMat.translate(part.verticies.get(index));
@@ -39,14 +42,16 @@ public class VoxelsAssembler extends MeshAssembler {
     // Recalculate aligment normals too :P
 
     transformMat.idt();
-    switch(voxelDef.block.rotation) {
-      case horizontal:
-        transformMat.rotate(voxelDef.voxel.alginTo.rotationHorizontal);
-      break;
+    if (voxelDef.voxel.alginTo != null) {
+      switch(voxelDef.block.rotation) {
+        case horizontal:
+          transformMat.rotate(voxelDef.voxel.alginTo.rotationHorizontal);
+        break;
 
-      case alignToSurface:
-        transformMat.rotate(voxelDef.voxel.alginTo.rotationAllSides);
-      break;
+        case alignToSurface:
+          transformMat.rotate(voxelDef.voxel.alginTo.rotationAllSides);
+        break;
+      }
     }
     transformMat.translate(part.normals.get(index));
     transformMat.getTranslation(vert.normal);

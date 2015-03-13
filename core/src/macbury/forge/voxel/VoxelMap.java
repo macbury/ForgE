@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Disposable;
+import macbury.forge.ForgE;
 import macbury.forge.blocks.Block;
 import macbury.forge.blocks.BlocksProvider;
 import macbury.forge.procedular.PerlinNoise;
@@ -235,4 +236,7 @@ public class VoxelMap implements Disposable {
     this.depth = depth;
   }
 
+  public static VoxelMap build() {
+    return new VoxelMap(ChunkMap.TERRAIN_TILE_SIZE, ForgE.blocks);
+  }
 }

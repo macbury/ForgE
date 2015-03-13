@@ -1,0 +1,13 @@
+{
+  class: macbury.forge.shaders.TerrainShader,
+  fragment: "block-preview",
+  vertex:   "block-preview",
+  uniforms: [
+    "DiffuseTerrainTexture",
+  ],
+  helpers: {
+    vertex: [],
+    fragment: []
+  },
+  
+}

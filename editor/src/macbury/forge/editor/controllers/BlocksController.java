@@ -7,6 +7,7 @@ import macbury.forge.ForgEBootListener;
 import macbury.forge.blocks.AirBlock;
 import macbury.forge.blocks.Block;
 import macbury.forge.blocks.BlocksProvider;
+import macbury.forge.editor.controllers.blocks.BlockPreviews;
 import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
 import macbury.forge.editor.parell.JobManager;
 import macbury.forge.editor.parell.jobs.BuildBlocksTexture;
@@ -31,7 +32,7 @@ import java.io.IOException;
 /**
  * Created by macbury on 11.11.14.
  */
-public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.DirectoryWatchJobListener, ForgEBootListener, ListSelectionListener {
+public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.DirectoryWatchJobListener, ForgEBootListener, ListSelectionListener, BlockPreviews.Listener {
   private static final int TILE_SIZE = 32;
   private static final String TAG = "BlocksController";
   private final BlockListRenderer blockListRenderer;
@@ -90,7 +91,7 @@ public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.
         BlockListItem item = new BlockListItem();
         item.block         = block;
 
-        item.loadIcon(Gdx.files.internal("textures/blocks/"+block.getIconName() + ".png").path());
+        item.loadIcon(BlockPreviews.blockPreview(block).path());
         blocksModel.addElement(item);
       }
     }
@@ -145,20 +146,29 @@ public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.
   }
 
   public void onRebuildTextures(Boolean success, BuildBlocksTexture buildBlocksTexture) {
-    reload();
     if (controller != null) {
       controller.rebuildChunks();
       controller.clearUndoRedo();
     }
-    resetSelectedItem();
+
+    rebuildPreviews();
   }
 
   @Override
   public void afterEngineCreate(ForgE engine) {
     if (!ForgE.blocks.getTextureAtlasFile().exists()) {
       rebuildTileset();
+    } else {
+      rebuildPreviews();
     }
+
   }
+
+  private void rebuildPreviews() {
+    //ForgE.screens.set(new PreviewScreen());
+    Gdx.app.postRunnable(new BlockPreviews(this));
+  }
+
 
   @Override
   public void valueChanged(ListSelectionEvent e) {
@@ -168,6 +178,12 @@ public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.
       panelPrimaryBlock.setIcon(item.image);
     }
 
+  }
+
+  @Override
+  public void onGeneratePreviewsCompleted() {
+    reload();
+    resetSelectedItem();
   }
 
   public class BlockListItem {
@@ -188,4 +204,6 @@ public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.
       this.icon  = new ImageIcon(image);
     }
   }
+
+
 }

@@ -381,10 +381,8 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
     }
   }
 
-
   public LevelState getCurrentLevelState() {
     return currentLevelState;
   }
-
 
 }
