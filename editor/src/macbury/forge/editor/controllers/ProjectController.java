@@ -20,6 +20,7 @@ import macbury.forge.level.LevelState;
 import macbury.forge.shaders.utils.BaseShader;
 import macbury.forge.shaders.utils.ShaderReloadListener;
 import macbury.forge.shaders.utils.ShadersManager;
+import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
 import java.awt.event.WindowEvent;
@@ -192,8 +193,8 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
       if (response == 0) {
         Gdx.app.log(TAG, "Removing dir: " + pathFile);
         try {
-          Files.deleteIfExists(FileSystems.getDefault().getPath(pathFile));
-          //FileUtils.deleteDirectory(new File("directory"));
+          //Files.deleteIfExists(FileSystems.getDefault().getPath(pathFile));
+          FileUtils.deleteDirectory(new File(pathFile));
         } catch (IOException e) {
           e.printStackTrace();
         }

@@ -11,5 +11,7 @@
 	<levels>
 		<level name="Gradle: net.contentobjects.jnotify:jnotify:0.94" value="project"/>
 		<level name="Gradle: org.nuiton.thirdparty:l2fprod-common:0.1" value="project"/>
+		<level name="Gradle: org.apache.commons:commons-io:1.3.2" value="project"/>
+		<level name="Gradle: commons-io:commons-io:1.3.2" value="project"/>
 	</levels>
 </component>
