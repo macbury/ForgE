@@ -9,4 +9,5 @@ import macbury.forge.editor.screens.EditorScreen;
 public interface OnMapChangeListener {
   public void onCloseMap(ProjectController controller, EditorScreen screen);
   public void onNewMap(ProjectController controller, EditorScreen screen);
+  public void onProjectStructureChange(ProjectController controller);
 }

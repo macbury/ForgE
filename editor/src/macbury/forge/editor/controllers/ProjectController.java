@@ -24,6 +24,7 @@ import macbury.forge.shaders.utils.ShadersManager;
 import javax.swing.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -33,6 +34,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class ProjectController implements JobListener, ShaderReloadListener, MapCreationWindow.Listener {
   private static final String LEVEL_STATE_LOADED_CALLBACK = "onLevelStateLoaded";
+  private static final String TAG = "ProjectController";
   private MainWindow mainWindow;
   public EditorScreen editorScreen;
   private Array<OnMapChangeListener> onMapChangeListenerArray = new Array<OnMapChangeListener>();
@@ -61,13 +63,7 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
       @Override
       public void windowClosing(WindowEvent e) {
         if (closeAndSaveChangesMap()) {
-          while(jobs.haveJobs()) {
-            try {
-              Thread.sleep(1000);
-            } catch (InterruptedException e1) {
-              e1.printStackTrace();
-            }
-          }
+          jobs.waitForAllToComplete();
           mainWindow.dispose();
           System.exit(0);
         }
@@ -175,6 +171,69 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
     } else {
       closeMap();
       return true;
+    }
+  }
+
+
+  public void deleteFolder(String pathFile) {
+    if (closeAndSaveChangesMap()) {
+      jobs.waitForAllToComplete();
+      int response = JOptionPane.showOptionDialog(mainWindow,
+          "Are you sure?",
+          "Delete folder",
+          JOptionPane.YES_NO_OPTION,
+          JOptionPane.QUESTION_MESSAGE,
+          null,
+          null,
+          null);
+
+      if (response == 0) {
+        Gdx.app.log(TAG, "Removing dir: " + pathFile);
+        File file = new File(pathFile);
+        file.delete();
+        triggerMapStructureChange();
+      }
+    }
+
+  }
+
+  public void createFolder(String pathFile) {
+    if (closeAndSaveChangesMap()) {
+      jobs.waitForAllToComplete();
+      String folderName = JOptionPane.showInputDialog("Enter folder name:");
+      if (folderName.length() >= 1) {
+        File file = new File(pathFile + File.separator + folderName);
+        Gdx.app.log(TAG, "Creating directory" + file.getAbsolutePath());
+        file.mkdirs();
+        triggerMapStructureChange();
+      }
+    }
+  }
+
+  public void deleteMap(int levelStateId) {
+    if (closeAndSaveChangesMap()) {
+      jobs.waitForAllToComplete();
+      FileHandle levelHandle = ForgE.levels.getFileHandle(levelStateId);
+      int response = JOptionPane.showOptionDialog(mainWindow,
+          "Are you sure?",
+          "Delete map",
+          JOptionPane.YES_NO_OPTION,
+          JOptionPane.QUESTION_MESSAGE,
+          null,
+          null,
+          null);
+
+      if (response == 0) {
+        Gdx.app.log(TAG, "Removing map: " + levelHandle.file().getAbsolutePath());
+        levelHandle.file().delete();
+        triggerMapStructureChange();
+      }
+    }
+  }
+
+  private void triggerMapStructureChange() {
+    for (OnMapChangeListener listener : onMapChangeListenerArray) {
+      listener.onProjectStructureChange(ProjectController.this);
     }
   }
 
@@ -302,4 +361,6 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
   public LevelState getCurrentLevelState() {
     return currentLevelState;
   }
+
+
 }

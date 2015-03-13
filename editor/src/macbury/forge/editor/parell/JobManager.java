@@ -103,4 +103,14 @@ public class JobManager extends Thread {
     running = false;
     currentJob = null;
   }
+
+  public void waitForAllToComplete() {
+    while(this.haveJobs()) {
+      try {
+        Thread.sleep(1000);
+      } catch (InterruptedException e1) {
+        e1.printStackTrace();
+      }
+    }
+  }
 }

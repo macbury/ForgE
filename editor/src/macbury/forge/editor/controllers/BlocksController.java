@@ -120,6 +120,11 @@ public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.
     resetSelectedItem();
   }
 
+  @Override
+  public void onProjectStructureChange(ProjectController controller) {
+    reload();
+  }
+
   private void resetSelectedItem() {
     blockList.setSelectedIndex(0);
     setSecondarySelectedIndex(1);

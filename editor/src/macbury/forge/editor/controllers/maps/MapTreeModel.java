@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import macbury.forge.ForgE;
+import macbury.forge.level.Level;
 import macbury.forge.level.LevelState;
 
 import javax.swing.*;
@@ -14,6 +15,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 
 /**
@@ -184,7 +186,12 @@ public class MapTreeModel extends DefaultTreeModel implements TreeExpansionListe
 
     @Override
     public String getDirectory() {
-      return Gdx.files.internal(".").file().getAbsolutePath();
+      try {
+        return Gdx.files.internal(".").file().getCanonicalPath() + File.separator + LevelState.MAP_STORAGE_DIR;
+      } catch (IOException e) {
+        e.printStackTrace();
+        return null;
+      }
     }
   }
 }

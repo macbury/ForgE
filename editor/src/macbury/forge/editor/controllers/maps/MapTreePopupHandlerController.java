@@ -81,6 +81,12 @@ public class MapTreePopupHandlerController implements ActionListener {
   public void actionPerformed(ActionEvent e) {
     if (e.getSource() == newMapMenuItem) {
       projectController.newMap(selectedNode.getDirectory());
+    } else if (e.getSource() == deleteFolderMenuItem) {
+      projectController.deleteFolder(selectedNode.getPathFile());
+    } else if (e.getSource() == deleteMapMenuItem) {
+      projectController.deleteMap(selectedNode.getId());
+    } else if (e.getSource() == createFolderMenuItem) {
+      projectController.createFolder(selectedNode.getDirectory());
     }
   }
 }
