@@ -137,6 +137,14 @@ public class ChangeManager implements Disposable {
     currentIndex.changeable.apply();
   }
 
+  public Changeable getCurrent() {
+    if (currentIndex != null) {
+      return currentIndex.changeable;
+    } else {
+      return null;
+    }
+  }
+
   @Override
   public void dispose() {
     listeners.clear();

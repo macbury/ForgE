@@ -94,6 +94,11 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
   }
 
   @Override
+  public void onMapSaved(ProjectController projectController, EditorScreen editorScreen) {
+
+  }
+
+  @Override
   public void onChangeManagerChange(ChangeManager changeManager) {
     updateRedoUndoButtons();
   }

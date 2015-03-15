@@ -140,6 +140,11 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
   }
 
   @Override
+  public void onMapSaved(ProjectController projectController, EditorScreen editorScreen) {
+
+  }
+
+  @Override
   public void actionPerformed(ActionEvent e) {
     if (e.getSource() == drawPencilButton) {
       setCurrentSelection(singleBlockSelection);

@@ -38,6 +38,7 @@ import java.util.concurrent.TimeUnit;
 public class ProjectController implements JobListener, ShaderReloadListener, MapCreationWindow.Listener {
   private static final String LEVEL_STATE_LOADED_CALLBACK = "onLevelStateLoaded";
   private static final String TAG = "ProjectController";
+  private static final String LEVEL_STATE_SAVE_CALLBACK = "onLevelStateSaved";
   private MainWindow mainWindow;
   public EditorScreen editorScreen;
   private Array<OnMapChangeListener> onMapChangeListenerArray = new Array<OnMapChangeListener>();
@@ -146,6 +147,7 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
 
   public void saveMap() {
     SaveLevelJob job = new SaveLevelJob(editorScreen.level.state);
+    job.setCallback(this, LEVEL_STATE_SAVE_CALLBACK);
     jobs.enqueue(job);
     editorScreen.changeManager.clear();
   }
@@ -281,6 +283,19 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
     updateUI();
   }
 
+  public void onLevelStateSaved(LevelState state, SaveLevelJob job) {
+    mainWindow.setTitle(state.name);
+    Gdx.app.postRunnable(new Runnable() {
+      @Override
+      public void run() {
+        updateUI();
+
+        for (OnMapChangeListener listener : onMapChangeListenerArray) {
+          listener.onMapSaved(ProjectController.this, ProjectController.this.editorScreen);
+        }
+      }
+    });
+  }
 
   public void onLevelStateLoaded(LevelState state, NewLevelJob job) {
     setState(state);

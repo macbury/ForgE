@@ -211,4 +211,9 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
   public void onProjectStructureChange(ProjectController controller) {
 
   }
+
+  @Override
+  public void onMapSaved(ProjectController projectController, EditorScreen editorScreen) {
+
+  }
 }

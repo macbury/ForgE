@@ -102,6 +102,11 @@ public class MapTreeController implements OnMapChangeListener, ForgEBootListener
   }
 
   @Override
+  public void onMapSaved(ProjectController projectController, EditorScreen editorScreen) {
+    reload();
+  }
+
+  @Override
   public void afterEngineCreate(ForgE engine) {
     mapTree.setVisible(true);
     reload();
