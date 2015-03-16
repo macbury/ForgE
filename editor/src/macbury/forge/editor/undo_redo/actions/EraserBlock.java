@@ -36,7 +36,10 @@ public class EraserBlock extends TerrainCursorChangeable {
     for (int x = (int)applyBox.min.x; x < applyBox.max.x; x++) {
       for (int y = (int)applyBox.min.y; y < applyBox.max.y; y++) {
         for (int z = (int)applyBox.min.z; z < applyBox.max.z; z++) {
-          oldVoxels[x - (int)applyBox.min.x][y - (int)applyBox.min.y][z - (int)applyBox.min.z] = new Voxel(map.getVoxelForPosition(x,y,z));
+          Voxel oldVoxel = map.getVoxelForPosition(x,y,z);
+          if (oldVoxel != null) {
+            oldVoxels[x - (int)applyBox.min.x][y - (int)applyBox.min.y][z - (int)applyBox.min.z] = new Voxel(oldVoxel);
+          }
 
           map.setEmptyForPosition(x,y,z);
         }

@@ -15,6 +15,7 @@ import macbury.forge.editor.undo_redo.Changeable;
 import macbury.forge.editor.undo_redo.actions.ApplyBlock;
 import macbury.forge.editor.undo_redo.actions.ApplyRangeBlock;
 import macbury.forge.editor.undo_redo.actions.EraserBlock;
+import macbury.forge.editor.undo_redo.actions.TreeBuilderChangeable;
 import macbury.forge.voxel.ChunkMap;
 
 import javax.swing.*;
@@ -35,6 +36,8 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
   private final JToggleButton ereaserButton;
   private final BlocksController blocksController;
   private final GdxSwingInputProcessor inputProcessor;
+  private final JToggleButton drawTreePencil;
+  private final TreeSelection treeSelection;
   private AbstractSelection currentSelection;
   private final JToggleButton drawRectButton;
   private SelectionSystem selectionSystem;
@@ -53,14 +56,14 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
     this.singleBlockSelection = new SingleBlockSelection();
     this.rectSelection        = new BoxSelection();
     this.ereaseSelection      = new EreaseSelection();
-
+    this.treeSelection        = new TreeSelection();
     drawPencilButton          = buildToogleButton("draw_pencil", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.D);
     drawRectButton            = buildToogleButton("draw_rect", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.R);
 
     buildToogleButton("draw_bucket", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.F);
 
     buildToogleButton("draw_airbrush", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.A);
-    buildToogleButton("draw_tree", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.T);
+    drawTreePencil            = buildToogleButton("draw_tree", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.T);
     buildToogleButton("draw_elipsis", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.Q);
     ereaserButton = buildToogleButton("draw_eraser", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.E);
 
@@ -77,7 +80,7 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
     toolbar.setEnabled(interfaceEnabled);
     drawPencilButton.setEnabled(interfaceEnabled);
     drawRectButton.setEnabled(interfaceEnabled);
-
+    drawTreePencil.setEnabled(interfaceEnabled);
   }
 
   private JToggleButton buildToogleButton(String iconName, ButtonGroup buttonGroup, int modifier, int keycode) {
@@ -152,6 +155,8 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
       setCurrentSelection(rectSelection);
     } else if (e.getSource() == ereaserButton) {
       setCurrentSelection(ereaseSelection);
+    } else if (e.getSource() == drawTreePencil) {
+      setCurrentSelection(treeSelection);
     }
 
   }
@@ -180,6 +185,8 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
       task = new ApplyRangeBlock(selection, map, blockToDraw);
     } else if (selection == ereaseSelection) {
       task = new EraserBlock(selection, map);
+    } else if (selection == treeSelection) {
+      task = new TreeBuilderChangeable(selection, map, blocksController.getCurrentPrimaryBlock(), blocksController.getCurrentSecondaryBlock());
     }
     changeManager.addChangeable(task).apply();
   }

@@ -53,8 +53,6 @@ public class ApplyRangeBlock extends TerrainCursorChangeable {
             currentVoxel.alginTo = alignToSide;
             map.setVoxelForPosition(currentVoxel, tempA);
           }
-
-
         }
       }
     }
