@@ -57,7 +57,7 @@ public class TreeBuilderChangeable extends TerrainCursorChangeable {
       putBlock(woodBlock, cursor);
     }
 
-    int size = 1;
+    int size = (int)Math.round(1 + Math.random());
 
     for (int x = -size; x <= size; x++) {
       for (int y = -size; y <= size; y++) {
@@ -70,6 +70,7 @@ public class TreeBuilderChangeable extends TerrainCursorChangeable {
           putBlock(leafesBlock, cursor.set(from).add(x - 1, y+height, z));
           putBlock(leafesBlock, cursor.set(from).add(x, y+height, z + 1));
           putBlock(leafesBlock, cursor.set(from).add(x, y+height, z - 1));
+          putBlock(leafesBlock, cursor.set(from).add(x, y+height+1, z));
         }
       }
     }

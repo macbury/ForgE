@@ -16,6 +16,7 @@ import java.util.HashMap;
 public class AssetsManager implements Disposable {
   public static final String ASSETS_PREFIX = "assets/";
   private static final String TAG = "AssetsManager";
+  private static final int MAX_TO_LOAD_PER_TICK = 10;
   private HashMap<String, Asset> loadedAssets;
   private Array<Asset> pendingAssets;
 
@@ -56,6 +57,18 @@ public class AssetsManager implements Disposable {
       Gdx.app.log(TAG, "Loading: " + asset.getPath());
       asset.load();
     }
+  }
+
+  public boolean loadPendingInChunks() {
+    int toLoadLeft = MAX_TO_LOAD_PER_TICK;
+    while(pendingAssets.size > 0 || toLoadLeft == 0) {
+      Asset asset = pendingAssets.pop();
+      Gdx.app.log(TAG, "Loading: " + asset.getPath());
+      asset.load();
+      toLoadLeft--;
+    }
+
+    return pendingAssets.size == 0;
   }
 
   @Override

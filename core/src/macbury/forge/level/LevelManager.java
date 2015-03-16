@@ -122,10 +122,11 @@ public class LevelManager {
     return Integer.valueOf(file.nameWithoutExtension().replaceAll(LevelState.MAP_NAME_PREFIX, ""));
   }
 
-
   public FileHandle getFileHandle(int id) {
     return idToPathMap.get(id);
   }
 
-
+  public LevelState load(int levelId) {
+    return load(getFileHandle(levelId));
+  }
 }

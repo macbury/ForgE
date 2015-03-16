@@ -5,7 +5,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import macbury.forge.Config;
 import macbury.forge.ForgE;
 import macbury.forge.ForgEBootListener;
-import macbury.forge.screens.test.TestMeshScreen;
+import macbury.forge.screens.LoadingScreen;
 
 public class DesktopLauncher {
   public static void main (String[] arg) {
@@ -18,7 +18,7 @@ public class DesktopLauncher {
     engine.addBootListener(new ForgEBootListener() {
       @Override
       public void afterEngineCreate(ForgE engine) {
-        ForgE.screens.set(new TestMeshScreen());
+        ForgE.screens.set(new LoadingScreen(949));
       }
     });
     new LwjglApplication(engine, config);

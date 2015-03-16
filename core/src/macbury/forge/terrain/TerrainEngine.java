@@ -27,8 +27,9 @@ import java.util.Comparator;
  * Created by macbury on 23.10.14.
  */
 public class TerrainEngine implements Disposable, ActionTimer.TimerListener, BaseRenderableProvider {
-  private static final float UPDATE_EVERY    = 0.05f;
+  private static final float UPDATE_EVERY    = 0.02f;
   private static final String TAG = "TerrainEngine";
+  private static final int CHUNK_TO_REBUILD_PER_TICK = 10;
   private final ActionTimer       timer;
   private final ChunkMap          map;
   private final OctreeNode        octree;
@@ -125,11 +126,11 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
    * Rebuild pending chunks in queue, return true if everything has been rebuilded
    * @return
    */
-  private boolean rebuild() {
+  public boolean rebuild() {
     if (map.chunkToRebuild.size > 0) {
       ForgE.blocks.loadAtlasAndUvsIfNull();
       Gdx.app.log(TAG, "Chunks to rebuild: " + map.chunkToRebuild.size);
-      int i = 10;
+      int i = CHUNK_TO_REBUILD_PER_TICK;
       while(map.chunkToRebuild.size > 0) {
         Chunk chunk = map.chunkToRebuild.pop();
         buildChunkGeometry(chunk);
