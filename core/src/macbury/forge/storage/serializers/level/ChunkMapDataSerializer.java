@@ -1,4 +1,4 @@
-package macbury.forge.storage.serializers;
+package macbury.forge.storage.serializers.level;
 
 import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryo.Kryo;

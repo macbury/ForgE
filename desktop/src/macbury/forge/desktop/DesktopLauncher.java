@@ -10,10 +10,11 @@ import macbury.forge.screens.test.TestMeshScreen;
 public class DesktopLauncher {
   public static void main (String[] arg) {
     LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-    config.resizable = false;
-    config.width     = 1360;
-    config.height    = 768;
-    ForgE engine     = new ForgE(new Config());
+    config.resizable      = false;
+    config.width          = 1360;
+    config.height         = 768;
+    config.foregroundFPS  = 30;
+    ForgE engine          = new ForgE(new Config());
     engine.addBootListener(new ForgEBootListener() {
       @Override
       public void afterEngineCreate(ForgE engine) {

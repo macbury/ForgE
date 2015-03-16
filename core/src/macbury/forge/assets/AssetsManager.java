@@ -26,7 +26,7 @@ public class AssetsManager implements Disposable {
     pendingAssets = new Array<Asset>();
   }
 
-  protected Asset getAsset(Class<? extends Asset> assetClass, String path) {
+  public Asset getAsset(Class<? extends Asset> assetClass, String path) {
     if (!loadedAssets.containsKey(path)) {
       Asset tempAsset = null;
       try {

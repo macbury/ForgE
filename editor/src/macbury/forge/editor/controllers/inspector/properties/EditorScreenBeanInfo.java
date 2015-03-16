@@ -10,14 +10,17 @@ import macbury.forge.editor.screens.EditorScreen;
  */
 public class EditorScreenBeanInfo extends BaseBeanInfo {
   private static final String CATEGORY_LEVEL = "Map";
-
+  private static final String CATEGORY_WIND = "Wind";
   public EditorScreenBeanInfo() {
     super(EditorScreenBean.class);
 
     ExtendedPropertyDescriptor tilesetProperty = addProperty("title").setCategory(CATEGORY_LEVEL);
     tilesetProperty.setDisplayName("Title");
     tilesetProperty.setShortDescription("Map title for editor");
-    //tilesetProperty.setPropertyEditorClass(TilesetEditor.class);
+
+    ExtendedPropertyDescriptor foliageSpeed = addProperty("windSpeed").setCategory(CATEGORY_WIND);
+    foliageSpeed.setDisplayName("Speed");
+    foliageSpeed.setShortDescription("Wind speed and direction");
   }
 
   public static class EditorScreenBean {
@@ -33,6 +36,14 @@ public class EditorScreenBeanInfo extends BaseBeanInfo {
 
     public void setTitle(String title) {
       screen.level.state.setName(title);
+    }
+
+    public String getWindSpeed() {
+      return screen.level.env.windDirection.toString();
+    }
+
+    public void setWindSpeed() {
+
     }
   }
 }

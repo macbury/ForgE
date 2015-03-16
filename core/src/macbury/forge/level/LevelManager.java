@@ -7,8 +7,8 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import macbury.forge.storage.StorageManager;
-import macbury.forge.storage.serializers.FullLevelStateSerializer;
-import macbury.forge.storage.serializers.LevelStateBasicInfoSerializer;
+import macbury.forge.storage.serializers.level.FullLevelStateSerializer;
+import macbury.forge.storage.serializers.level.LevelStateBasicInfoSerializer;
 
 import java.io.*;
 import java.util.HashMap;

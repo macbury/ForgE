@@ -12,9 +12,9 @@ import macbury.forge.voxel.ChunkMap;
  * Created by macbury on 28.10.14.
  */
 public class LevelEnv {
-  public final DirectionalLight mainLight;
-  public final Color ambientLight;
-  public final Color skyColor;
+  public DirectionalLight mainLight;
+  public Color ambientLight;
+  public Color skyColor;
   public ChunkMap terrainMap;
 
   public TextureAsset windDisplacementTexture;

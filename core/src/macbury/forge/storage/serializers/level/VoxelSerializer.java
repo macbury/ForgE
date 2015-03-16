@@ -1,4 +1,4 @@
-package macbury.forge.storage.serializers;
+package macbury.forge.storage.serializers.level;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
