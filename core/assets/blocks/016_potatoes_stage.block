@@ -1,0 +1,11 @@
+{
+  shape: "foliage",
+  solid: false,
+  shadeAO: true,
+  envAO: true,
+  transparent: true,
+  rotation: "alignToSurface",
+  textures: {
+    all: "potatoes_stage"
+  }
+}

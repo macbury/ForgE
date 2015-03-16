@@ -200,13 +200,14 @@ public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.
       BufferedImage img = null;
       try {
         img = ImageIO.read(new File(iconPath));
+        this.image = img.getScaledInstance(TILE_SIZE, TILE_SIZE, Image.SCALE_FAST);
+
+        this.icon  = new ImageIcon(image);
       } catch (IOException e) {
         e.printStackTrace();
       }
 
-      this.image = img.getScaledInstance(TILE_SIZE, TILE_SIZE, Image.SCALE_FAST);
 
-      this.icon  = new ImageIcon(image);
     }
   }
 

@@ -1,0 +1,10 @@
+{
+  shape: "foliage-cube",
+  solid: true,
+  shadeAO: true,
+  envAO: true,
+  transparent: true,
+  textures: {
+    all: "leaves_oak"
+  }
+}

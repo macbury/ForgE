@@ -12,9 +12,10 @@ import java.util.HashMap;
  * Created by macbury on 11.11.14.
  */
 public class Block {
+
   /*
-  TODO: merge side with terrain builder.face :P
-   */
+    TODO: merge side with terrain builder.face :P
+     */
   public enum Side {
     all(Vector3i.ZERO, new Quaternion(), new Quaternion()),
     top(Vector3i.TOP, new Quaternion(Vector3.Z, -180), new Quaternion()),
@@ -136,6 +137,16 @@ public class Block {
 
   public TextureAtlas.AtlasRegion getRegionForSide(Side side) {
     return uvs.get(side);
+  }
+
+  public boolean haveTexture() {
+    boolean empty = false;
+    for (Side side : uvs.keySet()) {
+      if (uvs.get(side) == null) {
+        empty = true;
+      }
+    }
+    return !empty;
   }
 
   @Override
