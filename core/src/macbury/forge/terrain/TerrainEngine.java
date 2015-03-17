@@ -122,15 +122,18 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
     camera.restoreFov();
   }
 
+  public boolean rebuild() {
+    return rebuild(CHUNK_TO_REBUILD_PER_TICK);
+  }
+
   /**
    * Rebuild pending chunks in queue, return true if everything has been rebuilded
    * @return
    */
-  public boolean rebuild() {
+  public boolean rebuild(int i) {
     if (map.chunkToRebuild.size > 0) {
       ForgE.blocks.loadAtlasAndUvsIfNull();
       Gdx.app.log(TAG, "Chunks to rebuild: " + map.chunkToRebuild.size);
-      int i = CHUNK_TO_REBUILD_PER_TICK;
       while(map.chunkToRebuild.size > 0) {
         Chunk chunk = map.chunkToRebuild.pop();
         buildChunkGeometry(chunk);

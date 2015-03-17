@@ -1,8 +1,10 @@
 package macbury.forge.screens;
 
-import com.badlogic.gdx.Gdx;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g3d.utils.FirstPersonCameraController;
-import com.badlogic.gdx.math.Vector3;
+import macbury.forge.components.MovementComponent;
+import macbury.forge.components.PlayerComponent;
+import macbury.forge.components.PositionComponent;
 import macbury.forge.level.Level;
 
 /**
@@ -25,7 +27,22 @@ public class GameplayScreen extends AbstractScreen {
     level.camera.far  = FAR_CAMERA;
     level.camera.near = NEAR_CAMERA;
     //level.camera.lookAt(22,0,22);
-    Gdx.input.setInputProcessor(cameraController);
+    //Gdx.input.setInputProcessor(cameraController);
+
+
+    Entity e          = level.entities.createEntity();
+    PositionComponent position = level.entities.createComponent(PositionComponent.class);
+    position.vector.set(50,3,50);
+    position.size.set(1,1,1);
+    MovementComponent movement = level.entities.createComponent(MovementComponent.class);
+    movement.speed    = 10;
+    PlayerComponent player = level.entities.createComponent(PlayerComponent.class);
+    player.camera = level.camera;
+
+    e.add(player);
+    e.add(movement);
+    e.add(position);
+    level.entities.addEntity(e);
   }
 
   @Override

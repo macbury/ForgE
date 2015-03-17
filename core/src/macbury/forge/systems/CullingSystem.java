@@ -5,7 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.utils.Array;
-import macbury.forge.components.Position;
+import macbury.forge.components.PositionComponent;
 import macbury.forge.graphics.camera.GameCamera;
 import macbury.forge.graphics.frustrum.FrustrumDebugAndRenderer;
 import macbury.forge.level.Level;
@@ -22,18 +22,18 @@ public class CullingSystem extends IteratingSystem {
   private final Array<OctreeObject> octreeVisibleObjects;
   private final FrustrumDebugAndRenderer frustrumDebugger;
   private final FrustrumClassFilterOctreeQuery frustrumOctreeQuery;
-  private ComponentMapper<Position>   pm = ComponentMapper.getFor(Position.class);
+  private ComponentMapper<PositionComponent>   pm = ComponentMapper.getFor(PositionComponent.class);
   private float cameraOldFieldOfView;
 
   public CullingSystem(Level level) {
-    super(Family.getFor(Position.class));
+    super(Family.getFor(PositionComponent.class));
 
     this.rootNode              = level.octree;
     this.camera                = level.camera;
     this.frustrumDebugger      = level.frustrumDebugger;
     this.octreeVisibleObjects  = new Array<OctreeObject>();
     this.frustrumOctreeQuery   = new FrustrumClassFilterOctreeQuery();
-    frustrumOctreeQuery.setKlass(Position.class);
+    frustrumOctreeQuery.setKlass(PositionComponent.class);
   }
 
   @Override
@@ -46,7 +46,7 @@ public class CullingSystem extends IteratingSystem {
     rootNode.retrieve(octreeVisibleObjects, frustrumOctreeQuery);
 
     for (int i = 0; i < octreeVisibleObjects.size; i++) {
-      Position position = (Position) octreeVisibleObjects.get(i);
+      PositionComponent position = (PositionComponent) octreeVisibleObjects.get(i);
       position.visible  = true;
     }
 
@@ -55,7 +55,7 @@ public class CullingSystem extends IteratingSystem {
 
   @Override
   protected void processEntity(Entity entity, float deltaTime) {
-    Position position = pm.get(entity);
+    PositionComponent position = pm.get(entity);
     position.visible  = false;
   }
 }

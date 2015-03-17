@@ -13,6 +13,7 @@ import macbury.forge.promises.Promise;
  */
 public class GeometryBuilderTask extends GdxFutureTask<LevelState, Level> {
   private static final String TAG = "GeometryBuilderTask";
+  private static final int CHUNK_TO_REBUILD_PER_TICK = 20;
   private LevelState levelState;
   private Level level;
 
@@ -26,12 +27,11 @@ public class GeometryBuilderTask extends GdxFutureTask<LevelState, Level> {
     this.levelState = object;
     this.level      = new Level(levelState);
     Gdx.app.log(TAG, "Initializing level!");
-
   }
 
   @Override
   public void tick(float delta) {
-    if (level.terrainEngine.rebuild()) {
+    if (level.terrainEngine.rebuild(CHUNK_TO_REBUILD_PER_TICK)) {
       done(level);
     }
   }

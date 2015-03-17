@@ -10,8 +10,8 @@ import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.utils.Array;
-import macbury.forge.components.Cursor;
-import macbury.forge.components.Position;
+import macbury.forge.components.CursorComponent;
+import macbury.forge.components.PositionComponent;
 import macbury.forge.editor.selection.AbstractSelection;
 import macbury.forge.editor.selection.SelectType;
 import macbury.forge.editor.selection.SelectionInterface;
@@ -31,7 +31,7 @@ public class SelectionSystem extends EntitySystem {
   private final GameCamera camera;
   private final ChunkMap map;
   private final VoxelPicker voxelPicker;
-  private final Cursor cursorComponent;
+  private final CursorComponent cursorComponent;
   private final ShapeRenderer shapeRenderer;
   private final RenderContext renderContext;
   private Overlay overlay;
@@ -49,9 +49,9 @@ public class SelectionSystem extends EntitySystem {
     this.renderContext           = level.renderContext;
     Entity cursorEntity          = level.entities.createEntity();
 
-    this.cursorComponent         = level.entities.createComponent(Cursor.class);
+    this.cursorComponent         = level.entities.createComponent(CursorComponent.class);
 
-    cursorEntity.add(level.entities.createComponent(Position.class));
+    cursorEntity.add(level.entities.createComponent(PositionComponent.class));
     cursorEntity.add(cursorComponent);
     level.entities.addEntity(cursorEntity);
   }

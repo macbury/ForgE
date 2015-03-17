@@ -12,8 +12,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import macbury.forge.ForgE;
-import macbury.forge.components.Cursor;
-import macbury.forge.components.Position;
+import macbury.forge.components.CursorComponent;
+import macbury.forge.components.PositionComponent;
 import macbury.forge.graphics.DebugShape;
 import macbury.forge.graphics.batch.VoxelBatch;
 import macbury.forge.graphics.batch.renderable.VoxelFaceRenderable;
@@ -37,13 +37,13 @@ public class DebugSystem extends IteratingSystem {
   private final OctreeNode terrainOctree;
   private final TerrainEngine terrain;
   private final RenderContext context;
-  private ComponentMapper<Position>   pm = ComponentMapper.getFor(Position.class);
-  private ComponentMapper<Cursor>     cm = ComponentMapper.getFor(Cursor.class);
+  private ComponentMapper<PositionComponent>   pm = ComponentMapper.getFor(PositionComponent.class);
+  private ComponentMapper<CursorComponent>     cm = ComponentMapper.getFor(CursorComponent.class);
   private final BoundingBox tempBox;
   private final Vector3     tempVec;
 
   public DebugSystem(Level level) {
-    super(Family.getFor(Position.class));
+    super(Family.getFor(PositionComponent.class));
     this.batch            = level.batch;
     this.context          = level.renderContext;
     this.dynamicOctree    = level.octree;
@@ -58,8 +58,8 @@ public class DebugSystem extends IteratingSystem {
 
   @Override
   public void processEntity(Entity entity, float deltaTime) {
-    Position positionComponent = pm.get(entity);
-    Cursor   cursorComponent   = cm.get(entity);
+    PositionComponent positionComponent = pm.get(entity);
+    CursorComponent cursorComponent   = cm.get(entity);
 
     if (positionComponent.visible && ForgE.config.renderBoundingBox) {
       positionComponent.getBoundingBox(tempBox);

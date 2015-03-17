@@ -38,6 +38,8 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
   private final GdxSwingInputProcessor inputProcessor;
   private final JToggleButton drawTreePencil;
   private final TreeSelection treeSelection;
+  private final JToggleButton drawBrushButton;
+  private final JPanel brushPropertiesPanel;
   private AbstractSelection currentSelection;
   private final JToggleButton drawRectButton;
   private SelectionSystem selectionSystem;
@@ -46,25 +48,25 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
   private EditorScreen screen;
   private JobManager jobs;
 
-  public TerrainToolsController(JToolBar terrainToolsToolbar, BlocksController blocksController, GdxSwingInputProcessor inputProcessor) {
+  public TerrainToolsController(JToolBar terrainToolsToolbar, BlocksController blocksController, GdxSwingInputProcessor inputProcessor, JPanel brushPropertiesPanel) {
     toolbar                   = terrainToolsToolbar;
     this.blocksController     = blocksController;
     this.inputProcessor       = inputProcessor;
     this.toolsGroup           = new ButtonGroup();
     this.modifyGroup          = new ButtonGroup();
-
+    this.brushPropertiesPanel = brushPropertiesPanel;
     this.singleBlockSelection = new SingleBlockSelection();
     this.rectSelection        = new BoxSelection();
     this.ereaseSelection      = new EreaseSelection();
     this.treeSelection        = new TreeSelection();
     drawPencilButton          = buildToogleButton("draw_pencil", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.D);
     drawRectButton            = buildToogleButton("draw_rect", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.R);
+    drawBrushButton           = buildToogleButton("draw_brush", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.B);
+    //buildToogleButton("draw_bucket", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.F);
 
-    buildToogleButton("draw_bucket", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.F);
-
-    buildToogleButton("draw_airbrush", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.A);
+    //buildToogleButton("draw_airbrush", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.A);
     drawTreePencil            = buildToogleButton("draw_tree", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.T);
-    buildToogleButton("draw_elipsis", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.Q);
+    //buildToogleButton("draw_elipsis", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.Q);
     ereaserButton = buildToogleButton("draw_eraser", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.E);
 
     toolbar.addSeparator();
@@ -81,6 +83,8 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
     drawPencilButton.setEnabled(interfaceEnabled);
     drawRectButton.setEnabled(interfaceEnabled);
     drawTreePencil.setEnabled(interfaceEnabled);
+
+    brushPropertiesPanel.setEnabled(drawBrushButton.isSelected());
   }
 
   private JToggleButton buildToogleButton(String iconName, ButtonGroup buttonGroup, int modifier, int keycode) {

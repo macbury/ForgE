@@ -48,20 +48,7 @@ public class Level implements Disposable {
     this.entities            = new LevelEntityEngine(this);
 
     octree.setBounds(terrainMap.getBounds(ChunkMap.TERRAIN_TILE_SIZE));
-/*
-    for (int i = 0; i < 50; i++) {
-      Entity e          = entities.createEntity();
-      Position position = entities.createComponent(Position.class);
-      position.vector.set(5,2,100+i);
-      position.size.set(1,1,1);
-      Movement movement = entities.createComponent(Movement.class);
-      movement.speed    = 40;
-      movement.direction.set(Vector3.X);
 
-      e.add(movement);
-      e.add(position);
-      entities.addEntity(e);
-    }*/
   }
 
   public void resize(int width, int height) {

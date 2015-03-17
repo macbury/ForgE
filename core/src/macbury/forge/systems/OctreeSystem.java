@@ -4,7 +4,7 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IntervalIteratingSystem;
-import macbury.forge.components.Position;
+import macbury.forge.components.PositionComponent;
 import macbury.forge.level.Level;
 import macbury.forge.voxel.ChunkMap;
 import macbury.forge.octree.OctreeNode;
@@ -19,10 +19,10 @@ public class OctreeSystem extends IntervalIteratingSystem {
   private final OctreeNode tree;
   private final TerrainEngine terrainEngine;
   private final ChunkMap map;
-  private ComponentMapper<Position> pm  = ComponentMapper.getFor(Position.class);
+  private ComponentMapper<PositionComponent> pm  = ComponentMapper.getFor(PositionComponent.class);
 
   public OctreeSystem(Level level) {
-    super(Family.getFor(Position.class), UPDATE_EVERY);
+    super(Family.getFor(PositionComponent.class), UPDATE_EVERY);
     this.tree          = level.octree;
     this.terrainEngine = level.terrainEngine;
     this.map           = level.terrainMap;
@@ -39,7 +39,7 @@ public class OctreeSystem extends IntervalIteratingSystem {
 
   @Override
   protected void processEntity(Entity entity) {
-    Position position = pm.get(entity);
+    PositionComponent position = pm.get(entity);
     tree.insert(position);
   }
 }

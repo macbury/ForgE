@@ -13,7 +13,7 @@ import macbury.forge.octree.OctreeObject;
 /**
  * Created by macbury on 19.10.14.
  */
-public class Position extends Component implements Pool.Poolable, OctreeObject {
+public class PositionComponent extends Component implements Pool.Poolable, OctreeObject {
   public final Vector3     vector;
   public final Quaternion  rotation;
   public final Vector3     size;
@@ -23,7 +23,7 @@ public class Position extends Component implements Pool.Poolable, OctreeObject {
   public boolean visible = true;
   private final static Vector3 temp = new Vector3();
 
-  public Position() {
+  public PositionComponent() {
     this.vector         = new Vector3();
     this.rotation       = new Quaternion();
     this.size           = new Vector3();

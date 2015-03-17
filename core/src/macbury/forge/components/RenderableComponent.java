@@ -7,10 +7,10 @@ import macbury.forge.graphics.batch.renderable.BaseRenderable;
 /**
  * Created by macbury on 19.10.14.
  */
-public class Renderable extends Component implements Pool.Poolable {
+public class RenderableComponent extends Component implements Pool.Poolable {
   public BaseRenderable instance;
   public boolean useWorldTransform = true;
-  public Renderable() {
+  public RenderableComponent() {
   }
 
   @Override
