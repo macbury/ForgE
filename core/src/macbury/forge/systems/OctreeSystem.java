@@ -15,7 +15,7 @@ import macbury.forge.terrain.TerrainEngine;
  * Rebuild periodicaly whole tree for all entities passed into it
  */
 public class OctreeSystem extends IntervalIteratingSystem {
-  private static final float UPDATE_EVERY = 0.1f;
+  private static final float UPDATE_EVERY = 0.25f;
   private final OctreeNode tree;
   private final TerrainEngine terrainEngine;
   private final ChunkMap map;

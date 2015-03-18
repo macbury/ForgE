@@ -18,7 +18,7 @@ public class DesktopLauncher {
     engine.addBootListener(new ForgEBootListener() {
       @Override
       public void afterEngineCreate(ForgE engine) {
-        ForgE.screens.set(new LoadingScreen(949));
+        ForgE.screens.set(new LoadingScreen(1048));
       }
     });
     new LwjglApplication(engine, config);

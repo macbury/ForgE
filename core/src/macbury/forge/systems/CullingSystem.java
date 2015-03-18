@@ -40,8 +40,8 @@ public class CullingSystem extends IteratingSystem {
   public void update(float deltaTime) {
     super.update(deltaTime);
     octreeVisibleObjects.clear();
-
-    camera.extendFov();
+    camera.update();
+    //camera.extendFov();
     frustrumOctreeQuery.setFrustum(camera.normalOrDebugFrustrum());
     rootNode.retrieve(octreeVisibleObjects, frustrumOctreeQuery);
 
@@ -50,7 +50,7 @@ public class CullingSystem extends IteratingSystem {
       position.visible  = true;
     }
 
-    camera.restoreFov();
+    //camera.restoreFov();
   }
 
   @Override

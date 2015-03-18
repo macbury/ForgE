@@ -1,6 +1,8 @@
 package macbury.forge.screens;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g3d.utils.FirstPersonCameraController;
 import macbury.forge.components.MovementComponent;
 import macbury.forge.components.PlayerComponent;
@@ -22,6 +24,7 @@ public class GameplayScreen extends AbstractScreen {
 
   @Override
   protected void initialize() {
+    Gdx.input.setCursorCatched(true);
     this.cameraController = new FirstPersonCameraController(level.camera);
     level.camera.position.set(50, 3, 50);
     level.camera.far  = FAR_CAMERA;
@@ -35,7 +38,7 @@ public class GameplayScreen extends AbstractScreen {
     position.vector.set(50,3,50);
     position.size.set(1,1,1);
     MovementComponent movement = level.entities.createComponent(MovementComponent.class);
-    movement.speed    = 10;
+    movement.speed    = 15.4f;
     PlayerComponent player = level.entities.createComponent(PlayerComponent.class);
     player.camera = level.camera;
 
@@ -49,6 +52,10 @@ public class GameplayScreen extends AbstractScreen {
   public void render(float delta) {
     cameraController.update(delta);
     level.render(delta);
+
+    if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+      Gdx.input.setCursorCatched(false);
+    }
   }
 
   @Override
