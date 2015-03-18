@@ -38,7 +38,7 @@ public class GameplayScreen extends AbstractScreen {
     position.vector.set(50,3,50);
     position.size.set(1,1,1);
     MovementComponent movement = level.entities.createComponent(MovementComponent.class);
-    movement.speed    = 15.4f;
+    movement.speed    = 7.4f;
     PlayerComponent player = level.entities.createComponent(PlayerComponent.class);
     player.camera = level.camera;
 

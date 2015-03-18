@@ -7,15 +7,10 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.math.collision.Ray;
-import com.sun.javafx.geom.PickRay;
 import macbury.forge.components.MovementComponent;
 import macbury.forge.components.PlayerComponent;
 import macbury.forge.components.PositionComponent;
-import macbury.forge.utils.Vector3i;
 
 /**
  * Created by macbury on 17.03.15.
@@ -30,7 +25,8 @@ public class PlayerSystem extends IteratingSystem {
   private int FORWARD = Input.Keys.W;
   private int BACKWARD = Input.Keys.S;
   private float mouseSensitivity = 10f;
-  private Vector3 temp = new Vector3();
+  private Vector3 tempA = new Vector3();
+  private Vector3 tempB = new Vector3();
   public PlayerSystem() {
     super(Family.getFor(PlayerComponent.class, PositionComponent.class, MovementComponent.class));
   }
@@ -51,29 +47,26 @@ public class PlayerSystem extends IteratingSystem {
       float deltaY = -Gdx.input.getDeltaY() * mouseSensitivity* deltaTime;
 
       camera.direction.rotate(camera.up, deltaX);
-      temp.set(camera.direction).crs(camera.up).nor();
-      camera.direction.rotate(temp, deltaY);
+      tempA.set(camera.direction).crs(camera.up).nor();
+      camera.direction.rotate(tempA, deltaY);
 
       //camera.direction.x = Math.max(camera.direction.x, -0.2f);
       //Gdx.app.log(TAG, camera.direction.toString());
-
+      tempA.setZero();
+      tempB.setZero();
       if (Gdx.input.isKeyPressed(FORWARD)) {
-        temp.set(camera.direction.x, 0, camera.direction.z);
+        tempA.set(camera.direction.x, 0, camera.direction.z);
       } else if (Gdx.input.isKeyPressed(BACKWARD)) {
-        temp.set(-camera.direction.x, 0, -camera.direction.z);
-      } else {
-        temp.setZero();
+        tempA.set(-camera.direction.x, 0, -camera.direction.z);
       }
 
       if (Gdx.input.isKeyPressed(STRAFE_LEFT)) {
-        movementComponent.direction.x = -1;
+        tempB.set(camera.direction).crs(camera.up).nor().scl(-1f);
       } else if (Gdx.input.isKeyPressed(STRAFE_RIGHT)) {
-        movementComponent.direction.x = 1;
-      } else {
-        movementComponent.direction.x = 0;
+        tempB.set(camera.direction).crs(camera.up).nor();
       }
 
-      movementComponent.direction.set(temp);
+      movementComponent.direction.set(tempA.add(tempB).nor());
       camera.position.set(positionComponent.vector);
       //camera.direction.add(positionComponent.rotation.x, positionComponent.rotation.y, positionComponent.rotation.z);
     }
