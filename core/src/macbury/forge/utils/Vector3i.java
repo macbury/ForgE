@@ -100,4 +100,11 @@ public class Vector3i {
     z -= other.z;
     return this;
   }
+
+  public Vector3i sub(int ox, int oy, int oz) {
+    x -= ox;
+    y -= oy;
+    z -= oz;
+    return this;
+  }
 }

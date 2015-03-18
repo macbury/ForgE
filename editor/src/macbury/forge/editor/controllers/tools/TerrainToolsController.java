@@ -1,8 +1,10 @@
-package macbury.forge.editor.controllers;
+package macbury.forge.editor.controllers.tools;
 
 import com.badlogic.gdx.Input;
 import macbury.forge.blocks.Block;
 import icons.Utils;
+import macbury.forge.editor.controllers.BlocksController;
+import macbury.forge.editor.controllers.ProjectController;
 import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
 import macbury.forge.editor.input.GdxSwingInputProcessor;
 import macbury.forge.editor.input.KeyShortcutMapping;
@@ -12,10 +14,7 @@ import macbury.forge.editor.selection.*;
 import macbury.forge.editor.systems.SelectionSystem;
 import macbury.forge.editor.undo_redo.ChangeManager;
 import macbury.forge.editor.undo_redo.Changeable;
-import macbury.forge.editor.undo_redo.actions.ApplyBlock;
-import macbury.forge.editor.undo_redo.actions.ApplyRangeBlock;
-import macbury.forge.editor.undo_redo.actions.EraserBlock;
-import macbury.forge.editor.undo_redo.actions.TreeBuilderChangeable;
+import macbury.forge.editor.undo_redo.actions.*;
 import macbury.forge.voxel.ChunkMap;
 
 import javax.swing.*;
@@ -39,7 +38,10 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
   private final JToggleButton drawTreePencil;
   private final TreeSelection treeSelection;
   private final JToggleButton drawBrushButton;
-  private final JPanel brushPropertiesPanel;
+  private final JSpinner brushSizeSpinner;
+  private final JComboBox brushTypeComboBox;
+  private final BrushTypeModel brushTypeModel;
+  private final BrushSelection brushSelection;
   private AbstractSelection currentSelection;
   private final JToggleButton drawRectButton;
   private SelectionSystem selectionSystem;
@@ -48,17 +50,19 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
   private EditorScreen screen;
   private JobManager jobs;
 
-  public TerrainToolsController(JToolBar terrainToolsToolbar, BlocksController blocksController, GdxSwingInputProcessor inputProcessor, JPanel brushPropertiesPanel) {
+  public TerrainToolsController(JToolBar terrainToolsToolbar, BlocksController blocksController, GdxSwingInputProcessor inputProcessor) {
     toolbar                   = terrainToolsToolbar;
     this.blocksController     = blocksController;
+    this.brushSizeSpinner     = new JSpinner();
+    this.brushTypeComboBox    = new JComboBox();
     this.inputProcessor       = inputProcessor;
     this.toolsGroup           = new ButtonGroup();
     this.modifyGroup          = new ButtonGroup();
-    this.brushPropertiesPanel = brushPropertiesPanel;
     this.singleBlockSelection = new SingleBlockSelection();
     this.rectSelection        = new BoxSelection();
     this.ereaseSelection      = new EreaseSelection();
     this.treeSelection        = new TreeSelection();
+    this.brushSelection       = new BrushSelection();
     drawPencilButton          = buildToogleButton("draw_pencil", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.D);
     drawRectButton            = buildToogleButton("draw_rect", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.R);
     drawBrushButton           = buildToogleButton("draw_brush", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.B);
@@ -70,7 +74,20 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
     ereaserButton = buildToogleButton("draw_eraser", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.E);
 
     toolbar.addSeparator();
+    SpinnerNumberModel spinnerNumberModel = new SpinnerNumberModel();
+    spinnerNumberModel.setMinimum(1);
+    spinnerNumberModel.setValue(1);
+    spinnerNumberModel.setMaximum(ApplyCustomBrushChangeable.BrushType.MAX_SIZE);
 
+    brushSizeSpinner.setSize(50, 16);
+    brushSizeSpinner.setModel(spinnerNumberModel);
+
+    this.brushTypeModel = new BrushTypeModel();
+    brushTypeComboBox.setSize(200, brushTypeComboBox.getPreferredSize().height);
+    brushTypeComboBox.setModel(brushTypeModel);
+    brushTypeComboBox.setRenderer(new BrushListRenderer());
+    toolbar.add(brushTypeComboBox);
+    toolbar.add(brushSizeSpinner);
     updateUI();
   }
 
@@ -84,7 +101,9 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
     drawRectButton.setEnabled(interfaceEnabled);
     drawTreePencil.setEnabled(interfaceEnabled);
 
-    brushPropertiesPanel.setEnabled(drawBrushButton.isSelected());
+    boolean brushOptionsEnabled = interfaceEnabled && drawBrushButton.isSelected();
+    brushSizeSpinner.setEnabled(brushOptionsEnabled);
+    brushTypeComboBox.setEnabled(brushOptionsEnabled);
   }
 
   private JToggleButton buildToogleButton(String iconName, ButtonGroup buttonGroup, int modifier, int keycode) {
@@ -124,6 +143,7 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
 
   @Override
   public void onNewMap(ProjectController controller, EditorScreen screen) {
+    brushTypeModel.reload();
     drawPencilButton.setSelected(true);
     this.screen          = screen;
     selectionSystem      = screen.selectionSystem;
@@ -161,6 +181,10 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
       setCurrentSelection(ereaseSelection);
     } else if (e.getSource() == drawTreePencil) {
       setCurrentSelection(treeSelection);
+    } else if (e.getSource() == drawBrushButton) {
+      setCurrentSelection(brushSelection);
+    } else {
+      updateUI();
     }
 
   }
@@ -191,6 +215,8 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
       task = new EraserBlock(selection, map);
     } else if (selection == treeSelection) {
       task = new TreeBuilderChangeable(selection, map, blocksController.getCurrentPrimaryBlock(), blocksController.getCurrentSecondaryBlock());
+    } else if (selection == brushSelection) {
+      task = new ApplyCustomBrushChangeable(selection, map,(Integer)brushSizeSpinner.getValue(), (ApplyCustomBrushChangeable.BrushType)brushTypeModel.getSelectedItem(), blockToDraw);
     }
     changeManager.addChangeable(task).apply();
   }
