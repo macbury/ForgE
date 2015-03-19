@@ -4,9 +4,9 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g3d.utils.FirstPersonCameraController;
-import macbury.forge.components.MovementComponent;
-import macbury.forge.components.PlayerComponent;
-import macbury.forge.components.PositionComponent;
+import com.badlogic.gdx.math.Vector3;
+import macbury.forge.ForgE;
+import macbury.forge.components.*;
 import macbury.forge.level.Level;
 
 /**
@@ -26,22 +26,21 @@ public class GameplayScreen extends AbstractScreen {
   protected void initialize() {
     Gdx.input.setCursorCatched(true);
     this.cameraController = new FirstPersonCameraController(level.camera);
-    level.camera.position.set(50, 3, 50);
-    level.camera.far  = FAR_CAMERA;
-    level.camera.near = NEAR_CAMERA;
-    //level.camera.lookAt(22,0,22);
-    //Gdx.input.setInputProcessor(cameraController);
+    level.camera.far      = FAR_CAMERA;
+    level.camera.near     = NEAR_CAMERA;
 
+    //level.entities.addEntity(ForgE.entityBuilder.player(new Vector3(10, 20, 10), level.camera, level.entities));
 
     Entity e          = level.entities.createEntity();
     PositionComponent position = level.entities.createComponent(PositionComponent.class);
-    position.vector.set(50,3,50);
-    position.size.set(1,1,1);
+    position.vector.set(50,20,50);
+    position.size.set(1,1.85f,1);
     MovementComponent movement = level.entities.createComponent(MovementComponent.class);
     movement.speed    = 7.4f;
     PlayerComponent player = level.entities.createComponent(PlayerComponent.class);
     player.camera = level.camera;
-
+    GravityComponent gravityComponent   = level.entities.createComponent(GravityComponent.class);
+    e.add(gravityComponent);
     e.add(player);
     e.add(movement);
     e.add(position);

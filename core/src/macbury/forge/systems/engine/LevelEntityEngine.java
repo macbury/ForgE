@@ -20,7 +20,7 @@ public class LevelEntityEngine extends PooledEngine implements Disposable {
     rendering = new RenderingSystem(level);
     octree    = new OctreeSystem(level);
     debug     = new DebugSystem(level);
-    movement  = new MovementSystem();
+    movement  = new MovementSystem(level);
     culling   = new CullingSystem(level);
     player    = new PlayerSystem();
 

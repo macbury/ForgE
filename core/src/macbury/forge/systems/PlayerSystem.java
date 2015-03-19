@@ -7,8 +7,10 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
+import macbury.forge.ForgE;
 import macbury.forge.components.MovementComponent;
 import macbury.forge.components.PlayerComponent;
 import macbury.forge.components.PositionComponent;
@@ -18,6 +20,10 @@ import macbury.forge.components.PositionComponent;
  */
 public class PlayerSystem extends IteratingSystem {
   private static final String TAG = "PlayerSystem";
+  private static final float HEAD_WOBBLE_SPEED = 10;
+  private static final float HEAD_MAX_WOBBLE = 0.1F;
+  private static final float MAX_HEAD_UP_ROTATION = 0.8f;
+  private static final float MIN_HEAD_DOWN_ROTATION = -0.8f;
   private ComponentMapper<PositionComponent> pm  = ComponentMapper.getFor(PositionComponent.class);
   private ComponentMapper<MovementComponent> mm  = ComponentMapper.getFor(MovementComponent.class);
   private ComponentMapper<PlayerComponent> plm   = ComponentMapper.getFor(PlayerComponent.class);
@@ -27,9 +33,10 @@ public class PlayerSystem extends IteratingSystem {
   private int BACKWARD = Input.Keys.S;
   private float mouseSensitivityX = 10f;
   private float mouseSensitivityY = 8f;
+
   private Vector3 tempA   = new Vector3();
   private Vector3 tempB   = new Vector3();
-  private Matrix4 tempMat = new Matrix4();
+
   public PlayerSystem() {
     super(Family.getFor(PlayerComponent.class, PositionComponent.class, MovementComponent.class));
   }
@@ -47,13 +54,13 @@ public class PlayerSystem extends IteratingSystem {
 
     if (camera != null) {
       float deltaX = -Gdx.input.getDeltaX() * mouseSensitivityX * deltaTime;
-      float deltaY = -Gdx.input.getDeltaY() * mouseSensitivityY* deltaTime;
+      float deltaY = -Gdx.input.getDeltaY() * mouseSensitivityY * deltaTime;
 
       camera.direction.rotate(camera.up, deltaX);
       tempA.set(camera.direction).crs(camera.up).nor();
       tempB.set(camera.direction).rotate(tempA, deltaY);
 
-      if (tempB.y <= 0.8f && tempB.y >= -0.8f) {
+      if (tempB.y <= MAX_HEAD_UP_ROTATION && tempB.y >= MIN_HEAD_DOWN_ROTATION) {
         camera.direction.set(tempB);
       }
 
@@ -72,8 +79,11 @@ public class PlayerSystem extends IteratingSystem {
       }
 
       movementComponent.direction.set(tempA.add(tempB).nor());
-      camera.position.set(positionComponent.vector);
-      //camera.direction.add(positionComponent.rotation.x, positionComponent.rotation.y, positionComponent.rotation.z);
+      camera.position.set(positionComponent.vector).y += positionComponent.size.y;
+      if (!movementComponent.direction.isZero()) {
+        camera.position.y += MathUtils.sin(ForgE.graphics.getElapsedTime() * HEAD_WOBBLE_SPEED) * HEAD_MAX_WOBBLE;
+      }
+
     }
   }
 

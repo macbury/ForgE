@@ -1,6 +1,7 @@
 package macbury.forge.voxel;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
@@ -51,6 +52,10 @@ public class ChunkMap extends VoxelMap {
 
   public Vector3i voxelPositionToChunkPosition(int x, int y, int z){
     return tempA.set(x/CHUNK_SIZE,y/CHUNK_SIZE,z/CHUNK_SIZE);
+  }
+
+  public Vector3i worldPositionToVoxelPosition(Vector3 worldPosition){
+    return tempA.set(MathUtils.floor(worldPosition.x), MathUtils.floor(worldPosition.y), MathUtils.floor(worldPosition.z));
   }
 
   public Chunk findForChunkPosition(Vector3i position) {

@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.assets.assets.TextureAsset;
 import macbury.forge.voxel.ChunkMap;
@@ -19,6 +20,7 @@ public class LevelEnv {
 
   public TextureAsset windDisplacementTexture;
   public Vector2 windDirection = new Vector2(0.1f,0);
+  public Vector3 gravity = new Vector3(0, -7f, 0);
 
   public LevelEnv() {
     skyColor     = Color.valueOf("3498db");
