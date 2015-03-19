@@ -13,6 +13,8 @@ public class DesktopLauncher {
     config.resizable      = false;
     config.width          = 1360;
     config.height         = 768;
+    /*config.width          = 480 * 2;
+    config.height         = 320 * 2;*/
     config.foregroundFPS  = 30;
     ForgE engine          = new ForgE(new Config());
     engine.addBootListener(new ForgEBootListener() {

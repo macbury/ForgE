@@ -7,6 +7,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import macbury.forge.components.MovementComponent;
 import macbury.forge.components.PlayerComponent;
@@ -24,9 +25,11 @@ public class PlayerSystem extends IteratingSystem {
   private int STRAFE_RIGHT = Input.Keys.D;
   private int FORWARD = Input.Keys.W;
   private int BACKWARD = Input.Keys.S;
-  private float mouseSensitivity = 10f;
-  private Vector3 tempA = new Vector3();
-  private Vector3 tempB = new Vector3();
+  private float mouseSensitivityX = 10f;
+  private float mouseSensitivityY = 8f;
+  private Vector3 tempA   = new Vector3();
+  private Vector3 tempB   = new Vector3();
+  private Matrix4 tempMat = new Matrix4();
   public PlayerSystem() {
     super(Family.getFor(PlayerComponent.class, PositionComponent.class, MovementComponent.class));
   }
@@ -43,15 +46,17 @@ public class PlayerSystem extends IteratingSystem {
     PositionComponent positionComponent = pm.get(entity);
 
     if (camera != null) {
-      float deltaX = -Gdx.input.getDeltaX() * mouseSensitivity * deltaTime;
-      float deltaY = -Gdx.input.getDeltaY() * mouseSensitivity* deltaTime;
+      float deltaX = -Gdx.input.getDeltaX() * mouseSensitivityX * deltaTime;
+      float deltaY = -Gdx.input.getDeltaY() * mouseSensitivityY* deltaTime;
 
       camera.direction.rotate(camera.up, deltaX);
       tempA.set(camera.direction).crs(camera.up).nor();
-      camera.direction.rotate(tempA, deltaY);
+      tempB.set(camera.direction).rotate(tempA, deltaY);
 
-      //camera.direction.x = Math.max(camera.direction.x, -0.2f);
-      //Gdx.app.log(TAG, camera.direction.toString());
+      if (tempB.y <= 0.8f && tempB.y >= -0.8f) {
+        camera.direction.set(tempB);
+      }
+
       tempA.setZero();
       tempB.setZero();
       if (Gdx.input.isKeyPressed(FORWARD)) {
