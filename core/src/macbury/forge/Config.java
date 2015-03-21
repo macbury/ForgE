@@ -15,7 +15,7 @@ public class Config {
   public boolean renderDynamicOctree = false;
   public boolean renderStaticOctree = false;
   public boolean renderBoundingBox = false;
-
+  public boolean cacheGeometry      = false;
   public void setRenderDebugTo(RenderDebug debug) {
     renderDebug = debug;
     Gdx.app.postRunnable(new Runnable() {

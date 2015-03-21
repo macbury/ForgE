@@ -14,6 +14,7 @@ public class GameDatabaseSerializer extends Serializer<GameDatabase> {
   public void write(Kryo kryo, Output output, GameDatabase gameDatabase) {
     output.writeInt(gameDatabase.currentyUID);
     output.writeString(gameDatabase.title);
+    output.writeLong(gameDatabase.build++);
   }
 
   @Override
@@ -22,6 +23,7 @@ public class GameDatabaseSerializer extends Serializer<GameDatabase> {
     db.bootstrap();
     db.currentyUID = input.readInt();
     db.title       = input.readString();
+    db.build       = input.readLong();
     return db;
   }
 

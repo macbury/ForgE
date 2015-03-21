@@ -23,14 +23,17 @@ public class LevelState {
   public int id;
   public String name;
 
+  public LevelState() {
+    width   = ChunkMap.CHUNK_SIZE * 5;
+    depth   = ChunkMap.CHUNK_SIZE * 5;
+    height  = ChunkMap.CHUNK_SIZE * 2;
+    env     = new LevelEnv();
+  }
 
   public LevelState(GameDatabase db) {
-    id     = db.uid();
-    name   = MAP_NAME_PREFIX + id;
-    width  = ChunkMap.CHUNK_SIZE * 5;
-    depth  = ChunkMap.CHUNK_SIZE * 5;
-    height = ChunkMap.CHUNK_SIZE * 2;
-    env    = new LevelEnv();
+    this();
+    id      = db.uid();
+    name    = MAP_NAME_PREFIX + id;
   }
 
   /**
@@ -91,6 +94,5 @@ public class LevelState {
   public void setName(String name) {
     this.name = name;
   }
-
 
 }

@@ -9,7 +9,7 @@ public class GameDatabase {
   public static final String FILE_NAME = "game.db";
   public String title;
   public int currentyUID = 0;
-
+  public long build      = 0;
 
   /**
    * Create int uuid

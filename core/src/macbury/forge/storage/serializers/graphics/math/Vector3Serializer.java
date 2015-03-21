@@ -1,4 +1,4 @@
-package macbury.forge.storage.serializers.graphics;
+package macbury.forge.storage.serializers.graphics.math;
 
 import com.badlogic.gdx.math.Vector3;
 import com.esotericsoftware.kryo.Kryo;

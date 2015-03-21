@@ -28,7 +28,6 @@ public class GameplayScreen extends AbstractScreen {
     this.cameraController = new FirstPersonCameraController(level.camera);
     level.camera.far      = FAR_CAMERA;
     level.camera.near     = NEAR_CAMERA;
-
     //level.entities.addEntity(ForgE.entityBuilder.player(new Vector3(10, 20, 10), level.camera, level.entities));
 
     Entity e          = level.entities.createEntity();
@@ -53,7 +52,7 @@ public class GameplayScreen extends AbstractScreen {
     level.render(delta);
 
     if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-      Gdx.input.setCursorCatched(false);
+      Gdx.app.exit();
     }
   }
 

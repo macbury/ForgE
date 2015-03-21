@@ -11,12 +11,17 @@ public class DesktopLauncher {
   public static void main (String[] arg) {
     LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
     config.resizable      = false;
-    config.width          = 1360;
-    config.height         = 768;
-    /*config.width          = 480 * 2;
-    config.height         = 320 * 2;*/
+    //config.width          = 1920;
+    //config.height         = 1080;
+    config.width          = 480 * 2;
+    config.height         = 320 * 2;
     config.foregroundFPS  = 30;
-    ForgE engine          = new ForgE(new Config());
+    config.fullscreen     = false;
+
+    Config forgeConfig        = new Config();
+    forgeConfig.cacheGeometry = true; //TODO: check in terrain engine if there is geometry in file
+
+    ForgE engine              = new ForgE(forgeConfig);
     engine.addBootListener(new ForgEBootListener() {
       @Override
       public void afterEngineCreate(ForgE engine) {
