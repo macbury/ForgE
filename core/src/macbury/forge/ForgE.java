@@ -12,8 +12,7 @@ import macbury.forge.level.LevelManager;
 import macbury.forge.screens.ScreenManager;
 import macbury.forge.shaders.utils.ShadersManager;
 import macbury.forge.storage.StorageManager;
-import macbury.forge.systems.EntityManager;
-import sun.net.www.MimeTable;
+import macbury.forge.entities.EntityManager;
 
 public class ForgE extends Game {
   public static GraphicsUtils       graphics;
@@ -25,7 +24,7 @@ public class ForgE extends Game {
   public static GameDatabase        db;
   public static BlocksProvider      blocks;
   public static InputManager        input;
-  public static EntityManager       entityBuilder;
+  public static EntityManager entities;
   private Array<ForgEBootListener>  bootListeners;
   public static LevelManager              levels;
 
@@ -47,7 +46,7 @@ public class ForgE extends Game {
     input         = new InputManager();
     blocks        = new BlocksProvider();
     levels        = new LevelManager(storage);
-    entityBuilder = new EntityManager();
+    entities = new EntityManager();
     Gdx.input.setInputProcessor(input);
     for (ForgEBootListener listener : bootListeners) {
       listener.afterEngineCreate(this);

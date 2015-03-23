@@ -20,8 +20,6 @@ import macbury.forge.components.PositionComponent;
  */
 public class PlayerSystem extends IteratingSystem {
   private static final String TAG = "PlayerSystem";
-  private static final float HEAD_WOBBLE_SPEED = 10;
-  private static final float HEAD_MAX_WOBBLE = 0.1F;
   private static final float MAX_HEAD_UP_ROTATION = 0.8f;
   private static final float MIN_HEAD_DOWN_ROTATION = -0.8f;
   private ComponentMapper<PositionComponent> pm  = ComponentMapper.getFor(PositionComponent.class);
@@ -48,7 +46,8 @@ public class PlayerSystem extends IteratingSystem {
 
   @Override
   protected void processEntity(Entity entity, float deltaTime) {
-    Camera camera                       = plm.get(entity).camera;
+    PlayerComponent playerComponent     = plm.get(entity);
+    Camera camera                       = playerComponent.camera;
     MovementComponent movementComponent = mm.get(entity);
     PositionComponent positionComponent = pm.get(entity);
 
@@ -81,7 +80,7 @@ public class PlayerSystem extends IteratingSystem {
       movementComponent.direction.set(tempA.add(tempB).nor());
       camera.position.set(positionComponent.vector).y += positionComponent.size.y;
       if (!movementComponent.direction.isZero()) {
-        camera.position.y += MathUtils.sin(ForgE.graphics.getElapsedTime() * HEAD_WOBBLE_SPEED) * HEAD_MAX_WOBBLE;
+        camera.position.y += MathUtils.sin(ForgE.graphics.getElapsedTime() * playerComponent.headWobbleSpeed) * playerComponent.headWobbleMax;
       }
 
     }

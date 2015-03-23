@@ -43,7 +43,7 @@ public class VoxelFaceRenderableSerializer extends Serializer<VoxelFaceRenderabl
     }
 
     indiBuff.position(oldPosition);
-    
+
   }
 
   @Override

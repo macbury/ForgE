@@ -20,12 +20,23 @@ public class OctreeSystem extends IntervalIteratingSystem {
   private final TerrainEngine terrainEngine;
   private final ChunkMap map;
   private ComponentMapper<PositionComponent> pm  = ComponentMapper.getFor(PositionComponent.class);
+  private boolean firstBoot = true;
 
   public OctreeSystem(Level level) {
     super(Family.getFor(PositionComponent.class), UPDATE_EVERY);
     this.tree          = level.octree;
     this.terrainEngine = level.terrainEngine;
     this.map           = level.terrainMap;
+
+  }
+
+  @Override
+  public void update(float deltaTime) {
+    super.update(deltaTime);
+    if (firstBoot) {
+      updateInterval();
+      firstBoot = false;
+    }
   }
 
   @Override

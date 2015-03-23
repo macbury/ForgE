@@ -28,22 +28,11 @@ public class GameplayScreen extends AbstractScreen {
     this.cameraController = new FirstPersonCameraController(level.camera);
     level.camera.far      = FAR_CAMERA;
     level.camera.near     = NEAR_CAMERA;
-    //level.entities.addEntity(ForgE.entityBuilder.player(new Vector3(10, 20, 10), level.camera, level.entities));
 
-    Entity e          = level.entities.createEntity();
-    PositionComponent position = level.entities.createComponent(PositionComponent.class);
-    position.vector.set(50,20,50);
-    position.size.set(1,1.85f,1);
-    MovementComponent movement = level.entities.createComponent(MovementComponent.class);
-    movement.speed    = 7.4f;
-    PlayerComponent player = level.entities.createComponent(PlayerComponent.class);
-    player.camera = level.camera;
-    GravityComponent gravityComponent   = level.entities.createComponent(GravityComponent.class);
-    e.add(gravityComponent);
-    e.add(player);
-    e.add(movement);
-    e.add(position);
-    level.entities.addEntity(e);
+
+    Entity playerEntity = ForgE.entities.get("player").build(level.entities);
+    playerEntity.getComponent(PlayerComponent.class).camera = level.camera;
+    level.entities.addEntity(playerEntity);
   }
 
   @Override
