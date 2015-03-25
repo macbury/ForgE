@@ -238,6 +238,5 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
     } else {
       setCurrentSelection(currentSelection);
     }
-
   }
 }

@@ -21,7 +21,7 @@ public class PlayerStartPositionSerializer extends Serializer<PlayerStartPositio
   public PlayerStartPosition read(Kryo kryo, Input input, Class<PlayerStartPosition> type) {
     PlayerStartPosition startPosition = new PlayerStartPosition();
     startPosition.voxelPosition       = kryo.readObject(input, Vector3i.class);
-    startPosition.mapId               = input.readInt();
+    startPosition.mapId               = input.readInt(true);
     return startPosition;
   }
 }

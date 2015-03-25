@@ -106,7 +106,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     this.progressTaskDialog = new ProgressTaskDialog();
     projectController = new ProjectController();
     mainMenu = new MainMenu(projectController);
-    eventsToolsController  = new EventsController();
+    eventsToolsController  = new EventsController(this);
     terrainToolsController = new TerrainToolsController(terrainToolsToolbar, blocksController, inputProcessor);
     mainToolbarController = new MainToolbarController(projectController, mainToolbar, mainMenu, inputProcessor);
     shadersController = new ShadersController(directoryWatcher);
@@ -137,7 +137,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     projectController.addOnMapChangeListener(blocksController);
     projectController.addOnMapChangeListener(mapTreeController);
     projectController.addOnMapChangeListener(toolsController);
-
+    projectController.addOnMapChangeListener(eventsToolsController);
     toolsController.register(terrainToolsController, 0);
     toolsController.register(eventsToolsController, 2);
     mainContentPane.setVisible(true);
