@@ -27,7 +27,6 @@ public class OctreeSystem extends IntervalIteratingSystem {
     this.tree          = level.octree;
     this.terrainEngine = level.terrainEngine;
     this.map           = level.terrainMap;
-
   }
 
   @Override

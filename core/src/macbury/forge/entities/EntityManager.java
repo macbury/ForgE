@@ -15,6 +15,8 @@ import java.util.HashMap;
  */
 public class EntityManager implements Disposable {
   private static final String TAG = "EntityManager";
+  private static final String ENTITIES_STORAGE = "entities/";
+  private static final String ENTITY_EXT = ".json";
   public HashMap<String, EntityBuilder> builders;
   private Json json;
 
@@ -26,20 +28,21 @@ public class EntityManager implements Disposable {
 
   private void buildJsonReader() {
     this.json = new Json();
-    json.addClassTag("position", PositionComponent.class);
-    json.addClassTag("movement", MovementComponent.class);
-    json.addClassTag("player", PlayerComponent.class);
-    json.addClassTag("gravity", GravityComponent.class);
-    json.addClassTag("collision", CollisionComponent.class);
+    json.addClassTag("position",      PositionComponent.class);
+    json.addClassTag("movement",      MovementComponent.class);
+    json.addClassTag("player",        PlayerComponent.class);
+    json.addClassTag("gravity",       GravityComponent.class);
+    json.addClassTag("collision",     CollisionComponent.class);
+    json.addClassTag("entity_state",  EntityStateComponent.class);
   }
 
   private void reload() {
     builders.clear();
     Gdx.app.log(TAG, "Reloading...");
-    FileHandle[] entityJsons = Gdx.files.internal("entities/").list(new FilenameFilter() {
+    FileHandle[] entityJsons = Gdx.files.internal(ENTITIES_STORAGE).list(new FilenameFilter() {
       @Override
       public boolean accept(File dir, String name) {
-        return name.endsWith(".json");
+        return name.endsWith(ENTITY_EXT);
       }
     });
 
@@ -52,7 +55,7 @@ public class EntityManager implements Disposable {
 
   @Override
   public void dispose() {
-
+    builders.clear();
   }
 
   public EntityBuilder get(String entityId) {

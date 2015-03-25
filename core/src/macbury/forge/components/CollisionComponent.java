@@ -11,13 +11,16 @@ import java.util.ArrayList;
  */
 public class CollisionComponent extends BaseComponent {
   public final Vector3 position = new Vector3();
+  public boolean solid          = false;
+
   @Override
   public void reset() {
     position.setZero();
+    solid = false;
   }
 
   @Override
   public void set(BaseComponent otherComponent) {
-
+    solid = ((CollisionComponent)otherComponent).solid;
   }
 }

@@ -15,20 +15,20 @@ import com.esotericsoftware.kryo.pool.KryoFactory;
 import com.esotericsoftware.kryo.pool.KryoPool;
 import macbury.forge.assets.assets.Asset;
 import macbury.forge.db.GameDatabase;
+import macbury.forge.db.models.PlayerStartPosition;
 import macbury.forge.graphics.batch.renderable.VoxelFaceRenderable;
 import macbury.forge.level.LevelEnv;
 import macbury.forge.level.LevelState;
-import macbury.forge.storage.serializers.*;
 import macbury.forge.storage.serializers.assets.AssetSerializer;
+import macbury.forge.storage.serializers.db.GameDatabaseSerializer;
+import macbury.forge.storage.serializers.db.models.PlayerStartPositionSerializer;
 import macbury.forge.storage.serializers.graphics.*;
-import macbury.forge.storage.serializers.graphics.math.BoundingBoxSerializer;
-import macbury.forge.storage.serializers.graphics.math.Matrix4Serializer;
-import macbury.forge.storage.serializers.graphics.math.Vector2Serializer;
-import macbury.forge.storage.serializers.graphics.math.Vector3Serializer;
+import macbury.forge.storage.serializers.graphics.math.*;
 import macbury.forge.storage.serializers.level.ChunkMapDataSerializer;
 import macbury.forge.storage.serializers.level.FullLevelStateSerializer;
 import macbury.forge.storage.serializers.level.LevelEnvSerializer;
 import macbury.forge.storage.serializers.level.VoxelSerializer;
+import macbury.forge.utils.Vector3i;
 import macbury.forge.voxel.ChunkMap;
 import macbury.forge.voxel.Voxel;
 
@@ -58,6 +58,8 @@ public class StorageManager {
       kryo.register(BoundingBox.class, new BoundingBoxSerializer());
       kryo.register(VoxelFaceRenderable.class, new VoxelFaceRenderableSerializer());
       kryo.register(Matrix4.class, new Matrix4Serializer());
+      kryo.register(Vector3i.class, new Vector3iSerializer());
+      kryo.register(PlayerStartPosition.class, new PlayerStartPositionSerializer());
       return kryo;
     }
   };

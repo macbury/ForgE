@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.PerformanceCounter;
 import macbury.forge.ForgE;
+import macbury.forge.db.models.Teleport;
 import macbury.forge.level.loader.AsyncLevelLoader;
 import macbury.forge.level.Level;
 import macbury.forge.level.loader.GeometryBuilderTask;
@@ -26,7 +27,7 @@ public class LoadingScreen extends AbstractScreen implements Promise<Level> {
   private static final String TAG = "LoadingScreen";
   private static final float ROTATION_SPEED = 80f;
   private static final float STANDARD_CUBE_ROTATION = 60F;
-  private final int levelId;
+  private Teleport teleport;
   private PerspectiveCamera camera;
   private Level level;
   private GdxPromiseFrameTicker promiseTicker;
@@ -35,9 +36,9 @@ public class LoadingScreen extends AbstractScreen implements Promise<Level> {
   private Matrix4 boxTransMat;
   private float indicatorRotation;
 
-  public LoadingScreen(int levelId) {
+  public LoadingScreen(Teleport teleport) {
     super();
-    this.levelId = levelId;
+    this.teleport = teleport;
   }
 
   @Override
@@ -50,12 +51,12 @@ public class LoadingScreen extends AbstractScreen implements Promise<Level> {
 
     camera.position.set(0, 8, 0);
     camera.lookAt(Vector3.Zero);
-    Gdx.app.log(TAG, "Preparing to load: " + levelId);
+    Gdx.app.log(TAG, "Preparing to load: " + teleport.mapId);
     AsyncLevelLoader loader                 = new AsyncLevelLoader();
     GeometryBuilderTask geometryBuilderTask = new GeometryBuilderTask(promiseTicker);
     loader.then(geometryBuilderTask);
     geometryBuilderTask.then(new LevelAssetsLoaderTask(promiseTicker)).then(this);
-    loader.execute(levelId);
+    loader.execute(teleport.mapId);
 
     this.indicatorRotation = 0f;
   }
@@ -104,13 +105,14 @@ public class LoadingScreen extends AbstractScreen implements Promise<Level> {
 
   @Override
   public void dispose() {
-    level = null;
+    level    = null;
+    teleport = null;
   }
 
   @Override
   public void success(Level loadedLevel) {
     Gdx.app.log(TAG, "Done all promises!");
-    GameplayScreen screen = new GameplayScreen(loadedLevel);
+    GameplayScreen screen = new GameplayScreen(teleport, loadedLevel);
     ForgE.screens.set(screen);
   }
 

@@ -58,6 +58,7 @@ public class ChunkMap extends VoxelMap {
     return tempA.set(MathUtils.floor(worldPosition.x), MathUtils.floor(worldPosition.y), MathUtils.floor(worldPosition.z));
   }
 
+
   public Chunk findForChunkPosition(Vector3i position) {
     for (Chunk chunk : chunks) {
       if (chunk.position.equals(position))

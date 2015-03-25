@@ -2,6 +2,7 @@ package macbury.forge;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.utils.Array;
 import macbury.forge.assets.AssetsManager;
 import macbury.forge.blocks.BlocksProvider;
@@ -37,6 +38,7 @@ public class ForgE extends Game {
 
   @Override
   public void create () {
+    Bullet.init(false, true);
     storage       = new StorageManager();
     db            = storage.loadOrInitializeDB();
     graphics      = new GraphicsUtils();
@@ -61,5 +63,10 @@ public class ForgE extends Game {
 
   public void addBootListener(ForgEBootListener bootListener) {
     this.bootListeners.add(bootListener);
+  }
+
+  @Override
+  public void dispose() {
+    super.dispose();
   }
 }

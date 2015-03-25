@@ -154,6 +154,7 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
 
   public boolean closeAndSaveChangesMap() {
     if (editorScreen != null && editorScreen.changeManager != null && editorScreen.changeManager.canUndo()) {
+
       int response = JOptionPane.showOptionDialog(mainWindow,
           "There are changes in map. Do you want to save them?",
           "Save map",

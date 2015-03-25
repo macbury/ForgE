@@ -1,8 +1,11 @@
 package macbury.forge.editor;
 
+import com.ezware.dialog.task.CommandLink;
+import com.ezware.dialog.task.TaskDialogs;
 import macbury.forge.editor.windows.MainWindow;
 
 import javax.swing.*;
+import java.math.BigDecimal;
 
 /**
  * Created by macbury on 15.10.14.
@@ -21,6 +24,7 @@ public class DesktopLauncher {
                 break;
             }
         }
+
      // UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
     } catch (ClassNotFoundException e) {
       e.printStackTrace();

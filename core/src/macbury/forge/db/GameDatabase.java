@@ -1,6 +1,7 @@
 package macbury.forge.db;
 
 import com.badlogic.gdx.Gdx;
+import macbury.forge.db.models.PlayerStartPosition;
 
 /**
  * Created by macbury on 07.11.14.
@@ -10,7 +11,7 @@ public class GameDatabase {
   public String title;
   public int currentyUID = 0;
   public long build      = 0;
-
+  public PlayerStartPosition startPosition;
   /**
    * Create int uuid
    * @return unique id

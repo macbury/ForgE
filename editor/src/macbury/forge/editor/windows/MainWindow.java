@@ -3,6 +3,8 @@ package macbury.forge.editor.windows;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglAWTCanvas;
 import com.badlogic.gdx.backends.lwjgl.LwjglAWTInput;
+import com.ezware.dialog.task.CommandLink;
+import com.ezware.dialog.task.TaskDialogs;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
@@ -72,6 +74,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     super();
     $$$setupUI$$$();
     Thread.setDefaultUncaughtExceptionHandler(this);
+
     Toolkit kit = Toolkit.getDefaultToolkit();
     //Image mainIcon   = kit.createImage(ClassLoader.getSystemResource("icons/main.ico"));
     //setIconImage(mainIcon);
@@ -193,10 +196,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
 
   @Override
   public void uncaughtException(Thread t, Throwable e) {
-    JOptionPane.showMessageDialog(this,
-        e.getMessage(),
-        "Insane error",
-        JOptionPane.ERROR_MESSAGE);
+    TaskDialogs.showException(e);
     e.printStackTrace();
   }
 
@@ -213,37 +213,37 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     mainContentPane = new JPanel();
     mainContentPane.setLayout(new BorderLayout(0, 0));
     statusBarPanel = new JPanel();
-    statusBarPanel.setLayout(new GridLayoutManager(1, 11, new Insets(5, 5, 5, 10), -1, -1));
+    statusBarPanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 11, new Insets(5, 5, 5, 10), -1, -1));
     statusBarPanel.setMinimumSize(new Dimension(646, 32));
     mainContentPane.add(statusBarPanel, BorderLayout.SOUTH);
     statusRenderablesLabel = new JLabel();
     statusRenderablesLabel.setText("Voxels: 6");
-    statusBarPanel.add(statusRenderablesLabel, new GridConstraints(0, 8, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(62, 26), null, 0, false));
-    final Spacer spacer1 = new Spacer();
-    statusBarPanel.add(spacer1, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, new Dimension(14, 26), null, 0, false));
+    statusBarPanel.add(statusRenderablesLabel, new com.intellij.uiDesigner.core.GridConstraints(0, 8, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(62, 26), null, 0, false));
+    final com.intellij.uiDesigner.core.Spacer spacer1 = new com.intellij.uiDesigner.core.Spacer();
+    statusBarPanel.add(spacer1, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, new Dimension(14, 26), null, 0, false));
     final JToolBar.Separator toolBar$Separator1 = new JToolBar.Separator();
-    statusBarPanel.add(toolBar$Separator1, new GridConstraints(0, 5, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(10, 26), null, 0, false));
+    statusBarPanel.add(toolBar$Separator1, new com.intellij.uiDesigner.core.GridConstraints(0, 5, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(10, 26), null, 0, false));
     final JToolBar.Separator toolBar$Separator2 = new JToolBar.Separator();
-    statusBarPanel.add(toolBar$Separator2, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(10, 26), null, 0, false));
+    statusBarPanel.add(toolBar$Separator2, new com.intellij.uiDesigner.core.GridConstraints(0, 3, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(10, 26), null, 0, false));
     statusMemoryLabel = new JLabel();
     statusMemoryLabel.setText("Memory: 6GB/10GB");
-    statusBarPanel.add(statusMemoryLabel, new GridConstraints(0, 4, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(138, 26), null, 0, false));
+    statusBarPanel.add(statusMemoryLabel, new com.intellij.uiDesigner.core.GridConstraints(0, 4, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(138, 26), null, 0, false));
     statusFpsLabel = new JLabel();
     statusFpsLabel.setText("FPS: 60s");
-    statusBarPanel.add(statusFpsLabel, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(59, 26), null, 0, false));
+    statusBarPanel.add(statusFpsLabel, new com.intellij.uiDesigner.core.GridConstraints(0, 2, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(59, 26), null, 0, false));
     final JToolBar.Separator toolBar$Separator3 = new JToolBar.Separator();
-    statusBarPanel.add(toolBar$Separator3, new GridConstraints(0, 9, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(10, 26), null, 0, false));
+    statusBarPanel.add(toolBar$Separator3, new com.intellij.uiDesigner.core.GridConstraints(0, 9, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(10, 26), null, 0, false));
     mapCursorPositionLabel = new JLabel();
     mapCursorPositionLabel.setText("0x0x0");
-    statusBarPanel.add(mapCursorPositionLabel, new GridConstraints(0, 10, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(46, 26), null, 0, false));
+    statusBarPanel.add(mapCursorPositionLabel, new com.intellij.uiDesigner.core.GridConstraints(0, 10, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(46, 26), null, 0, false));
     final JToolBar.Separator toolBar$Separator4 = new JToolBar.Separator();
-    statusBarPanel.add(toolBar$Separator4, new GridConstraints(0, 7, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(10, 26), null, 0, false));
+    statusBarPanel.add(toolBar$Separator4, new com.intellij.uiDesigner.core.GridConstraints(0, 7, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(10, 26), null, 0, false));
     statusTriangleCountLabel = new JLabel();
     statusTriangleCountLabel.setText("Triangle count: 0");
-    statusBarPanel.add(statusTriangleCountLabel, new GridConstraints(0, 6, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(112, 26), null, 0, false));
+    statusBarPanel.add(statusTriangleCountLabel, new com.intellij.uiDesigner.core.GridConstraints(0, 6, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(112, 26), null, 0, false));
     jobProgressBar = new JProgressBar();
     jobProgressBar.setIndeterminate(true);
-    statusBarPanel.add(jobProgressBar, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, 1, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(146, 26), null, 0, false));
+    statusBarPanel.add(jobProgressBar, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, 1, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(146, 26), null, 0, false));
     mainToolbar = new JToolBar();
     mainToolbar.setFloatable(false);
     mainContentPane.add(mainToolbar, BorderLayout.NORTH);
@@ -287,7 +287,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     panel3.setPreferredSize(new Dimension(60, 48));
     panel2.add(panel3, BorderLayout.SOUTH);
     final JPanel panel4 = new JPanel();
-    panel4.setLayout(new GridLayoutManager(1, 3, new Insets(0, 0, 0, 0), -1, -1));
+    panel4.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 3, new Insets(0, 0, 0, 0), -1, -1));
     GridBagConstraints gbc;
     gbc = new GridBagConstraints();
     gbc.gridx = 1;
@@ -296,13 +296,13 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     panel3.add(panel4, gbc);
     panelSecondaryBlock.setBackground(new Color(-65794));
     panelSecondaryBlock.setPreferredSize(new Dimension(32, 32));
-    panel4.add(panelSecondaryBlock, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+    panel4.add(panelSecondaryBlock, new com.intellij.uiDesigner.core.GridConstraints(0, 2, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
     panelSecondaryBlock.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(), null));
-    final Spacer spacer2 = new Spacer();
-    panel4.add(spacer2, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+    final com.intellij.uiDesigner.core.Spacer spacer2 = new com.intellij.uiDesigner.core.Spacer();
+    panel4.add(spacer2, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
     panelPrimaryBlock.setBackground(new Color(-65794));
     panelPrimaryBlock.setPreferredSize(new Dimension(32, 32));
-    panel4.add(panelPrimaryBlock, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+    panel4.add(panelPrimaryBlock, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
     panelPrimaryBlock.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(), null));
     final JPanel panel5 = new JPanel();
     panel5.setLayout(new BorderLayout(0, 0));
