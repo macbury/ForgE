@@ -1,4 +1,4 @@
-package macbury.forge.editor.controllers.tools;
+package macbury.forge.editor.controllers.tools.terrain;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;

@@ -3,7 +3,6 @@ package macbury.forge.editor.windows;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglAWTCanvas;
 import com.badlogic.gdx.backends.lwjgl.LwjglAWTInput;
-import com.ezware.dialog.task.CommandLink;
 import com.ezware.dialog.task.TaskDialogs;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -14,7 +13,9 @@ import macbury.forge.ForgEBootListener;
 import macbury.forge.editor.controllers.*;
 import macbury.forge.editor.controllers.inspector.InspectorController;
 import macbury.forge.editor.controllers.maps.MapTreeController;
-import macbury.forge.editor.controllers.tools.TerrainToolsController;
+import macbury.forge.editor.controllers.tools.ToolsController;
+import macbury.forge.editor.controllers.tools.events.EventsController;
+import macbury.forge.editor.controllers.tools.terrain.TerrainToolsController;
 import macbury.forge.editor.input.GdxSwingInputProcessor;
 import macbury.forge.editor.parell.JobManager;
 import macbury.forge.editor.reloader.DirectoryWatcher;
@@ -37,6 +38,8 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
   private final LwjglAWTInput input;
   private final MapTreeController mapTreeController;
   private final InspectorController inspectorController;
+  private final ToolsController toolsController;
+  private final EventsController eventsToolsController;
   private LwjglAWTCanvas openGLCanvas;
   private ForgE engine;
   private ProjectController projectController;
@@ -98,10 +101,12 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     config.debug = true;
 
     engine = new ForgE(config);
+    toolsController  = new ToolsController(toolsPane);
     blocksController = new BlocksController(blockList, directoryWatcher, jobs, (ImagePanel) panelPrimaryBlock, (ImagePanel) panelSecondaryBlock);
     this.progressTaskDialog = new ProgressTaskDialog();
     projectController = new ProjectController();
     mainMenu = new MainMenu(projectController);
+    eventsToolsController  = new EventsController();
     terrainToolsController = new TerrainToolsController(terrainToolsToolbar, blocksController, inputProcessor);
     mainToolbarController = new MainToolbarController(projectController, mainToolbar, mainMenu, inputProcessor);
     shadersController = new ShadersController(directoryWatcher);
@@ -131,6 +136,10 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     projectController.addOnMapChangeListener(terrainToolsController);
     projectController.addOnMapChangeListener(blocksController);
     projectController.addOnMapChangeListener(mapTreeController);
+    projectController.addOnMapChangeListener(toolsController);
+
+    toolsController.register(terrainToolsController, 0);
+    toolsController.register(eventsToolsController, 2);
     mainContentPane.setVisible(true);
     invalidate();
     addWindowFocusListener(this);

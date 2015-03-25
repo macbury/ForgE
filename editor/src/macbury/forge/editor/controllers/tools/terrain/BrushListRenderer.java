@@ -1,4 +1,4 @@
-package macbury.forge.editor.controllers.tools;
+package macbury.forge.editor.controllers.tools.terrain;
 
 import macbury.forge.editor.undo_redo.actions.ApplyCustomBrushChangeable;
 

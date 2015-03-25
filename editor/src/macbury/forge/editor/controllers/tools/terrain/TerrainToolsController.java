@@ -1,4 +1,4 @@
-package macbury.forge.editor.controllers.tools;
+package macbury.forge.editor.controllers.tools.terrain;
 
 import com.badlogic.gdx.Input;
 import macbury.forge.blocks.Block;
@@ -6,6 +6,7 @@ import icons.Utils;
 import macbury.forge.editor.controllers.BlocksController;
 import macbury.forge.editor.controllers.ProjectController;
 import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
+import macbury.forge.editor.controllers.tools.ToolsController;
 import macbury.forge.editor.input.GdxSwingInputProcessor;
 import macbury.forge.editor.input.KeyShortcutMapping;
 import macbury.forge.editor.parell.JobManager;
@@ -24,7 +25,7 @@ import java.awt.event.ActionListener;
 /**
  * Created by macbury on 04.11.14.
  */
-public class TerrainToolsController implements OnMapChangeListener, ActionListener, SelectionInterface {
+public class TerrainToolsController implements OnMapChangeListener, ActionListener, SelectionInterface, ToolsController.ToolControllerListener {
   private final JToolBar toolbar;
   private final ButtonGroup toolsGroup;
   private final JToggleButton drawPencilButton;
@@ -146,7 +147,6 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
     brushTypeModel.reload();
     drawPencilButton.setSelected(true);
     this.screen          = screen;
-    selectionSystem      = screen.selectionSystem;
     changeManager        = screen.changeManager;
     map                  = screen.level.terrainMap;
 
@@ -155,10 +155,6 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
     singleBlockSelection.setVoxelSize(map.voxelSize);
     rectSelection.setVoxelSize(map.voxelSize);
 
-    selectionSystem.addListener(this);
-
-    setCurrentSelection(singleBlockSelection);
-    updateUI();
   }
 
   @Override
@@ -225,5 +221,23 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
     this.currentSelection = currentSelection;
     this.selectionSystem.setSelection(currentSelection);
     updateUI();
+  }
+
+  @Override
+  public void onToolPaneUnSelected(SelectionSystem system) {
+    system.removeListener(this);
+  }
+
+  @Override
+  public void onToolPaneSelected(ToolsController.ToolControllerListener selectedToolController, SelectionSystem system) {
+    selectionSystem = system;
+    system.addListener(this);
+
+    if (currentSelection == null) {
+      setCurrentSelection(singleBlockSelection);
+    } else {
+      setCurrentSelection(currentSelection);
+    }
+
   }
 }
