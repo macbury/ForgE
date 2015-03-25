@@ -131,7 +131,7 @@ public class ChunkMap extends VoxelMap {
     }
   }
 
-  private void rebuildChunkForChunkPositionIfExists(Vector3i chunkPosition) {
+  public void rebuildChunkForChunkPositionIfExists(Vector3i chunkPosition) {
     Chunk chunk            = findForChunkPosition(chunkPosition);
     if (chunk != null) {
       addToRebuild(chunk);
@@ -184,7 +184,6 @@ public class ChunkMap extends VoxelMap {
           chunk.end.set(chunk.start).add(CHUNK_SIZE, CHUNK_SIZE, CHUNK_SIZE);
           chunk.size.set(CHUNK_SIZE, CHUNK_SIZE, CHUNK_SIZE).scl(voxelSize);
           chunks.add(chunk);
-
         }
       }
     }
@@ -195,6 +194,30 @@ public class ChunkMap extends VoxelMap {
     if (chunkToRebuild.indexOf(chunk, true) == -1){
       chunkToRebuild.add(chunk);
     }
+  }
+
+  public void findChunksWithData(Array<Chunk> out) {
+    out.clear();
+    for(Chunk chunk : chunks) {
+      if (chunk.renderables.size > 0 || isAnySolidVoxelsInChunk(chunk)) {
+        out.add(chunk);
+      }
+    }
+  }
+
+  public boolean isAnySolidVoxelsInChunk(Chunk chunk) {
+    for (int x = chunk.start.x; x < chunk.end.x; x++) {
+      for (int y = chunk.start.y; y < chunk.end.y; y++) {
+        for (int z = chunk.start.z; z < chunk.end.z; z++) {
+          tempA.set(x,y,z);
+          if (isNotAir(tempA)) {
+            return true;
+          }
+        }
+      }
+    }
+
+    return false;
   }
 
   @Override

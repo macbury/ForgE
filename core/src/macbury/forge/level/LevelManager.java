@@ -12,6 +12,9 @@ import macbury.forge.storage.serializers.level.LevelStateBasicInfoSerializer;
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.zip.DeflaterInputStream;
+import java.util.zip.DeflaterOutputStream;
+import java.util.zip.InflaterInputStream;
 
 /**
  * Created by macbury on 09.03.15.
@@ -41,8 +44,9 @@ public class LevelManager {
     LevelState levelState = null;
     Gdx.app.log(TAG, "Loading map: " + mapFile.toString());
     try {
-      Input input = new Input(new FileInputStream(mapFile.file()));
-      levelState = kryo.readObject(input, LevelState.class, new FullLevelStateSerializer());
+      InflaterInputStream inflaterInputStream = new InflaterInputStream(new FileInputStream(mapFile.file()));
+      Input input                             = new Input(inflaterInputStream);
+      levelState                              = kryo.readObject(input, LevelState.class, new FullLevelStateSerializer());
       input.close();
     } catch (FileNotFoundException e) {
       e.printStackTrace();
@@ -60,7 +64,8 @@ public class LevelManager {
     Gdx.app.log(TAG, "Saving map: " + file.getAbsolutePath());
     try {
       synchronized (state) {
-        Output output = new Output(new FileOutputStream(file, false));
+        DeflaterOutputStream outputStream = new DeflaterOutputStream(new FileOutputStream(file, false));
+        Output output                     = new Output(outputStream);
         kryo.writeObject(output, state, new FullLevelStateSerializer());
         output.close();
       }
@@ -104,8 +109,9 @@ public class LevelManager {
     FileHandle mapFile    = getLevelFileHandle(levelId);
     Gdx.app.log(TAG, "Loading map: " + mapFile.toString());
     try {
-      Input input = new Input(new FileInputStream(mapFile.file()));
-      levelState  = kryo.readObject(input, LevelState.class, basicLevelInfoSerializer);
+      InflaterInputStream inflaterInput       = new InflaterInputStream(new FileInputStream(mapFile.file()));
+      Input input                             = new Input(inflaterInput);
+      levelState                              = kryo.readObject(input, LevelState.class, basicLevelInfoSerializer);
       input.close();
     } catch (FileNotFoundException e) {
       e.printStackTrace();
