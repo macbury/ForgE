@@ -18,6 +18,7 @@ public class GameDatabaseSerializer extends Serializer<GameDatabase> {
     output.writeString(gameDatabase.title);
     output.writeLong(gameDatabase.build++);
     kryo.writeObjectOrNull(output, gameDatabase.startPosition, PlayerStartPosition.class);
+    output.writeInt(gameDatabase.lastOpenedMapId);
   }
 
   @Override
@@ -28,6 +29,7 @@ public class GameDatabaseSerializer extends Serializer<GameDatabase> {
     db.title         = input.readString();
     db.build         = input.readLong();
     db.startPosition = kryo.readObjectOrNull(input, PlayerStartPosition.class);
+    db.lastOpenedMapId = input.readInt();
     return db;
   }
 

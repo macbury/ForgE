@@ -101,12 +101,12 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     config.debug = true;
 
     engine = new ForgE(config);
-    toolsController  = new ToolsController(toolsPane);
+    toolsController = new ToolsController(toolsPane);
     blocksController = new BlocksController(blockList, directoryWatcher, jobs, (ImagePanel) panelPrimaryBlock, (ImagePanel) panelSecondaryBlock);
     this.progressTaskDialog = new ProgressTaskDialog();
     projectController = new ProjectController();
     mainMenu = new MainMenu(projectController);
-    eventsToolsController  = new EventsController(this);
+    eventsToolsController = new EventsController(this);
     terrainToolsController = new TerrainToolsController(terrainToolsToolbar, blocksController, inputProcessor);
     mainToolbarController = new MainToolbarController(projectController, mainToolbar, mainMenu, inputProcessor);
     shadersController = new ShadersController(directoryWatcher);
@@ -154,6 +154,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     projectController.setMainWindow(this);
     directoryWatcher.start();
     mainContentPane.setVisible(true);
+    projectController.tryOpenLastMap();
   }
 
   @Override
@@ -261,10 +262,10 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     mainContentPane.add(mainSplitPane, BorderLayout.CENTER);
     final JSplitPane splitPane1 = new JSplitPane();
     splitPane1.setContinuousLayout(true);
-    splitPane1.setDividerLocation(619);
+    splitPane1.setDividerLocation(473);
     splitPane1.setOrientation(0);
     splitPane1.setPreferredSize(new Dimension(320, 527));
-    splitPane1.setResizeWeight(0.5);
+    splitPane1.setResizeWeight(0.6);
     mainSplitPane.add(splitPane1, BorderLayout.WEST);
     final JPanel panel1 = new JPanel();
     panel1.setLayout(new BorderLayout(0, 0));
@@ -329,6 +330,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     mapTree = new JTree();
     mapTree.setRootVisible(true);
     mapTree.setShowsRootHandles(true);
+    mapTree.putClientProperty("JTree.lineStyle", "");
     scrollPane2.setViewportView(mapTree);
     openGlContainer = new JPanel();
     openGlContainer.setLayout(new BorderLayout(0, 0));

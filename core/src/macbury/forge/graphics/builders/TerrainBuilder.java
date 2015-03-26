@@ -70,12 +70,6 @@ public class TerrainBuilder {
             Voxel currentVoxel     = map.getVoxelForPosition(x, y, z);
 
             nextTileToCheck.set(x,y,z);
-            /*if (currentVoxel.alginTo != null && currentVoxel.getBlock().rotation != Block.Rotation.none) {
-              nextTileToCheck.sub(currentVoxel.alginTo.direction);
-            } else {
-              nextTileToCheck.add(face.direction);
-            }*/
-
             nextTileToCheck.add(face.direction);
 
             updateCursorSize = false;

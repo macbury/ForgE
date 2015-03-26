@@ -118,7 +118,7 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
     if (closeAndSaveChangesMap()) {
       LevelState newMapState                 = new LevelState(ForgE.db);
       MapCreationWindow.MapDocument document = new MapCreationWindow.MapDocument(newMapState, storeDir);
-      MapCreationWindow newMapWindow = new MapCreationWindow(document, this);
+      MapCreationWindow newMapWindow        = new MapCreationWindow(document, this);
       newMapWindow.show(mainWindow);
     }
   }
@@ -265,9 +265,9 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
   }
 
   public void closeMap() {
-    currentLevelState = null;
     mainWindow.setTitle("");
     if (editorScreen != null) {
+
       for (OnMapChangeListener listener : onMapChangeListenerArray) {
         listener.onCloseMap(ProjectController.this, ProjectController.this.editorScreen);
       }
@@ -279,7 +279,7 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
         }
       });
     }
-
+    currentLevelState = null;
     editorScreen = null;
     updateUI();
   }
@@ -308,7 +308,10 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
 
   private void setState(LevelState state) {
     currentLevelState = state;
+    ForgE.db.lastOpenedMapId = state.id;
     mainWindow.setTitle(state.name);
+    ForgE.db.save();
+
     this.editorScreen = new EditorScreen(state);
     Gdx.app.postRunnable(new Runnable() {
       @Override
@@ -401,4 +404,9 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
     return currentLevelState;
   }
 
+  public void tryOpenLastMap() {
+    if (ForgE.levels.exists(ForgE.db.lastOpenedMapId)) {
+      openMap(ForgE.levels.getFileHandle(ForgE.db.lastOpenedMapId));
+    }
+  }
 }

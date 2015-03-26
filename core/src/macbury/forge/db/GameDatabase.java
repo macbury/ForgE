@@ -14,6 +14,7 @@ public class GameDatabase {
   public String title;
   public int currentyUID = 0;
   public long build      = 0;
+  public int lastOpenedMapId = -1;
   public PlayerStartPosition startPosition;
   /**
    * Create int uuid
@@ -37,6 +38,10 @@ public class GameDatabase {
     startPosition.mapId         = levelId;
     startPosition.voxelPosition = new Vector3i(voxelPosition);
 
+    ForgE.storage.saveDB(this);
+  }
+
+  public void save() {
     ForgE.storage.saveDB(this);
   }
 }

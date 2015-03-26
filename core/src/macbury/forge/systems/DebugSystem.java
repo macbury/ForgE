@@ -26,6 +26,7 @@ import macbury.forge.graphics.frustrum.FrustrumDebugAndRenderer;
 import macbury.forge.level.Level;
 import macbury.forge.octree.OctreeNode;
 import macbury.forge.terrain.TerrainEngine;
+import macbury.forge.utils.Vector3i;
 
 /**
  * Created by macbury on 20.10.14.
@@ -33,6 +34,8 @@ import macbury.forge.terrain.TerrainEngine;
 public class DebugSystem extends IteratingSystem implements Disposable {
   private static final Color BOUNDING_BOX_COLOR  = Color.DARK_GRAY;
   private static final Color OCTREE_BOUNDS_COLOR = Color.OLIVE;
+  private static final float DEBUG_BOX_OFFSET_POSITION    = 0.05f;
+  private static final float DEBUG_BOX_OFFSET_SIZE        = DEBUG_BOX_OFFSET_POSITION * 2;
   private final VoxelBatch batch;
   private final GameCamera camera;
   private final OctreeNode dynamicOctree;
@@ -117,17 +120,35 @@ public class DebugSystem extends IteratingSystem implements Disposable {
         DebugShape.cullledOctree(batch.shapeRenderer, terrainOctree, camera.normalOrDebugFrustrum());
       }
       if (ForgE.config.debug) {
-        if (ForgE.db.startPosition != null && level.state.id == ForgE.db.startPosition.mapId) {
-          batch.shapeRenderer.setColor(Color.WHITE);
-          level.terrainMap.localVoxelPositionToWorldPosition(ForgE.db.startPosition.voxelPosition, tempVec);
-          batch.shapeRenderer.box(tempVec.x, tempVec.y, tempVec.z+1, 1,1,1);
-        }
+        renderStartPosition();
       }
 
     } batch.shapeRenderer.end();
 
     frustrumDebugger.render(camera);
     context.end();
+  }
+
+  private void renderStartPosition() {
+    if (ForgE.db.startPosition != null && level.state.id == ForgE.db.startPosition.mapId) {
+
+      level.terrainMap.localVoxelPositionToWorldPosition(ForgE.db.startPosition.voxelPosition, tempVec);
+      renderDebugBox(tempVec, level.terrainMap.voxelSize, Color.WHITE, Color.BLACK);
+    }
+  }
+
+  private void renderDebugBox(Vector3 position, Vector3 size, Color outerColor, Color innerColor) {
+    batch.shapeRenderer.setColor(outerColor);
+    batch.shapeRenderer.box(position.x, position.y, position.z+size.z, size.x,size.y,size.z);
+    batch.shapeRenderer.setColor(innerColor);
+    batch.shapeRenderer.box(
+        position.x + DEBUG_BOX_OFFSET_POSITION,
+        position.y + DEBUG_BOX_OFFSET_POSITION,
+        position.z+size.z - DEBUG_BOX_OFFSET_POSITION,
+        size.x - DEBUG_BOX_OFFSET_SIZE,
+        size.y - DEBUG_BOX_OFFSET_SIZE,
+        size.z - DEBUG_BOX_OFFSET_SIZE
+    );
   }
 
 

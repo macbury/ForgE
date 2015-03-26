@@ -77,7 +77,11 @@ public class LevelManager {
   }
 
   public void save(LevelState state) {
-    save(state, Gdx.files.internal(LevelState.MAP_STORAGE_DIR).file().getAbsolutePath());
+    String storeDir = Gdx.files.internal(LevelState.MAP_STORAGE_DIR).file().getAbsolutePath();
+    if (exists(state.id)) {
+      storeDir = getFileHandle(state.id).file().getParent();
+    }
+    save(state, storeDir);
   }
 
   private void getHandles(FileHandle begin, Array<FileHandle> handles)  {
@@ -139,5 +143,10 @@ public class LevelManager {
       throw new GdxRuntimeException("Map not found with id: " + levelId);
     }
     return load(handle);
+  }
+
+  public boolean exists(int levelId) {
+    FileHandle handle = getFileHandle(levelId);
+    return handle != null && handle.exists();
   }
 }

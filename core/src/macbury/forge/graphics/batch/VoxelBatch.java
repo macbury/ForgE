@@ -2,6 +2,7 @@ package macbury.forge.graphics.batch;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
@@ -11,6 +12,7 @@ import macbury.forge.Config;
 import macbury.forge.ForgE;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
 import macbury.forge.graphics.batch.renderable.BaseRenderableProvider;
+import macbury.forge.graphics.batch.sprites.Sprite3D;
 import macbury.forge.level.LevelEnv;
 import macbury.forge.shaders.ShaderProvider;
 import macbury.forge.shaders.utils.RenderableBaseShader;
@@ -36,6 +38,13 @@ public class VoxelBatch implements Disposable {
     this.sorter         = new CameraRenderableSorter();
     renderablesPerFrame = 0;
     trianglesPerFrame   = 0;
+  }
+
+  public Sprite3D build(TextureRegion region, boolean isStatic, boolean transparent) {
+    Sprite3D sprite3D = new Sprite3D(this);
+    sprite3D.init(transparent, isStatic);
+    sprite3D.setTextureRegion(region);
+    return sprite3D;
   }
 
   public void begin(Camera cam) {

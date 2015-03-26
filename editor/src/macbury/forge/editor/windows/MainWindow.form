@@ -141,10 +141,10 @@
             <constraints border-constraint="West"/>
             <properties>
               <continuousLayout value="true"/>
-              <dividerLocation value="619"/>
+              <dividerLocation value="473"/>
               <orientation value="0"/>
               <preferredSize width="320" height="527"/>
-              <resizeWeight value="0.5"/>
+              <resizeWeight value="0.6"/>
             </properties>
             <border type="none"/>
             <children>
@@ -303,6 +303,9 @@
                       <rootVisible value="true"/>
                       <showsRootHandles value="true"/>
                     </properties>
+                    <clientProperties>
+                      <JTree.lineStyle class="java.lang.String" value=""/>
+                    </clientProperties>
                   </component>
                 </children>
               </scrollpane>
