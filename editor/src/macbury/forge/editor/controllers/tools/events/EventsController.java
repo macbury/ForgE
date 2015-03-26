@@ -14,6 +14,7 @@ import macbury.forge.editor.selection.EventSelection;
 import macbury.forge.editor.selection.SelectionInterface;
 import macbury.forge.editor.systems.SelectionSystem;
 import macbury.forge.editor.windows.MainWindow;
+import macbury.forge.utils.Vector3i;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,11 +26,13 @@ import java.awt.event.ActionListener;
  */
 public class EventsController implements ToolsController.ToolControllerListener, SelectionInterface, ActionListener, OnMapChangeListener {
 
+  private static final String TAG = "EventsController";
   private final JPopupMenu eventPopupMenu;
   private final JMenuItem mntmSetStartPosition;
   private final MainWindow mainWindow;
   private final EventSelection eventSelection;
   private int levelId;
+  private Vector3i selectedVoxelPosition;
 
   public EventsController(MainWindow mainWindow) {
     this.mainWindow           = mainWindow;
@@ -65,6 +68,7 @@ public class EventsController implements ToolsController.ToolControllerListener,
 
   @Override
   public void onSelectionEnd(AbstractSelection selection) {
+    this.selectedVoxelPosition = selection.getEndPostion();
     if (selection.getSelectedMouseButton() == Input.Buttons.RIGHT) {
       Point point = mainWindow.getMousePosition();
 
@@ -76,7 +80,8 @@ public class EventsController implements ToolsController.ToolControllerListener,
   @Override
   public void actionPerformed(ActionEvent e) {
     if (e.getSource() == mntmSetStartPosition) {
-      ForgE.db.setStartPosition(levelId, eventSelection.getStartPosition());
+      Gdx.app.log(TAG, "Selected position is: " + selectedVoxelPosition.toString());
+      ForgE.db.setStartPosition(levelId, selectedVoxelPosition);
     }
   }
 

@@ -1,10 +1,13 @@
 package macbury.forge.editor.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g3d.decals.CameraGroupStrategy;
+import com.badlogic.gdx.graphics.g3d.decals.DecalBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import macbury.forge.ForgE;
 import macbury.forge.editor.systems.SelectionSystem;
 import macbury.forge.editor.undo_redo.ChangeManager;
+import macbury.forge.graphics.batch.CameraRenderableSorter;
 import macbury.forge.graphics.camera.RTSCameraController;
 import macbury.forge.level.Level;
 import macbury.forge.level.LevelState;
@@ -24,6 +27,7 @@ public class EditorScreen extends AbstractScreen {
   private Overlay overlay;
   public SelectionSystem selectionSystem;
   public ChangeManager changeManager;
+  private DecalBatch decalBatch;
 
   public EditorScreen(LevelState state) {
     super();
@@ -38,6 +42,7 @@ public class EditorScreen extends AbstractScreen {
     this.level                = new Level(state);
     this.selectionSystem      = new SelectionSystem(level);
     this.cameraController     = new RTSCameraController();
+    this.decalBatch           = new DecalBatch(new CameraGroupStrategy(level.camera));
     level.camera.far          = LEVEL_EDITOR_FAR_CAMERA;
 
     cameraController.setCenter(level.terrainMap.getWidth() / 2, level.terrainMap.getDepth() / 2);
@@ -89,8 +94,10 @@ public class EditorScreen extends AbstractScreen {
 
   @Override
   public void dispose() {
+
     level.dispose();
     changeManager.dispose();
+    decalBatch.dispose();
   }
 
 }

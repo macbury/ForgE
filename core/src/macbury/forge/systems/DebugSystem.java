@@ -4,13 +4,16 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.GL30;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
+import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.ForgE;
 import macbury.forge.components.CursorComponent;
 import macbury.forge.components.PositionComponent;
@@ -27,7 +30,7 @@ import macbury.forge.terrain.TerrainEngine;
 /**
  * Created by macbury on 20.10.14.
  */
-public class DebugSystem extends IteratingSystem {
+public class DebugSystem extends IteratingSystem implements Disposable {
   private static final Color BOUNDING_BOX_COLOR  = Color.DARK_GRAY;
   private static final Color OCTREE_BOUNDS_COLOR = Color.OLIVE;
   private final VoxelBatch batch;
@@ -37,6 +40,8 @@ public class DebugSystem extends IteratingSystem {
   private final OctreeNode terrainOctree;
   private final TerrainEngine terrain;
   private final RenderContext context;
+  private final Level level;
+  private final Texture startPositionIcon;
   private ComponentMapper<PositionComponent>   pm = ComponentMapper.getFor(PositionComponent.class);
   private ComponentMapper<CursorComponent>     cm = ComponentMapper.getFor(CursorComponent.class);
   private final BoundingBox tempBox;
@@ -44,6 +49,7 @@ public class DebugSystem extends IteratingSystem {
 
   public DebugSystem(Level level) {
     super(Family.getFor(PositionComponent.class));
+    this.level            = level;
     this.batch            = level.batch;
     this.context          = level.renderContext;
     this.dynamicOctree    = level.octree;
@@ -53,6 +59,8 @@ public class DebugSystem extends IteratingSystem {
     this.frustrumDebugger = level.frustrumDebugger;
     this.tempBox          = new BoundingBox();
     this.tempVec          = new Vector3();
+
+    this.startPositionIcon = new Texture(Gdx.files.internal("ed/icons/start_position.png"));
   }
 
 
@@ -108,9 +116,23 @@ public class DebugSystem extends IteratingSystem {
       if (ForgE.config.renderStaticOctree) {
         DebugShape.cullledOctree(batch.shapeRenderer, terrainOctree, camera.normalOrDebugFrustrum());
       }
+      if (ForgE.config.debug) {
+        if (ForgE.db.startPosition != null && level.state.id == ForgE.db.startPosition.mapId) {
+          batch.shapeRenderer.setColor(Color.WHITE);
+          level.terrainMap.localVoxelPositionToWorldPosition(ForgE.db.startPosition.voxelPosition, tempVec);
+          batch.shapeRenderer.box(tempVec.x, tempVec.y, tempVec.z+1, 1,1,1);
+        }
+      }
+
     } batch.shapeRenderer.end();
 
     frustrumDebugger.render(camera);
     context.end();
+  }
+
+
+  @Override
+  public void dispose() {
+    startPositionIcon.dispose();
   }
 }

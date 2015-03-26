@@ -3,6 +3,7 @@ package macbury.forge.level;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
@@ -133,6 +134,10 @@ public class LevelManager {
   }
 
   public LevelState load(int levelId) {
-    return load(getFileHandle(levelId));
+    FileHandle handle = getFileHandle(levelId);
+    if (handle == null) {
+      throw new GdxRuntimeException("Map not found with id: " + levelId);
+    }
+    return load(handle);
   }
 }

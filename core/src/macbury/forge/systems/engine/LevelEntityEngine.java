@@ -39,6 +39,7 @@ public class LevelEntityEngine extends PooledEngine implements Disposable {
 
   @Override
   public void dispose() {
+    debug.dispose();
     removeAllEntities();
   }
 }

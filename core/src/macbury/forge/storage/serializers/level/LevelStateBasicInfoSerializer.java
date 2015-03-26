@@ -26,7 +26,7 @@ public class LevelStateBasicInfoSerializer extends Serializer<LevelState> {
 
   @Override
   public LevelState read(Kryo kryo, Input input, Class<LevelState> type) {
-    LevelState state = new LevelState(ForgE.db);
+    LevelState state = new LevelState();
     state.setId(input.readInt());
     state.setName(input.readString());
 
