@@ -4,6 +4,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import macbury.forge.ForgE;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
+import macbury.forge.graphics.batch.renderable.SpriteRenderable;
 import macbury.forge.graphics.batch.renderable.VoxelFaceRenderable;
 import macbury.forge.shaders.utils.BaseShader;
 import macbury.forge.shaders.utils.RenderableBaseShader;
@@ -15,7 +16,9 @@ import macbury.forge.shaders.utils.ShadersManager;
  */
 public class ShaderProvider implements Disposable, ShaderReloadListener {
   private static final String TERRAIN_SHADER = "terrain";
+  private static final String SPRITE_SHADER = "sprite";
   private RenderableBaseShader terrainShader;
+  private RenderableBaseShader sprite3DShader;
 
   public ShaderProvider() {
     reloadShaderCache();
@@ -23,11 +26,14 @@ public class ShaderProvider implements Disposable, ShaderReloadListener {
   }
 
   private void reloadShaderCache() {
-    this.terrainShader = (RenderableBaseShader)ForgE.shaders.get(TERRAIN_SHADER);
+    this.terrainShader  = (RenderableBaseShader)ForgE.shaders.get(TERRAIN_SHADER);
+    this.sprite3DShader = (RenderableBaseShader)ForgE.shaders.get(SPRITE_SHADER);
   }
 
   public RenderableBaseShader provide(BaseRenderable renderable) {
-    if (VoxelFaceRenderable.class.isInstance(renderable)) {
+    if (SpriteRenderable.class.isInstance(renderable)) {
+      return sprite3DShader;
+    } else if (VoxelFaceRenderable.class.isInstance(renderable)) {
       return terrainShader;
     } else {
       throw new GdxRuntimeException("No shader for: " + renderable.getClass().getSimpleName());

@@ -110,6 +110,6 @@ public class Sprite3DCache implements Disposable {
   }
 
   public boolean is(TextureRegion region) {
-    return region == this.region;
+    return region.getTexture() == this.region.getTexture() && region.getU() == this.region.getU() && region.getV() == this.region.getV() && region.getU2() == this.region.getU2() && region.getV2() == this.region.getV2();
   }
 }

@@ -2,6 +2,7 @@ package macbury.forge.graphics.batch.sprites;
 
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Mesh;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
@@ -20,13 +21,13 @@ public abstract class BaseSprite3D {
   protected VoxelBatch manager;
 
   protected Vector3 position;
-  protected Quaternion rotation = new Quaternion();
-  protected Vector2 scale       = new Vector2(1, 1);
-  protected Matrix4 transform   = new Matrix4();
-  protected boolean dirty       = true;
-  protected final static Vector3 dir = new Vector3();
-  protected static Vector3 tmp       = new Vector3();
-  protected static Vector3 tmp2      = new Vector3();
+  protected Quaternion rotation         = new Quaternion();
+  protected Vector2 scale               = new Vector2(1, 1);
+  protected Matrix4 transform           = new Matrix4();
+  protected boolean dirty               = true;
+  protected final static Vector3 dir    = new Vector3();
+  protected static Vector3 tmp          = new Vector3();
+  protected static Vector3 tmp2         = new Vector3();
 
   protected static final Vector3 X_AXIS = new Vector3(1, 0, 0);
   protected static final Vector3 Y_AXIS = new Vector3(0, 1, 0);
@@ -100,6 +101,7 @@ public abstract class BaseSprite3D {
   }
 
   public abstract Mesh getMesh();
+  public abstract Texture getTexture();
 
   public void set(Vector3 newPos) {
     this.position.set(newPos);

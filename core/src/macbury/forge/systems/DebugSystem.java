@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
@@ -20,6 +21,7 @@ import macbury.forge.components.PositionComponent;
 import macbury.forge.graphics.DebugShape;
 import macbury.forge.graphics.batch.VoxelBatch;
 import macbury.forge.graphics.batch.renderable.VoxelFaceRenderable;
+import macbury.forge.graphics.batch.sprites.Sprite3D;
 import macbury.forge.graphics.builders.Chunk;
 import macbury.forge.graphics.camera.GameCamera;
 import macbury.forge.graphics.frustrum.FrustrumDebugAndRenderer;
@@ -44,11 +46,12 @@ public class DebugSystem extends IteratingSystem implements Disposable {
   private final TerrainEngine terrain;
   private final RenderContext context;
   private final Level level;
-  private final Texture startPositionIcon;
+  private Texture startPositionIcon;
   private ComponentMapper<PositionComponent>   pm = ComponentMapper.getFor(PositionComponent.class);
   private ComponentMapper<CursorComponent>     cm = ComponentMapper.getFor(CursorComponent.class);
   private final BoundingBox tempBox;
   private final Vector3     tempVec;
+  private Sprite3D          startPositionSprite;
 
   public DebugSystem(Level level) {
     super(Family.getFor(PositionComponent.class));
@@ -63,7 +66,7 @@ public class DebugSystem extends IteratingSystem implements Disposable {
     this.tempBox          = new BoundingBox();
     this.tempVec          = new Vector3();
 
-    this.startPositionIcon = new Texture(Gdx.files.internal("ed/icons/start_position.png"));
+
   }
 
 
@@ -134,6 +137,13 @@ public class DebugSystem extends IteratingSystem implements Disposable {
 
       level.terrainMap.localVoxelPositionToWorldPosition(ForgE.db.startPosition.voxelPosition, tempVec);
       renderDebugBox(tempVec, level.terrainMap.voxelSize, Color.WHITE, Color.BLACK);
+      if (startPositionIcon == null) {
+        this.startPositionSprite = batch.build(ForgE.assets.getTexture("ed/icons/start_position.png"), false, true);
+      }
+      startPositionSprite.set(tempVec.sub(-0.5f));
+
+      startPositionSprite.lookAt(camera.position, camera.up);
+      batch.add(startPositionSprite);
     }
   }
 

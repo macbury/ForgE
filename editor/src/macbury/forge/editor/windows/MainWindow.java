@@ -28,6 +28,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
+import java.util.logging.Handler;
 
 public class MainWindow extends JFrame implements ForgEBootListener, FocusListener, WindowFocusListener, Thread.UncaughtExceptionHandler {
   private static final String WINDOW_MAIN_NAME = "ForgE";
@@ -206,8 +207,16 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
 
   @Override
   public void uncaughtException(Thread t, Throwable e) {
-    TaskDialogs.showException(e);
-    e.printStackTrace();
+    final Throwable err = e;
+    SwingUtilities.invokeLater(new Runnable() {
+      public void run() {
+        TaskDialogs.showException(err);
+        err.printStackTrace();
+        MainWindow.this.dispose();
+        System.exit(0);
+      }
+    });
+
   }
 
 

@@ -1,0 +1,13 @@
+{
+  class: macbury.forge.shaders.SpriteShader,
+  fragment: "sprite",
+  vertex:   "sprite",
+  uniforms: [
+    
+  ],
+  helpers: {
+    vertex: 	[],
+    fragment: 	[]
+  },
+  
+}
