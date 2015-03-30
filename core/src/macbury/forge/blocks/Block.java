@@ -136,6 +136,10 @@ public class Block {
   }
 
   public TextureAtlas.AtlasRegion getRegionForSide(Side side) {
+    TextureAtlas.AtlasRegion region = uvs.get(side);
+    if (region == null) {
+      throw new NoUvForBlockSide(side, this);
+    }
     return uvs.get(side);
   }
 
@@ -152,5 +156,12 @@ public class Block {
   @Override
   public String toString() {
     return "Block " + name + " with id " + id;
+  }
+
+
+  public class NoUvForBlockSide extends GdxRuntimeException {
+    public NoUvForBlockSide(Side side, Block block) {
+      super("No uv for: " + side.toString() + " for block " + block.name);
+    }
   }
 }

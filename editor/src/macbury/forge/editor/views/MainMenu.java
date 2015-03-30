@@ -2,6 +2,7 @@ package macbury.forge.editor.views;
 
 import macbury.forge.Config;
 import macbury.forge.ForgE;
+import macbury.forge.editor.controllers.BlocksController;
 import macbury.forge.editor.controllers.ProjectController;
 import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
 import macbury.forge.editor.parell.jobs.BuildBlocksTexture;
@@ -16,6 +17,7 @@ import java.awt.event.ActionListener;
  */
 public class MainMenu extends JPopupMenu implements OnMapChangeListener {
   private final ProjectController controller;
+  private final BlocksController blocksController;
   public JCheckBoxMenuItem debugRenderDynamicOctree;
   public JCheckBoxMenuItem debugBoundingBox;
   public JRadioButtonMenuItem debugWireframeItem;
@@ -26,10 +28,11 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
   private JRadioButtonMenuItem debugNormalsItem;
   private JRadioButtonMenuItem debugLightingItem;
 
-  public MainMenu(ProjectController projectController) {
+  public MainMenu(ProjectController projectController, BlocksController blocksController) {
     super();
 
     this.controller = projectController;
+    this.blocksController = blocksController;
 
     createProjectMenu();
     addSeparator();
@@ -81,7 +84,7 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
     rebuild.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        controller.jobs.enqueue(new BuildBlocksTexture());
+        blocksController.rebuildTileset();
       }
     });
 

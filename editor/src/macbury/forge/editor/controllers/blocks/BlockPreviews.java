@@ -15,6 +15,7 @@ import macbury.forge.editor.utils.ScreenshotFactory;
 import macbury.forge.graphics.batch.renderable.VoxelFaceRenderable;
 import macbury.forge.graphics.builders.Chunk;
 import macbury.forge.graphics.builders.TerrainBuilder;
+import macbury.forge.graphics.mesh.VoxelsAssembler;
 import macbury.forge.level.LevelEnv;
 import macbury.forge.shaders.TerrainShader;
 import macbury.forge.shaders.utils.BaseShader;
@@ -28,6 +29,7 @@ public class BlockPreviews implements Runnable {
   private final static int PREVIEW_SIZE = 48;
   private static final String TAG = "GenerateBlockPreviews";
   private final Listener listener;
+  private final boolean removeOld;
   private RenderContext renderContext;
   private PerspectiveCamera camera;
   private ChunkMap voxelMap;
@@ -36,8 +38,9 @@ public class BlockPreviews implements Runnable {
   private TerrainShader shader;
   private LevelEnv levelEnv;
 
-  public BlockPreviews(Listener listener) {
-    this.listener = listener;
+  public BlockPreviews(Listener listener, boolean removeOld) {
+    this.listener   = listener;
+    this.removeOld  = removeOld;
   }
 
   @Override
@@ -83,7 +86,7 @@ public class BlockPreviews implements Runnable {
   private void saveBlockScreenshot(Block block) {
     FileHandle preview = blockPreview(block);
 
-    if (preview.exists()) {
+    if (preview.exists() && !removeOld) {
       Gdx.app.log(TAG, "Skipping: " + block.name);
       return;
     } else {
@@ -95,9 +98,12 @@ public class BlockPreviews implements Runnable {
     mainChunk.clearFaces();
     builder.begin(); {
       builder.cursor.set(mainChunk);
-
-      while(builder.next()) {
-        builder.buildFaceForChunk(mainChunk);
+      try {
+        while(builder.next()) {
+          builder.buildFaceForChunk(mainChunk);
+        }
+      } catch (Block.NoUvForBlockSide e) {
+        Gdx.app.error(TAG, e.toString());
       }
     } builder.end();
 

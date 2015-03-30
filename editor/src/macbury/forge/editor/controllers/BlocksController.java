@@ -144,19 +144,21 @@ public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.
     }
   }
 
-  private void rebuildTileset() {
+  public void rebuildTileset() {
     BuildBlocksTexture job = new BuildBlocksTexture();
     job.setCallback(this, "onRebuildTextures");
     jobs.enqueue(job);
   }
 
   public void onRebuildTextures(Boolean success, BuildBlocksTexture buildBlocksTexture) {
+    Gdx.app.log(TAG, "Rebuilded all textures");
     if (controller != null) {
       controller.rebuildChunks();
       controller.clearUndoRedo();
     }
 
-    rebuildPreviews();
+    rebuildPreviews(true);
+
   }
 
   @Override
@@ -164,14 +166,14 @@ public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.
     if (!ForgE.blocks.getTextureAtlasFile().exists()) {
       rebuildTileset();
     } else {
-      rebuildPreviews();
+      rebuildPreviews(false);
     }
 
   }
 
-  private void rebuildPreviews() {
+  private void rebuildPreviews(boolean removeOld) {
     //ForgE.screens.set(new PreviewScreen());
-    Gdx.app.postRunnable(new BlockPreviews(this));
+    Gdx.app.postRunnable(new BlockPreviews(this, removeOld));
   }
 
 

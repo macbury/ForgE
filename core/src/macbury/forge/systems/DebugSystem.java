@@ -164,6 +164,7 @@ public class DebugSystem extends IteratingSystem implements Disposable {
 
   @Override
   public void dispose() {
-    startPositionIcon.dispose();
+    if (startPositionIcon != null)
+      startPositionIcon.dispose();
   }
 }

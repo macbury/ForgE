@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import macbury.forge.blocks.Block;
 import macbury.forge.blocks.BlockShapePart;
 import macbury.forge.blocks.BlockShapeTriangle;
@@ -117,4 +118,5 @@ public class VoxelsAssembler extends MeshAssembler {
   public void right(VoxelDef voxelDef) {
     face(voxelDef, Block.Side.right);
   }
+
 }
