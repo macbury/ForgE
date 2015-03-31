@@ -14,8 +14,8 @@ import java.util.HashMap;
 public class Block {
 
   /*
-    TODO: merge side with terrain builder.face :P
-     */
+      TODO: merge side with terrain builder.face :P
+       */
   public enum Side {
     all(Vector3i.ZERO, new Quaternion(), new Quaternion()),
     top(Vector3i.TOP, new Quaternion(Vector3.Z, -180), new Quaternion()),
@@ -156,6 +156,10 @@ public class Block {
   @Override
   public String toString() {
     return "Block " + name + " with id " + id;
+  }
+
+  public boolean isSolid() {
+    return solid;
   }
 
 

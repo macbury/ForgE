@@ -1,8 +1,10 @@
 package macbury.forge.editor;
 
+import com.badlogic.gdx.math.Vector3;
 import com.ezware.dialog.task.CommandLink;
 import com.ezware.dialog.task.TaskDialogs;
 import macbury.forge.editor.windows.MainWindow;
+import macbury.forge.utils.Vector3i;
 
 import javax.swing.*;
 import java.math.BigDecimal;

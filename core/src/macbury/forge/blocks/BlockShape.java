@@ -19,9 +19,11 @@ public class BlockShape implements Json.Serializable {
   private static final String KEY_TRIANGLES = "triangles";
   private static final String KEY_OCCULSION = "occulsion";
   private static final String KEY_WAVINESS  = "waviness";
+  private static final String KEY_SCALABLE  = "scalable";
   public String name;
   public boolean occulsion;
   private HashMap<Block.Side, BlockShapePart> parts;
+  public boolean scalable;
 
   @Override
   public void write(Json json) {
@@ -30,8 +32,9 @@ public class BlockShape implements Json.Serializable {
 
   @Override
   public void read(Json json, JsonValue jsonData) {
-    this.parts = new HashMap<Block.Side, BlockShapePart>();
+    this.parts     = new HashMap<Block.Side, BlockShapePart>();
     this.occulsion = jsonData.getBoolean(KEY_OCCULSION);
+    this.scalable  = jsonData.getBoolean(KEY_SCALABLE, false);
     JsonValue partsValue = jsonData.get(KEY_PARTS);
 
     for(JsonValue partValue : partsValue) {

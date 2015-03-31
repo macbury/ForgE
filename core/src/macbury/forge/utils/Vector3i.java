@@ -1,5 +1,6 @@
 package macbury.forge.utils;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 
 /**
@@ -106,5 +107,37 @@ public class Vector3i {
     y -= oy;
     z -= oz;
     return this;
+  }
+
+  public float dst(final Vector3i vector) {
+    final float a = vector.x - x;
+    final float b = vector.y - y;
+    final float c = vector.z - z;
+    return (float)Math.sqrt(a * a + b * b + c * c);
+  }
+
+  public float dst2 (Vector3i point) {
+    final float a = point.x - x;
+    final float b = point.y - y;
+    final float c = point.z - z;
+    return a * a + b * b + c * c;
+  }
+
+  public Vector3i abs() {
+    this.x = Math.abs(x);
+    this.y = Math.abs(y);
+    this.z = Math.abs(z);
+    return this;
+  }
+
+  public boolean isOneDirection() {
+    byte dirs = 0;
+    if (x != 0)
+      dirs++;
+    if (y != 0)
+      dirs++;
+    if (z != 0)
+      dirs++;
+    return dirs == 1;
   }
 }

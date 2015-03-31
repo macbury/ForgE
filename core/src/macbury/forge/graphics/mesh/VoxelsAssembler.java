@@ -4,10 +4,10 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 import macbury.forge.blocks.Block;
 import macbury.forge.blocks.BlockShapePart;
 import macbury.forge.blocks.BlockShapeTriangle;
+import macbury.forge.graphics.builders.TerrainPart;
 import macbury.forge.graphics.builders.VoxelDef;
 
 /**
@@ -17,12 +17,14 @@ public class VoxelsAssembler extends MeshAssembler {
   private Matrix4 transformMat = new Matrix4();
   private Vector3 tempVec      = new Vector3();
 
-  private MeshVertexInfo vertex(VoxelDef voxelDef, BlockShapePart part, int index, TextureAtlas.AtlasRegion sideRegion) {
+  private MeshVertexInfo vertex(VoxelDef voxelDef, BlockShapePart part, int index, TextureAtlas.AtlasRegion sideRegion, TerrainPart terrainPart) {
     MeshVertexInfo vert = this.vertex().ao(voxelDef.ao).transparent(voxelDef.block.transparent);
 
     // Part first calculate position of vertex and rotate in the algiment path
     transformMat.idt();
+
     transformMat.translate(voxelDef.position.x, voxelDef.position.y, voxelDef.position.z);
+    transformMat.scl(terrainPart.voxelSize.x, terrainPart.voxelSize.y, terrainPart.voxelSize.z);
     transformMat.translate(voxelDef.center);
 
     if (voxelDef.voxel.alginTo != null) {
@@ -79,44 +81,44 @@ public class VoxelsAssembler extends MeshAssembler {
     return vert;
   }
 
-  public void face(VoxelDef voxelDef, Block.Side side) {
+  public void face(VoxelDef voxelDef, Block.Side side, TerrainPart part) {
     BlockShapePart blockShapePart       = voxelDef.block.blockShape.get(side);
 
     if (blockShapePart != null) {
       TextureAtlas.AtlasRegion sideRegion = voxelDef.block.getRegionForSide(side);
 
       for(BlockShapeTriangle triangle : blockShapePart.triangles) {
-        MeshVertexInfo vert1          = vertex(voxelDef, blockShapePart, triangle.index1, sideRegion);
-        MeshVertexInfo vert2          = vertex(voxelDef, blockShapePart, triangle.index2, sideRegion);
-        MeshVertexInfo vert3          = vertex(voxelDef, blockShapePart, triangle.index3, sideRegion);
+        MeshVertexInfo vert1          = vertex(voxelDef, blockShapePart, triangle.index1, sideRegion, part);
+        MeshVertexInfo vert2          = vertex(voxelDef, blockShapePart, triangle.index2, sideRegion, part);
+        MeshVertexInfo vert3          = vertex(voxelDef, blockShapePart, triangle.index3, sideRegion, part);
 
         triangle(vert1, vert2, vert3);
       }
     }
   }
-
+/*
   public void top(VoxelDef voxelDef) {
-    face(voxelDef, Block.Side.top);
+    face(voxelDef, Block.Side.top, part);
   }
 
   public void bottom(VoxelDef voxelDef) {
-    face(voxelDef, Block.Side.bottom);
+    face(voxelDef, Block.Side.bottom, part);
   }
 
   public void front(VoxelDef voxelDef) {
-    face(voxelDef, Block.Side.front);
+    face(voxelDef, Block.Side.front, part);
   }
 
   public void back(VoxelDef voxelDef) {
-    face(voxelDef, Block.Side.back);
+    face(voxelDef, Block.Side.back, part);
   }
 
   public void left(VoxelDef voxelDef) {
-    face(voxelDef, Block.Side.left);
+    face(voxelDef, Block.Side.left, part);
   }
 
   public void right(VoxelDef voxelDef) {
-    face(voxelDef, Block.Side.right);
+    face(voxelDef, Block.Side.right, part);
   }
-
+*/
 }

@@ -23,5 +23,6 @@ void main() {
     discard;
   }
 
-  gl_FragColor = mix(fog(diffuse, u_skyColor, u_eyePosition, v_position), u_skyColor, v_fogPower);
+ // gl_FragColor = mix(fog(diffuse, u_skyColor, u_eyePosition, v_position), u_skyColor, v_fogPower);
+ gl_FragColor = diffuse;
 }

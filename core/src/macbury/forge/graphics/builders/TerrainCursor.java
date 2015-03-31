@@ -56,4 +56,9 @@ public class TerrainCursor {
     verticalVec.setZero();
     horizontalVec.setZero();
   }
+
+  @Override
+  public String toString() {
+    return cursor.toString();
+  }
 }
