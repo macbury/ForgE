@@ -44,6 +44,21 @@ public class TerrainBuilder {
     }
   };
 
+  private static Comparator<TerrainPart> terrainPartComparator = new Comparator<TerrainPart>() {
+    private float dst;
+    @Override
+    public int compare(TerrainPart o1, TerrainPart o2) {
+      dst = o1.distanceTo(o2);
+      if (dst == 0) {
+        return 0;
+      } else if (dst > 0) {
+        return 1;
+      } else {
+        return -1;
+      }
+    }
+  };
+
   public TerrainBuilder(ChunkMap voxelMap) {
     super();
     this.terrainParts              = new Array<TerrainPart>();
@@ -68,12 +83,7 @@ public class TerrainBuilder {
   }
 
   private void joinVeriticalyParts(Array<TerrainPart> out) {
-    out.sort(new Comparator<TerrainPart>() {
-      @Override
-      public int compare(TerrainPart o1, TerrainPart o2) {
-        return 0;
-      }
-    });
+    out.sort(terrainPartComparator);
   }
 
   private void optimizeFace(Block.Side face, Array<TerrainPart> out) {
@@ -89,8 +99,7 @@ public class TerrainBuilder {
           Voxel currentVoxel     = map.getVoxelForPosition(x, y, z);
           Voxel nextVoxel        = map.getVoxelForPosition(nextTileToCheck);
 
-
-          if (map.isNotAir(x,y,z) && map.isEmpty(nextTileToCheck)) {
+          if (map.isNotAir(x,y,z) && map.isEmptyNotOutOfBounds(nextTileToCheck)) {
             currentPart               = terrainPartPool.obtain();
             currentPart.block         = currentVoxel.getBlock();
             currentPart.voxel         = currentVoxel;
@@ -168,8 +177,8 @@ public class TerrainBuilder {
             } else if (isVoxelTransparent(nextVoxel))  {
               addTrianglesForFace(currentVoxel, face, solidVoxelAssembler);
               updateCursorSize = true;
-            } else if (map.isEmptyNotOutOfBounds(nextTileToCheck) || doVoxelsDontHaveTheSameShape(currentVoxel, nextVoxel) || !isVoxelBlockHaveOcculsion(currentVoxel)) {
               addTrianglesForFace(currentVoxel, face, solidVoxelAssembler);
+            } else if (map.isEmptyNotOutOfBounds(nextTileToCheck) || doVoxelsDontHaveTheSameShape(currentVoxel, nextVoxel) || !isVoxelBlockHaveOcculsion(currentVoxel)) {
               updateCursorSize = true;
             }
 
@@ -198,6 +207,10 @@ public class TerrainBuilder {
     facesToBuild.clear();
     //facesToBuild.addAll(Block.Side.values());
     facesToBuild.add(Block.Side.top);
+    facesToBuild.add(Block.Side.bottom);
+    facesToBuild.add(Block.Side.left);
+    facesToBuild.add(Block.Side.right);
+    facesToBuild.add(Block.Side.front);
   }
 
   public void end() {

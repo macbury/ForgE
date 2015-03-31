@@ -25,10 +25,14 @@ public class TerrainPart implements Pool.Poolable {
     voxelPosition.setZero();
   }
 
-  public boolean similar(TerrainPart otherPart) {
+  public float distanceTo(TerrainPart otherPart) {
     tempA.set(this.voxelPosition).add(voxelSize);
+    return otherPart.voxelPosition.dst(tempA);
+  }
+
+  public boolean similar(TerrainPart otherPart) {
     getPartDirection(otherPart.voxelPosition, tempB);
-    return block.blockShape.scalable && otherPart.block.id == this.block.id && otherPart.voxelPosition.dst(tempA) == 1 && tempB.isOneDirection();
+    return block.blockShape.scalable && otherPart.block.id == this.block.id && distanceTo(otherPart) == 1 && tempB.isOneDirection();
   }
 
   public void getPartDirection(Vector3i from, Vector3i out) {
