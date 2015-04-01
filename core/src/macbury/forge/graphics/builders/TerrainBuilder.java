@@ -86,50 +86,50 @@ public class TerrainBuilder {
     out.sort(terrainPartComparator);
   }
 
+  private void createTerrainPart(int x, int y, int z, Voxel voxel, Array<TerrainPart> out) {
+    TerrainPart currentPart    = terrainPartPool.obtain();
+    currentPart.block         = voxel.getBlock();
+    currentPart.voxel         = voxel;
+    currentPart.voxelPosition.set(x, y, z);
+    currentPart.voxelSize.setZero();
+    if (out.size > 0) {
+      TerrainPart lastPart = out.get(out.size-1);
+      if (lastPart.similar(currentPart)) {
+        lastPart.join(currentPart);
+      } else {
+        out.add(currentPart);
+      }
+    } else {
+      out.add(currentPart);
+    }
+  }
+
   private void optimizeFace(Block.Side face, Array<TerrainPart> out) {
-    TerrainPart currentPart = null;
     for (int y = cursor.start.y; y < cursor.end.y; y++) {
       for (int z = cursor.start.z; z < cursor.end.z; z++) {
-        currentPart = null;
         for (int x = cursor.start.x; x < cursor.end.x; x++) {
-          voxelDef.reset();
-          nextTileToCheck.set(x,y,z);
-          nextTileToCheck.add(face.direction);
+          if (map.isNotAir(x, y, z)) {
+            voxelDef.reset();
+            nextTileToCheck.set(x, y, z);
+            nextTileToCheck.add(face.direction);
 
-          Voxel currentVoxel     = map.getVoxelForPosition(x, y, z);
-          Voxel nextVoxel        = map.getVoxelForPosition(nextTileToCheck);
+            Voxel currentVoxel = map.getVoxelForPosition(x, y, z);
+            Voxel nextVoxel = map.getVoxelForPosition(nextTileToCheck);
 
-          if (map.isNotAir(x,y,z) && (map.isEmptyNotOutOfBounds(nextTileToCheck) || isVoxelTransparent(nextVoxel))) {
-            currentPart               = terrainPartPool.obtain();
-            currentPart.block         = currentVoxel.getBlock();
-            currentPart.voxel         = currentVoxel;
-            currentPart.voxelPosition.set(x, y, z);
-            currentPart.voxelSize.setZero();
-            if (out.size > 0) {
-              TerrainPart lastPart = out.get(out.size-1);
-              if (lastPart.similar(currentPart)) {
-                lastPart.join(currentPart);
-              } else {
-                out.add(currentPart);
+            if (isVoxelTransparent(currentVoxel)) {
+              if (!isVoxelTransparent(nextVoxel) || nextVoxel == null || nextVoxel.blockId != currentVoxel.blockId || !isVoxelBlockHaveOcculsion(currentVoxel)) {
+                createTerrainPart(x, y, z, currentVoxel, out);
               }
-            } else {
-              out.add(currentPart);
+            } else if (isVoxelTransparent(nextVoxel)) {
+              createTerrainPart(x, y, z, currentVoxel, out);
+            } else if (map.isEmptyNotOutOfBounds(nextTileToCheck) || doVoxelsDontHaveTheSameShape(currentVoxel, nextVoxel) || !isVoxelBlockHaveOcculsion(currentVoxel)) {
+              createTerrainPart(x, y, z, currentVoxel, out);
             }
-          } else {
-            currentPart = null;
+
+          /*if (map.isNotAir(x,y,z) && (map.isEmptyNotOutOfBounds(nextTileToCheck) || isVoxelTransparent(nextVoxel))) {
+            createTerrainPart(x,y,z, currentVoxel, out);
+          }*/
           }
-
-
-          /*
-          * check if last terrain part is similar to this part(the same block, only diffrence of one in position)
-          * if true then remove this part and extend last part one time in direction of this part
-           */
-
-          //if (currentVoxel != null && currentVoxel.getBlock().isSolid()) {
-          //  addTrianglesForFace(currentVoxel, face, solidVoxelAssembler);
-          //}
-          //if (currentVoxel != null)
-          //addTrianglesForFace(currentVoxel, face, solidVoxelAssembler);
         }
       }
     }
