@@ -16,9 +16,11 @@ import macbury.forge.graphics.builders.VoxelDef;
 public class VoxelsAssembler extends MeshAssembler {
   private Matrix4 transformMat = new Matrix4();
   private Vector3 tempVec      = new Vector3();
+  private Vector2 tempVec2     = new Vector2();
 
   private MeshVertexInfo vertex(VoxelDef voxelDef, BlockShapePart part, int index, TextureAtlas.AtlasRegion sideRegion, TerrainPart terrainPart) {
-    MeshVertexInfo vert = this.vertex().ao(voxelDef.ao).transparent(voxelDef.block.transparent);
+    terrainPart.getUVScaling(tempVec2);
+    MeshVertexInfo vert = this.vertex().ao(voxelDef.ao).transparent(voxelDef.block.transparent).scaling(tempVec2);
 
     // Part first calculate position of vertex and rotate in the algiment path
     transformMat.idt();

@@ -140,4 +140,8 @@ public class Vector3i {
       dirs++;
     return dirs == 1;
   }
+
+  public boolean isZero() {
+    return x == 0 && y == 0 && z == 0;
+  }
 }

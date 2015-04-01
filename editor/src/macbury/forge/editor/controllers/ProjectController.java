@@ -3,6 +3,7 @@ package macbury.forge.editor.controllers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
+import com.ezware.dialog.task.TaskDialogs;
 import macbury.forge.ForgE;
 import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
 import macbury.forge.editor.parell.Job;
@@ -118,7 +119,7 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
     if (closeAndSaveChangesMap()) {
       LevelState newMapState                 = new LevelState(ForgE.db);
       MapCreationWindow.MapDocument document = new MapCreationWindow.MapDocument(newMapState, storeDir);
-      MapCreationWindow newMapWindow        = new MapCreationWindow(document, this);
+      MapCreationWindow newMapWindow         = new MapCreationWindow(document, this);
       newMapWindow.show(mainWindow);
     }
   }
@@ -381,10 +382,14 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
 
   @Override
   public void onShaderError(ShadersManager shaderManager, BaseShader program) {
-    JOptionPane.showMessageDialog(mainWindow,
-      program.getLog(),
-      "Shader Error",
-      JOptionPane.ERROR_MESSAGE);
+    /*final BaseShader.Error err = error;
+    SwingUtilities.invokeLater(new Runnable() {
+      @Override
+      public void run() {
+        TaskDialogs.showException(err);
+      }
+    });*/
+
   }
 
   public void rebuildChunks() {

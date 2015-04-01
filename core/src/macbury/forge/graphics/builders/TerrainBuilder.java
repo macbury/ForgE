@@ -99,7 +99,7 @@ public class TerrainBuilder {
           Voxel currentVoxel     = map.getVoxelForPosition(x, y, z);
           Voxel nextVoxel        = map.getVoxelForPosition(nextTileToCheck);
 
-          if (map.isNotAir(x,y,z) && map.isEmptyNotOutOfBounds(nextTileToCheck)) {
+          if (map.isNotAir(x,y,z) && (map.isEmptyNotOutOfBounds(nextTileToCheck) || isVoxelTransparent(nextVoxel))) {
             currentPart               = terrainPartPool.obtain();
             currentPart.block         = currentVoxel.getBlock();
             currentPart.voxel         = currentVoxel;
@@ -211,6 +211,7 @@ public class TerrainBuilder {
     facesToBuild.add(Block.Side.left);
     facesToBuild.add(Block.Side.right);
     facesToBuild.add(Block.Side.front);
+    facesToBuild.add(Block.Side.back);
   }
 
   public void end() {
@@ -227,9 +228,9 @@ public class TerrainBuilder {
     if (side != Block.Side.all || side != Block.Side.side) {
       optimizeFace(side, terrainParts);
       joinVeriticalyParts(terrainParts);
-      createTrianglesFor(side, terrainParts, solidVoxelAssembler);
+      createTrianglesFor(side, terrainParts, solidVoxelAssembler, transparentVoxelAssembler);
       buildFaceForChunkWithAssembler(chunk, solidVoxelAssembler, false, side);
-      //buildFaceForChunkWithAssembler(chunk, transparentVoxelAssembler, true, side);
+      buildFaceForChunkWithAssembler(chunk, transparentVoxelAssembler, true, side);
 
       terrainPartPool.freeAll(terrainParts);
       terrainParts.clear();
@@ -238,7 +239,7 @@ public class TerrainBuilder {
   }
 
 
-  private void createTrianglesFor(Block.Side side, Array<TerrainPart> terrainParts, VoxelsAssembler assembler) {
+  private void createTrianglesFor(Block.Side side, Array<TerrainPart> terrainParts, VoxelsAssembler solidVoxelAssembler, VoxelsAssembler transparentVoxelAssembler) {
     for (TerrainPart part : terrainParts) {
       part.voxelSize.add(1,1,1);
       voxelDef.block = part.block;
@@ -251,7 +252,12 @@ public class TerrainBuilder {
       voxelDef.size.set(map.voxelSize);
       voxelDef.voxel         = part.voxel;
       voxelDef.center.set(map.voxelSize.x / 2f, map.voxelSize.y / 2f, map.voxelSize.z / 2f);
-      assembler.face(voxelDef, side, part);
+      if (part.block.transparent) {
+        transparentVoxelAssembler.face(voxelDef, side,part);
+      } else {
+        solidVoxelAssembler.face(voxelDef, side, part);
+      }
+
     }
   }
 
@@ -264,7 +270,7 @@ public class TerrainBuilder {
       if (ForgE.config.generateWireframe)
         renderable.wireframe           = assembler.wireframe();
       renderable.triangleCount         = assembler.getTriangleCount();
-      renderable.mesh                  = assembler.mesh(MeshVertexInfo.AttributeType.Position, MeshVertexInfo.AttributeType.Normal, MeshVertexInfo.AttributeType.TextureCord, MeshVertexInfo.AttributeType.Material);
+      renderable.mesh                  = assembler.mesh(MeshVertexInfo.AttributeType.Position, MeshVertexInfo.AttributeType.Normal, MeshVertexInfo.AttributeType.TextureCord, MeshVertexInfo.AttributeType.Material, MeshVertexInfo.AttributeType.TextureTiling);
 
       renderable.worldTransform.idt();
       renderable.haveTransparency = haveTransparency;

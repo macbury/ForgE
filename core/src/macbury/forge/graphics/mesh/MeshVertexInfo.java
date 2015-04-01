@@ -23,15 +23,14 @@ public class MeshVertexInfo implements Pool.Poolable {
   public Color   color;
   public Material material;
   public short index;
-
-  private final Color tempColor = new Color();
-
+  public Vector2 uvTiling;
 
   public static enum AttributeType {
     Position(VertexAttributes.Usage.Position, 3,ShaderProgram.POSITION_ATTRIBUTE),
     Normal(VertexAttributes.Usage.Normal, 3, ShaderProgram.NORMAL_ATTRIBUTE),
     Material(VertexAttributes.Usage.ColorPacked, 4, "a_material"),
     TextureCord(VertexAttributes.Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE+"0"),
+    TextureTiling(VertexAttributes.Usage.TextureCoordinates, 2, "a_textureTiling"),
     Color(VertexAttributes.Usage.ColorPacked, 4, ShaderProgram.COLOR_ATTRIBUTE); // probably should be 4 not 1
 
     private final int attributeSize;
@@ -60,6 +59,7 @@ public class MeshVertexInfo implements Pool.Poolable {
     this.uv       = new Vector2();
     this.index    = 0;
     this.material = new Material();
+    this.uvTiling = new Vector2();
     reset();
   }
 
@@ -197,6 +197,11 @@ public class MeshVertexInfo implements Pool.Poolable {
     return this;
   }
 
+  public MeshVertexInfo scaling(Vector2 scaling) {
+    this.uvTiling.set(scaling);
+    return this;
+  }
+
   public MeshVertexInfo ao(float incrBy) {
     this.ao += incrBy;
     this.ao = MathUtils.clamp(ao, 0.0f, 1.0f);
@@ -214,6 +219,7 @@ public class MeshVertexInfo implements Pool.Poolable {
     uv(0,0);
     set(0, 0, 0);
     normal(0, 0, 0);
+    uvTiling.setZero();
     ao = 0;
     index = 0;
     material.reset();
