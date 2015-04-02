@@ -51,7 +51,7 @@ public class CollisionSystem extends IteratingSystem {
         Gdx.app.log(TAG, "Collision ground: "+tempC.toString());
         //map.localVoxelPositionToWorldPosition(tempC, tempA);
 
-        collisionComponent.position.y    = tempC.y + 1;
+        collisionComponent.position.y    = tempC.y + 0.5f;
       }
     }
     //TODO: check collision with terrain

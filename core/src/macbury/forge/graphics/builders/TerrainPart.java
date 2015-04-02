@@ -68,7 +68,12 @@ public class TerrainPart implements Pool.Poolable {
   }
 
   public void getUVScaling(Vector2 out) {
-    out.set(voxelSize.x, voxelSize.z); //TODO make dependent on face side
+    if (currentDirection.equals(Vector3i.FRONT)) {
+      out.set(voxelSize.z, voxelSize.y);
+    } else {
+      out.set(voxelSize.x, voxelSize.z);
+    }
+
   }
 
   public void join(TerrainPart otherPart) {

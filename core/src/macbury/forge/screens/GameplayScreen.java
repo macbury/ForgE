@@ -14,7 +14,7 @@ import macbury.forge.level.Level;
  * Created by macbury on 16.03.15.
  */
 public class GameplayScreen extends AbstractScreen {
-  private static final float FAR_CAMERA = 45;
+  private static final float FAR_CAMERA = 60;
   private static final float NEAR_CAMERA = 0.01f;
   private final Level level;
   private final Teleport teleport;
@@ -27,7 +27,7 @@ public class GameplayScreen extends AbstractScreen {
 
   @Override
   protected void initialize() {
-    //Gdx.input.setCursorCatched(true);
+    Gdx.input.setCursorCatched(true);
     this.cameraController = new FirstPersonCameraController(level.camera);
     level.camera.far      = FAR_CAMERA;
     level.camera.near     = NEAR_CAMERA;
