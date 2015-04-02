@@ -64,7 +64,7 @@ public class MeshAssembler implements Disposable {
     boolean usingTexture  = false;
     boolean usingColor    = false;
     boolean usingMaterial = false;
-    boolean usingTextureScaling = false;
+    boolean usingTextureFullCords = false;
     for (MeshVertexInfo.AttributeType attr : attributtes) {
       vertiesArraySize        += attr.size();
       meshAttributtes[cursor] = attr.attribute();
@@ -83,8 +83,8 @@ public class MeshAssembler implements Disposable {
           usingColor = true;
         break;
 
-        case TextureTiling:
-          usingTextureScaling = true;
+        case TextureFullCords:
+          usingTextureFullCords = true;
           break;
 
         case Material:
@@ -132,9 +132,11 @@ public class MeshAssembler implements Disposable {
         verties[cursor++] = vertex.material();
       }
 
-      if (usingTextureScaling) {
-        verties[cursor++] = vertex.uvTiling.x;
-        verties[cursor++] = vertex.uvTiling.y;
+      if (usingTextureFullCords) {
+        verties[cursor++] = vertex.textureFullCords[0];
+        verties[cursor++] = vertex.textureFullCords[1];
+        verties[cursor++] = vertex.textureFullCords[2];
+        verties[cursor++] = vertex.textureFullCords[3];
       }
     }
 
@@ -157,6 +159,7 @@ public class MeshAssembler implements Disposable {
 
   private void clear() {
     currentIndex = 0;
+
     for(MeshVertexInfo vert : vertexArrayList)
       meshVertexPool.free(vert);
     for(MeshTriangle triangle : triangleArrayList)

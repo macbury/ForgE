@@ -23,14 +23,14 @@ public class MeshVertexInfo implements Pool.Poolable {
   public Color   color;
   public Material material;
   public short index;
-  public Vector2 uvTiling;
+  public float[] textureFullCords = new float[4];
 
   public static enum AttributeType {
     Position(VertexAttributes.Usage.Position, 3,ShaderProgram.POSITION_ATTRIBUTE),
     Normal(VertexAttributes.Usage.Normal, 3, ShaderProgram.NORMAL_ATTRIBUTE),
     Material(VertexAttributes.Usage.ColorPacked, 4, "a_material"),
     TextureCord(VertexAttributes.Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE+"0"),
-    TextureTiling(VertexAttributes.Usage.TextureCoordinates, 2, "a_textureTiling"),
+    TextureFullCords(VertexAttributes.Usage.TextureCoordinates, 4, "a_textureFullCoords"),
     Color(VertexAttributes.Usage.ColorPacked, 4, ShaderProgram.COLOR_ATTRIBUTE); // probably should be 4 not 1
 
     private final int attributeSize;
@@ -59,7 +59,6 @@ public class MeshVertexInfo implements Pool.Poolable {
     this.uv       = new Vector2();
     this.index    = 0;
     this.material = new Material();
-    this.uvTiling = new Vector2();
     reset();
   }
 
@@ -197,8 +196,11 @@ public class MeshVertexInfo implements Pool.Poolable {
     return this;
   }
 
-  public MeshVertexInfo scaling(Vector2 scaling) {
-    this.uvTiling.set(scaling);
+  public MeshVertexInfo textureFullCords(float u, float v, float u2, float v2) {
+    this.textureFullCords[0] = u;
+    this.textureFullCords[1] = v;
+    this.textureFullCords[2] = u2;
+    this.textureFullCords[3] = v2;
     return this;
   }
 
@@ -219,7 +221,10 @@ public class MeshVertexInfo implements Pool.Poolable {
     uv(0,0);
     set(0, 0, 0);
     normal(0, 0, 0);
-    uvTiling.setZero();
+    this.textureFullCords[0] = 0;
+    this.textureFullCords[1] = 0;
+    this.textureFullCords[2] = 0;
+    this.textureFullCords[3] = 0;
     ao = 0;
     index = 0;
     material.reset();

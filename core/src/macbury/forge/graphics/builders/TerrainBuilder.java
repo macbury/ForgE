@@ -3,6 +3,7 @@ package macbury.forge.graphics.builders;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.Pool;
 import macbury.forge.ForgE;
 import macbury.forge.blocks.Block;
@@ -34,6 +35,7 @@ public class TerrainBuilder {
 
   private Vector3i nextTileToCheck = new Vector3i();
   private final VoxelDef voxelDef;
+  private Array<TerrainPart> tempTerrainParts = new Array<TerrainPart>();
 
   private static Pool<TerrainPart> terrainPartPool = new Pool<TerrainPart>() {
     @Override
@@ -48,10 +50,7 @@ public class TerrainBuilder {
     private float dst;
     @Override
     public int compare(TerrainPart o1, TerrainPart o2) {
-      dst = o1.distanceTo(o2);
-      if (dst == 0) {
-        return 0;
-      } else if (dst > 0) {
+      if (o1.comparedTo(o2)) {
         return 1;
       } else {
         return -1;
@@ -82,10 +81,6 @@ public class TerrainBuilder {
     return voxelB != null && (voxelB.getBlock().blockShape != voxelA.getBlock().blockShape);
   }
 
-  private void joinVeriticalyParts(Array<TerrainPart> out) {
-    out.sort(terrainPartComparator);
-  }
-
   private void createTerrainPart(int x, int y, int z, Voxel voxel, Array<TerrainPart> out) {
     TerrainPart currentPart    = terrainPartPool.obtain();
     currentPart.block         = voxel.getBlock();
@@ -94,7 +89,7 @@ public class TerrainBuilder {
     currentPart.voxelSize.setZero();
     if (out.size > 0) {
       TerrainPart lastPart = out.get(out.size-1);
-      if (lastPart.similar(currentPart)) {
+      if (lastPart.isHorizontalSimilar(currentPart)) {
         lastPart.join(currentPart);
       } else {
         out.add(currentPart);
@@ -125,80 +120,31 @@ public class TerrainBuilder {
             } else if (map.isEmptyNotOutOfBounds(nextTileToCheck) || doVoxelsDontHaveTheSameShape(currentVoxel, nextVoxel) || !isVoxelBlockHaveOcculsion(currentVoxel)) {
               createTerrainPart(x, y, z, currentVoxel, out);
             }
-
-          /*if (map.isNotAir(x,y,z) && (map.isEmptyNotOutOfBounds(nextTileToCheck) || isVoxelTransparent(nextVoxel))) {
-            createTerrainPart(x,y,z, currentVoxel, out);
-          }*/
           }
         }
       }
     }
   }
 
-  private void buildFace(Block.Side face) {
-    boolean updateCursorSize = false;
-    for (int y = cursor.start.y; y < cursor.end.y; y++) {
-      for (int x = cursor.start.x; x < cursor.end.x; x++) {
-        for (int z = cursor.start.z; z < cursor.end.z; z++) {
-          //
-          if (map.isNotAir(x, y, z)) {
-            voxelDef.reset();
+  private void joinVeriticalyParts(Array<TerrainPart> out) {
+    /*tempTerrainParts.addAll(out);
+    tempTerrainParts.sort(terrainPartComparator);
 
-            Voxel currentVoxel     = map.getVoxelForPosition(x, y, z);
-
-            nextTileToCheck.set(x,y,z);
-            nextTileToCheck.add(face.direction);
-
-            updateCursorSize = false;
-
-            tempB.set(cursor.start.x, cursor.start.y, cursor.start.z).scl(map.voxelSize);
-            tempA.set(x,y,z).scl(map.voxelSize).sub(tempB);
-
-
-            voxelDef.position.set(tempA);
-            voxelDef.voxelPosition.set(x,y,z);
-            voxelDef.size.set(map.voxelSize);
-
-            //Gdx.app.log(TAG, "pos: "+ tempA.toString());
-
-            voxelDef.center.set(map.voxelSize.x / 2f, map.voxelSize.y / 2f, map.voxelSize.z / 2f);
-
-
-            Voxel nextVoxel        = map.getVoxelForPosition(nextTileToCheck);
-
-            voxelDef.voxel         = currentVoxel;
-
-            if (isVoxelTransparent(currentVoxel)) {
-              if (!isVoxelTransparent(nextVoxel) || nextVoxel == null || nextVoxel.blockId != currentVoxel.blockId || !isVoxelBlockHaveOcculsion(currentVoxel)) {
-                addTrianglesForFace(currentVoxel, face, transparentVoxelAssembler);
-              }
-
-              updateCursorSize = true;
-            } else if (isVoxelTransparent(nextVoxel))  {
-              addTrianglesForFace(currentVoxel, face, solidVoxelAssembler);
-              updateCursorSize = true;
-              addTrianglesForFace(currentVoxel, face, solidVoxelAssembler);
-            } else if (map.isEmptyNotOutOfBounds(nextTileToCheck) || doVoxelsDontHaveTheSameShape(currentVoxel, nextVoxel) || !isVoxelBlockHaveOcculsion(currentVoxel)) {
-              updateCursorSize = true;
-            }
-
-            if (updateCursorSize) {
-              cursor.size.x = Math.max(x, cursor.size.x);
-              cursor.size.y = Math.max(y, cursor.size.y);
-              cursor.size.z = Math.max(z, cursor.size.z);
-            }
-          }
-        }
+    out.clear();
+    while(tempTerrainParts.size > 1) {
+      TerrainPart aPart = tempTerrainParts.pop();
+      TerrainPart bPart = tempTerrainParts.pop();
+      if (aPart.isVeriticalSimilar(bPart)) {
+        aPart.join(bPart);
+        terrainPartPool.free(bPart);
+        out.add(aPart);
+      } else {
+        out.add(aPart);
+        out.add(bPart);
       }
     }
-    tempA.set(cursor.start.x, cursor.start.y, cursor.start.z).scl(map.voxelSize);
-    cursor.size.scl(map.voxelSize).sub(tempA);
-  }
 
-  private void addTrianglesForFace(Voxel voxel, Block.Side side, VoxelsAssembler assembler) {
-    Block block    = voxel.getBlock();
-    voxelDef.block = block;
-    //assembler.face(voxelDef, side, part);
+    tempTerrainParts.clear();*/
   }
 
   public void begin() {
@@ -225,8 +171,11 @@ public class TerrainBuilder {
 
   public void buildFaceForChunk(Chunk chunk) {
     Block.Side side = facesToBuild.pop();
-    if (side != Block.Side.all || side != Block.Side.side) {
-      optimizeFace(side, terrainParts);
+    if (side == Block.Side.all || side == Block.Side.side) {
+      throw new GdxRuntimeException("I cannot assemble chunk face for: " + side.toString());
+    }
+    optimizeFace(side, terrainParts);
+    if (terrainParts.size > 0) {
       joinVeriticalyParts(terrainParts);
       createTrianglesFor(side, terrainParts, solidVoxelAssembler, transparentVoxelAssembler);
       buildFaceForChunkWithAssembler(chunk, solidVoxelAssembler, false, side);
@@ -235,9 +184,7 @@ public class TerrainBuilder {
       terrainPartPool.freeAll(terrainParts);
       terrainParts.clear();
     }
-
   }
-
 
   private void createTrianglesFor(Block.Side side, Array<TerrainPart> terrainParts, VoxelsAssembler solidVoxelAssembler, VoxelsAssembler transparentVoxelAssembler) {
     for (TerrainPart part : terrainParts) {
@@ -257,20 +204,18 @@ public class TerrainBuilder {
       } else {
         solidVoxelAssembler.face(voxelDef, side, part);
       }
-
     }
   }
 
   private void buildFaceForChunkWithAssembler(Chunk chunk, VoxelsAssembler assembler, boolean haveTransparency, Block.Side face) {
     if (!assembler.isEmpty()) {
-
       VoxelFaceRenderable renderable   = new VoxelFaceRenderable();
       renderable.primitiveType         = GL30.GL_TRIANGLES;
 
       if (ForgE.config.generateWireframe)
         renderable.wireframe           = assembler.wireframe();
       renderable.triangleCount         = assembler.getTriangleCount();
-      renderable.mesh                  = assembler.mesh(MeshVertexInfo.AttributeType.Position, MeshVertexInfo.AttributeType.Normal, MeshVertexInfo.AttributeType.TextureCord, MeshVertexInfo.AttributeType.Material, MeshVertexInfo.AttributeType.TextureTiling);
+      renderable.mesh                  = assembler.mesh(MeshVertexInfo.AttributeType.Position, MeshVertexInfo.AttributeType.Normal, MeshVertexInfo.AttributeType.TextureCord, MeshVertexInfo.AttributeType.Material, MeshVertexInfo.AttributeType.TextureFullCords);
 
       renderable.worldTransform.idt();
       renderable.haveTransparency = haveTransparency;

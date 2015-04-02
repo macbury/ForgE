@@ -2,7 +2,7 @@ attribute vec3 a_normal;
 attribute vec4 a_position;
 attribute vec4 a_material;
 attribute vec2 a_texCoord0;
-attribute vec2 a_textureTiling;
+attribute vec4 a_textureFullCoords;
 uniform vec2   u_mapSize;
 uniform mat3   u_normalMatrix;
 uniform mat4   u_projectionMatrix;
@@ -17,18 +17,24 @@ uniform vec2      u_windDirection;
 varying vec4   v_lightDiffuse;
 varying vec3   v_normal;
 varying vec4   v_position;
+
 varying vec2   v_textCoord;
+varying vec2   v_uvStart;
+varying vec2   v_uvMul;
 
 varying float  v_fogPower;
 varying float  v_transparent;
-varying vec2   v_textureTiling;
+
 void main() {
   v_normal          = normalize(u_normalMatrix * a_normal);
   float ao          = a_material.r;
   float specular    = a_material.g;
   float waviness    = a_material.a;
   v_transparent     = a_material.b;
-  v_textureTiling   = a_textureTiling;
+
+  v_uvStart         = a_textureFullCoords.xy;
+  v_uvMul           = a_textureFullCoords.zw - v_uvStart;
+
   vec3 lightDiffuse = u_ambientLight.rgb + directionalLightDiffuse(u_mainLight, v_normal) - vec3(ao, ao, ao);
   v_lightDiffuse    = vec4(lightDiffuse, 1f);
   v_textCoord       = a_texCoord0;

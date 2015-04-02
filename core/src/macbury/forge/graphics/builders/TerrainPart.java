@@ -33,12 +33,34 @@ public class TerrainPart implements Pool.Poolable {
     return otherPart.voxelPosition.dst(tempA);
   }
 
-  public boolean similar(TerrainPart otherPart) {
+  public boolean isHorizontalSimilar(TerrainPart otherPart) {
     getPartDirection(otherPart.voxelPosition, tempB);
     if (!voxelSize.isZero() && !currentDirection.equals(tempB)) {
       return false;
     }
-    return block.blockShape.scalable && block.blockShape.occulsion && otherPart.block.id == this.block.id && distanceTo(otherPart) == 1 && tempB.isOneDirection();
+    return canBeJoined(otherPart) && tempB.isOneDirection() && distanceTo(otherPart) == 1;
+  }
+
+  private boolean canBeJoined(TerrainPart otherPart) {
+    return (block.blockShape.scalable) && otherPart.block.id == this.block.id;
+  }
+
+  public boolean isVeriticalSimilar(TerrainPart otherPart) {
+    return false;//canBeJoined(otherPart) && otherPart.voxelPosition.dst(this.voxelPosition) == 1;
+  }
+
+  public boolean comparedTo(TerrainPart other) {
+    if (this.voxelPosition.y != other.voxelPosition.y)
+      return this.voxelPosition.y < other.voxelPosition.y;
+    if (this.voxelPosition.x != other.voxelPosition.x)
+      return this.voxelPosition.x < other.voxelPosition.x;
+    if (this.voxelPosition.z != other.voxelPosition.z)
+      return this.voxelPosition.z < other.voxelPosition.z;
+    if (this.voxelSize.x != other.voxelSize.x)
+      return this.voxelSize.x < other.voxelSize.x;
+    if (this.voxelSize.y != other.voxelSize.y)
+      return this.voxelSize.y < other.voxelSize.y;
+    return this.voxelSize.z < other.voxelSize.z;
   }
 
   public void getPartDirection(Vector3i from, Vector3i out) {
@@ -55,9 +77,12 @@ public class TerrainPart implements Pool.Poolable {
       currentDirection.set(tempA);
     }
 
-    voxelSize.add(tempA);
+    voxelSize.add(currentDirection);
 
     //BoundingBox box = new BoundingBox();
     //box.ext();
   }
+
+
+
 }

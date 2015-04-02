@@ -19,8 +19,7 @@ public class VoxelsAssembler extends MeshAssembler {
   private Vector2 tempVec2     = new Vector2();
 
   private MeshVertexInfo vertex(VoxelDef voxelDef, BlockShapePart part, int index, TextureAtlas.AtlasRegion sideRegion, TerrainPart terrainPart) {
-    terrainPart.getUVScaling(tempVec2);
-    MeshVertexInfo vert = this.vertex().ao(voxelDef.ao).transparent(voxelDef.block.transparent).scaling(tempVec2);
+    MeshVertexInfo vert = this.vertex().ao(voxelDef.ao).transparent(voxelDef.block.transparent);
 
     // Part first calculate position of vertex and rotate in the algiment path
     transformMat.idt();
@@ -58,23 +57,16 @@ public class VoxelsAssembler extends MeshAssembler {
         break;
       }
     }
+    
     transformMat.translate(part.normals.get(index));
     transformMat.getTranslation(vert.normal);
 
-
     Vector2 uv = part.uvs.get(index);
+    terrainPart.getUVScaling(tempVec2);
+    tempVec2.scl(uv);
 
-    if (uv.x == 0.0f) {
-      vert.uv.x = sideRegion.getU();
-    } else {
-      vert.uv.x = sideRegion.getU2();
-    }
-
-    if (uv.y == 0.0f) {
-      vert.uv.y = sideRegion.getV();
-    } else {
-      vert.uv.y = sideRegion.getV2();
-    }
+    vert.uv.set(tempVec2);
+    vert.textureFullCords(sideRegion.getU(), sideRegion.getV(), sideRegion.getU2(), sideRegion.getV2());
 
     if (part.waviness != null) {
       vert.material.setWaviness(part.waviness[index]);

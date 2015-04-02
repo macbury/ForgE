@@ -41,7 +41,7 @@ public class DesktopGame implements ForgEBootListener, Thread.UncaughtExceptionH
     if (ForgE.db.startPosition == null) {
       throw new GdxRuntimeException("Start position not found!");
     } else {
-      ForgE.screens.set(new LoadingScreen(ForgE.db.startPosition.toTeleport()));
+      ForgE.screens.set(new LoadingScreen(ForgE.db.startPosition));
     }
   }
 
