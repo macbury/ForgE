@@ -15,7 +15,7 @@ public class TerrainPart implements Pool.Poolable {
   public final Vector3i currentDirection  = new Vector3i();
   public final Vector3i voxelPosition     = new Vector3i();
   public final Vector3i voxelSize         = new Vector3i();
-  public final Vector2  uv                = new Vector2();
+  public final Vector2  voxelSizeRect     = new Vector2();
   public Block block;
   public Voxel voxel;
   private final static Vector3i tempA = new Vector3i();
@@ -29,7 +29,7 @@ public class TerrainPart implements Pool.Poolable {
     voxelSize.setZero();
     voxelPosition.setZero();
     currentDirection.setZero();
-    uv.setZero();
+    voxelSizeRect.setZero();
   }
 
   public float distanceTo(TerrainPart otherPart) {
@@ -72,9 +72,9 @@ public class TerrainPart implements Pool.Poolable {
   }
 
   public void getUVScaling(Vector2 out) {
-    uv.x = Math.max(uv.x, 1);
-    uv.y = Math.max(uv.y, 1);
-    out.set(uv);
+    voxelSizeRect.x = Math.max(voxelSizeRect.x, 1);
+    voxelSizeRect.y = Math.max(voxelSizeRect.y, 1);
+    out.set(voxelSizeRect);
     //Gdx.app.log("voxel size", out.toString());
   }
 
@@ -87,21 +87,20 @@ public class TerrainPart implements Pool.Poolable {
 
     voxelSize.add(currentDirection);
 
-    uv.set(voxelSize.x, voxelSize.y);
+    voxelSizeRect.set(voxelSize.x, voxelSize.y);
 
     if (currentDirection.z == 1) {
       switch (face) {
         case right:
         case left:
-          uv.set(voxelSize.z, voxelSize.y);
+          voxelSizeRect.set(voxelSize.z, voxelSize.y);
           break;
         case top:
-          uv.set(voxelSize.x, voxelSize.z);
+          voxelSizeRect.set(voxelSize.x, voxelSize.z);
           break;
       }
     }
 
-    uv.add(1,1);
+    voxelSizeRect.add(1, 1);
   }
-
 }
