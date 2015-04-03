@@ -48,7 +48,7 @@ public class CollisionSystem extends IteratingSystem {
     if (collisionComponent.solid) {
       tempC.set(map.worldPositionToVoxelPosition(positionComponent.vector));
       if (map.isSolid(tempC.x, tempC.y, tempC.z) || map.isOutOfBounds(tempC)) {
-        Gdx.app.log(TAG, "Collision ground: "+tempC.toString());
+        //Gdx.app.log(TAG, "Collision ground: "+tempC.toString());
         //map.localVoxelPositionToWorldPosition(tempC, tempA);
 
         collisionComponent.position.y    = tempC.y + 0.5f;

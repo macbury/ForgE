@@ -1,5 +1,6 @@
 package macbury.forge.graphics.builders;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.Pool;
@@ -11,13 +12,15 @@ import macbury.forge.voxel.Voxel;
  * Created by macbury on 30.03.15.
  */
 public class TerrainPart implements Pool.Poolable {
-  public final Vector3i currentDirection = new Vector3i();
-  public final Vector3i voxelPosition = new Vector3i();
-  public final Vector3i voxelSize      = new Vector3i();
+  public final Vector3i currentDirection  = new Vector3i();
+  public final Vector3i voxelPosition     = new Vector3i();
+  public final Vector3i voxelSize         = new Vector3i();
+  public final Vector2  uv                = new Vector2();
   public Block block;
   public Voxel voxel;
   private final static Vector3i tempA = new Vector3i();
   private final static Vector3i tempB = new Vector3i();
+  public Block.Side face = Block.Side.all;
 
   @Override
   public void reset() {
@@ -26,6 +29,7 @@ public class TerrainPart implements Pool.Poolable {
     voxelSize.setZero();
     voxelPosition.setZero();
     currentDirection.setZero();
+    uv.setZero();
   }
 
   public float distanceTo(TerrainPart otherPart) {
@@ -68,26 +72,36 @@ public class TerrainPart implements Pool.Poolable {
   }
 
   public void getUVScaling(Vector2 out) {
-    if (currentDirection.equals(Vector3i.FRONT)) {
-      out.set(voxelSize.z, voxelSize.y);
-    } else {
-      out.set(voxelSize.x, voxelSize.z);
-    }
-
+    uv.x = Math.max(uv.x, 1);
+    uv.y = Math.max(uv.y, 1);
+    out.set(uv);
+    //Gdx.app.log("voxel size", out.toString());
   }
 
   public void join(TerrainPart otherPart) {
-    getPartDirection(otherPart.voxelPosition, tempA);
     if (voxelSize.isZero()) {
+      getPartDirection(otherPart.voxelPosition, tempA);
       currentDirection.set(tempA);
+      //Gdx.app.log("Direction", currentDirection.toString());
     }
 
     voxelSize.add(currentDirection);
 
-    //BoundingBox box = new BoundingBox();
-    //box.ext();
+    uv.set(voxelSize.x, voxelSize.y);
+
+    if (currentDirection.z == 1) {
+      switch (face) {
+        case right:
+        case left:
+          uv.set(voxelSize.z, voxelSize.y);
+          break;
+        case top:
+          uv.set(voxelSize.x, voxelSize.z);
+          break;
+      }
+    }
+
+    uv.add(1,1);
   }
-
-
 
 }

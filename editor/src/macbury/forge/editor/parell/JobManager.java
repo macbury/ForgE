@@ -91,6 +91,7 @@ public class JobManager extends Thread {
   }
 
   public void onJobFinish(Job job) {
+    System.gc();
     Gdx.app.log(TAG, "Finished job: " + job.getClass().getSimpleName() );
     for (int i = 0; i < listeners.size; i++) {
       JobListener listener = listeners.get(i);

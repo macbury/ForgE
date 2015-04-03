@@ -81,8 +81,9 @@ public class TerrainBuilder {
     return voxelB != null && (voxelB.getBlock().blockShape != voxelA.getBlock().blockShape);
   }
 
-  private void createTerrainPart(int x, int y, int z, Voxel voxel, Array<TerrainPart> out) {
+  private void createTerrainPart(Block.Side face, int x, int y, int z, Voxel voxel, Array<TerrainPart> out) {
     TerrainPart currentPart    = terrainPartPool.obtain();
+    currentPart.face           = face;
     currentPart.block         = voxel.getBlock();
     currentPart.voxel         = voxel;
     currentPart.voxelPosition.set(x, y, z);
@@ -113,12 +114,12 @@ public class TerrainBuilder {
 
             if (isVoxelTransparent(currentVoxel)) {
               if (!isVoxelTransparent(nextVoxel) || nextVoxel == null || nextVoxel.blockId != currentVoxel.blockId || !isVoxelBlockHaveOcculsion(currentVoxel)) {
-                createTerrainPart(x, y, z, currentVoxel, out);
+                createTerrainPart(face, x, y, z, currentVoxel, out);
               }
             } else if (isVoxelTransparent(nextVoxel)) {
-              createTerrainPart(x, y, z, currentVoxel, out);
+              createTerrainPart(face, x, y, z, currentVoxel, out);
             } else if (map.isEmptyNotOutOfBounds(nextTileToCheck) || doVoxelsDontHaveTheSameShape(currentVoxel, nextVoxel) || !isVoxelBlockHaveOcculsion(currentVoxel)) {
-              createTerrainPart(x, y, z, currentVoxel, out);
+              createTerrainPart(face, x, y, z, currentVoxel, out);
             }
           }
         }
@@ -151,7 +152,6 @@ public class TerrainBuilder {
     solidVoxelAssembler.begin();
     transparentVoxelAssembler.begin();
     facesToBuild.clear();
-    //facesToBuild.addAll(Block.Side.values());
     facesToBuild.add(Block.Side.top);
     facesToBuild.add(Block.Side.bottom);
     facesToBuild.add(Block.Side.left);

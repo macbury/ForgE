@@ -31,8 +31,7 @@ public class GameplayScreen extends AbstractScreen {
     this.cameraController = new FirstPersonCameraController(level.camera);
     level.camera.far      = FAR_CAMERA;
     level.camera.near     = NEAR_CAMERA;
-
-
+    level.camera.fieldOfView  = 70;
     Entity playerEntity = ForgE.entities.get("player").build(level.entities);
     playerEntity.getComponent(PlayerComponent.class).camera = level.camera;
 
