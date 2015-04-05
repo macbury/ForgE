@@ -161,28 +161,6 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
         builder.buildFaceForChunk(chunk);
       }
     } builder.end();
-    /*if (ForgE.config.cacheGeometry && chunk.renderables.size > 0) {
-      Kryo kryo                                = ForgE.storage.pool.borrow();
-
-      try {
-
-        File handle = new File("/tmp/"+chunk.position.toString()+".geo");
-        Gdx.app.log(TAG, "Saving: " + handle.getAbsolutePath());
-        Output output = new Output(new FileOutputStream(handle, false));
-        for (VoxelFaceRenderable renderable : chunk.renderables) {
-          kryo.writeObject(output, renderable);
-        }
-
-        output.close();
-      } catch (FileNotFoundException e) {
-        e.printStackTrace();
-      }
-
-      ForgE.storage.pool.release(kryo);
-      //throw new RuntimeException("Implement caching!!!");
-      //TODO check if file chunk exists in cache, if true then load, else rebuild and save it
-    }*/
-
 
     if (chunk.isEmpty()) {
       remove(chunk);

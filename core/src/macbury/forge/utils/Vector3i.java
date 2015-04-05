@@ -144,4 +144,17 @@ public class Vector3i {
   public boolean isZero() {
     return x == 0 && y == 0 && z == 0;
   }
+
+  public Vector3i add(float nx, float ny, float nz) {
+    add((int)nx, (int)ny, (int)nz);
+    return this;
+  }
+
+  public Vector3i nor() {
+    this.abs();
+    this.x = x >= 1 ? 1 : 0;
+    this.y = y >= 1 ? 1 : 0;
+    this.z = z >= 1 ? 1 : 0;
+    return this;
+  }
 }

@@ -1,5 +1,6 @@
 package macbury.forge.graphics.builders;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
@@ -35,7 +36,8 @@ public class TerrainBuilder {
 
   private Vector3i nextTileToCheck = new Vector3i();
   private final VoxelDef voxelDef;
-  private Array<TerrainPart> tempTerrainParts = new Array<TerrainPart>();
+  private Array<TerrainPart> tempTerrainParts  = new Array<TerrainPart>();
+  private Array<TerrainPart> temp2TerrainParts = new Array<TerrainPart>();
 
   private static Pool<TerrainPart> terrainPartPool = new Pool<TerrainPart>() {
     @Override
@@ -47,14 +49,9 @@ public class TerrainBuilder {
   };
 
   private static Comparator<TerrainPart> terrainPartComparator = new Comparator<TerrainPart>() {
-    private float dst;
     @Override
     public int compare(TerrainPart o1, TerrainPart o2) {
-      if (o1.comparedTo(o2)) {
-        return 1;
-      } else {
-        return -1;
-      }
+      return o1.compareVertical(o2);
     }
   };
 
@@ -91,7 +88,7 @@ public class TerrainBuilder {
     if (out.size > 0) {
       TerrainPart lastPart = out.get(out.size-1);
       if (lastPart.isHorizontalSimilar(currentPart)) {
-        lastPart.join(currentPart);
+        lastPart.joinHorizontal(currentPart);
       } else {
         out.add(currentPart);
       }
@@ -128,24 +125,36 @@ public class TerrainBuilder {
   }
 
   private void joinVeriticalyParts(Array<TerrainPart> out) {
-    /*tempTerrainParts.addAll(out);
+    tempTerrainParts.clear();
+    tempTerrainParts.addAll(out);
     tempTerrainParts.sort(terrainPartComparator);
-
+    tempTerrainParts.reverse();
     out.clear();
-    while(tempTerrainParts.size > 1) {
-      TerrainPart aPart = tempTerrainParts.pop();
-      TerrainPart bPart = tempTerrainParts.pop();
-      if (aPart.isVeriticalSimilar(bPart)) {
-        aPart.join(bPart);
-        terrainPartPool.free(bPart);
-        out.add(aPart);
+    Gdx.app.log(TAG, "START");
+    while(tempTerrainParts.size > 0) {
+      TerrainPart partA = tempTerrainParts.pop();
+
+      if (tempTerrainParts.size == 0) {
+        out.add(partA);
+        Gdx.app.log(TAG, "lAST: " + partA.toString());
       } else {
-        out.add(aPart);
-        out.add(bPart);
+        TerrainPart partB = tempTerrainParts.pop();
+
+        if (partA.joinVertical(partB)) {
+          Gdx.app.log(TAG, "A: " + partA.toString());
+          Gdx.app.log(TAG, "B: " + partB.toString());
+
+          tempTerrainParts.add(partA);
+          Gdx.app.log(TAG, "Joined into: " + partA.toString());
+          //terrainPartPool.free(partB);
+        } else {
+          out.add(partA);
+          out.add(partB);
+          Gdx.app.log(TAG, partA.toString() + " != " + partB.toString());
+        }
       }
     }
-
-    tempTerrainParts.clear();*/
+    Gdx.app.log(TAG, "END");
   }
 
   public void begin() {
@@ -153,11 +162,11 @@ public class TerrainBuilder {
     transparentVoxelAssembler.begin();
     facesToBuild.clear();
     facesToBuild.add(Block.Side.top);
-    facesToBuild.add(Block.Side.bottom);
-    facesToBuild.add(Block.Side.left);
-    facesToBuild.add(Block.Side.right);
-    facesToBuild.add(Block.Side.front);
-    facesToBuild.add(Block.Side.back);
+    //facesToBuild.add(Block.Side.bottom);
+    //facesToBuild.add(Block.Side.left);
+    //facesToBuild.add(Block.Side.right);
+    //facesToBuild.add(Block.Side.front);
+    //facesToBuild.add(Block.Side.back);
   }
 
   public void end() {

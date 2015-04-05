@@ -12,6 +12,7 @@ import macbury.forge.voxel.Voxel;
  * Created by macbury on 30.03.15.
  */
 public class TerrainPart implements Pool.Poolable {
+  private static final String TAG = "TerrainPart";
   public final Vector3i currentDirection  = new Vector3i();
   public final Vector3i voxelPosition     = new Vector3i();
   public final Vector3i voxelSize         = new Vector3i();
@@ -20,6 +21,7 @@ public class TerrainPart implements Pool.Poolable {
   public Voxel voxel;
   private final static Vector3i tempA = new Vector3i();
   private final static Vector3i tempB = new Vector3i();
+  private final static Vector2 tempC  = new Vector2();
   public Block.Side face = Block.Side.all;
 
   @Override
@@ -32,9 +34,19 @@ public class TerrainPart implements Pool.Poolable {
     voxelSizeRect.setZero();
   }
 
-  public float distanceTo(TerrainPart otherPart) {
+  private float distanceTo(TerrainPart otherPart) {
     tempA.set(this.voxelPosition).add(voxelSize);
     return otherPart.voxelPosition.dst(tempA);
+  }
+
+  private float distanceVeriticalTo(TerrainPart otherPart) {
+    float dst = distanceTo(otherPart);
+    if (dst != 1) {
+      tempA.set(this.voxelPosition);
+      return otherPart.voxelPosition.dst(tempA);
+    } else {
+      return dst;
+    }
   }
 
   public boolean isHorizontalSimilar(TerrainPart otherPart) {
@@ -42,33 +54,19 @@ public class TerrainPart implements Pool.Poolable {
     if (!voxelSize.isZero() && !currentDirection.equals(tempB)) {
       return false;
     }
-    return canBeJoined(otherPart) && tempB.isOneDirection() && distanceTo(otherPart) == 1;
-  }
-
-  private boolean canBeJoined(TerrainPart otherPart) {
-    return (block.blockShape.scalable) && otherPart.block.id == this.block.id;
+    return canBeJoined(otherPart) && tempB.isOneDirection() && distanceVeriticalTo(otherPart) == 1;
   }
 
   public boolean isVeriticalSimilar(TerrainPart otherPart) {
-    return false;//canBeJoined(otherPart) && otherPart.voxelPosition.dst(this.voxelPosition) == 1;
+    return canBeJoined(otherPart) && distanceVeriticalTo(otherPart) == 1;
   }
 
-  public boolean comparedTo(TerrainPart other) {
-    if (this.voxelPosition.y != other.voxelPosition.y)
-      return this.voxelPosition.y < other.voxelPosition.y;
-    if (this.voxelPosition.x != other.voxelPosition.x)
-      return this.voxelPosition.x < other.voxelPosition.x;
-    if (this.voxelPosition.z != other.voxelPosition.z)
-      return this.voxelPosition.z < other.voxelPosition.z;
-    if (this.voxelSize.x != other.voxelSize.x)
-      return this.voxelSize.x < other.voxelSize.x;
-    if (this.voxelSize.y != other.voxelSize.y)
-      return this.voxelSize.y < other.voxelSize.y;
-    return this.voxelSize.z < other.voxelSize.z;
+  private boolean canBeJoined(TerrainPart otherPart) {
+    return block.blockShape.scalable && otherPart.block.id == this.block.id;
   }
 
   public void getPartDirection(Vector3i from, Vector3i out) {
-    out.set(this.voxelPosition).add(voxelSize).sub(from).abs();
+    out.set(this.voxelPosition).sub(from).nor();
   }
 
   public void getUVScaling(Vector2 out) {
@@ -78,7 +76,22 @@ public class TerrainPart implements Pool.Poolable {
     //Gdx.app.log("voxel size", out.toString());
   }
 
-  public void join(TerrainPart otherPart) {
+  public boolean joinVertical(TerrainPart otherPart) {
+    if (canBeJoined(otherPart)) {
+      getPartDirection(otherPart.voxelPosition, tempA);
+      tempC.set(tempA.x, tempA.z).scl(otherPart.voxelSizeRect);
+
+      //if (tempC.x == 0)
+      voxelSize.add(tempC.x, 0, tempC.y);
+      voxelSizeRect.add(tempC.x, tempC.y);
+
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public void joinHorizontal(TerrainPart otherPart) {
     if (voxelSize.isZero()) {
       getPartDirection(otherPart.voxelPosition, tempA);
       currentDirection.set(tempA);
@@ -102,5 +115,44 @@ public class TerrainPart implements Pool.Poolable {
     }
 
     voxelSizeRect.add(1, 1);
+  }
+
+  public int compareVertical(TerrainPart other) {
+    if (other.voxelSizeRect.x > this.voxelSizeRect.x) {
+      return -1;
+    } else if (other.voxelSizeRect.x < this.voxelSizeRect.x) {
+      return 1;
+    } else {
+      if (other.voxelSizeRect.y > this.voxelSizeRect.y) {
+        return -1;
+      } else if (other.voxelSizeRect.y < this.voxelSizeRect.y) {
+        return 1;
+      } else {
+        if (other.voxelPosition.z > this.voxelPosition.z) {
+          return -1;
+        } else if (other.voxelPosition.z < this.voxelPosition.z) {
+          return 1;
+        } else {
+          if (other.voxelPosition.x > this.voxelPosition.x) {
+            return -1;
+          } else if (other.voxelPosition.x < this.voxelPosition.x) {
+            return 1;
+          } else {
+            if (other.voxelPosition.y > this.voxelPosition.y) {
+              return -1;
+            } else if (other.voxelPosition.y < this.voxelPosition.y) {
+              return 1;
+            } else {
+              return 0;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @Override
+  public String toString() {
+    return "<TerrainPart blockId="+this.block.id+" pos="+voxelPosition.toString()+" size="+voxelSizeRect+">";
   }
 }
