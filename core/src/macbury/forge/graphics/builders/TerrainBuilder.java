@@ -195,7 +195,6 @@ public class TerrainBuilder {
       tempB.set(cursor.start.x, cursor.start.y, cursor.start.z).scl(map.voxelSize);
       tempA.set(part.voxelPosition.x, part.voxelPosition.y, part.voxelPosition.z).scl(map.voxelSize).sub(tempB);
 
-
       voxelDef.position.set(tempA);
       voxelDef.voxelPosition.set(part.voxelPosition.x, part.voxelPosition.y, part.voxelPosition.z);
       voxelDef.size.set(map.voxelSize);
