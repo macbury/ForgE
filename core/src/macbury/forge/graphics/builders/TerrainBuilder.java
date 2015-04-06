@@ -37,7 +37,6 @@ public class TerrainBuilder {
   private Vector3i nextTileToCheck = new Vector3i();
   private final VoxelDef voxelDef;
   private Array<TerrainPart> tempTerrainParts  = new Array<TerrainPart>();
-  private Array<TerrainPart> temp2TerrainParts = new Array<TerrainPart>();
 
   private static Pool<TerrainPart> terrainPartPool = new Pool<TerrainPart>() {
     @Override
@@ -48,12 +47,6 @@ public class TerrainBuilder {
     }
   };
 
-  private static Comparator<TerrainPart> terrainPartComparator = new Comparator<TerrainPart>() {
-    @Override
-    public int compare(TerrainPart o1, TerrainPart o2) {
-      return o1.compareVertical(o2);
-    }
-  };
 
   public TerrainBuilder(ChunkMap voxelMap) {
     super();
@@ -127,8 +120,8 @@ public class TerrainBuilder {
   private void joinVeriticalyParts(Array<TerrainPart> out) {
     tempTerrainParts.clear();
     tempTerrainParts.addAll(out);
-    tempTerrainParts.sort(terrainPartComparator);
-    tempTerrainParts.reverse();
+    tempTerrainParts.sort();
+    //tempTerrainParts.reverse();
     out.clear();
     Gdx.app.log(TAG, "START");
     while(tempTerrainParts.size > 0) {
@@ -162,11 +155,11 @@ public class TerrainBuilder {
     transparentVoxelAssembler.begin();
     facesToBuild.clear();
     facesToBuild.add(Block.Side.top);
-    //facesToBuild.add(Block.Side.bottom);
-    //facesToBuild.add(Block.Side.left);
-    //facesToBuild.add(Block.Side.right);
-    //facesToBuild.add(Block.Side.front);
-    //facesToBuild.add(Block.Side.back);
+    facesToBuild.add(Block.Side.bottom);
+    facesToBuild.add(Block.Side.left);
+    facesToBuild.add(Block.Side.right);
+    facesToBuild.add(Block.Side.front);
+    facesToBuild.add(Block.Side.back);
   }
 
   public void end() {
@@ -185,7 +178,7 @@ public class TerrainBuilder {
     }
     optimizeFace(side, terrainParts);
     if (terrainParts.size > 0) {
-      joinVeriticalyParts(terrainParts);
+      //joinVeriticalyParts(terrainParts);
       createTrianglesFor(side, terrainParts, solidVoxelAssembler, transparentVoxelAssembler);
       buildFaceForChunkWithAssembler(chunk, solidVoxelAssembler, false, side);
       buildFaceForChunkWithAssembler(chunk, transparentVoxelAssembler, true, side);

@@ -2,6 +2,8 @@ package macbury.forge.graphics.builders;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.Pool;
 import macbury.forge.blocks.Block;
@@ -11,7 +13,7 @@ import macbury.forge.voxel.Voxel;
 /**
  * Created by macbury on 30.03.15.
  */
-public class TerrainPart implements Pool.Poolable {
+public class TerrainPart implements Pool.Poolable, Comparable<TerrainPart> {
   private static final String TAG = "TerrainPart";
   public final Vector3i currentDirection  = new Vector3i();
   public final Vector3i voxelPosition     = new Vector3i();
@@ -21,7 +23,11 @@ public class TerrainPart implements Pool.Poolable {
   public Voxel voxel;
   private final static Vector3i tempA = new Vector3i();
   private final static Vector3i tempB = new Vector3i();
-  private final static Vector2 tempC  = new Vector2();
+  private final static Vector3i tempE = new Vector3i();
+  private final static BoundingBox tempBoxA = new BoundingBox();
+  private final static BoundingBox tempBoxB = new BoundingBox();
+  private final static Vector3  tempC = new Vector3();
+  private final static Vector3  tempD = new Vector3();
   public Block.Side face = Block.Side.all;
 
   @Override
@@ -77,18 +83,32 @@ public class TerrainPart implements Pool.Poolable {
   }
 
   public boolean joinVertical(TerrainPart otherPart) {
+
     if (canBeJoined(otherPart)) {
       getPartDirection(otherPart.voxelPosition, tempA);
-      tempC.set(tempA.x, tempA.z).scl(otherPart.voxelSizeRect);
-
-      //if (tempC.x == 0)
-      voxelSize.add(tempC.x, 0, tempC.y);
-      voxelSizeRect.add(tempC.x, tempC.y);
-
-      return true;
+      getBoundingBox(tempBoxA);
+      otherPart.getBoundingBox(tempBoxB);
+      tempB.set(voxelSize).scl(tempA);
+      tempE.set(otherPart.voxelSize).scl(tempA);
+      if ( tempB.equals(tempE) && tempBoxA.contains(tempBoxB)) {
+        tempBoxA.ext(tempBoxB);
+        tempBoxA.getMin(tempD);
+        voxelPosition.set(tempD);
+        voxelSize.set((int)tempBoxA.getWidth(), (int)tempBoxA.getHeight(), (int)tempBoxA.getDepth());
+        //voxelSizeRect.add(tempC.x, tempC.y);
+        return true;
+      } else {
+        return false;
+      }
     } else {
       return false;
     }
+  }
+
+  private void getBoundingBox(BoundingBox out) {
+    this.voxelPosition.cpyTo(tempC);
+    this.voxelPosition.cpyTo(tempD).add(this.voxelSize.x, this.voxelSize.y, this.voxelSize.z);
+    out.set(tempC, tempD);
   }
 
   public void joinHorizontal(TerrainPart otherPart) {
@@ -118,41 +138,18 @@ public class TerrainPart implements Pool.Poolable {
   }
 
   public int compareVertical(TerrainPart other) {
-    if (other.voxelSizeRect.x > this.voxelSizeRect.x) {
-      return -1;
-    } else if (other.voxelSizeRect.x < this.voxelSizeRect.x) {
-      return 1;
-    } else {
-      if (other.voxelSizeRect.y > this.voxelSizeRect.y) {
-        return -1;
-      } else if (other.voxelSizeRect.y < this.voxelSizeRect.y) {
-        return 1;
-      } else {
-        if (other.voxelPosition.z > this.voxelPosition.z) {
-          return -1;
-        } else if (other.voxelPosition.z < this.voxelPosition.z) {
-          return 1;
-        } else {
-          if (other.voxelPosition.x > this.voxelPosition.x) {
-            return -1;
-          } else if (other.voxelPosition.x < this.voxelPosition.x) {
-            return 1;
-          } else {
-            if (other.voxelPosition.y > this.voxelPosition.y) {
-              return -1;
-            } else if (other.voxelPosition.y < this.voxelPosition.y) {
-              return 1;
-            } else {
-              return 0;
-            }
-          }
-        }
-      }
-    }
+    return (int)other.voxelSizeRect.x - (int)this.voxelSizeRect.x;
   }
 
   @Override
   public String toString() {
-    return "<TerrainPart blockId="+this.block.id+" pos="+voxelPosition.toString()+" size="+voxelSizeRect+">";
+    return "<TerrainPart blockId="+this.block.id+" pos="+voxelPosition.toString()+" size="+voxelSize.toString()+">";
+  }
+
+
+  @Override
+  public int compareTo(TerrainPart o) {
+    float dst = tempA.set(voxelPosition).dst2(o.voxelPosition);
+    return dst < 0 ? -1 : (dst > 0 ? 1 : 0);
   }
 }

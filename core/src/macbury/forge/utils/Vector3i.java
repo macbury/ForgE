@@ -157,4 +157,15 @@ public class Vector3i {
     this.z = z >= 1 ? 1 : 0;
     return this;
   }
+
+  public Vector3i scl(Vector3i other) {
+    this.x *= other.x;
+    this.y *= other.y;
+    this.z *= other.z;
+    return this;
+  }
+
+  public Vector3 cpyTo(Vector3 tempC) {
+    return tempC.set(x, y,z);
+  }
 }
