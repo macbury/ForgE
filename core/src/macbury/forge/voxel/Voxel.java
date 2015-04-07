@@ -33,4 +33,18 @@ public class Voxel {
     this.blockId = otherVoxel.blockId;
     this.alginTo = otherVoxel.alginTo;
   }
+
+  public boolean isAir() {
+    return getBlock().isAir();
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    Voxel b = (Voxel)obj;
+    return blockId == b.blockId;
+  }
+
+  public boolean isScalable() {
+    return getBlock().blockShape.scalable;
+  }
 }

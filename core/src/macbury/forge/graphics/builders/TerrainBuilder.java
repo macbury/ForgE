@@ -37,6 +37,7 @@ public class TerrainBuilder {
   private Vector3i nextTileToCheck = new Vector3i();
   private final VoxelDef voxelDef;
   private Array<TerrainPart> tempTerrainParts  = new Array<TerrainPart>();
+  private static Voxel mask[] = new Voxel[ChunkMap.CHUNK_SIZE * ChunkMap.CHUNK_SIZE];
 
   private static Pool<TerrainPart> terrainPartPool = new Pool<TerrainPart>() {
     @Override
@@ -71,95 +72,18 @@ public class TerrainBuilder {
     return voxelB != null && (voxelB.getBlock().blockShape != voxelA.getBlock().blockShape);
   }
 
-  private void createTerrainPart(Block.Side face, int x, int y, int z, Voxel voxel, Array<TerrainPart> out) {
-    TerrainPart currentPart    = terrainPartPool.obtain();
-    currentPart.face           = face;
-    currentPart.block         = voxel.getBlock();
-    currentPart.voxel         = voxel;
-    currentPart.voxelPosition.set(x, y, z);
-    currentPart.voxelSize.setZero();
-    if (out.size > 0) {
-      TerrainPart lastPart = out.get(out.size-1);
-      if (lastPart.isHorizontalSimilar(currentPart)) {
-        lastPart.joinHorizontal(currentPart);
-      } else {
-        out.add(currentPart);
-      }
-    } else {
-      out.add(currentPart);
-    }
-  }
 
-  private void optimizeFace(Block.Side face, Array<TerrainPart> out) {
-    for (int y = cursor.start.y; y < cursor.end.y; y++) {
-      for (int z = cursor.start.z; z < cursor.end.z; z++) {
-        for (int x = cursor.start.x; x < cursor.end.x; x++) {
-          if (map.isNotAir(x, y, z)) {
-            voxelDef.reset();
-            nextTileToCheck.set(x, y, z);
-            nextTileToCheck.add(face.direction);
-
-            Voxel currentVoxel = map.getVoxelForPosition(x, y, z);
-            Voxel nextVoxel = map.getVoxelForPosition(nextTileToCheck);
-
-            if (isVoxelTransparent(currentVoxel)) {
-              if (!isVoxelTransparent(nextVoxel) || nextVoxel == null || nextVoxel.blockId != currentVoxel.blockId || !isVoxelBlockHaveOcculsion(currentVoxel)) {
-                createTerrainPart(face, x, y, z, currentVoxel, out);
-              }
-            } else if (isVoxelTransparent(nextVoxel)) {
-              createTerrainPart(face, x, y, z, currentVoxel, out);
-            } else if (map.isEmptyNotOutOfBounds(nextTileToCheck) || doVoxelsDontHaveTheSameShape(currentVoxel, nextVoxel) || !isVoxelBlockHaveOcculsion(currentVoxel)) {
-              createTerrainPart(face, x, y, z, currentVoxel, out);
-            }
-          }
-        }
-      }
-    }
-  }
-
-  private void joinVeriticalyParts(Array<TerrainPart> out) {
-    tempTerrainParts.clear();
-    tempTerrainParts.addAll(out);
-    tempTerrainParts.sort();
-    //tempTerrainParts.reverse();
-    out.clear();
-    Gdx.app.log(TAG, "START");
-    while(tempTerrainParts.size > 0) {
-      TerrainPart partA = tempTerrainParts.pop();
-
-      if (tempTerrainParts.size == 0) {
-        out.add(partA);
-        Gdx.app.log(TAG, "lAST: " + partA.toString());
-      } else {
-        TerrainPart partB = tempTerrainParts.pop();
-
-        if (partA.joinVertical(partB)) {
-          Gdx.app.log(TAG, "A: " + partA.toString());
-          Gdx.app.log(TAG, "B: " + partB.toString());
-
-          tempTerrainParts.add(partA);
-          Gdx.app.log(TAG, "Joined into: " + partA.toString());
-          //terrainPartPool.free(partB);
-        } else {
-          out.add(partA);
-          out.add(partB);
-          Gdx.app.log(TAG, partA.toString() + " != " + partB.toString());
-        }
-      }
-    }
-    Gdx.app.log(TAG, "END");
-  }
 
   public void begin() {
     solidVoxelAssembler.begin();
     transparentVoxelAssembler.begin();
     facesToBuild.clear();
     facesToBuild.add(Block.Side.top);
-    facesToBuild.add(Block.Side.bottom);
+    /*facesToBuild.add(Block.Side.bottom);
     facesToBuild.add(Block.Side.left);
     facesToBuild.add(Block.Side.right);
     facesToBuild.add(Block.Side.front);
-    facesToBuild.add(Block.Side.back);
+    facesToBuild.add(Block.Side.back);*/
   }
 
   public void end() {
@@ -176,10 +100,11 @@ public class TerrainBuilder {
     if (side == Block.Side.all || side == Block.Side.side) {
       throw new GdxRuntimeException("I cannot assemble chunk face for: " + side.toString());
     }
-    optimizeFace(side, terrainParts);
+    resetMask();
+    createMask(side);
     if (terrainParts.size > 0) {
-      //joinVeriticalyParts(terrainParts);
       createTrianglesFor(side, terrainParts, solidVoxelAssembler, transparentVoxelAssembler);
+
       buildFaceForChunkWithAssembler(chunk, solidVoxelAssembler, false, side);
       buildFaceForChunkWithAssembler(chunk, transparentVoxelAssembler, true, side);
 
@@ -188,9 +113,102 @@ public class TerrainBuilder {
     }
   }
 
+  private boolean isAir(Voxel voxel) {
+    return voxel == null || voxel.isAir();
+  }
+
+  private boolean isVoxelsTheSame(Voxel a, Voxel b) {
+    return a != null && b != null && a.equals(b) && a.isScalable();
+  }
+
+  private void createMask(Block.Side face) {
+    for (int y = cursor.start.y; y < cursor.end.y; y++) {
+      int n = 0;
+      for (int z = cursor.start.z; z < cursor.end.z; z++) {
+        for (int x = cursor.start.x; x < cursor.end.x; x++) {
+          if (map.isNotAir(x, y, z)) {
+            nextTileToCheck.set(x, y, z);
+            nextTileToCheck.add(face.direction);
+
+            Voxel currentVoxel = map.getVoxelForPosition(x, y, z);
+            Voxel nextVoxel    = map.getVoxelForPosition(nextTileToCheck);
+            //Gdx.app.log(TAG, "n="+n + " for X:" + x + " Y: " + y + " Z: " + z);
+
+            if (isVoxelTransparent(currentVoxel)) {
+              if (!isVoxelTransparent(nextVoxel) || nextVoxel == null || nextVoxel.blockId != currentVoxel.blockId || !isVoxelBlockHaveOcculsion(currentVoxel)) {
+                mask[n++] = currentVoxel;
+              } else {
+                mask[n++] = null;
+              }
+            } else if (isVoxelTransparent(nextVoxel)) {
+              mask[n++] = currentVoxel;
+            } else if (map.isEmptyNotOutOfBounds(nextTileToCheck) || doVoxelsDontHaveTheSameShape(currentVoxel, nextVoxel) || !isVoxelBlockHaveOcculsion(currentVoxel)) {
+              mask[n++] = currentVoxel;
+            } else {
+              mask[n++] = null;
+            }
+          } else {
+            mask[n++] = null;
+          }
+        }
+      }
+
+      n = 0;
+
+      for(int j = 0; j < ChunkMap.CHUNK_SIZE; j++) {
+        for (int i = 0; i < ChunkMap.CHUNK_SIZE; ) {
+          if (mask[n] == null || mask[n].isAir()) {
+            i++;
+            n++;
+          } else {
+            int w, h = 0;
+            for(w = 1; i + w < ChunkMap.CHUNK_SIZE && !isAir(mask[n + w]) && isVoxelsTheSame(mask[n + w], mask[n]); w++) {}
+
+            boolean done = false;
+
+            for(h = 1; j + h < ChunkMap.CHUNK_SIZE; h++) {
+
+              for(int k = 0; k < w; k++) {
+                if(isAir(mask[n + k + h * ChunkMap.CHUNK_SIZE]) || !isVoxelsTheSame(mask[n + k + h * ChunkMap.CHUNK_SIZE], mask[n])) { done = true; break; }
+              }
+
+              if(done) { break; }
+            }
+
+            //Gdx.app.log(TAG, "New quad: " + mask[n].blockId + " size=" + w+"x"+h + " at " + "X: " + i + " Y: " + j);
+
+            TerrainPart currentPart     = terrainPartPool.obtain();
+            currentPart.face            = face;
+            currentPart.block           = mask[n].getBlock();
+            currentPart.voxel           = mask[n];
+            currentPart.voxelPosition.set(i, y, j).add(cursor.start);
+            currentPart.voxelSize.set(w, 1, h);
+            currentPart.uvTiling.set(w,h);
+            terrainParts.add(currentPart);
+
+            Gdx.app.log(TAG, "Quad: " + currentPart.toString());
+
+
+            for(int l = 0; l < h; ++l) {
+              for(int k = 0; k < w; ++k) { mask[n + k + l * ChunkMap.CHUNK_SIZE] = null; }
+            }
+
+            i += w;
+            n += w;
+          }
+        }
+      }
+    }
+  }
+
+  private void resetMask() {
+    for (int i = 0; i < mask.length; i++) {
+      mask[i] = null;
+    }
+  }
+
   private void createTrianglesFor(Block.Side side, Array<TerrainPart> terrainParts, VoxelsAssembler solidVoxelAssembler, VoxelsAssembler transparentVoxelAssembler) {
     for (TerrainPart part : terrainParts) {
-      part.voxelSize.add(1,1,1);
       voxelDef.block = part.block;
       tempB.set(cursor.start.x, cursor.start.y, cursor.start.z).scl(map.voxelSize);
       tempA.set(part.voxelPosition.x, part.voxelPosition.y, part.voxelPosition.z).scl(map.voxelSize).sub(tempB);
@@ -236,5 +254,6 @@ public class TerrainBuilder {
     terrainParts.clear();
     terrainPartPool.freeAll(terrainParts);
     terrainPartPool.clear();
+    resetMask();
   }
 }
