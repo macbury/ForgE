@@ -79,10 +79,16 @@ public class TerrainBuilder {
     transparentVoxelAssembler.begin();
     facesToBuild.clear();
     facesToBuild.add(Block.Side.top);
-    /*facesToBuild.add(Block.Side.bottom);
     facesToBuild.add(Block.Side.left);
+    facesToBuild.add(Block.Side.bottom);
     facesToBuild.add(Block.Side.right);
+    /*
+    facesToBuild.add(Block.Side.top);
     facesToBuild.add(Block.Side.front);
+
+
+    facesToBuild.add(Block.Side.right);
+
     facesToBuild.add(Block.Side.back);*/
   }
 
@@ -101,7 +107,7 @@ public class TerrainBuilder {
       throw new GdxRuntimeException("I cannot assemble chunk face for: " + side.toString());
     }
     resetMask();
-    createMask(side);
+    greedy(side);
     if (terrainParts.size > 0) {
       createTrianglesFor(side, terrainParts, solidVoxelAssembler, transparentVoxelAssembler);
 
@@ -121,84 +127,115 @@ public class TerrainBuilder {
     return a != null && b != null && a.equals(b) && a.isScalable();
   }
 
-  private void createMask(Block.Side face) {
-    for (int y = cursor.start.y; y < cursor.end.y; y++) {
-      int n = 0;
-      for (int z = cursor.start.z; z < cursor.end.z; z++) {
-        for (int x = cursor.start.x; x < cursor.end.x; x++) {
-          if (map.isNotAir(x, y, z)) {
-            nextTileToCheck.set(x, y, z);
-            nextTileToCheck.add(face.direction);
-
-            Voxel currentVoxel = map.getVoxelForPosition(x, y, z);
-            Voxel nextVoxel    = map.getVoxelForPosition(nextTileToCheck);
-            //Gdx.app.log(TAG, "n="+n + " for X:" + x + " Y: " + y + " Z: " + z);
-
-            if (isVoxelTransparent(currentVoxel)) {
-              if (!isVoxelTransparent(nextVoxel) || nextVoxel == null || nextVoxel.blockId != currentVoxel.blockId || !isVoxelBlockHaveOcculsion(currentVoxel)) {
-                mask[n++] = currentVoxel;
-              } else {
-                mask[n++] = null;
-              }
-            } else if (isVoxelTransparent(nextVoxel)) {
-              mask[n++] = currentVoxel;
-            } else if (map.isEmptyNotOutOfBounds(nextTileToCheck) || doVoxelsDontHaveTheSameShape(currentVoxel, nextVoxel) || !isVoxelBlockHaveOcculsion(currentVoxel)) {
-              mask[n++] = currentVoxel;
-            } else {
-              mask[n++] = null;
-            }
-          } else {
-            mask[n++] = null;
+  private void greedy(Block.Side face) {
+    if (face == Block.Side.top || face == Block.Side.bottom) {
+      for (int y = cursor.start.y; y < cursor.end.y; y++) {
+        int n = 0;
+        for (int z = cursor.start.z; z < cursor.end.z; z++) {
+          for (int x = cursor.start.x; x < cursor.end.x; x++) {
+            n = createMask(face, n, x,y,z);
           }
         }
+        createQuads(face, y);
       }
-
-      n = 0;
-
-      for(int j = 0; j < ChunkMap.CHUNK_SIZE; j++) {
-        for (int i = 0; i < ChunkMap.CHUNK_SIZE; ) {
-          if (mask[n] == null || mask[n].isAir()) {
-            i++;
-            n++;
-          } else {
-            int w, h = 0;
-            for(w = 1; i + w < ChunkMap.CHUNK_SIZE && !isAir(mask[n + w]) && isVoxelsTheSame(mask[n + w], mask[n]); w++) {}
-
-            boolean done = false;
-
-            for(h = 1; j + h < ChunkMap.CHUNK_SIZE; h++) {
-
-              for(int k = 0; k < w; k++) {
-                if(isAir(mask[n + k + h * ChunkMap.CHUNK_SIZE]) || !isVoxelsTheSame(mask[n + k + h * ChunkMap.CHUNK_SIZE], mask[n])) { done = true; break; }
-              }
-
-              if(done) { break; }
-            }
-
-            //Gdx.app.log(TAG, "New quad: " + mask[n].blockId + " size=" + w+"x"+h + " at " + "X: " + i + " Y: " + j);
-
-            TerrainPart currentPart     = terrainPartPool.obtain();
-            currentPart.face            = face;
-            currentPart.block           = mask[n].getBlock();
-            currentPart.voxel           = mask[n];
-            currentPart.voxelPosition.set(i, y, j).add(cursor.start);
-            currentPart.voxelSize.set(w, 1, h);
-            currentPart.uvTiling.set(w,h);
-            terrainParts.add(currentPart);
-
-            Gdx.app.log(TAG, "Quad: " + currentPart.toString());
-
-
-            for(int l = 0; l < h; ++l) {
-              for(int k = 0; k < w; ++k) { mask[n + k + l * ChunkMap.CHUNK_SIZE] = null; }
-            }
-
-            i += w;
-            n += w;
+    } else if (face == Block.Side.left || face == Block.Side.right) {
+      for (int x = cursor.start.x; x < cursor.end.x; x++) {
+        int n = 0;
+        for (int z = cursor.start.z; z < cursor.end.z; z++) {
+          for (int y = cursor.start.y; y < cursor.end.y; y++) {
+            n = createMask(face, n, x,y,z);
           }
+        }
+        createQuads(face, x);
+      }
+    }
+  }
+
+  private void createQuads(Block.Side face, int a) {
+    int n = 0;
+
+    for(int j = 0; j < ChunkMap.CHUNK_SIZE; j++) {
+      for (int i = 0; i < ChunkMap.CHUNK_SIZE; ) {
+        if (mask[n] == null || mask[n].isAir()) {
+          i++;
+          n++;
+        } else {
+          int w, h = 0;
+          for(w = 1; i + w < ChunkMap.CHUNK_SIZE && !isAir(mask[n + w]) && isVoxelsTheSame(mask[n + w], mask[n]); w++) {}
+
+          boolean done = false;
+
+          for(h = 1; j + h < ChunkMap.CHUNK_SIZE; h++) {
+
+            for(int k = 0; k < w; k++) {
+              if(isAir(mask[n + k + h * ChunkMap.CHUNK_SIZE]) || !isVoxelsTheSame(mask[n + k + h * ChunkMap.CHUNK_SIZE], mask[n])) { done = true; break; }
+            }
+
+            if(done) { break; }
+          }
+
+          Gdx.app.log(TAG, "New quad: " + mask[n].blockId + " size=" + w+"x"+h + " at " + "X: " + i + " Y: " + j);
+
+          TerrainPart currentPart     = terrainPartPool.obtain();
+          currentPart.face            = face;
+          currentPart.block           = mask[n].getBlock();
+          currentPart.voxel           = mask[n];
+
+
+
+          if (face == Block.Side.left || face == Block.Side.right) {
+            currentPart.uvTiling.set(h,w);
+            currentPart.voxelPosition.set(a, i, j).add(cursor.start);
+            currentPart.voxelSize.set(1, w, h);
+          } else {
+            currentPart.uvTiling.set(w,h);
+            currentPart.voxelPosition.set(i, a, j).add(cursor.start);
+            currentPart.voxelSize.set(w, 1, h);
+          }
+
+
+          terrainParts.add(currentPart);
+
+          Gdx.app.log(TAG, "Quad: " + currentPart.toString());
+
+
+          for(int l = 0; l < h; ++l) {
+            for(int k = 0; k < w; ++k) { mask[n + k + l * ChunkMap.CHUNK_SIZE] = null; }
+          }
+
+          i += w;
+          n += w;
         }
       }
     }
+  }
+
+  private int createMask(Block.Side face, int n, int x, int y, int z) {
+    if (map.isNotAir(x, y, z)) {
+      nextTileToCheck.set(x, y, z);
+      nextTileToCheck.add(face.direction);
+
+      Voxel currentVoxel = map.getVoxelForPosition(x, y, z);
+      Voxel nextVoxel    = map.getVoxelForPosition(nextTileToCheck);
+      //Gdx.app.log(TAG, "n="+n + " for X:" + x + " Y: " + y + " Z: " + z);
+
+      if (isVoxelTransparent(currentVoxel)) {
+        if (!isVoxelTransparent(nextVoxel) || nextVoxel == null || nextVoxel.blockId != currentVoxel.blockId || !isVoxelBlockHaveOcculsion(currentVoxel)) {
+          mask[n++] = currentVoxel;
+        } else {
+          mask[n++] = null;
+        }
+      } else if (isVoxelTransparent(nextVoxel)) {
+        mask[n++] = currentVoxel;
+      } else if (map.isEmptyNotOutOfBounds(nextTileToCheck) || doVoxelsDontHaveTheSameShape(currentVoxel, nextVoxel) || !isVoxelBlockHaveOcculsion(currentVoxel)) {
+        mask[n++] = currentVoxel;
+      } else {
+        mask[n++] = null;
+      }
+    } else {
+      mask[n++] = null;
+    }
+    return n;
   }
 
   private void resetMask() {
