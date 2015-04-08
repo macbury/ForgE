@@ -146,38 +146,6 @@ public class TerrainBuilder {
 
       createQuads(face, a, cursor.start);
     }
-/*
-    if (face == Block.Side.top || face == Block.Side.bottom) {
-      for (int y = cursor.start.y; y < cursor.end.y; y++) {
-        int n = 0;
-        for (int z = cursor.start.z; z < cursor.end.z; z++) {
-          for (int x = cursor.start.x; x < cursor.end.x; x++) {
-            n = createMask(face, n, x,y,z);
-          }
-        }
-        createQuads(face, y, cursor.start);
-      }
-    } else if (face == Block.Side.left || face == Block.Side.right) {
-      for (int x = cursor.start.x; x < cursor.end.x; x++) {
-        int n = 0;
-        for (int z = cursor.start.z; z < cursor.end.z; z++) {
-          for (int y = cursor.start.y; y < cursor.end.y; y++) {
-            n = createMask(face, n, x,y,z);
-          }
-        }
-        createQuads(face, x, cursor.start);
-      }
-    } else {
-      for (int z = cursor.start.z; z < cursor.end.z; z++) {
-        int n = 0;
-        for (int x = cursor.start.x; x < cursor.end.x; x++) {
-          for (int y = cursor.start.y; y < cursor.end.y; y++) {
-            n = createMask(face, n, x,y,z);
-          }
-        }
-        createQuads(face, z, cursor.start);
-      }
-    }*/
   }
 
   private void createQuads(Block.Side face, int a, Vector3i origin) {
