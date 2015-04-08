@@ -72,24 +72,18 @@ public class TerrainBuilder {
     return voxelB != null && (voxelB.getBlock().blockShape != voxelA.getBlock().blockShape);
   }
 
-
-
   public void begin() {
     solidVoxelAssembler.begin();
     transparentVoxelAssembler.begin();
     facesToBuild.clear();
     facesToBuild.add(Block.Side.top);
-    facesToBuild.add(Block.Side.left);
     facesToBuild.add(Block.Side.bottom);
+
+    facesToBuild.add(Block.Side.left);
     facesToBuild.add(Block.Side.right);
-    /*
-    facesToBuild.add(Block.Side.top);
+
+    facesToBuild.add(Block.Side.back);
     facesToBuild.add(Block.Side.front);
-
-
-    facesToBuild.add(Block.Side.right);
-
-    facesToBuild.add(Block.Side.back);*/
   }
 
   public void end() {
@@ -128,6 +122,31 @@ public class TerrainBuilder {
   }
 
   private void greedy(Block.Side face) {
+    for (int a = 0; a < ChunkMap.CHUNK_SIZE; a++) {
+      int n = 0;
+      for (int b = 0; b < ChunkMap.CHUNK_SIZE; b++) {
+        for (int c = 0; c < ChunkMap.CHUNK_SIZE; c++) {
+
+          switch (face) {
+            case top:
+            case bottom:
+              n = createMask(face, n, c + cursor.start.x,a + cursor.start.y,b + cursor.start.z);
+              break;
+            case left:
+            case right:
+              n = createMask(face, n, a + cursor.start.x,c + cursor.start.y, b + cursor.start.z);
+              break;
+            default:
+              n = createMask(face, n, b + cursor.start.x, c + cursor.start.y, a + cursor.start.z);
+              break;
+          }
+
+        }
+      }
+
+      createQuads(face, a, cursor.start);
+    }
+/*
     if (face == Block.Side.top || face == Block.Side.bottom) {
       for (int y = cursor.start.y; y < cursor.end.y; y++) {
         int n = 0;
@@ -136,7 +155,7 @@ public class TerrainBuilder {
             n = createMask(face, n, x,y,z);
           }
         }
-        createQuads(face, y);
+        createQuads(face, y, cursor.start);
       }
     } else if (face == Block.Side.left || face == Block.Side.right) {
       for (int x = cursor.start.x; x < cursor.end.x; x++) {
@@ -146,12 +165,22 @@ public class TerrainBuilder {
             n = createMask(face, n, x,y,z);
           }
         }
-        createQuads(face, x);
+        createQuads(face, x, cursor.start);
       }
-    }
+    } else {
+      for (int z = cursor.start.z; z < cursor.end.z; z++) {
+        int n = 0;
+        for (int x = cursor.start.x; x < cursor.end.x; x++) {
+          for (int y = cursor.start.y; y < cursor.end.y; y++) {
+            n = createMask(face, n, x,y,z);
+          }
+        }
+        createQuads(face, z, cursor.start);
+      }
+    }*/
   }
 
-  private void createQuads(Block.Side face, int a) {
+  private void createQuads(Block.Side face, int a, Vector3i origin) {
     int n = 0;
 
     for(int j = 0; j < ChunkMap.CHUNK_SIZE; j++) {
@@ -177,26 +206,31 @@ public class TerrainBuilder {
           Gdx.app.log(TAG, "New quad: " + mask[n].blockId + " size=" + w+"x"+h + " at " + "X: " + i + " Y: " + j);
 
           TerrainPart currentPart     = terrainPartPool.obtain();
-          currentPart.face            = face;
+          currentPart.face = face;
           currentPart.block           = mask[n].getBlock();
           currentPart.voxel           = mask[n];
 
 
-
-          if (face == Block.Side.left || face == Block.Side.right) {
+          if (face == Block.Side.front || face == Block.Side.back) {
             currentPart.uvTiling.set(h,w);
-            currentPart.voxelPosition.set(a, i, j).add(cursor.start);
+            currentPart.voxelPosition.set(j, i, a);
+            currentPart.voxelSize.set(h, w, 1);
+
+          } else if (face == Block.Side.left || face == Block.Side.right) {
+            currentPart.uvTiling.set(h,w);
+            currentPart.voxelPosition.set(a, i, j);
             currentPart.voxelSize.set(1, w, h);
           } else {
             currentPart.uvTiling.set(w,h);
-            currentPart.voxelPosition.set(i, a, j).add(cursor.start);
+            currentPart.voxelPosition.set(i, a, j);
             currentPart.voxelSize.set(w, 1, h);
-          }
 
+          }
+          currentPart.voxelPosition.add(origin);
 
           terrainParts.add(currentPart);
 
-          Gdx.app.log(TAG, "Quad: " + currentPart.toString());
+          Gdx.app.log(TAG, "Quad: " + currentPart.toString() + " with origin " + origin.toString());
 
 
           for(int l = 0; l < h; ++l) {

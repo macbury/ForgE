@@ -11,7 +11,7 @@ public class Config {
   }
   public boolean generateWireframe = false;
   public boolean debug             = false;
-  public RenderDebug renderDebug   = RenderDebug.Wireframe;
+  public RenderDebug renderDebug   = RenderDebug.Textured;
   public boolean renderDynamicOctree = false;
   public boolean renderStaticOctree = false;
   public boolean renderBoundingBox = false;
