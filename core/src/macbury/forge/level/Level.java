@@ -74,7 +74,6 @@ public class Level implements Disposable {
 
   @Override
   public void dispose() {
-
     batch.dispose();
     terrainMap.dispose();
     entities.dispose();

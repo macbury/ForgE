@@ -16,8 +16,10 @@ public class LevelEntityEngine extends PooledEngine implements Disposable {
   public final CullingSystem culling;
   private final PlayerSystem player;
   private final CollisionSystem collision;
+  public final PsychicsSystem psychics;
 
   public LevelEntityEngine(Level level) {
+    psychics  = new PsychicsSystem();
     rendering = new RenderingSystem(level);
     octree    = new OctreeSystem(level);
     debug     = new DebugSystem(level);
@@ -40,6 +42,7 @@ public class LevelEntityEngine extends PooledEngine implements Disposable {
   @Override
   public void dispose() {
     debug.dispose();
+    psychics.dispose();
     removeAllEntities();
 
   }
