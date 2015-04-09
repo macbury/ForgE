@@ -25,15 +25,15 @@ public class ForgE extends Game {
   public static GameDatabase        db;
   public static BlocksProvider      blocks;
   public static InputManager        input;
-  public static EntityManager entities;
+  public static EntityManager       entities;
   private Array<ForgEBootListener>  bootListeners;
-  public static LevelManager              levels;
+  public static LevelManager        levels;
 
 
   public ForgE(Config config) {
     super();
-    this.config = config;
-    this.bootListeners = new Array<ForgEBootListener>();
+    this.config         = config;
+    this.bootListeners  = new Array<ForgEBootListener>();
   }
 
   @Override
@@ -48,7 +48,7 @@ public class ForgE extends Game {
     input         = new InputManager();
     blocks        = new BlocksProvider();
     levels        = new LevelManager(storage);
-    entities = new EntityManager();
+    entities      = new EntityManager();
     Gdx.input.setInputProcessor(input);
     for (ForgEBootListener listener : bootListeners) {
       listener.afterEngineCreate(this);

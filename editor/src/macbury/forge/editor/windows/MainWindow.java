@@ -11,7 +11,7 @@ import macbury.forge.Config;
 import macbury.forge.ForgE;
 import macbury.forge.ForgEBootListener;
 import macbury.forge.editor.controllers.*;
-import macbury.forge.editor.controllers.inspector.InspectorController;
+import macbury.forge.editor.controllers.tools.inspector.InspectorController;
 import macbury.forge.editor.controllers.maps.MapTreeController;
 import macbury.forge.editor.controllers.tools.ToolsController;
 import macbury.forge.editor.controllers.tools.events.EventsController;
@@ -28,7 +28,6 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
-import java.util.logging.Handler;
 
 public class MainWindow extends JFrame implements ForgEBootListener, FocusListener, WindowFocusListener, Thread.UncaughtExceptionHandler {
   private static final String WINDOW_MAIN_NAME = "ForgE";
@@ -41,6 +40,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
   private final InspectorController inspectorController;
   private final ToolsController toolsController;
   private final EventsController eventsToolsController;
+  public static MainWindow current;
   private LwjglAWTCanvas openGLCanvas;
   private ForgE engine;
   private ProjectController projectController;
@@ -82,7 +82,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     Toolkit kit = Toolkit.getDefaultToolkit();
     //Image mainIcon   = kit.createImage(ClassLoader.getSystemResource("icons/main.ico"));
     //setIconImage(mainIcon);
-
+    this.current = this;
     setContentPane(mainContentPane);
     mainContentPane.setVisible(false);
     setSize(1360, 760);
@@ -141,10 +141,11 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     projectController.addOnMapChangeListener(eventsToolsController);
     toolsController.register(terrainToolsController, 0);
     toolsController.register(eventsToolsController, 2);
+    toolsController.register(inspectorController, 3);
     mainContentPane.setVisible(true);
     invalidate();
     addWindowFocusListener(this);
-
+    //Color newColor = ColorPicker.showDialog(this, Color.WHITE);
   }
 
   @Override

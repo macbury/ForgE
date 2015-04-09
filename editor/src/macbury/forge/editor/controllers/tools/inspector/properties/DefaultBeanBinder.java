@@ -1,11 +1,8 @@
-package macbury.forge.editor.controllers.inspector.properties;
+package macbury.forge.editor.controllers.tools.inspector.properties;
 
 import java.beans.BeanInfo;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyVetoException;
-
-import javax.swing.UIManager;
 
 import com.l2fprod.common.model.DefaultBeanInfoResolver;
 import com.l2fprod.common.propertysheet.Property;

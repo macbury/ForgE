@@ -34,8 +34,8 @@ void main() {
   v_uvStart         = a_textureFullCoords.xy;
   v_uvMul           = a_textureFullCoords.zw - v_uvStart;
 
-  vec3 lightDiffuse = u_ambientLight.rgb + directionalLightDiffuse(u_mainLight, v_normal) - vec3(ao, ao, ao);
-  v_lightDiffuse    = vec4(lightDiffuse, 1f);
+  vec3 lightDiffuse = directionalLightDiffuse(u_mainLight, v_normal);
+  v_lightDiffuse    = u_ambientLight * vec4(lightDiffuse, 1f);
   v_textCoord       = a_texCoord0;
   v_position        = u_worldTransform * a_position;
   v_position        = applyWind(u_time, u_windDirection, waviness, v_position, u_mapSize, u_windDisplacementTexture);

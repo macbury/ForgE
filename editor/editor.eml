@@ -17,6 +17,9 @@
 	<lib name="miglayout-3.7.2.jar" scope="COMPILE">
 		<relative-module-cls project-related="jar://$PROJECT_DIR$/libs/miglayout-3.7.2.jar!/"/>
 	</lib>
+	<lib name="ColorPicker.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/libs/ColorPicker.jar!/"/>
+	</lib>
 	<levels>
 		<level name="Gradle: net.contentobjects.jnotify:jnotify:0.94" value="project"/>
 		<level name="Gradle: org.nuiton.thirdparty:l2fprod-common:0.1" value="project"/>

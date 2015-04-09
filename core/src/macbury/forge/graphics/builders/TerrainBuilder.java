@@ -171,10 +171,10 @@ public class TerrainBuilder {
             if(done) { break; }
           }
 
-          Gdx.app.log(TAG, "New quad: " + mask[n].blockId + " size=" + w+"x"+h + " at " + "X: " + i + " Y: " + j);
+          //Gdx.app.log(TAG, "New quad: " + mask[n].blockId + " size=" + w+"x"+h + " at " + "X: " + i + " Y: " + j);
 
           TerrainPart currentPart     = terrainPartPool.obtain();
-          currentPart.face = face;
+          currentPart.face            = face;
           currentPart.block           = mask[n].getBlock();
           currentPart.voxel           = mask[n];
 
@@ -198,8 +198,7 @@ public class TerrainBuilder {
 
           terrainParts.add(currentPart);
 
-          Gdx.app.log(TAG, "Quad: " + currentPart.toString() + " with origin " + origin.toString());
-
+          //Gdx.app.log(TAG, "Quad: " + currentPart.toString() + " with origin " + origin.toString());
 
           for(int l = 0; l < h; ++l) {
             for(int k = 0; k < w; ++k) { mask[n + k + l * ChunkMap.CHUNK_SIZE] = null; }
