@@ -48,10 +48,6 @@ public class InspectorController implements OnMapChangeListener, DefaultBeanBind
     changeManager = screen.changeManager;
 
     changeManager.addListener(this);
-
-    this.binder   = new DefaultBeanBinder(new EditorScreenBeanInfo.EditorScreenBean(screen), inspectorSheetPanel, new EditorScreenBeanInfo());
-    this.binder.setListener(this);
-
   }
 
   @Override
@@ -63,17 +59,24 @@ public class InspectorController implements OnMapChangeListener, DefaultBeanBind
   public void onMapSaved(ProjectController projectController, EditorScreen editorScreen) {
 
   }
-
+/*
   @Override
   public void onPropertyChange(DefaultBeanBinder binder, PropertyChangeEvent event, Object object) {
-    this.pause = PropertyChangeable.class.isInstance(changeManager.getCurrent());
-    if (!pause) {
+    if (com.badlogic.gdx.graphics.Color.class.isInstance(event.getNewValue())) {
       PropertyChangeable propertyChangeable = new PropertyChangeable(object, event);
       changeManager.addChangeable(propertyChangeable).apply();
+      Gdx.app.log(TAG, "Color change: "+ event.getNewValue() + " from " + event.getOldValue() + " for " + object.toString());
+    } else {
+      this.pause = PropertyChangeable.class.isInstance(changeManager.getCurrent());
+      if (!pause) {
+        PropertyChangeable propertyChangeable = new PropertyChangeable(object, event);
+        changeManager.addChangeable(propertyChangeable).apply();
+      }
+      pause = false;
+      Gdx.app.log(TAG, "Property change: "+ event.getNewValue() + " from " + event.getOldValue() + " for " + object.toString());
     }
-    pause = false;
-    Gdx.app.log(TAG, "Property change: "+ event.getNewValue() + " from " + event.getOldValue() + " for " + object.toString());
-  }
+
+  }*/
 
   @Override
   public void onChangeManagerChange(ChangeManager changeManager) {
@@ -82,13 +85,24 @@ public class InspectorController implements OnMapChangeListener, DefaultBeanBind
 
   @Override
   public void onToolPaneUnSelected(SelectionSystem system) {
-
+    if (binder != null) {
+      binder.unbind();
+    }
+    this.binder = null;
   }
 
   @Override
   public void onToolPaneSelected(ToolsController.ToolControllerListener selectedToolController, SelectionSystem system) {
-    if (selectedToolController == this)
+    if (selectedToolController == this) {
+      this.binder   = new DefaultBeanBinder(new EditorScreenBeanInfo.EditorScreenBean(screen), inspectorSheetPanel, new EditorScreenBeanInfo());
+      this.binder.setListener(this);
       inspectorSheetPanel.updateUI();
+    }
+  }
 
+  @Override
+  public void onPropertyChange(DefaultBeanBinder binder, PropertyChangeEvent event, Object object) {
+    PropertyChangeable propertyChangeable = new PropertyChangeable(object, event);
+    propertyChangeable.apply();
   }
 }

@@ -19,6 +19,10 @@ public class EditorScreenBeanInfo extends BaseBeanInfo {
     tilesetProperty.setDisplayName("Title");
     tilesetProperty.setShortDescription("Map title for editor");
 
+    ExtendedPropertyDescriptor fogProperty = addProperty("fogColor").setCategory(CATEGORY_LEVEL);
+    fogProperty.setDisplayName("Fog & sky color");
+    fogProperty.setShortDescription("Color of the fog and sky");
+
     ExtendedPropertyDescriptor ambientLightColorProperty = addProperty("ambientLight").setCategory(CATEGORY_LIGHTING);
     ambientLightColorProperty.setDisplayName("Ambient Light Color");
     ambientLightColorProperty.setShortDescription("color for ambient light");
@@ -39,6 +43,14 @@ public class EditorScreenBeanInfo extends BaseBeanInfo {
       this.screen = screen;
     }
 
+    public Color getFogColor() {
+      return screen.level.env.skyColor;
+    }
+
+    public void setFogColor(Color newColor) {
+      screen.level.env.skyColor.set(newColor);
+    }
+
     public String getTitle() {
       return screen.level.state.getName();
     }
@@ -52,7 +64,7 @@ public class EditorScreenBeanInfo extends BaseBeanInfo {
     }
 
     public void setSunLightColor(Color hexColor) {
-
+      screen.level.env.mainLight.color.set(hexColor);
     }
 
     public Color getAmbientLight() {
@@ -60,7 +72,7 @@ public class EditorScreenBeanInfo extends BaseBeanInfo {
     }
 
     public void setAmbientLight(Color hexColor) {
-
+      screen.level.env.ambientLight.set(hexColor);
     }
 
     public String getWindSpeed() {

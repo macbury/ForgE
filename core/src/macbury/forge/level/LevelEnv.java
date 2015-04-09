@@ -27,7 +27,7 @@ public class LevelEnv {
     mainLight    = new DirectionalLight();
     mainLight.set(1f, 1f, 1f,-1, -1, 0.5f);
 
-    ambientLight = Color.WHITE;
+    ambientLight = Color.GRAY;
   }
 
 }

@@ -92,7 +92,7 @@ public class ApplyCustomBrushChangeable extends TerrainCursorChangeable {
   }
 
   public static class BrushType implements Disposable{
-    public static final int MAX_SIZE = 20;
+    public static final int MAX_SIZE = 60;
     private final String name;
     private ImageIcon imageIcon;
     private Pixmap basePixmap;

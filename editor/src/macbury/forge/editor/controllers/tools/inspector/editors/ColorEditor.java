@@ -9,19 +9,14 @@ import java.awt.event.MouseListener;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.AbstractAction;
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JColorChooser;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.UIManager;
+import javax.swing.*;
 
 import com.badlogic.gdx.graphics.Color;
+import com.bric.swing.ColorPicker;
 import com.l2fprod.common.beans.editor.AbstractPropertyEditor;
 import com.l2fprod.common.swing.renderer.ColorCellRenderer;
+import icons.Utils;
+import macbury.forge.editor.windows.MainWindow;
 
 
 /**
@@ -35,14 +30,14 @@ public class ColorEditor extends AbstractPropertyEditor {
 
     private static final long serialVersionUID = 411604969565728959L;
 
-    private ColorCellRenderer label = null;
+    private JLabel label = null;
     private JButton button = null;
 
     public ColorEditorComponent() {
 
       setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
-      label = new ColorCellRenderer();
+      label = new JLabel();
       label.setBorder(BorderFactory.createEmptyBorder(0, 2, 0, 0));
       label.setAlignmentX(JTextField.LEFT_ALIGNMENT);
       label.setBackground(UIManager.getColor("Table.selectionBackground"));
@@ -72,34 +67,6 @@ public class ColorEditor extends AbstractPropertyEditor {
         }
       });
 
-      label.addMouseListener(new MouseListener() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-          selectColor();
-        }
-
-        @Override
-        public void mousePressed(MouseEvent e) {
-
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent e) {
-
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent e) {
-
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
-
-        }
-      });
-
-
       JPanel left = new JPanel();
       left.setLayout(new BorderLayout(0, 0));
       left.add(label);
@@ -111,12 +78,12 @@ public class ColorEditor extends AbstractPropertyEditor {
       right.setPreferredSize(new Dimension(size.width, 25));
       right.setAlignmentX(JPanel.RIGHT_ALIGNMENT);
 
-      add(left, BorderLayout.WEST);
-      add(right, BorderLayout.CENTER);
+      add(left, BorderLayout.CENTER);
+      add(right, BorderLayout.EAST);
     }
 
     public void setColor(Color color) {
-      label.setValue(new java.awt.Color(color.toIntBits()));
+      label.setText(color.toString());
       ColorEditor.this.color = color;
     }
   }
@@ -139,18 +106,15 @@ public class ColorEditor extends AbstractPropertyEditor {
   }
 
   protected void selectColor() {
-    java.awt.Color oldColor = new java.awt.Color(color.toIntBits());
-    String title = "Select color";
-    java.awt.Color selectedColor = JColorChooser.showDialog(editor, title, oldColor);
+    java.awt.Color selectedColor = ColorPicker.showDialog(MainWindow.current, Utils.fromLibgdx(color));
 
     if (selectedColor != null) {
+      Color newColor = Utils.fromAwt(selectedColor);
 
-      selectedColor.toString();
-      Color newColor = new Color(selectedColor.getRed());
+      colorEditor.setColor(newColor);
 
-      //colorEditor.setColor(newColor);
+      firePropertyChange(color, newColor);
 
-      //firePropertyChange(oldColor, newColor);
     }
   }
 
