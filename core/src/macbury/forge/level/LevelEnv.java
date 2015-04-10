@@ -30,4 +30,43 @@ public class LevelEnv {
     ambientLight = Color.GRAY;
   }
 
+  public Vector3 getGravity() {
+    return gravity;
+  }
+
+  public void setGravity(Vector3 gravity) {
+    this.gravity = gravity;
+  }
+
+  public Vector2 getWindDirection() {
+    return windDirection;
+  }
+
+  public void setWindDirection(Vector2 windDirection) {
+    this.windDirection = windDirection;
+  }
+
+  public Color getSkyColor() {
+    return skyColor;
+  }
+
+  public void setSkyColor(Color skyColor) {
+    this.skyColor = skyColor;
+  }
+
+  public Color getAmbientLight() {
+    return ambientLight;
+  }
+
+  public void setAmbientLight(Color ambientLight) {
+    this.ambientLight = ambientLight;
+  }
+
+  public DirectionalLight getMainLight() {
+    return mainLight;
+  }
+
+  public void setMainLight(DirectionalLight mainLight) {
+    this.mainLight = mainLight;
+  }
 }

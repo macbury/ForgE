@@ -87,6 +87,7 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx-bullet:$gdxVersion"
         compile 'com.esotericsoftware:kryo-shaded:3.0.0'
         compile 'org.mozilla:rhino:1.7R5'
+        compile 'org.apache.commons:commons-lang3:3.4'
     }
 }
 
