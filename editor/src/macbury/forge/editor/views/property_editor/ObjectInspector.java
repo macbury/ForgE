@@ -24,7 +24,7 @@ public class ObjectInspector {
         Class<? extends AbstractPropertyValue> editorClass = propertyTable.getEditorClassFor(propertyDescriptor.getPropertyType());
         try {
           AbstractPropertyValue editorInstance               = editorClass.newInstance();
-          editorInstance.setTitle(propertyDescriptor.getName());
+          editorInstance.setProperty(propertyDescriptor, toInspect);
           valueEditors.add(editorInstance);
         } catch (InstantiationException e) {
           e.printStackTrace();

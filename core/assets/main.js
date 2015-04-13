@@ -1,6 +1,5 @@
-var TAG = "main";
 
-function Start($game, $log, $db) {
+function onStart($game) {
   $log.info(TAG, "Initialized game!!!!");
   $game.teleport($db.playerStartPosition);
 }

@@ -47,7 +47,7 @@ public class PropertyTableTest extends JFrame {
   }
 
   public class ExampleObjectToInspect {
-    private String title;
+    private String title = "test title";
     private int number;
     private float decimalNumber;
     private boolean yesOrNo;
