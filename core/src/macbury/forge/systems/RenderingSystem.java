@@ -32,7 +32,7 @@ public class RenderingSystem extends IteratingSystem {
     if (position.visible) {
       BaseRenderable baseRenderable = renderable.instance;
       if (renderable.useWorldTransform) {
-        baseRenderable.worldTransform.set(position.getWorldTransformMatrix());
+        baseRenderable.worldTransform.set(position.worldTransform);
       }
 
       batch.add(baseRenderable);

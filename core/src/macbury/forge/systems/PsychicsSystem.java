@@ -1,16 +1,29 @@
 package macbury.forge.systems;
 
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.EntityListener;
-import com.badlogic.ashley.core.EntitySystem;
+import com.badlogic.ashley.core.*;
+import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.bullet.DebugDrawer;
 import com.badlogic.gdx.physics.bullet.collision.*;
+import com.badlogic.gdx.physics.bullet.linearmath.btIDebugDraw;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import macbury.forge.components.CollisionComponent;
+import macbury.forge.components.GravityComponent;
+import macbury.forge.components.MovementComponent;
+import macbury.forge.components.PositionComponent;
 
 /**
  * Created by macbury on 09.04.15.
  */
 public class PsychicsSystem extends EntitySystem implements EntityListener, Disposable {
+  private final DebugDrawer debugDrawer;
+  private ComponentMapper<PositionComponent> pm   = ComponentMapper.getFor(PositionComponent.class);
+  private ComponentMapper<CollisionComponent> cm  = ComponentMapper.getFor(CollisionComponent.class);
+  private ComponentMapper<MovementComponent> mm   = ComponentMapper.getFor(MovementComponent.class);
 
   private final btDefaultCollisionConfiguration collisionConfig;
   private final btCollisionDispatcher dispatcher;
@@ -19,43 +32,103 @@ public class PsychicsSystem extends EntitySystem implements EntityListener, Disp
   private final btBoxShape groundShape;
   private final btCollisionObject groundCollider;
   private final PsychicsContactListener contactListener;
+  private final Family family;
+
+  private final btCapsuleShape playerCapsuleShape;
+  private final btCollisionObject playerCollisionObject;
+
+  private ImmutableArray<Entity> entities;
 
   public PsychicsSystem() {
     super();
+
+    family          = Family.getFor(PositionComponent.class, CollisionComponent.class);
+
+    debugDrawer     = new DebugDrawer();
     collisionConfig = new btDefaultCollisionConfiguration();
     dispatcher      = new btCollisionDispatcher(collisionConfig);
     broadphase      = new btDbvtBroadphase();
-    collisionWorld  = new btCollisionWorld(dispatcher, broadphase, collisionConfig);
     contactListener = new PsychicsContactListener();
+    collisionWorld  = new btCollisionWorld(dispatcher, broadphase, collisionConfig);
 
-    groundShape     = new btBoxShape(new Vector3(100f, 0.5f, 100f));
+
+    debugDrawer.setDebugMode(btIDebugDraw.DebugDrawModes.DBG_MAX_DEBUG_DRAW_MODE);
+
+    Matrix4 groundPos = new Matrix4();
+    groundPos.translate(0,0,0);
+
+    groundShape     = new btBoxShape(new Vector3(100f, 1f, 100f));
     groundCollider  = new btCollisionObject();
     groundCollider.setCollisionShape(groundShape);
+    groundCollider.setWorldTransform(groundPos);
+    groundCollider.setCollisionFlags(btCollisionObject.CollisionFlags.CF_STATIC_OBJECT);
 
-    collisionWorld.addCollisionObject(groundCollider);
 
+    playerCapsuleShape    = new btCapsuleShape(0.5f, 1f);
+    playerCollisionObject = new btCollisionObject();
+    playerCollisionObject.setCollisionShape(playerCapsuleShape);
+
+    playerCollisionObject.setCollisionFlags(btCollisionObject.CollisionFlags.CF_CUSTOM_MATERIAL_CALLBACK);
+
+    collisionWorld.addCollisionObject(groundCollider, Flags.GROUND, Flags.ALL);
+    collisionWorld.addCollisionObject(playerCollisionObject, Flags.GROUND, Flags.GROUND);
   }
 
   @Override
   public void update(float deltaTime) {
-    super.update(deltaTime);
+    for (int i = 0; i < entities.size(); i++) {
+      Entity e = entities.get(i);
+      PositionComponent pc   = pm.get(e);
+
+      playerCollisionObject.setWorldTransform(pc.worldTransform);
+    }
+
     collisionWorld.performDiscreteCollisionDetection();
   }
 
   @Override
-  public void entityAdded(Entity entity) {
+  public void removedFromEngine(Engine engine) {
+    entities = null;
+  }
 
+  @Override
+  public void addedToEngine(Engine engine) {
+    entities = engine.getEntitiesFor(family);
+  }
+
+  @Override
+  public void entityAdded(Entity entity) {
+    if (family.matches(entity)) {
+      CollisionComponent cc = cm.get(entity);
+      playerCollisionObject.userData = entity;
+      ////entityArray.add(entity);
+    }
   }
 
   @Override
   public void entityRemoved(Entity entity) {
+    if (family.matches(entity)) {
+      //entityArray.removeValue(entity, true);
+      //TODO clear bullet shit
+    }
+  }
 
+  public void debugDraw(PerspectiveCamera camera) {
+    collisionWorld.setDebugDrawer(debugDrawer);
+    debugDrawer.begin(camera); {
+      collisionWorld.debugDrawWorld();
+    }debugDrawer.end();
   }
 
   @Override
   public void dispose() {
+    playerCollisionObject.dispose();
+    playerCapsuleShape.dispose();
+
     groundShape.dispose();
     groundCollider.dispose();
+
+    entities = null;
 
     dispatcher.dispose();
     collisionConfig.dispose();
@@ -64,12 +137,116 @@ public class PsychicsSystem extends EntitySystem implements EntityListener, Disp
     collisionWorld.dispose();
 
     broadphase.dispose();
+    debugDrawer.dispose();
+  }
+
+  public void disable() {
+    setProcessing(false);
+  }
+
+  public static class Flags {
+    final static short GROUND = 1<<8;
+    final static short OBJECT = 1<<9;
+    final static short ALL    = -1;
   }
 
   public class PsychicsContactListener extends ContactListener {
+    private static final String TAG = "PsychicsContactListener";
+    private Vector3 tmpA = new Vector3();
+    private Vector3 tmpB = new Vector3();
+    private Vector3 norm = new Vector3();
+    private Vector3 worldA = new Vector3();
+    private Vector3 worldB = new Vector3();
+    /*
     @Override
-    public boolean onContactAdded(btCollisionObject colObj0, int partId0, int index0, btCollisionObject colObj1, int partId1, int index1) {
-      return super.onContactAdded(colObj0, partId0, index0, colObj1, partId1, index1);
+    public boolean onContactAdded(btManifoldPoint cp, btCollisionObject colObjA, int partId0, int index0, btCollisionObject colObjB, int partId1, int index1) {
+      Entity eA = getEntity(colObjA);
+      Entity eB = getEntity(colObjB);
+
+      if (eA != null || eB != null) {
+        float dist = cp.getDistance();
+        cp.getNormalWorldOnB(norm);
+        cp.getPositionWorldOnA(worldA);
+        cp.getPositionWorldOnA(worldB);
+
+        if (eA != null) {
+          entityCollision(eA, norm, worldA, worldB, dist, eB);
+        }
+
+        if (eB != null) {
+          entityCollision(eB, norm.scl(-1f), worldB, worldA, dist, eA);
+        }
+      }
+      return true;
+    }*/
+
+
+    @Override
+    public void onContactStarted(btPersistentManifold manifold) {
+      if (manifold.getNumContacts() > 0) {
+
+        Gdx.app.log(TAG, "Contact started");
+        btCollisionObject colObjA = manifold.getBody0();
+        btCollisionObject colObjB = manifold.getBody1();
+
+        Entity eA = getEntity(colObjA);
+        Entity eB = getEntity(colObjB);
+
+        if (eA != null || eB != null) {
+          for (int i = 0; i < manifold.getNumContacts(); i++) {
+            btManifoldPoint cp = manifold.getContactPoint(i);
+            float dist = cp.getDistance();
+            cp.getNormalWorldOnB(norm);
+            cp.getPositionWorldOnA(worldA);
+            cp.getPositionWorldOnA(worldB);
+
+          /*Gdx.app.log(TAG, "Distance: " + dist);
+          Gdx.app.log(TAG, "worldA: " + worldA.toString());
+          Gdx.app.log(TAG, "worldB: " + worldB.toString());
+          Gdx.app.log(TAG, "norm: " + norm.nor().toString());*/
+
+            if (eA != null) {
+              entityCollision(eA, norm, worldA, worldB, dist, eB);
+            }
+
+            if (eB != null) {
+              entityCollision(eB, norm.scl(-1f), worldB, worldA, dist, eA);
+            }
+            cp.dispose();
+          }
+        }
+      }
     }
+
+    @Override
+    public void onContactEnded(btPersistentManifold manifold) {
+      if (manifold.getNumContacts() > 0) {
+        Gdx.app.log(TAG, "Contact ended");
+      }
+    }
+
+    private void entityCollision(Entity ent, Vector3 normal, Vector3 myPoint, Vector3 otherPoint, float dist, Entity otherEntity) {
+      //if (Math.abs(dist) <= 0.01f) return; // ignoring tiny collisions seems to help stability?
+
+      //ent.addCollisionPositionChange(tmpA);
+      CollisionComponent collisionComponent = cm.get(ent);
+      MovementComponent movementComponent   = mm.get(ent);
+      if (collisionComponent != null) {
+
+        //collisionComponent.setNormal(normal);
+        Gdx.app.log("dist",String.valueOf(dist));
+        tmpA.set(myPoint).sub(otherPoint).nor().add(normal).scl(dist);
+        movementComponent.targetPosition.add(tmpA);
+      }
+    }
+
+    private Entity getEntity(btCollisionObject collisionObject) {
+      if (collisionObject.userData != null) {
+        return (Entity)collisionObject.userData;
+      } else {
+        return null;
+      }
+    }
+
   }
 }

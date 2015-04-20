@@ -9,6 +9,7 @@ import macbury.forge.ForgE;
 import macbury.forge.components.*;
 import macbury.forge.db.models.Teleport;
 import macbury.forge.level.Level;
+import macbury.forge.utils.Vector3i;
 
 /**
  * Created by macbury on 16.03.15.
@@ -34,7 +35,16 @@ public class GameplayScreen extends AbstractScreen {
     level.camera.fieldOfView  = 70;
     Entity playerEntity = ForgE.entities.get("player").build(level.entities);
     playerEntity.getComponent(PlayerComponent.class).camera = level.camera;
+/*
+    for (int i = 0; i < 20; i++) {
 
+      Entity bulletTestEntity = ForgE.entities.get("bullet-test").build(level.entities);
+      level.terrainMap.localVoxelPositionToWorldPosition(teleport.voxelPosition, playerEntity.getComponent(PositionComponent.class).vector);
+      playerEntity.getComponent(PositionComponent.class).vector.add(0, 0, i);
+      level.entities.addEntity(bulletTestEntity);
+    }
+
+*/
     level.terrainMap.localVoxelPositionToWorldPosition(teleport.voxelPosition, playerEntity.getComponent(PositionComponent.class).vector);
 
     level.entities.addEntity(playerEntity);

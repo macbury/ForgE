@@ -65,7 +65,7 @@ public class PositionComponent extends BaseComponent implements OctreeObject {
     this.parent = parent;
   }
 
-  public Matrix4 getWorldTransformMatrix() {
+  public Matrix4 updateTransformMatrix() {
     worldTransform.idt();
     worldTransform.setToTranslationAndScaling(vector, scale);
     worldTransform.rotate(rotation);

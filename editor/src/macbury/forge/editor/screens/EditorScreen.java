@@ -51,6 +51,7 @@ public class EditorScreen extends AbstractScreen {
 
     selectionSystem.setOverlay(overlay);
     level.entities.addSystem(selectionSystem);
+    level.entities.psychics.disable();
     stage.addActor(overlay);
   }
 

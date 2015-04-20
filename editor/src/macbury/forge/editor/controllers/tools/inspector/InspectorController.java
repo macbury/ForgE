@@ -96,13 +96,18 @@ public class InspectorController implements OnMapChangeListener, DefaultBeanBind
     if (selectedToolController == this) {
       this.binder   = new DefaultBeanBinder(new EditorScreenBeanInfo.EditorScreenBean(screen), inspectorSheetPanel, new EditorScreenBeanInfo());
       this.binder.setListener(this);
+
       inspectorSheetPanel.updateUI();
     }
   }
 
   @Override
   public void onPropertyChange(DefaultBeanBinder binder, PropertyChangeEvent event, Object object) {
+    Gdx.app.log(TAG, "On property change event");
+    //this.binder.setListener(null);
     PropertyChangeable propertyChangeable = new PropertyChangeable(object, event);
+    //changeManager.addChangeable(propertyChangeable).apply();
+    //this.binder.setListener(this);
     propertyChangeable.apply();
   }
 }

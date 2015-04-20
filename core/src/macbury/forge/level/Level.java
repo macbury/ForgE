@@ -3,6 +3,7 @@ package macbury.forge.level;
 import com.badlogic.gdx.graphics.g3d.utils.DefaultTextureBinder;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.utils.Disposable;
+import macbury.forge.Config;
 import macbury.forge.ForgE;
 import macbury.forge.graphics.batch.VoxelBatch;
 import macbury.forge.graphics.camera.GameCamera;
@@ -69,6 +70,10 @@ public class Level implements Disposable {
       batch.add(terrainEngine);
       batch.render(env);
     } batch.end();
+
+    if (ForgE.config.renderBulletDebug) {
+      entities.psychics.debugDraw(camera);
+    }
   }
 
 

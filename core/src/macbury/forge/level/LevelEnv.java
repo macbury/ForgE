@@ -20,7 +20,7 @@ public class LevelEnv {
 
   public TextureAsset windDisplacementTexture;
   public Vector2 windDirection = new Vector2(0.1f,0);
-  public Vector3 gravity = new Vector3(0, -7f, 0);
+  public Vector3 gravity = new Vector3(0, -6f, 0);
 
   public LevelEnv() {
     skyColor     = Color.valueOf("3498db");

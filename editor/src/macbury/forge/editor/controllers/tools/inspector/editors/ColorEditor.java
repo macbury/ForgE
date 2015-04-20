@@ -83,7 +83,7 @@ public class ColorEditor extends AbstractPropertyEditor {
     }
 
     public void setColor(Color color) {
-      label.setText(color.toString());
+      label.setText("#"+color.toString());
       ColorEditor.this.color = color;
     }
   }
@@ -114,7 +114,6 @@ public class ColorEditor extends AbstractPropertyEditor {
       colorEditor.setColor(newColor);
 
       firePropertyChange(color, newColor);
-
     }
   }
 

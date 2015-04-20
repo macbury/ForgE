@@ -40,7 +40,7 @@ public class CollisionSystem extends IteratingSystem {
 
   @Override
   protected void processEntity(Entity entity, float deltaTime) {
-    PositionComponent positionComponent   = pm.get(entity);
+    /*PositionComponent positionComponent   = pm.get(entity);
     CollisionComponent collisionComponent = cm.get(entity);
     MovementComponent movementComponent   = mm.get(entity);
     collisionComponent.position.setZero();
@@ -56,6 +56,6 @@ public class CollisionSystem extends IteratingSystem {
     }
     //TODO: check collision with terrain
     //TODO: check collision with entities
-
+*/
   }
 }

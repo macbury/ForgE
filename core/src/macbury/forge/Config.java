@@ -6,6 +6,8 @@ import com.badlogic.gdx.Gdx;
  * Created by macbury on 18.10.14.
  */
 public class Config {
+  public boolean renderBulletDebug = true;
+
   public enum RenderDebug {
     Textured, Wireframe, Normals, Lighting
   }

@@ -20,15 +20,13 @@ import macbury.forge.utils.Vector3i;
  */
 public class MovementSystem extends IteratingSystem {
   private final Level level;
-  private ComponentMapper<PositionComponent> pm   = ComponentMapper.getFor(PositionComponent.class);
   private ComponentMapper<MovementComponent> mm   = ComponentMapper.getFor(MovementComponent.class);
   private ComponentMapper<GravityComponent>  gm   = ComponentMapper.getFor(GravityComponent.class);
-  private ComponentMapper<CollisionComponent> cm  = ComponentMapper.getFor(CollisionComponent.class);
   private final Vector3 tempA;
   private final Vector3 tempB;
 
   public MovementSystem(Level level) {
-    super(Family.getFor(PositionComponent.class, MovementComponent.class));
+    super(Family.getFor(MovementComponent.class));
     this.level = level;
     tempA = new Vector3();
     tempB = new Vector3();
@@ -37,9 +35,9 @@ public class MovementSystem extends IteratingSystem {
   @Override
   public void processEntity(Entity entity, float deltaTime) {
     MovementComponent movementComponent   = mm.get(entity);
-    PositionComponent positionComponent   = pm.get(entity);
     GravityComponent  gravityComponent    = gm.get(entity);
-    CollisionComponent collisionComponent = cm.get(entity);
+
+    movementComponent.targetPosition.setZero();
 
     if (!movementComponent.direction.isZero()) {
       float distance = movementComponent.speed * deltaTime;
@@ -48,19 +46,13 @@ public class MovementSystem extends IteratingSystem {
           movementComponent.direction.y * distance,
           movementComponent.direction.z * distance
       );
-      tempB.set(positionComponent.vector).add(tempA);
-      positionComponent.vector.set(tempB);
+      movementComponent.targetPosition.add(tempA);
     }
 
     if (gravityComponent != null) {
       tempA.set(level.env.gravity).scl(deltaTime);
-      positionComponent.vector.add(tempA);
+      movementComponent.targetPosition.add(tempA);
     }
 
-    if (collisionComponent != null && !collisionComponent.position.isZero()) {
-      if (collisionComponent.position.y >= positionComponent.vector.y) {
-        positionComponent.vector.y = collisionComponent.position.y;
-      }
-    }
   }
 }

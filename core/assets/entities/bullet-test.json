@@ -1,0 +1,20 @@
+{
+  name: "bullet-test",
+  components: [
+    {
+      class: "position",
+      vector: { x: 50,  y: 20,    z: 50 },
+      size:   { x: 1,   y: 1.85f, z: 1 }
+    },
+    {
+      class: "movement",
+      speed: 7.4f
+    },
+    { class: "gravity" },
+    { class: "entity_state" },
+    {
+      class: "collision",
+      solid: true,
+    }
+  ]
+}
