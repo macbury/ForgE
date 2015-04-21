@@ -21,6 +21,7 @@ public class PositionComponent extends BaseComponent implements OctreeObject {
   public OctreeNode        parent;
   public final Matrix4     worldTransform;
   public boolean visible = true;
+  public boolean dirty   = true;
   private final static Vector3 temp = new Vector3();
 
   public PositionComponent() {
@@ -42,6 +43,7 @@ public class PositionComponent extends BaseComponent implements OctreeObject {
     size.set(otherPosition.size);
     scale.set(otherPosition.scale);
     visible = otherPosition.visible;
+    dirty = true;
   }
 
   @Override
@@ -53,6 +55,7 @@ public class PositionComponent extends BaseComponent implements OctreeObject {
     scale.set(1,1,1);
     parent = null;
     visible = false;
+    dirty = true;
   }
 
   @Override
@@ -66,9 +69,12 @@ public class PositionComponent extends BaseComponent implements OctreeObject {
   }
 
   public Matrix4 updateTransformMatrix() {
-    worldTransform.idt();
-    worldTransform.setToTranslationAndScaling(vector, scale);
-    worldTransform.rotate(rotation);
+    if (dirty) {
+      worldTransform.idt();
+      worldTransform.setToTranslationAndScaling(vector, scale);
+      worldTransform.rotate(rotation);
+    }
+
     return worldTransform;
   }
 }
