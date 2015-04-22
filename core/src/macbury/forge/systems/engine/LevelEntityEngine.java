@@ -2,7 +2,6 @@ package macbury.forge.systems.engine;
 
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.utils.Disposable;
-import macbury.forge.components.PositionComponent;
 import macbury.forge.level.Level;
 import macbury.forge.systems.*;
 
@@ -10,7 +9,7 @@ import macbury.forge.systems.*;
  * Created by macbury on 19.10.14.
  */
 public class LevelEntityEngine extends PooledEngine implements Disposable {
-  public final RenderingSystem rendering;
+  public final WorldRenderingSystem rendering;
   public final OctreeSystem octree;
   public final DebugSystem debug;
   public final MovementSystem movement;
@@ -22,7 +21,7 @@ public class LevelEntityEngine extends PooledEngine implements Disposable {
 
   public LevelEntityEngine(Level level) {
     psychics  = new PsychicsSystem();
-    rendering = new RenderingSystem(level);
+    rendering = new WorldRenderingSystem(level);
     octree    = new OctreeSystem(level);
     debug     = new DebugSystem(level);
     movement  = new MovementSystem(level);
@@ -40,18 +39,17 @@ public class LevelEntityEngine extends PooledEngine implements Disposable {
     addSystem(psychics);
     addSystem(positions);
 
-    addSystem(debug);
+
     addSystem(rendering);
+    addSystem(debug);
 
     addEntityListener(psychics);
   }
 
   @Override
   public void dispose() {
-
     debug.dispose();
     psychics.dispose();
     removeAllEntities();
-
   }
 }

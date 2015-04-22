@@ -57,9 +57,9 @@ public class PsychicsSystem extends EntitySystem implements EntityListener, Disp
     debugDrawer.setDebugMode(btIDebugDraw.DebugDrawModes.DBG_MAX_DEBUG_DRAW_MODE);
 
     Matrix4 groundPos = new Matrix4();
-    groundPos.translate(0,0,0);
+    groundPos.translate(40,0.5f,40);
 
-    groundShape     = new btBoxShape(new Vector3(100f, 1f, 100f));
+    groundShape     = new btBoxShape(new Vector3(40f, 0.5f, 40f));
     groundCollider  = new btCollisionObject();
     groundCollider.setCollisionShape(groundShape);
     groundCollider.setWorldTransform(groundPos);

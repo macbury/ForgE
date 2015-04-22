@@ -66,9 +66,13 @@ public class DebugSystem extends IteratingSystem implements Disposable {
     this.tempBox          = new BoundingBox();
     this.tempVec          = new Vector3();
 
-
   }
 
+
+  @Override
+  public boolean checkProcessing() {
+    return ForgE.config.debug;
+  }
 
   @Override
   public void processEntity(Entity entity, float deltaTime) {
@@ -88,6 +92,7 @@ public class DebugSystem extends IteratingSystem implements Disposable {
 
   @Override
   public void update(float deltaTime) {
+    batch.begin(camera);
     context.begin();
     context.setDepthTest(GL30.GL_LEQUAL);
     context.setCullFace(GL30.GL_BACK);
@@ -101,12 +106,8 @@ public class DebugSystem extends IteratingSystem implements Disposable {
       if (ForgE.config.renderBoundingBox) {
         batch.shapeRenderer.identity();
         for (int i = 0; i < terrain.chunks.size; i++) {
-          //batch.shapeRenderer.setColor(BOUNDING_BOX_COLOR);
           Chunk chunk = terrain.chunks.get(i);
           chunk.getBoundingBox(tempBox);
-
-          //DebugShape.draw(batch.shapeRenderer, tempBox);
-          //batch.shapeRenderer.setColor(Color.NAVY);
           for (int j = 0; j < chunk.renderables.size; j++) {
             VoxelFaceRenderable renderable = chunk.renderables.get(j);
             DebugShape.draw(batch.shapeRenderer, renderable.boundingBox);
@@ -130,6 +131,18 @@ public class DebugSystem extends IteratingSystem implements Disposable {
 
     frustrumDebugger.render(camera);
     context.end();
+    batch.render(level.env);
+    batch.end();
+    if (ForgE.config.renderBulletDebug) {
+      context.begin(); {
+        context.setDepthTest(GL30.GL_LEQUAL);
+        context.setCullFace(GL30.GL_BACK);
+        context.setDepthTest(GL20.GL_LEQUAL);
+        level.entities.psychics.debugDraw(camera);
+      } context.end();
+
+    }
+
   }
 
   private void renderStartPosition() {
