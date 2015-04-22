@@ -1,5 +1,6 @@
 {
   occulsion: false,
+  scalable: false,
   parts: {
 
     front: {

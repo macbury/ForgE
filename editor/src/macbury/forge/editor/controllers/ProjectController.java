@@ -36,7 +36,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by macbury on 18.10.14.
  */
-public class ProjectController implements JobListener, ShaderReloadListener, MapCreationWindow.Listener {
+public class ProjectController implements JobListener, ShaderReloadListener, MapCreationWindow.Listener, EditorScreen.ForgeAfterRenderListener {
   private static final String LEVEL_STATE_LOADED_CALLBACK = "onLevelStateLoaded";
   private static final String TAG = "ProjectController";
   private static final String LEVEL_STATE_SAVE_CALLBACK = "onLevelStateSaved";
@@ -47,6 +47,7 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
   private ProgressTaskDialog progressTaskDialog;
   private JProgressBar jobProgressBar;
   private LevelState currentLevelState;
+  private UpdateStatusBar updateStatusBar;
 
   public void setMainWindow(final MainWindow mainWindow) {
     this.mainWindow         = mainWindow;
@@ -313,7 +314,12 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
     mainWindow.setTitle(state.name);
     ForgE.db.save();
 
+    if (editorScreen != null) {
+      editorScreen.removeAfterRenderListener(this);
+    }
+
     this.editorScreen = new EditorScreen(state);
+    editorScreen.addAfterRenderListener(this);
     Gdx.app.postRunnable(new Runnable() {
       @Override
       public void run() {
@@ -328,9 +334,16 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
     });
   }
 
+  @Override
+  public void forgeAfterRenderCallback(EditorScreen screen) {
+
+    if (updateStatusBar != null) {
+      updateStatusBar.update();
+    }
+  }
+
   public void setStatusLabel(JLabel statusLabel, JLabel statusMemoryLabel, JLabel statusRenderablesLabel, JLabel mapCursorPositionLabel, JLabel statusTriangleCountLabel) {
-    ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-    executor.scheduleAtFixedRate(new UpdateStatusBar(this, statusLabel, statusMemoryLabel, statusRenderablesLabel, mapCursorPositionLabel, statusTriangleCountLabel), 0, 250, TimeUnit.MILLISECONDS);
+    this.updateStatusBar = new UpdateStatusBar(this, statusLabel, statusMemoryLabel, statusRenderablesLabel, mapCursorPositionLabel, statusTriangleCountLabel);
   }
 
   public void addOnMapChangeListener(OnMapChangeListener listener) {
@@ -414,4 +427,5 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
       openMap(ForgE.levels.getFileHandle(ForgE.db.lastOpenedMapId));
     }
   }
+
 }

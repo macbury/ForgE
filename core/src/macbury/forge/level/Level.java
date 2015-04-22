@@ -61,10 +61,11 @@ public class Level implements Disposable {
   }
 
   public void render(float delta) {
-
+    batch.resetStats();
     camera.update();
     terrainEngine.update();
     entities.update(delta);
+
   }
 
 

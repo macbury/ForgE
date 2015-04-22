@@ -1,6 +1,7 @@
 package macbury.forge.editor.runnables;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import macbury.forge.editor.controllers.ProjectController;
 import macbury.forge.utils.FormatUtils;
 
@@ -9,7 +10,7 @@ import javax.swing.*;
 /**
  * Created by macbury on 23.10.14.
  */
-public class UpdateStatusBar implements Runnable {
+public class UpdateStatusBar {
 
   private final JLabel fpsLabel;
   private final JLabel statusMemoryLabel;
@@ -17,7 +18,7 @@ public class UpdateStatusBar implements Runnable {
   private final JLabel mapCursorPositionLabel;
   private final JLabel statusTriangleCountLabel;
   private ProjectController projectController;
-
+  private float accumulator;
   public UpdateStatusBar(ProjectController projectController, JLabel fpsLabel, JLabel statusMemoryLabel, JLabel statusRenderablesLabel, JLabel mapCursorPositionLabel, JLabel statusTriangleCountLabel) {
     this.fpsLabel = fpsLabel;
     this.statusMemoryLabel = statusMemoryLabel;
@@ -27,21 +28,27 @@ public class UpdateStatusBar implements Runnable {
     this.statusTriangleCountLabel = statusTriangleCountLabel;
   }
 
+  public void update() {
+    accumulator += Gdx.graphics.getDeltaTime();
 
-  @Override
-  public void run() {
-    if (projectController.editorScreen == null || projectController.editorScreen.level == null) {
-      fpsLabel.setText("...");
-      statusMemoryLabel.setText("...");
-      statusRenderablesLabel.setText("...");
-      mapCursorPositionLabel.setText("...");
-      statusTriangleCountLabel.setText("...");
-    } else {
-      fpsLabel.setText("FPS: " + Gdx.graphics.getFramesPerSecond());
-      statusMemoryLabel.setText("Memory: " + FormatUtils.humanReadableByteCount(Gdx.app.getNativeHeap(), true) + "/" + FormatUtils.humanReadableByteCount(Gdx.app.getJavaHeap(), true));
-      statusRenderablesLabel.setText("Renderables: " + String.valueOf(projectController.editorScreen.level.batch.renderablesPerFrame));
-      statusTriangleCountLabel.setText("Triangles: " + String.valueOf(projectController.editorScreen.level.batch.trianglesPerFrame));
-      mapCursorPositionLabel.setText(projectController.editorScreen.selectionSystem.voxelCursor.replace.toString());
+    if (accumulator >= 0.25f){
+      accumulator = 0f;
+      if (projectController.editorScreen == null || projectController.editorScreen.level == null) {
+        fpsLabel.setText("...");
+        statusMemoryLabel.setText("...");
+        statusRenderablesLabel.setText("...");
+        mapCursorPositionLabel.setText("...");
+        statusTriangleCountLabel.setText("...");
+      } else {
+        fpsLabel.setText("FPS: " + Gdx.graphics.getFramesPerSecond());
+        statusMemoryLabel.setText("Memory: " + FormatUtils.humanReadableByteCount(Gdx.app.getNativeHeap(), true) + "/" + FormatUtils.humanReadableByteCount(Gdx.app.getJavaHeap(), true));
+        statusRenderablesLabel.setText("Renderables: " + String.valueOf(projectController.editorScreen.level.batch.renderablesPerFrame));
+        statusTriangleCountLabel.setText("Vertex: " + String.valueOf(GLProfiler.vertexCount.count));
+
+        mapCursorPositionLabel.setText(projectController.editorScreen.selectionSystem.voxelCursor.replace.toString());
+      }
     }
+
   }
+
 }

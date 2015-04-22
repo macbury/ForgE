@@ -44,10 +44,8 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
   public  final Array<Chunk>      chunks;
   public  final Array<VoxelFaceRenderable> visibleFaces;
   public  final Array<OctreeObject> tempObjects;
-  public  final Matrix4 tempMat = new Matrix4();
   public  final Vector3 tempA  = new Vector3();
   public  final Vector3 tempC  = new Vector3();
-  public  final Vector3 tempD  = new Vector3();
   public  final Vector3i tempB = new Vector3i();
   private  final BoundingBox tempBox;
   private final Array<Chunk> visibleChunks;
@@ -108,7 +106,7 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
     frustrumOctreeQuery.setFrustum(camera.normalOrDebugFrustrum());
     octree.retrieve(tempObjects, frustrumOctreeQuery);
 
-    tempC.set(camera.normalOrDebugPosition());
+   // tempC.set(camera.normalOrDebugPosition());
 
     while(tempObjects.size > 0) {
       Chunk visibleChunk = (Chunk) tempObjects.pop();
@@ -160,6 +158,8 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
       while(builder.next()) {
         builder.buildFaceForChunk(chunk);
       }
+
+      builder.assembleMesh(chunk);
     } builder.end();
 
     if (chunk.isEmpty()) {

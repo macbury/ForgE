@@ -3,7 +3,9 @@ package macbury.forge.editor.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g3d.decals.CameraGroupStrategy;
 import com.badlogic.gdx.graphics.g3d.decals.DecalBatch;
+import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Array;
 import macbury.forge.ForgE;
 import macbury.forge.editor.systems.SelectionSystem;
 import macbury.forge.editor.undo_redo.ChangeManager;
@@ -28,7 +30,7 @@ public class EditorScreen extends AbstractScreen {
   public SelectionSystem selectionSystem;
   public ChangeManager changeManager;
   private DecalBatch decalBatch;
-
+  private Array<ForgeAfterRenderListener> afterRenderListenerArray = new Array<ForgeAfterRenderListener>();
   public EditorScreen(LevelState state) {
     super();
     this.state = state;
@@ -36,6 +38,7 @@ public class EditorScreen extends AbstractScreen {
 
   @Override
   protected void initialize() {
+    GLProfiler.enable();
     this.overlay              = new Overlay();
     this.stage                = new Stage();
     this.changeManager        = new ChangeManager();
@@ -55,6 +58,14 @@ public class EditorScreen extends AbstractScreen {
     stage.addActor(overlay);
   }
 
+  public void addAfterRenderListener(ForgeAfterRenderListener listener) {
+    afterRenderListenerArray.add(listener);
+  }
+
+  public void removeAfterRenderListener(ForgeAfterRenderListener listener) {
+    afterRenderListenerArray.removeValue(listener, true);
+  }
+
   @Override
   public void render(float delta) {
     ForgE.assets.loadPending();
@@ -62,6 +73,12 @@ public class EditorScreen extends AbstractScreen {
     cameraController.update(delta);
     level.render(delta);
     stage.draw();
+
+    for (int i = 0; i < afterRenderListenerArray.size; i++) {
+      afterRenderListenerArray.get(i).forgeAfterRenderCallback(this);
+    }
+
+    GLProfiler.reset();
   }
 
   @Override
@@ -101,4 +118,7 @@ public class EditorScreen extends AbstractScreen {
     decalBatch.dispose();
   }
 
+  public interface ForgeAfterRenderListener {
+    public void forgeAfterRenderCallback(EditorScreen screen);
+  }
 }

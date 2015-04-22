@@ -2,6 +2,7 @@ package macbury.forge;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.utils.Array;
 import macbury.forge.assets.AssetsManager;
@@ -27,6 +28,7 @@ public class ForgE extends Game {
   public static InputManager        input;
   public static EntityManager       entities;
   private Array<ForgEBootListener>  bootListeners;
+
   public static LevelManager        levels;
 
 
@@ -59,6 +61,7 @@ public class ForgE extends Game {
   public void render() {
     graphics.updateTime();
     super.render();
+
   }
 
   public void addBootListener(ForgEBootListener bootListener) {
@@ -69,4 +72,6 @@ public class ForgE extends Game {
   public void dispose() {
     super.dispose();
   }
+
+
 }

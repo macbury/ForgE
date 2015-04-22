@@ -166,9 +166,13 @@ public class VoxelBatch implements Disposable {
   public void end() {
     camera = null;
     sorted = false;
-    renderablesPerFrame = renderables.size;
+    renderablesPerFrame += renderables.size;
 
     renderables.clear();
+  }
+
+  public void resetStats() {
+    renderablesPerFrame = 0;
   }
 
   @Override
