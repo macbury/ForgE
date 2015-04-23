@@ -26,6 +26,7 @@ public class BuildBlocksTexture extends Job<Boolean> {
 
   @Override
   public Boolean perform() {
+
     TexturePacker.Settings settings = new TexturePacker.Settings();
     settings.grid = true;
     settings.square = true;

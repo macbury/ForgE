@@ -15,7 +15,7 @@ import macbury.forge.utils.Vector3i;
  * Created by macbury on 16.03.15.
  */
 public class GameplayScreen extends AbstractScreen {
-  private static final float FAR_CAMERA = 60;
+  private static final float FAR_CAMERA = 100;
   private static final float NEAR_CAMERA = 0.01f;
   private final Level level;
   private final Teleport teleport;
@@ -29,11 +29,11 @@ public class GameplayScreen extends AbstractScreen {
   @Override
   protected void initialize() {
     Gdx.input.setCursorCatched(true);
-    this.cameraController = new FirstPersonCameraController(level.camera);
-    level.camera.far      = FAR_CAMERA;
-    level.camera.near     = NEAR_CAMERA;
+    this.cameraController     = new FirstPersonCameraController(level.camera);
+    level.camera.far          = FAR_CAMERA;
+    level.camera.near         = NEAR_CAMERA;
     level.camera.fieldOfView  = 70;
-    Entity playerEntity = ForgE.entities.get("player").build(level.entities);
+    Entity playerEntity       = ForgE.entities.get("player").build(level.entities);
     playerEntity.getComponent(PlayerComponent.class).camera = level.camera;
 /*
     for (int i = 0; i < 20; i++) {
@@ -46,7 +46,7 @@ public class GameplayScreen extends AbstractScreen {
 
 */
     level.terrainMap.localVoxelPositionToWorldPosition(teleport.voxelPosition, playerEntity.getComponent(PositionComponent.class).vector);
-
+    playerEntity.getComponent(PositionComponent.class).vector.sub(-0.5f);
     level.entities.addEntity(playerEntity);
   }
 

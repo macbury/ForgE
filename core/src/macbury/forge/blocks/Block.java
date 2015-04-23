@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import macbury.forge.ForgE;
 import macbury.forge.utils.Vector3i;
 
 import java.util.HashMap;
@@ -12,10 +13,11 @@ import java.util.HashMap;
  * Created by macbury on 11.11.14.
  */
 public class Block {
+  private static final String DEV_TEXTURE_PLACEHOLDER_NAME = "dev";
 
   /*
-      TODO: merge side with terrain builder.face :P
-       */
+        TODO: merge side with terrain builder.face :P
+         */
   public enum Side {
     all(Vector3i.ZERO, new Quaternion(), new Quaternion()),
     top(Vector3i.TOP, new Quaternion(Vector3.Z, -180), new Quaternion()),
@@ -96,6 +98,10 @@ public class Block {
     for (String side : textures.keySet()) {
       String sideName                 = textures.get(side);
       TextureAtlas.AtlasRegion region = textureAtlas.findRegion(sideName);
+
+      if (region == null) {
+        region = ForgE.blocks.getDevTextureRegion();
+      }
 
       Side currentSide = Side.valueOf(side);
       switch (currentSide) {

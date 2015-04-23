@@ -1,0 +1,9 @@
+{
+  solid: true,
+  shadeAO: true,
+  envAO: true,
+  transparent: false,
+  textures: {
+    all: "brick"
+  }
+}

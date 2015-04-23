@@ -1,0 +1,11 @@
+{
+  solid: true,
+  shadeAO: true,
+  envAO: true,
+  transparent: false,
+  textures: {
+    top: "cactus_top",
+    side: "cactus_side",
+    bottom: "cactus_bottom"
+  }
+}

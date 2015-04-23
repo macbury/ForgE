@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import macbury.forge.ForgE;
 import macbury.forge.blocks.Block;
 import macbury.forge.blocks.BlockShapePart;
 import macbury.forge.blocks.BlockShapeTriangle;
@@ -79,7 +80,13 @@ public class VoxelsAssembler extends MeshAssembler {
     BlockShapePart blockShapePart       = voxelDef.block.blockShape.get(side);
 
     if (blockShapePart != null) {
-      TextureAtlas.AtlasRegion sideRegion = voxelDef.block.getRegionForSide(side);
+      TextureAtlas.AtlasRegion sideRegion = null;
+      try {
+        sideRegion = voxelDef.block.getRegionForSide(side);
+      } catch (Block.NoUvForBlockSide error) {
+        sideRegion = ForgE.blocks.getDevTextureRegion();
+      }
+
 
       for(BlockShapeTriangle triangle : blockShapePart.triangles) {
         MeshVertexInfo vert1          = vertex(voxelDef, blockShapePart, triangle.index1, sideRegion, part);

@@ -58,7 +58,6 @@ public class VoxelBatch implements Disposable {
     if (camera != null) throw new GdxRuntimeException("Call end() first.");
     camera = cam;
     sorted = false;
-    trianglesPerFrame = 0;
   }
 
   /**
@@ -173,6 +172,7 @@ public class VoxelBatch implements Disposable {
 
   public void resetStats() {
     renderablesPerFrame = 0;
+    trianglesPerFrame   = 0;
   }
 
   @Override

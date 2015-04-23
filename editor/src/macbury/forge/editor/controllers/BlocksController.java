@@ -138,7 +138,7 @@ public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.
 
   @Override
   public void onFileInDirectoryChange(FileHandle handle) {
-    if (handle.extension().equalsIgnoreCase(BlocksProvider.BLOCK_EXT) || handle.extension().equalsIgnoreCase(BlocksProvider.SHAPE_EXT)) {
+    if (handle.extension().contains(BlocksProvider.BLOCK_EXT) || handle.extension().contains(BlocksProvider.SHAPE_EXT)) {
       Gdx.app.log(TAG, "Change in: " + handle.name());
       rebuildTileset();
     }
@@ -172,8 +172,7 @@ public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.
   }
 
   private void rebuildPreviews(boolean removeOld) {
-    //ForgE.screens.set(new PreviewScreen());
-    Gdx.app.postRunnable(new BlockPreviews(this, removeOld));
+    BlockPreviews bp = new BlockPreviews(this, removeOld);
   }
 
 
@@ -184,7 +183,6 @@ public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.
       BlockListItem item = (BlockListItem) blocksModel.get(currentPrimarySelectedBlock);
       panelPrimaryBlock.setIcon(item.image);
     }
-
   }
 
   @Override

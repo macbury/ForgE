@@ -29,6 +29,7 @@ public class PositionSystem extends IteratingSystem {
 
   @Override
   protected void processEntity(Entity entity, float deltaTime) {
+    /*
     PositionComponent pc  = pm.get(entity);
     MovementComponent mc  = mm.get(entity);
     CollisionComponent cc = cm.get(entity);
@@ -50,6 +51,6 @@ public class PositionSystem extends IteratingSystem {
       pc.vector.add(tempA);
     }
 
-    pc.updateTransformMatrix();
+    pc.updateTransformMatrix();*/
   }
 }

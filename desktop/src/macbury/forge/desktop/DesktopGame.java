@@ -23,13 +23,14 @@ public class DesktopGame implements ForgEBootListener, Thread.UncaughtExceptionH
     config.resizable      = false;
     config.width          = 1360;
     config.height         = 768;
-    //config.width          = 480 * 2;
-    //config.height         = 320 * 2;
+    //config.width          = 1920;
+    //config.height         = 1080;
     config.foregroundFPS  = 30;
     config.fullscreen     = false;
 
     Config forgeConfig        = new Config();
-    forgeConfig.renderBoundingBox = false;
+    forgeConfig.debug = true;
+    forgeConfig.renderBulletDebug = true;
     //forgeConfig.cacheGeometry = true; //TODO: check in terrain engine if there is geometry in file
 
     ForgE engine              = new ForgE(forgeConfig);

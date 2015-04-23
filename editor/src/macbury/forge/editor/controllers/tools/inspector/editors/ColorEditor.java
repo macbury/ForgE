@@ -107,13 +107,12 @@ public class ColorEditor extends AbstractPropertyEditor {
 
   protected void selectColor() {
     java.awt.Color selectedColor = ColorPicker.showDialog(MainWindow.current, Utils.fromLibgdx(color));
-
+    Color oldColor               = new Color(color);
     if (selectedColor != null) {
       Color newColor = Utils.fromAwt(selectedColor);
 
       colorEditor.setColor(newColor);
-
-      firePropertyChange(color, newColor);
+      firePropertyChange(oldColor, newColor);
     }
   }
 

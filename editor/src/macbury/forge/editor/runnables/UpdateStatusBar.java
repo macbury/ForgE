@@ -26,6 +26,7 @@ public class UpdateStatusBar {
     this.statusRenderablesLabel = statusRenderablesLabel;
     this.projectController = projectController;
     this.statusTriangleCountLabel = statusTriangleCountLabel;
+    this.update();
   }
 
   public void update() {
@@ -43,7 +44,7 @@ public class UpdateStatusBar {
         fpsLabel.setText("FPS: " + Gdx.graphics.getFramesPerSecond());
         statusMemoryLabel.setText("Memory: " + FormatUtils.humanReadableByteCount(Gdx.app.getNativeHeap(), true) + "/" + FormatUtils.humanReadableByteCount(Gdx.app.getJavaHeap(), true));
         statusRenderablesLabel.setText("Renderables: " + String.valueOf(projectController.editorScreen.level.batch.renderablesPerFrame));
-        statusTriangleCountLabel.setText("Vertex: " + String.valueOf(GLProfiler.vertexCount.count));
+        statusTriangleCountLabel.setText("Triangles: " + String.valueOf(Math.round(projectController.editorScreen.level.batch.trianglesPerFrame)));
 
         mapCursorPositionLabel.setText(projectController.editorScreen.selectionSystem.voxelCursor.replace.toString());
       }

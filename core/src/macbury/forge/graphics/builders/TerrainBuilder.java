@@ -39,7 +39,7 @@ public class TerrainBuilder {
   private Array<TerrainPart> tempTerrainParts  = new Array<TerrainPart>();
   private static Voxel mask[] = new Voxel[ChunkMap.CHUNK_SIZE * ChunkMap.CHUNK_SIZE];
 
-  private static Pool<TerrainPart> terrainPartPool = new Pool<TerrainPart>() {
+  private Pool<TerrainPart> terrainPartPool = new Pool<TerrainPart>() {
     @Override
     protected TerrainPart newObject() {
       TerrainPart part = new TerrainPart();
@@ -293,6 +293,7 @@ public class TerrainBuilder {
     transparentVoxelAssembler.dispose();
     terrainParts.clear();
     terrainPartPool.freeAll(terrainParts);
+    terrainPartPool.clear();
     terrainPartPool.clear();
     resetMask();
   }

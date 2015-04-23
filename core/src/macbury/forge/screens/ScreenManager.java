@@ -30,4 +30,8 @@ public class ScreenManager {
     engine.setScreen(null);
     currentScreen = null;
   }
+
+  public void reset() {
+    disposeCurrentScreen();
+  }
 }

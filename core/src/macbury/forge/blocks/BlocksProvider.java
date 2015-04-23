@@ -150,4 +150,8 @@ public class BlocksProvider implements Disposable {
     loadAtlasAndUvsIfNull();
     return textureAtlas.getTextures().first();
   }
+
+  public TextureAtlas.AtlasRegion getDevTextureRegion() {
+    return textureAtlas.findRegion("dev");
+  }
 }

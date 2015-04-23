@@ -15,8 +15,8 @@ import java.util.ArrayList;
  */
 public class MeshAssembler implements Disposable {
 
-  private final static Pool<MeshVertexInfo> meshVertexPool = Pools.get(MeshVertexInfo.class);
-  private final static Pool<MeshTriangle> trianglesPool    = Pools.get(MeshTriangle.class);
+  private final Pool<MeshVertexInfo> meshVertexPool = Pools.get(MeshVertexInfo.class);
+  private final Pool<MeshTriangle> trianglesPool    = Pools.get(MeshTriangle.class);
 
   protected ArrayList<MeshVertexInfo> vertexArrayList;
   protected ArrayList<MeshTriangle> triangleArrayList;
@@ -173,6 +173,8 @@ public class MeshAssembler implements Disposable {
   @Override
   public void dispose() {
     clear();
+    meshVertexPool.clear();
+    meshVertexPool.clear();
   }
 
   public boolean isEmpty() {

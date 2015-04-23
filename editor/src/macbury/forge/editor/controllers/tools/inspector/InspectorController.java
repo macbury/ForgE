@@ -105,9 +105,16 @@ public class InspectorController implements OnMapChangeListener, DefaultBeanBind
   public void onPropertyChange(DefaultBeanBinder binder, PropertyChangeEvent event, Object object) {
     Gdx.app.log(TAG, "On property change event");
     //this.binder.setListener(null);
-    PropertyChangeable propertyChangeable = new PropertyChangeable(object, event);
-    //changeManager.addChangeable(propertyChangeable).apply();
+    PropertyChangeable propertyChangeable = new PropertyChangeable(object, event, this);
+    changeManager.addChangeable(propertyChangeable).apply();
     //this.binder.setListener(this);
-    propertyChangeable.apply();
+  }
+
+  public void stopListeningForPropertyChanges() {
+    this.binder.setListener(null);
+  }
+
+  public void startListeningForPropertyChanges() {
+    this.binder.setListener(this);
   }
 }
