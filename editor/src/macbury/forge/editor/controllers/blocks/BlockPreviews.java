@@ -108,7 +108,7 @@ public class BlockPreviews extends AbstractScreen {
     mainChunk.updateBoundingBox();
 
     if (mainChunk.renderables.size == 0) {
-      throw new GdxRuntimeException("No renderables for chunk!");
+      //throw new GdxRuntimeException("No renderables for chunk!");
     }
 
     ForgE.graphics.clearAll(Color.CLEAR);
@@ -152,16 +152,14 @@ public class BlockPreviews extends AbstractScreen {
   @Override
   public void render(float delta) {
     Gdx.gl.glViewport(0,0, PREVIEW_SIZE, PREVIEW_SIZE);
-    if (i < blocks.length) {
-      saveBlockScreenshot(blocks[i]);
-      i++;
-    } else {
-      listener.onGeneratePreviewsCompleted();
+    for (Block block : blocks) {
+      saveBlockScreenshot(block);
+    }
+    listener.onGeneratePreviewsCompleted();
 
-      ForgE.screens.reset();
-      if (oldScreen != null) {
-        ForgE.screens.set(oldScreen);
-      }
+    ForgE.screens.reset();
+    if (oldScreen != null) {
+      ForgE.screens.set(oldScreen);
     }
   }
 
@@ -193,7 +191,6 @@ public class BlockPreviews extends AbstractScreen {
   @Override
   public void dispose() {
     //buffer.dispose();
-    shader.dispose();
 
   }
 

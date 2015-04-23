@@ -4,6 +4,6 @@
   envAO: true,
   transparent: false,
   textures: {
-    top: "sadiasdjasdiu",
+    top: "grass",
   }
 }
