@@ -3,18 +3,11 @@
   components: [
     {
       class: "position",
-      vector: { x: 50,  y: 20,    z: 50 },
+      vector: { x: 0,  y: 2,    z: 0 },
       size:   { x: 1,   y: 1.85f, z: 1 }
     },
     {
-      class: "movement",
-      speed: 7.4f
+      class: "character",
     },
-    { class: "gravity" },
-    { class: "entity_state" },
-    {
-      class: "collision",
-      solid: true,
-    }
   ]
 }

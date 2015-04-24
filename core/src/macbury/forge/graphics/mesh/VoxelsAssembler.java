@@ -97,29 +97,4 @@ public class VoxelsAssembler extends MeshAssembler {
       }
     }
   }
-/*
-  public void top(VoxelDef voxelDef) {
-    face(voxelDef, Block.Side.top, part);
-  }
-
-  public void bottom(VoxelDef voxelDef) {
-    face(voxelDef, Block.Side.bottom, part);
-  }
-
-  public void front(VoxelDef voxelDef) {
-    face(voxelDef, Block.Side.front, part);
-  }
-
-  public void back(VoxelDef voxelDef) {
-    face(voxelDef, Block.Side.back, part);
-  }
-
-  public void left(VoxelDef voxelDef) {
-    face(voxelDef, Block.Side.left, part);
-  }
-
-  public void right(VoxelDef voxelDef) {
-    face(voxelDef, Block.Side.right, part);
-  }
-*/
 }

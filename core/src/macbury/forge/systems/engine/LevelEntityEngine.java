@@ -12,33 +12,29 @@ public class LevelEntityEngine extends PooledEngine implements Disposable {
   public final WorldRenderingSystem rendering;
   public final OctreeSystem octree;
   public final DebugSystem debug;
-  public final MovementSystem movement;
   public final CullingSystem culling;
   private final PlayerSystem player;
   //private final CollisionSystem collision;
-  public final PositionSystem positions;
   public final PsychicsSystem psychics;
+  public final PositionSystem position;
 
   public LevelEntityEngine(Level level) {
     psychics  = new PsychicsSystem();
     rendering = new WorldRenderingSystem(level);
+    position  = new PositionSystem();
     octree    = new OctreeSystem(level);
     debug     = new DebugSystem(level);
-    movement  = new MovementSystem(level);
     culling   = new CullingSystem(level);
     player    = new PlayerSystem();
-    positions = new PositionSystem();
-    //collision = new CollisionSystem(level.terrainMap, level.octree);
 
     addSystem(culling);
     addSystem(player);
-    addSystem(movement);
 
     addSystem(octree);
 
     addSystem(psychics);
-    addSystem(positions);
 
+    addSystem(position);
 
     addSystem(rendering);
     addSystem(debug);

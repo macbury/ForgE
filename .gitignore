@@ -66,3 +66,4 @@ build/
 ## OS Specific
 .DS_Store
 *.level
+core/assets/ed/previews/

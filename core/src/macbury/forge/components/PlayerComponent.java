@@ -2,6 +2,7 @@ package macbury.forge.components;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Pool;
 
 /**
@@ -11,9 +12,11 @@ public class PlayerComponent extends BaseComponent {
   public Camera camera;
   public float headWobbleSpeed;
   public float headWobbleMax;
+  public Vector3 cameraOffset = new Vector3();
   @Override
   public void reset() {
     this.camera = null;
+    cameraOffset.setZero();
   }
 
   @Override
@@ -21,5 +24,6 @@ public class PlayerComponent extends BaseComponent {
     this.camera           = ((PlayerComponent)otherComponent).camera;
     this.headWobbleSpeed  = ((PlayerComponent) otherComponent).headWobbleSpeed;
     this.headWobbleMax    = ((PlayerComponent) otherComponent).headWobbleMax;
+    this.cameraOffset.set(((PlayerComponent) otherComponent).cameraOffset);
   }
 }

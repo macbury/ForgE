@@ -31,8 +31,7 @@ public class EntityManager implements Disposable {
     json.addClassTag("position",      PositionComponent.class);
     json.addClassTag("movement",      MovementComponent.class);
     json.addClassTag("player",        PlayerComponent.class);
-    json.addClassTag("gravity",       GravityComponent.class);
-    json.addClassTag("collision",     CollisionComponent.class);
+    json.addClassTag("character",     CharacterComponent.class);
     json.addClassTag("entity_state",  EntityStateComponent.class);
   }
 

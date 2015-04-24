@@ -1,5 +1,6 @@
 package macbury.forge.systems;
 
+import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import macbury.forge.ForgE;
+import macbury.forge.components.CharacterComponent;
 import macbury.forge.components.MovementComponent;
 import macbury.forge.components.PlayerComponent;
 import macbury.forge.components.PositionComponent;
@@ -22,9 +24,9 @@ public class PlayerSystem extends IteratingSystem {
   private static final String TAG = "PlayerSystem";
   private static final float MAX_HEAD_UP_ROTATION = 0.8f;
   private static final float MIN_HEAD_DOWN_ROTATION = -0.8f;
-  private ComponentMapper<PositionComponent> pm  = ComponentMapper.getFor(PositionComponent.class);
-  private ComponentMapper<MovementComponent> mm  = ComponentMapper.getFor(MovementComponent.class);
-  private ComponentMapper<PlayerComponent> plm   = ComponentMapper.getFor(PlayerComponent.class);
+  private ComponentMapper<PositionComponent> pm   = ComponentMapper.getFor(PositionComponent.class);
+  private ComponentMapper<PlayerComponent> plm    = ComponentMapper.getFor(PlayerComponent.class);
+  private ComponentMapper<CharacterComponent> chm = ComponentMapper.getFor(CharacterComponent.class);
   private int STRAFE_LEFT = Input.Keys.A;
   private int STRAFE_RIGHT = Input.Keys.D;
   private int FORWARD = Input.Keys.W;
@@ -32,11 +34,12 @@ public class PlayerSystem extends IteratingSystem {
   private float mouseSensitivityX = 10f;
   private float mouseSensitivityY = 8f;
 
+
   private Vector3 tempA   = new Vector3();
   private Vector3 tempB   = new Vector3();
 
   public PlayerSystem() {
-    super(Family.getFor(PlayerComponent.class, PositionComponent.class, MovementComponent.class));
+    super(Family.getFor(PlayerComponent.class, PositionComponent.class));
   }
 
   @Override
@@ -46,11 +49,10 @@ public class PlayerSystem extends IteratingSystem {
 
   @Override
   protected void processEntity(Entity entity, float deltaTime) {
-    PlayerComponent playerComponent     = plm.get(entity);
-    Camera camera                       = playerComponent.camera;
-    MovementComponent movementComponent = mm.get(entity);
-    PositionComponent positionComponent = pm.get(entity);
-
+    PlayerComponent playerComponent       = plm.get(entity);
+    Camera camera                         = playerComponent.camera;
+    PositionComponent positionComponent   = pm.get(entity);
+    CharacterComponent characterComponent = chm.get(entity);
     if (camera != null) {
       float deltaX = -Gdx.input.getDeltaX() * mouseSensitivityX * deltaTime;
       float deltaY = -Gdx.input.getDeltaY() * mouseSensitivityY * deltaTime;
@@ -77,12 +79,18 @@ public class PlayerSystem extends IteratingSystem {
         tempB.set(camera.direction).crs(camera.up).nor();
       }
 
-      movementComponent.direction.set(tempA.add(tempB).nor());
-      camera.position.set(positionComponent.vector).y += positionComponent.size.y;
-      if (!movementComponent.direction.isZero()) {
-        camera.position.y += MathUtils.sin(ForgE.graphics.getElapsedTime() * playerComponent.headWobbleSpeed) * playerComponent.headWobbleMax;
+      if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+        characterComponent.characterController.jump();
       }
 
+      tempA.add(tempB).nor().scl(0.15f);
+      camera.position.set(positionComponent.vector).add(playerComponent.cameraOffset);
+
+      characterComponent.characterController.setWalkDirection(tempA);
+
+      if (!tempA.isZero()) {
+        camera.position.y += MathUtils.sin(ForgE.graphics.getElapsedTime() * playerComponent.headWobbleSpeed) * playerComponent.headWobbleMax;
+      }
     }
   }
 

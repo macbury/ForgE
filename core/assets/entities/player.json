@@ -3,23 +3,16 @@
   components: [
     {
       class: "position",
-      vector: { x: 50,  y: 20,    z: 50 },
-      size:   { x: 1,   y: 1.85f, z: 1 }
+      size:   { x: 1,   y: 1.5f, z: 1 }
     },
     {
-      class: "movement",
-      speed: 7.4f
+      class: "character"
     },
     {
       class:            "player",
       headWobbleSpeed:  10,
-      headWobbleMax:    0.1f
+      headWobbleMax:    0.1f,
+      cameraOffset: { y: 0.4f }
     },
-    { class: "gravity" },
-    { class: "entity_state" },
-    {
-      class: "collision",
-      solid: true,
-    }
   ]
 }

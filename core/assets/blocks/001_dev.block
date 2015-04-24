@@ -1,0 +1,7 @@
+{
+  solid: true,
+  shadeAO: true,
+  envAO: true,
+  textures: {
+  }
+}
