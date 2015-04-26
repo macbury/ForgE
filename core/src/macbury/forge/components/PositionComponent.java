@@ -14,7 +14,7 @@ import macbury.forge.octree.OctreeObject;
  * Created by macbury on 19.10.14.
  */
 public class PositionComponent extends BaseComponent implements OctreeObject {
-  public final Vector3     vector;
+  public final Vector3    vector;
   public final Quaternion  rotation;
   public final Vector3     size;
   public final Vector3     scale;
@@ -31,6 +31,11 @@ public class PositionComponent extends BaseComponent implements OctreeObject {
     this.size           = new Vector3();
     this.scale          = new Vector3();
     this.worldTransform = new Matrix4();
+  }
+
+  public void setVector(Vector3 in) {
+    vector.set(in);
+    dirty = true;
   }
 
   @Override

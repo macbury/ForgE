@@ -26,6 +26,7 @@ public class PsychicsSystem extends EntitySystem implements EntityListener, Disp
   private static final int MAX_SUB_STEPS     = 5;
   private static final float FIXED_TIME_STEP = 1f / 60f;
   private static final float BULLET_SIZE = 0.5f;
+  private final Family familyCharacterAndPosition;
   private DebugDrawer debugDrawer;
   private btSequentialImpulseConstraintSolver constraintSolver;
   private btAxisSweep3 sweep;
@@ -35,16 +36,14 @@ public class PsychicsSystem extends EntitySystem implements EntityListener, Disp
   private btDefaultCollisionConfiguration collisionConfig;
   private btCollisionDispatcher dispatcher;
   private btDiscreteDynamicsWorld bulletWorld;
-  private final Family family;
   private final Vector3 tempA = new Vector3();
   private final Matrix4 tempMat = new Matrix4();
   private btGhostPairCallback ghostCallback;
-
-  private final Array<Entity> entites = new Array<Entity>();
+  private Array<Entity> entitiesWithBullet = new Array<Entity>();
 
   public PsychicsSystem() {
     super();
-    family          = Family.getFor(PositionComponent.class,CharacterComponent.class);
+    familyCharacterAndPosition = Family.getFor(PositionComponent.class,CharacterComponent.class);
     createWorld();
   }
 
@@ -80,52 +79,42 @@ public class PsychicsSystem extends EntitySystem implements EntityListener, Disp
   @Override
   public void update(float deltaTime) {
     bulletWorld.stepSimulation(Math.min(MIN_TIME_STEPS, deltaTime), MAX_SUB_STEPS, FIXED_TIME_STEP);
+  }
 
-    for(Entity entity : entites) {
-      PositionComponent positionComponent   = pm.get(entity);
-      CharacterComponent characterComponent = chm.get(entity);
-      characterComponent.ghostObject.getWorldTransform(tempMat);
-      tempMat.getTranslation(positionComponent.vector);
-      positionComponent.dirty = true;
-    }
+  private boolean isInFamily(Entity e) {
+    return familyCharacterAndPosition.matches(e);
   }
 
   @Override
   public void entityAdded(Entity entity) {
-    if (family.matches(entity)) {
-
-      Gdx.app.log(TAG, "Added entity");
-      PositionComponent positionComponent = pm.get(entity);
-      positionComponent.updateTransformMatrix();
-      boolean haveCharacter = false;
-      for (int i = 0; i < entity.getComponents().size(); i++) {
-        Component component = entity.getComponents().get(i);
-
-        if (BulletPsychicsComponent.class.isInstance(component)) {
-          BulletPsychicsComponent bulletPsychicsComponent = (BulletPsychicsComponent)component;
-          tempMat.idt();
-          tempMat.translate(positionComponent.vector);
-          tempA.set(positionComponent.size).scl(PsychicsSystem.BULLET_SIZE);
-          bulletPsychicsComponent.initBullet(tempMat, bulletWorld,tempA);
-        }
-
-        if (CharacterComponent.class.isInstance(component)) {
-          haveCharacter = true;
-        }
-      }
-
-      if (haveCharacter) {
-        entites.add(entity);
-      }
+    if (isInFamily(entity)) {
+      entitiesWithBullet.add(entity);
+      initEntityBulletStuff(entity);
     }
   }
 
   @Override
   public void entityRemoved(Entity entity) {
-    if (family.matches(entity)) {
-      entites.removeValue(entity, true);
-
+    if (isInFamily(entity)) {
+      entitiesWithBullet.removeValue(entity, true);
       disposeEntityBulletStuff(entity);
+    }
+  }
+
+  private void initEntityBulletStuff(Entity entity) {
+    Gdx.app.log(TAG, "Added entity");
+    PositionComponent positionComponent = pm.get(entity);
+    positionComponent.updateTransformMatrix();
+    for (int i = 0; i < entity.getComponents().size(); i++) {
+      Component component = entity.getComponents().get(i);
+
+      if (BulletPsychicsComponent.class.isInstance(component)) {
+        BulletPsychicsComponent bulletPsychicsComponent = (BulletPsychicsComponent)component;
+        tempMat.idt();
+        tempMat.translate(positionComponent.vector);
+        tempA.set(positionComponent.size).scl(PsychicsSystem.BULLET_SIZE);
+        bulletPsychicsComponent.initBullet(tempMat, bulletWorld,tempA);
+      }
     }
   }
 
@@ -150,8 +139,8 @@ public class PsychicsSystem extends EntitySystem implements EntityListener, Disp
 
   @Override
   public void dispose() {
-    for (Entity entity : entites) {
-      disposeEntityBulletStuff(entity);
+    for (Entity e : entitiesWithBullet) {
+      disposeEntityBulletStuff(e);
     }
     ghostCallback.dispose();
     dispatcher.dispose();
@@ -162,7 +151,7 @@ public class PsychicsSystem extends EntitySystem implements EntityListener, Disp
     debugDrawer.dispose();
     constraintSolver.dispose();
     sweep.dispose();
-    entites.clear();
+    entitiesWithBullet.clear();
   }
 
   public void disable() {

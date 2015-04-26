@@ -3,13 +3,11 @@ package macbury.forge.level;
 import com.badlogic.gdx.graphics.g3d.utils.DefaultTextureBinder;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.utils.Disposable;
-import macbury.forge.Config;
-import macbury.forge.ForgE;
 import macbury.forge.graphics.batch.VoxelBatch;
 import macbury.forge.graphics.camera.GameCamera;
 import macbury.forge.graphics.frustrum.FrustrumDebugAndRenderer;
 import macbury.forge.octree.OctreeNode;
-import macbury.forge.systems.engine.LevelEntityEngine;
+import macbury.forge.systems.engine.EntitySystemsManager;
 import macbury.forge.terrain.TerrainEngine;
 import macbury.forge.voxel.ChunkMap;
 
@@ -17,7 +15,7 @@ import macbury.forge.voxel.ChunkMap;
  * Created by macbury on 18.10.14.
  */
 public class Level implements Disposable {
-  public final LevelEntityEngine        entities;
+  public final EntitySystemsManager entities;
   public final GameCamera               camera;
   public final VoxelBatch               batch;
   public final ChunkMap                 terrainMap;
@@ -46,7 +44,7 @@ public class Level implements Disposable {
     this.camera              = new GameCamera();
     this.frustrumDebugger    = new FrustrumDebugAndRenderer(camera);
     this.terrainEngine       = new TerrainEngine(this);
-    this.entities            = new LevelEntityEngine(this);
+    this.entities            = new EntitySystemsManager(this);
 
     //this.psychics            = new BulletWorld(collisionConfiguration, dispatcher, sweep, solver, collisionWorld);
 

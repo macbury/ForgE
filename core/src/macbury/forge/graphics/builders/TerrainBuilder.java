@@ -99,7 +99,7 @@ public class TerrainBuilder {
     }
     resetMask();
     greedyMesh(side);
-    
+
     if (terrainParts.size > 0) {
       createTrianglesFor(side, terrainParts, solidVoxelAssembler, transparentVoxelAssembler);
 

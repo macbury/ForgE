@@ -31,6 +31,7 @@ public class DesktopGame implements ForgEBootListener, Thread.UncaughtExceptionH
     Config forgeConfig            = new Config();
     forgeConfig.debug             = true;
     forgeConfig.renderBulletDebug = true;
+    forgeConfig.renderBoundingBox = false;
     //forgeConfig.cacheGeometry = true; //TODO: check in terrain engine if there is geometry in file
 
     ForgE engine              = new ForgE(forgeConfig);
