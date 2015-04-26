@@ -1,6 +1,5 @@
 package macbury.forge.graphics.builders;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
@@ -14,8 +13,6 @@ import macbury.forge.graphics.mesh.VoxelsAssembler;
 import macbury.forge.utils.Vector3i;
 import macbury.forge.voxel.ChunkMap;
 import macbury.forge.voxel.Voxel;
-
-import java.util.Comparator;
 
 /**
  * Created by macbury on 16.10.14.
@@ -101,7 +98,8 @@ public class TerrainBuilder {
       throw new GdxRuntimeException("I cannot assemble chunk face for: " + side.toString());
     }
     resetMask();
-    greedy(side);
+    greedyMesh(side);
+    
     if (terrainParts.size > 0) {
       createTrianglesFor(side, terrainParts, solidVoxelAssembler, transparentVoxelAssembler);
 
@@ -144,7 +142,7 @@ public class TerrainBuilder {
     return a != null && b != null && a.equals(b) && a.isScalable();
   }
 
-  private void greedy(Block.Side face) {
+  private void greedyMesh(Block.Side face) {
     for (int a = 0; a < ChunkMap.CHUNK_SIZE; a++) {
       int n = 0;
       for (int b = 0; b < ChunkMap.CHUNK_SIZE; b++) {

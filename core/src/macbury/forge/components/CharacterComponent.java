@@ -30,8 +30,6 @@ public class CharacterComponent extends BulletPsychicsComponent {
 
     characterController = new btKinematicCharacterController(ghostObject, ghostShape, stepHeight);
 
-
-
     world.addCollisionObject(
         ghostObject, (short) btBroadphaseProxy.CollisionFilterGroups.CharacterFilter,
         (short)(btBroadphaseProxy.CollisionFilterGroups.StaticFilter | btBroadphaseProxy.CollisionFilterGroups.DefaultFilter)

@@ -65,22 +65,6 @@ public class PsychicsSystem extends EntitySystem implements EntityListener, Disp
     //createPlayer(new Vector3(50, 8f, 30.3f));
   }
 
-  public void createPlayer(Vector3 pos) {
-    Matrix4 worldTransform  = new Matrix4();
-    worldTransform.translate(pos);
-    btPairCachingGhostObject ghostObject = new btPairCachingGhostObject();
-    ghostObject.setWorldTransform(worldTransform);
-    btCapsuleShape ghostShape = new btCapsuleShape(0.5f, 1f);
-    ghostObject.setCollisionShape(ghostShape);
-    ghostObject.setCollisionFlags(btCollisionObject.CollisionFlags.CF_CHARACTER_OBJECT);
-    btKinematicCharacterController characterController = new btKinematicCharacterController(ghostObject, ghostShape, .35f);
-    ghostObject.setWorldTransform(worldTransform);
-    //characterController.setWalkDirection(new Vector3(-0.1f, 0,0));
-    //characterController.jump();
-    bulletWorld.addCollisionObject(ghostObject, (short)btBroadphaseProxy.CollisionFilterGroups.CharacterFilter,
-        (short)(btBroadphaseProxy.CollisionFilterGroups.StaticFilter | btBroadphaseProxy.CollisionFilterGroups.DefaultFilter));
-    bulletWorld.addAction(characterController);
-  }
 
   public void createGround() {
     btBoxShape groundBoxShape = new btBoxShape(new Vector3(80* 0.5f, 0.5f, 80 * 0.5f));
@@ -102,7 +86,6 @@ public class PsychicsSystem extends EntitySystem implements EntityListener, Disp
       CharacterComponent characterComponent = chm.get(entity);
       characterComponent.ghostObject.getWorldTransform(tempMat);
       tempMat.getTranslation(positionComponent.vector);
-
       positionComponent.dirty = true;
     }
   }
@@ -141,14 +124,19 @@ public class PsychicsSystem extends EntitySystem implements EntityListener, Disp
   public void entityRemoved(Entity entity) {
     if (family.matches(entity)) {
       entites.removeValue(entity, true);
-      Gdx.app.log(TAG, "Removing entity");
-      for (int i = 0; i < entity.getComponents().size(); i++) {
-        Component component = entity.getComponents().get(i);
 
-        if (BulletPsychicsComponent.class.isInstance(component)) {
-          BulletPsychicsComponent bulletPsychicsComponent = (BulletPsychicsComponent)component;
-          bulletPsychicsComponent.disposeBullet();
-        }
+      disposeEntityBulletStuff(entity);
+    }
+  }
+
+  private void disposeEntityBulletStuff(Entity entity) {
+    Gdx.app.log(TAG, "Removing entity");
+    for (int i = 0; i < entity.getComponents().size(); i++) {
+      Component component = entity.getComponents().get(i);
+
+      if (BulletPsychicsComponent.class.isInstance(component)) {
+        BulletPsychicsComponent bulletPsychicsComponent = (BulletPsychicsComponent)component;
+        bulletPsychicsComponent.disposeBullet();
       }
     }
   }
@@ -162,6 +150,9 @@ public class PsychicsSystem extends EntitySystem implements EntityListener, Disp
 
   @Override
   public void dispose() {
+    for (Entity entity : entites) {
+      disposeEntityBulletStuff(entity);
+    }
     ghostCallback.dispose();
     dispatcher.dispose();
     collisionConfig.dispose();
