@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
 import macbury.forge.graphics.batch.renderable.SpriteRenderable;
-import macbury.forge.graphics.batch.renderable.VoxelFaceRenderable;
 import macbury.forge.level.LevelEnv;
 import macbury.forge.shaders.utils.RenderableBaseShader;
 

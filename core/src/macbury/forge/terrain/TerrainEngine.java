@@ -1,18 +1,14 @@
 package macbury.forge.terrain;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
-import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.io.Output;
 import macbury.forge.ForgE;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
 import macbury.forge.graphics.batch.renderable.BaseRenderableProvider;
-import macbury.forge.graphics.batch.renderable.VoxelFaceRenderable;
+import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
 import macbury.forge.graphics.builders.Chunk;
 import macbury.forge.graphics.builders.TerrainBuilder;
 import macbury.forge.graphics.camera.GameCamera;
@@ -24,9 +20,6 @@ import macbury.forge.octree.query.FrustrumClassFilterOctreeQuery;
 import macbury.forge.utils.ActionTimer;
 import macbury.forge.utils.Vector3i;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.util.Comparator;
 
 /**
@@ -42,7 +35,7 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
   private final GameCamera        camera;
   private final TerrainBuilder    builder;
   public  final Array<Chunk>      chunks;
-  public  final Array<VoxelFaceRenderable> visibleFaces;
+  public  final Array<VoxelChunkRenderable> visibleFaces;
   public  final Array<OctreeObject> tempObjects;
   public  final Vector3 tempA  = new Vector3();
   public  final Vector3 tempC  = new Vector3();
@@ -52,13 +45,15 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
   private final Comparator<Chunk> sorter;
   private final FrustrumClassFilterOctreeQuery frustrumOctreeQuery;
 
+  private final Array<TerrainEngineListener> listeners = new Array<TerrainEngineListener>();
+
   public TerrainEngine(Level level) {
     this.timer = new ActionTimer(UPDATE_EVERY, this);
     this.timer.start();
     this.frustrumOctreeQuery  = new FrustrumClassFilterOctreeQuery();
     this.tempObjects          = new Array<OctreeObject>();
     this.visibleChunks        = new Array<Chunk>();
-    this.visibleFaces         = new Array<VoxelFaceRenderable>();
+    this.visibleFaces         = new Array<VoxelChunkRenderable>();
     this.chunks               = new Array<Chunk>();
     this.map                  = level.terrainMap;
     this.octree               = level.octree;
@@ -113,7 +108,7 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
       if (visibleChunk.renderables.size > 0) {
         visibleChunks.add(visibleChunk);
         for (int i = 0; i < visibleChunk.renderables.size; i++) {
-          VoxelFaceRenderable renderable = visibleChunk.renderables.get(i);
+          VoxelChunkRenderable renderable = visibleChunk.renderables.get(i);
           //http://www.gamasutra.com/view/feature/131773/a_compact_method_for_backface_.php?print=1
           //tempA.set(renderable.boundingBox.getCenter());
           if (camera.boundsInFrustum(renderable.boundingBox) /*&& tempA.sub(tempC).scl(camera.direction).nor().dot(renderable.direction) >= 0f*/) {
@@ -151,7 +146,7 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
   }
 
   private void buildChunkGeometry(Chunk chunk) {
-    chunk.clearFaces();
+    remove(chunk);
     builder.begin(); {
       builder.cursor.set(chunk);
 
@@ -162,12 +157,15 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
       builder.assembleMesh(chunk);
     } builder.end();
 
-    if (chunk.isEmpty()) {
-      remove(chunk);
-    } else {
+    add(chunk);
+  }
+
+  private void add(Chunk chunk) {
+    if (!chunk.isEmpty()) {
       chunk.updateBoundingBox();
-      if (!chunks.contains(chunk, true)) {
-        chunks.add(chunk);
+      chunks.add(chunk);
+      for (TerrainEngineListener listener : listeners) {
+        listener.onChunkAdded(chunk, this);
       }
     }
   }
@@ -175,6 +173,9 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
   private void remove(Chunk chunk) {
     chunks.removeValue(chunk, true);
     chunk.dispose();
+    for (TerrainEngineListener listener : listeners) {
+      listener.onChunkRemove(chunk, this);
+    }
   }
 
   @Override
@@ -183,10 +184,24 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
       remove(chunks.pop());
     }
     builder.dispose();
+    listeners.clear();
   }
 
   @Override
   public void getRenderables(Array<BaseRenderable> renderables) {
     renderables.addAll(visibleFaces);
+  }
+
+  public void addListener(TerrainEngineListener listener) {
+    listeners.add(listener);
+  }
+
+  public void removeListener(TerrainEngineListener listener) {
+    listeners.removeValue(listener, true);
+  }
+
+  public interface TerrainEngineListener {
+    public void onChunkRemove(Chunk chunk, TerrainEngine engine);
+    public void onChunkAdded(Chunk chunk, TerrainEngine engine);
   }
 }

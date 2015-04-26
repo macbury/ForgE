@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
-import macbury.forge.graphics.batch.renderable.VoxelFaceRenderable;
+import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
 import macbury.forge.octree.OctreeNode;
 import macbury.forge.octree.OctreeObject;
 import macbury.forge.utils.Vector3i;
@@ -13,6 +13,7 @@ import macbury.forge.utils.Vector3i;
  * Created by macbury on 19.10.14.
  */
 public class Chunk implements OctreeObject, Disposable {
+  private static final String TAG = "Chunk";
   /**
    * Position is position of chunk. To change it to world position it needs to be multiply by CHUNK_SIZE
    */
@@ -30,7 +31,7 @@ public class Chunk implements OctreeObject, Disposable {
   public Vector3i end           = new Vector3i();
   public BoundingBox boundingBox  = new BoundingBox();
   public boolean needRebuild      = true;
-  public Array<VoxelFaceRenderable> renderables = new Array<VoxelFaceRenderable>(6);
+  public Array<VoxelChunkRenderable> renderables = new Array<VoxelChunkRenderable>(6);
   public OctreeNode parent;
   private final static Vector3 temp = new Vector3();
 
@@ -53,10 +54,11 @@ public class Chunk implements OctreeObject, Disposable {
 
   @Override
   public void dispose() {
+    //Gdx.app.log(TAG, "Disposing chunk!");
     clearFaces();
   }
 
-  public void addFace(VoxelFaceRenderable face) {
+  public void addFace(VoxelChunkRenderable face) {
     face.setParent(this);
     this.renderables.add(face);
   }
@@ -75,7 +77,7 @@ public class Chunk implements OctreeObject, Disposable {
     return renderables.size == 0;
   }
 
-  public VoxelFaceRenderable getFace(int i) {
+  public VoxelChunkRenderable getFace(int i) {
     return renderables.get(i);
   }
 }

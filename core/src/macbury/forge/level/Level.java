@@ -46,8 +46,6 @@ public class Level implements Disposable {
     this.terrainEngine       = new TerrainEngine(this);
     this.entities            = new EntitySystemsManager(this);
 
-    //this.psychics            = new BulletWorld(collisionConfiguration, dispatcher, sweep, solver, collisionWorld);
-
     octree.setBounds(terrainMap.getBounds(ChunkMap.TERRAIN_TILE_SIZE));
 
   }
@@ -63,7 +61,6 @@ public class Level implements Disposable {
     camera.update();
     terrainEngine.update();
     entities.update(delta);
-
   }
 
 

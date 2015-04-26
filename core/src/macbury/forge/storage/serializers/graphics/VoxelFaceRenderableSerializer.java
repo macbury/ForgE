@@ -4,7 +4,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import macbury.forge.graphics.batch.renderable.VoxelFaceRenderable;
+import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
 
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
@@ -12,9 +12,9 @@ import java.nio.ShortBuffer;
 /**
  * Created by macbury on 21.03.15.
  */
-public class VoxelFaceRenderableSerializer extends Serializer<VoxelFaceRenderable> {
+public class VoxelFaceRenderableSerializer extends Serializer<VoxelChunkRenderable> {
   @Override
-  public void write(Kryo kryo, Output output, VoxelFaceRenderable face) {
+  public void write(Kryo kryo, Output output, VoxelChunkRenderable face) {
     kryo.writeObject(output, face.direction);
     kryo.writeObject(output, face.boundingBox);
     output.writeBoolean(face.ssao);
@@ -47,7 +47,7 @@ public class VoxelFaceRenderableSerializer extends Serializer<VoxelFaceRenderabl
   }
 
   @Override
-  public VoxelFaceRenderable read(Kryo kryo, Input input, Class<VoxelFaceRenderable> type) {
+  public VoxelChunkRenderable read(Kryo kryo, Input input, Class<VoxelChunkRenderable> type) {
     return null;
   }
 }

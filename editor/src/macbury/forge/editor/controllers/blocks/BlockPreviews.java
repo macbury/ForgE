@@ -4,16 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g3d.utils.DefaultTextureBinder;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 import macbury.forge.ForgE;
 import macbury.forge.blocks.Block;
 import macbury.forge.editor.utils.ScreenshotFactory;
-import macbury.forge.graphics.batch.renderable.VoxelFaceRenderable;
+import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
 import macbury.forge.graphics.builders.Chunk;
 import macbury.forge.graphics.builders.TerrainBuilder;
 import macbury.forge.level.LevelEnv;
@@ -114,7 +112,7 @@ public class BlockPreviews extends AbstractScreen {
     ForgE.graphics.clearAll(Color.CLEAR);
     shader.begin(camera, renderContext, levelEnv); {
       for (int i = 0; i < mainChunk.renderables.size; i++) {
-        VoxelFaceRenderable renderable = mainChunk.renderables.get(i);
+        VoxelChunkRenderable renderable = mainChunk.renderables.get(i);
         shader.render(renderable);
       }
     } shader.end();

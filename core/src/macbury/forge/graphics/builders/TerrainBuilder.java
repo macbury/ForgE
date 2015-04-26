@@ -7,7 +7,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.Pool;
 import macbury.forge.ForgE;
 import macbury.forge.blocks.Block;
-import macbury.forge.graphics.batch.renderable.VoxelFaceRenderable;
+import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
 import macbury.forge.graphics.mesh.MeshVertexInfo;
 import macbury.forge.graphics.mesh.VoxelsAssembler;
 import macbury.forge.utils.Vector3i;
@@ -115,7 +115,7 @@ public class TerrainBuilder {
 
   private void buildFaceForChunkWithAssembler(Chunk chunk, VoxelsAssembler assembler, boolean haveTransparency) {
     if (!assembler.isEmpty()) {
-      VoxelFaceRenderable renderable   = new VoxelFaceRenderable();
+      VoxelChunkRenderable renderable   = new VoxelChunkRenderable();
       renderable.primitiveType         = GL30.GL_TRIANGLES;
 
       if (ForgE.config.generateWireframe)

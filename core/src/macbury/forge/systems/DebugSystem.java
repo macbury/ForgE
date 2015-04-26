@@ -4,12 +4,10 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
@@ -20,7 +18,7 @@ import macbury.forge.components.CursorComponent;
 import macbury.forge.components.PositionComponent;
 import macbury.forge.graphics.DebugShape;
 import macbury.forge.graphics.batch.VoxelBatch;
-import macbury.forge.graphics.batch.renderable.VoxelFaceRenderable;
+import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
 import macbury.forge.graphics.batch.sprites.Sprite3D;
 import macbury.forge.graphics.builders.Chunk;
 import macbury.forge.graphics.camera.GameCamera;
@@ -28,7 +26,6 @@ import macbury.forge.graphics.frustrum.FrustrumDebugAndRenderer;
 import macbury.forge.level.Level;
 import macbury.forge.octree.OctreeNode;
 import macbury.forge.terrain.TerrainEngine;
-import macbury.forge.utils.Vector3i;
 
 /**
  * Created by macbury on 20.10.14.
@@ -109,7 +106,7 @@ public class DebugSystem extends IteratingSystem implements Disposable {
           Chunk chunk = terrain.chunks.get(i);
           chunk.getBoundingBox(tempBox);
           for (int j = 0; j < chunk.renderables.size; j++) {
-            VoxelFaceRenderable renderable = chunk.renderables.get(j);
+            VoxelChunkRenderable renderable = chunk.renderables.get(j);
             DebugShape.draw(batch.shapeRenderer, renderable.boundingBox);
           }
         }

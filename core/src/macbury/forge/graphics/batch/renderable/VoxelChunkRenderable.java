@@ -8,7 +8,7 @@ import macbury.forge.graphics.builders.Chunk;
 /**
  * Created by macbury on 23.10.14.
  */
-public class VoxelFaceRenderable extends BaseRenderable implements Disposable {
+public class VoxelChunkRenderable extends BaseRenderable implements Disposable {
   public Vector3 direction = new Vector3();
   private Chunk parent;
   public BoundingBox boundingBox = new BoundingBox();

@@ -2,19 +2,16 @@ package macbury.forge.shaders;
 
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.GL30;
-import com.badlogic.gdx.graphics.GLTexture;
 import com.badlogic.gdx.math.Matrix3;
-import com.badlogic.gdx.math.Vector3;
-import macbury.forge.ForgE;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
 import macbury.forge.graphics.batch.renderable.TerrainChunkRenderable;
-import macbury.forge.graphics.batch.renderable.VoxelFaceRenderable;
+import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
 import macbury.forge.shaders.utils.RenderableBaseShader;
 
 /**
  * Created by macbury on 18.10.14.
  */
-public class TerrainShader extends RenderableBaseShader<VoxelFaceRenderable> {
+public class TerrainShader extends RenderableBaseShader<VoxelChunkRenderable> {
   private final Matrix3 tempNormalMatrix = new Matrix3();
 
   @Override
@@ -29,7 +26,7 @@ public class TerrainShader extends RenderableBaseShader<VoxelFaceRenderable> {
 
 
   @Override
-  public void beforeRender(VoxelFaceRenderable renderable) {
+  public void beforeRender(VoxelChunkRenderable renderable) {
     tempNormalMatrix.set(renderable.worldTransform).inv().transpose();
     shader.setUniformMatrix(UNIFORM_WORLD_TRANSFORM, renderable.worldTransform);
     shader.setUniformMatrix(UNIFORM_NORMAL_MATRIX, tempNormalMatrix);

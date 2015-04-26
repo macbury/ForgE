@@ -29,6 +29,8 @@ public class EntitySystemsManager extends PooledEngine implements Disposable {
     character = new CharacterSystem();
     player    = new PlayerSystem();
 
+    level.terrainEngine.addListener(psychics);
+
     addSystem(culling);
     addSystem(player);
 

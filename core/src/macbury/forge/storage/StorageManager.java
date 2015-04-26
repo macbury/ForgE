@@ -16,7 +16,7 @@ import com.esotericsoftware.kryo.pool.KryoPool;
 import macbury.forge.assets.assets.Asset;
 import macbury.forge.db.GameDatabase;
 import macbury.forge.db.models.PlayerStartPosition;
-import macbury.forge.graphics.batch.renderable.VoxelFaceRenderable;
+import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
 import macbury.forge.level.LevelEnv;
 import macbury.forge.level.LevelState;
 import macbury.forge.storage.serializers.assets.AssetSerializer;
@@ -56,7 +56,7 @@ public class StorageManager {
       kryo.register(DirectionalLight.class, new DirectionalLightSerializer());
       kryo.register(Asset.class, new AssetSerializer());
       kryo.register(BoundingBox.class, new BoundingBoxSerializer());
-      kryo.register(VoxelFaceRenderable.class, new VoxelFaceRenderableSerializer());
+      kryo.register(VoxelChunkRenderable.class, new VoxelFaceRenderableSerializer());
       kryo.register(Matrix4.class, new Matrix4Serializer());
       kryo.register(Vector3i.class, new Vector3iSerializer());
       kryo.register(PlayerStartPosition.class, new PlayerStartPositionSerializer());

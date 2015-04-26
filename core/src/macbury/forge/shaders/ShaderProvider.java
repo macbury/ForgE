@@ -5,7 +5,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import macbury.forge.ForgE;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
 import macbury.forge.graphics.batch.renderable.SpriteRenderable;
-import macbury.forge.graphics.batch.renderable.VoxelFaceRenderable;
+import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
 import macbury.forge.shaders.utils.BaseShader;
 import macbury.forge.shaders.utils.RenderableBaseShader;
 import macbury.forge.shaders.utils.ShaderReloadListener;
@@ -33,7 +33,7 @@ public class ShaderProvider implements Disposable, ShaderReloadListener {
   public RenderableBaseShader provide(BaseRenderable renderable) {
     if (SpriteRenderable.class.isInstance(renderable)) {
       return sprite3DShader;
-    } else if (VoxelFaceRenderable.class.isInstance(renderable)) {
+    } else if (VoxelChunkRenderable.class.isInstance(renderable)) {
       return terrainShader;
     } else {
       throw new GdxRuntimeException("No shader for: " + renderable.getClass().getSimpleName());

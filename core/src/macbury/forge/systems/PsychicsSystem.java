@@ -1,7 +1,6 @@
 package macbury.forge.systems;
 
 import com.badlogic.ashley.core.*;
-import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.Matrix4;
@@ -9,18 +8,21 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.DebugDrawer;
 import com.badlogic.gdx.physics.bullet.collision.*;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
-import com.badlogic.gdx.physics.bullet.dynamics.btKinematicCharacterController;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.physics.bullet.dynamics.btSequentialImpulseConstraintSolver;
 import com.badlogic.gdx.physics.bullet.linearmath.btIDebugDraw;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.components.*;
+import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
+import macbury.forge.graphics.builders.Chunk;
+import macbury.forge.terrain.TerrainEngine;
+import macbury.forge.utils.BulletUtils;
 
 /**
  * Created by macbury on 09.04.15.
  */
-public class PsychicsSystem extends EntitySystem implements EntityListener, Disposable {
+public class PsychicsSystem extends EntitySystem implements EntityListener, Disposable, TerrainEngine.TerrainEngineListener {
   private static final String TAG            = "PsychicsSystem";
   private static final float MIN_TIME_STEPS  = 1f / 30f;
   private static final int MAX_SUB_STEPS     = 5;
@@ -60,7 +62,7 @@ public class PsychicsSystem extends EntitySystem implements EntityListener, Disp
     bulletWorld.setGravity(new Vector3(0, -2f, 0));
     debugDrawer.setDebugMode(btIDebugDraw.DebugDrawModes.DBG_MAX_DEBUG_DRAW_MODE);
 
-    createGround();
+    //createGround();
     //createPlayer(new Vector3(50, 8f, 30.3f));
   }
 
@@ -98,6 +100,27 @@ public class PsychicsSystem extends EntitySystem implements EntityListener, Disp
     if (isInFamily(entity)) {
       entitiesWithBullet.removeValue(entity, true);
       disposeEntityBulletStuff(entity);
+    }
+  }
+
+  @Override
+  public void onChunkRemove(Chunk chunk, TerrainEngine engine) {
+
+  }
+
+  @Override
+  public void onChunkAdded(Chunk chunk, TerrainEngine engine) {
+    for (VoxelChunkRenderable renderable : chunk.renderables) {
+      btConvexHullShape shape                                  = BulletUtils.createConvexHullShape(renderable.mesh, true);
+      btRigidBody.btRigidBodyConstructionInfo constructionInfo = new btRigidBody.btRigidBodyConstructionInfo(0, null, shape, Vector3.Zero);
+      btRigidBody voxelChunkBody                               = new btRigidBody(constructionInfo);
+
+      tempMat.idt();
+      tempMat.translate(chunk.worldPosition);
+      voxelChunkBody.setWorldTransform(tempMat);
+
+      voxelChunkBody.setCollisionFlags(voxelChunkBody.getCollisionFlags() | btCollisionObject.CollisionFlags.CF_CUSTOM_MATERIAL_CALLBACK);
+      bulletWorld.addRigidBody(voxelChunkBody);
     }
   }
 
