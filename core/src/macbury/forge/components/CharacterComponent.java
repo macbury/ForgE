@@ -13,7 +13,7 @@ import com.badlogic.gdx.physics.bullet.dynamics.btKinematicCharacterController;
  * Created by macbury on 24.04.15.
  */
 public class CharacterComponent extends BulletPsychicsComponent {
-  private final static float DEFAULT_STEP_HEIGHT = 0.5f;
+  private final static float DEFAULT_STEP_HEIGHT = 0.85f;
   public btPairCachingGhostObject ghostObject;
   private btCapsuleShape ghostShape;
   public btKinematicCharacterController characterController;

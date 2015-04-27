@@ -80,7 +80,7 @@ public class ChunkPartCollider implements Disposable {
           Vector3i.ZERO,
           size,
           tempPos.set(voxelSize).scl(0.5f),
-          side,
+          voxel.alginTo,
           block.rotation,
           point,
           tempPos
