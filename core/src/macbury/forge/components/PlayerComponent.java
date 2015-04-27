@@ -12,6 +12,7 @@ public class PlayerComponent extends BaseComponent {
   public Camera camera;
   public float headWobbleSpeed;
   public float headWobbleMax;
+
   public Vector3 cameraOffset = new Vector3();
   @Override
   public void reset() {
@@ -25,5 +26,6 @@ public class PlayerComponent extends BaseComponent {
     this.headWobbleSpeed  = ((PlayerComponent) otherComponent).headWobbleSpeed;
     this.headWobbleMax    = ((PlayerComponent) otherComponent).headWobbleMax;
     this.cameraOffset.set(((PlayerComponent) otherComponent).cameraOffset);
+
   }
 }

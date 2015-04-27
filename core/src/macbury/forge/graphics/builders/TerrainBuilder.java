@@ -83,13 +83,15 @@ public class TerrainBuilder {
         greedyMesh.getResults(quadParts);
         createTrianglesFor(side, quadParts, solidVoxelAssembler, transparentVoxelAssembler);
         quadParts.clear();
+        if (ForgE.config.buildColliders) {
+          greedyCollider.begin(side, chunk.start); {
+            if (greedyCollider.haveResults()) {
+              greedyCollider.getResults(quadParts);
+              createCollidersFor(side, quadParts, chunk);
+            }
+          } greedyCollider.end();
+        }
 
-        greedyCollider.begin(side, chunk.start); {
-          if (greedyCollider.haveResults()) {
-            greedyCollider.getResults(quadParts);
-            createCollidersFor(side, quadParts, chunk);
-          }
-        } greedyCollider.end();
       }
     } greedyMesh.end();
   }

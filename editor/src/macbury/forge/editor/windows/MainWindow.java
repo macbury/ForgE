@@ -7,6 +7,7 @@ import com.ezware.dialog.task.TaskDialogs;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import icons.Utils;
 import macbury.forge.Config;
 import macbury.forge.ForgE;
 import macbury.forge.ForgEBootListener;
@@ -284,6 +285,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     panel1.add(toolsPane, BorderLayout.CENTER);
     final JPanel panel2 = new JPanel();
     panel2.setLayout(new BorderLayout(0, 0));
+
     toolsPane.addTab("", new ImageIcon(getClass().getResource("/icons/soil_layers.png")), panel2, "Terrain");
     terrainToolsToolbar = new JToolBar();
     terrainToolsToolbar.setBackground(UIManager.getColor("List.background"));

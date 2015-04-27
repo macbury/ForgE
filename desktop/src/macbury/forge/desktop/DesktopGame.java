@@ -29,7 +29,7 @@ public class DesktopGame implements ForgEBootListener, Thread.UncaughtExceptionH
     config.fullscreen     = false;
 
     Config forgeConfig            = new Config();
-    forgeConfig.debug             = true;
+    forgeConfig.debug             = false;
     forgeConfig.renderBulletDebug = false;
     forgeConfig.renderBoundingBox = false;
     //forgeConfig.cacheGeometry = true; //TODO: check in terrain engine if there is geometry in file

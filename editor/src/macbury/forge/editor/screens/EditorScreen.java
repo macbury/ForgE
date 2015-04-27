@@ -39,6 +39,7 @@ public class EditorScreen extends AbstractScreen {
   @Override
   protected void initialize() {
     GLProfiler.enable();
+    ForgE.config.buildColliders = false;
     this.overlay              = new Overlay();
     this.stage                = new Stage();
     this.changeManager        = new ChangeManager();

@@ -6,13 +6,18 @@
       size:   { x: 1,   y: 1.5f, z: 1 }
     },
     {
-      class: "character"
+      class: "character",
+      speed: { x: 0.10f, y: 0.10f, z: 0.10f },
+      jumpSpeed: 9f,
+      maxJumpHeight: 2f,
+      maxSlope: 0.785f
     },
     {
       class:            "player",
       headWobbleSpeed:  10,
       headWobbleMax:    0.1f,
-      cameraOffset: { y: 0.4f }
+      cameraOffset: { y: 0.4f },
+
     },
   ]
 }

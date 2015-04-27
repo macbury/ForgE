@@ -14,10 +14,17 @@ import com.badlogic.gdx.physics.bullet.dynamics.btKinematicCharacterController;
  */
 public class CharacterComponent extends BulletPsychicsComponent {
   private final static float DEFAULT_STEP_HEIGHT = 0.85f;
+  private static final float DEFAULT_JUMP_SPEED = 0.1F;
+  private static final float DEFAULT_MAX_JUMP_HEIGHT = 2;
+  private static final float DEFAULT_SLOPE = 0.78f;
   public btPairCachingGhostObject ghostObject;
   private btCapsuleShape ghostShape;
   public btKinematicCharacterController characterController;
+  public Vector3 speed        = new Vector3();
   private float stepHeight = DEFAULT_STEP_HEIGHT;
+  public float jumpSpeed;
+  public float maxJumpHeight;
+  public float maxSlope;
 
   @Override
   public void initBullet(Matrix4 transform, btDiscreteDynamicsWorld world, Vector3 size) {
@@ -29,7 +36,9 @@ public class CharacterComponent extends BulletPsychicsComponent {
     ghostObject.setCollisionFlags(btCollisionObject.CollisionFlags.CF_CHARACTER_OBJECT);
 
     characterController = new btKinematicCharacterController(ghostObject, ghostShape, stepHeight);
-
+    characterController.setJumpSpeed(jumpSpeed);
+    characterController.setMaxJumpHeight(maxJumpHeight);
+    characterController.setMaxSlope(maxSlope);
     world.addCollisionObject(
         ghostObject, (short) btBroadphaseProxy.CollisionFilterGroups.CharacterFilter,
         (short)(btBroadphaseProxy.CollisionFilterGroups.StaticFilter | btBroadphaseProxy.CollisionFilterGroups.DefaultFilter)
@@ -41,6 +50,10 @@ public class CharacterComponent extends BulletPsychicsComponent {
   public void reset() {
     super.reset();
     stepHeight = DEFAULT_STEP_HEIGHT;
+    jumpSpeed  = DEFAULT_JUMP_SPEED;
+    maxJumpHeight = DEFAULT_MAX_JUMP_HEIGHT;
+    maxSlope  = DEFAULT_SLOPE;
+    speed.setZero();
   }
 
   @Override
@@ -54,6 +67,10 @@ public class CharacterComponent extends BulletPsychicsComponent {
 
   @Override
   public void set(BaseComponent otherComponent) {
-
+    CharacterComponent chc = (CharacterComponent)otherComponent;
+    this.speed.set( chc.speed );
+    this.jumpSpeed = chc.jumpSpeed;
+    maxJumpHeight = chc.maxJumpHeight;
+    maxSlope      = chc.maxSlope;
   }
 }

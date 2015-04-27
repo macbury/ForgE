@@ -83,7 +83,7 @@ public class PlayerSystem extends IteratingSystem {
         characterComponent.characterController.jump();
       }
 
-      tempA.add(tempB).nor().scl(0.15f);
+      tempA.add(tempB).nor().scl(characterComponent.speed);
       camera.position.set(positionComponent.vector).add(playerComponent.cameraOffset);
 
       characterComponent.characterController.setWalkDirection(tempA);

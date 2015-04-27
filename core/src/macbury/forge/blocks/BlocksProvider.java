@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.SerializationException;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -77,7 +78,7 @@ public class BlocksProvider implements Disposable {
       try {
         Block block            = json.fromJson(Block.class, blockFile.readString());
         String[] nameParts     = blockFile.nameWithoutExtension().split("_");
-        block.name             = String.join(" ", Arrays.asList(Arrays.copyOfRange(nameParts, 1, nameParts.length)));
+        block.name             = StringUtils.join(Arrays.asList(Arrays.copyOfRange(nameParts, 1, nameParts.length)), " ");
         if (shapes.containsKey(block.shape)) {
           block.blockShape       = shapes.get(block.shape);
         } else {
