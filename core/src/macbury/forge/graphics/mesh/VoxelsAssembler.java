@@ -10,18 +10,53 @@ import macbury.forge.blocks.BlockShapePart;
 import macbury.forge.blocks.BlockShapeTriangle;
 import macbury.forge.graphics.builders.VoxelDef;
 import macbury.forge.terrain.greedy.AbstractGreedyAlgorithm;
+import macbury.forge.utils.Vector3i;
 
 /**
  * Created by macbury on 16.10.14.
  */
 public class VoxelsAssembler extends MeshAssembler {
-  private Matrix4 transformMat = new Matrix4();
+  private static Matrix4 transformMat = new Matrix4();
   private Vector3 tempVec      = new Vector3();
   private Vector2 tempVec2     = new Vector2();
+
+  public static void vertexTranslationFromShape(Vector3i origin, Vector3i voxelScale, Vector3 voxelCenter, Block.Side alginTo, Block.Rotation rotation, Vector3 point, Vector3 out) {
+    // Part first calculate position of vertex and rotate in the algiment path
+    transformMat.idt();
+
+    transformMat.translate(origin.x, origin.y, origin.z);
+    transformMat.scl(voxelScale.x, voxelScale.y, voxelScale.z);
+    transformMat.translate(voxelCenter);
+
+    if (alginTo != null) {
+      switch (rotation) {
+        case horizontal:
+          transformMat.rotate(alginTo.rotationHorizontal);
+          break;
+
+        case alignToSurface:
+          transformMat.rotate(alginTo.rotationAllSides);
+          break;
+      }
+    }
+
+    transformMat.translate(point);
+    transformMat.getTranslation(out);
+  }
 
   private MeshVertexInfo vertex(VoxelDef voxelDef, BlockShapePart part, int index, TextureAtlas.AtlasRegion sideRegion, AbstractGreedyAlgorithm.GreedyQuad terrainPart) {
     MeshVertexInfo vert = this.vertex().ao(voxelDef.ao).transparent(voxelDef.block.transparent);
 
+    vertexTranslationFromShape(
+        voxelDef.position,
+        terrainPart.voxelSize,
+        voxelDef.center,
+        voxelDef.voxel.alginTo,
+        voxelDef.block.rotation,
+        part.verticies.get(index),
+        vert.position
+    );
+/*
     // Part first calculate position of vertex and rotate in the algiment path
     transformMat.idt();
 
@@ -43,7 +78,7 @@ public class VoxelsAssembler extends MeshAssembler {
 
     transformMat.translate(part.verticies.get(index));
     transformMat.getTranslation(vert.position);
-
+*/
     // Recalculate aligment normals too :P
 
     transformMat.idt();

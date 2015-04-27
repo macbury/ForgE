@@ -13,8 +13,6 @@ public class VoxelChunkRenderable extends BaseRenderable implements Disposable {
   private Chunk parent;
   public BoundingBox boundingBox = new BoundingBox();
 
-
-
   @Override
   public void dispose() {
     if (mesh != null) {

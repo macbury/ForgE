@@ -31,7 +31,8 @@ public class Chunk implements OctreeObject, Disposable {
   public Vector3i end           = new Vector3i();
   public BoundingBox boundingBox  = new BoundingBox();
   public boolean needRebuild      = true;
-  public Array<VoxelChunkRenderable> renderables = new Array<VoxelChunkRenderable>(6);
+  public final Array<VoxelChunkRenderable> renderables = new Array<VoxelChunkRenderable>(6);
+  public final Array<ChunkPartCollider> colliders      = new Array<ChunkPartCollider>();
   public OctreeNode parent;
   private final static Vector3 temp = new Vector3();
 
@@ -41,9 +42,6 @@ public class Chunk implements OctreeObject, Disposable {
   }
 
   public void updateBoundingBox() {
-    //for (VoxelFaceRenderable face : renderables) {
-    //  boundingBox.set(face.boundingBox.min, face.boundingBox.max);
-    //}
     boundingBox.set(worldPosition, temp.set(worldPosition).add(size));
   }
 
@@ -56,6 +54,13 @@ public class Chunk implements OctreeObject, Disposable {
   public void dispose() {
     //Gdx.app.log(TAG, "Disposing chunk!");
     clearFaces();
+    clearColliders();
+  }
+
+  private void clearColliders() {
+    while(colliders.size > 0) {
+      colliders.pop().dispose();
+    }
   }
 
   public void addFace(VoxelChunkRenderable face) {

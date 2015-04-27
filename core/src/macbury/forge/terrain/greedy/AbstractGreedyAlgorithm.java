@@ -15,7 +15,8 @@ import macbury.forge.voxel.Voxel;
 public abstract class AbstractGreedyAlgorithm implements Disposable {
   private final Voxel mask[];
   private final int size;
-  private final Array<GreedyQuad> result = new Array<GreedyQuad>();
+  private final Array<GreedyQuad> result         = new Array<GreedyQuad>();
+
   private static Pool<GreedyQuad> greedyQuadPool = new Pool<GreedyQuad>() {
     @Override
     protected GreedyQuad newObject() {
@@ -48,10 +49,15 @@ public abstract class AbstractGreedyAlgorithm implements Disposable {
     return voxelB != null && (voxelB.getBlock().blockShape != voxelA.getBlock().blockShape);
   }
 
-  public void greedy(Block.Side face, Vector3i origin) {
-    greedyQuadPool.freeAll(result);
-    result.clear();
 
+  private boolean isAir(Voxel voxel) {
+    return voxel == null || voxel.isAir();
+  }
+
+  public abstract boolean isVoxelsTheSame(Voxel a, Voxel b);
+
+
+  public void begin(Block.Side face, Vector3i origin) {
     for (int a = 0; a < size; a++) {
       int n = 0;
       for (int b = 0; b < size; b++) {
@@ -76,35 +82,34 @@ public abstract class AbstractGreedyAlgorithm implements Disposable {
     }
   }
 
+  public void end() {
+    greedyQuadPool.freeAll(result);
+    result.clear();
+  }
+
   public void getResults(Array<GreedyQuad> output) {
     output.clear();
     output.addAll(result);
   }
 
-  private boolean isAir(Voxel voxel) {
-    return voxel == null || voxel.isAir();
-  }
-
-  public abstract boolean isVoxelsTheSame(Voxel a, Voxel b);
-
   private void createQuads(Block.Side face, int a, Vector3i origin) {
     int n = 0;
 
-    for(int j = 0; j < ChunkMap.CHUNK_SIZE; j++) {
-      for (int i = 0; i < ChunkMap.CHUNK_SIZE; ) {
+    for(int j = 0; j < size; j++) {
+      for (int i = 0; i < size; ) {
         if (mask[n] == null || mask[n].isAir()) {
           i++;
           n++;
         } else {
           int w, h = 0;
-          for(w = 1; i + w < ChunkMap.CHUNK_SIZE && !isAir(mask[n + w]) && isVoxelsTheSame(mask[n + w], mask[n]); w++) {}
+          for(w = 1; i + w < size && !isAir(mask[n + w]) && isVoxelsTheSame(mask[n + w], mask[n]); w++) {}
 
           boolean done = false;
 
-          for(h = 1; j + h < ChunkMap.CHUNK_SIZE; h++) {
+          for(h = 1; j + h < size; h++) {
 
             for(int k = 0; k < w; k++) {
-              if(isAir(mask[n + k + h * ChunkMap.CHUNK_SIZE]) || !isVoxelsTheSame(mask[n + k + h * ChunkMap.CHUNK_SIZE], mask[n])) { done = true; break; }
+              if(isAir(mask[n + k + h * size]) || !isVoxelsTheSame(mask[n + k + h * size], mask[n])) { done = true; break; }
             }
 
             if(done) { break; }
@@ -139,7 +144,7 @@ public abstract class AbstractGreedyAlgorithm implements Disposable {
           //Gdx.app.log(TAG, "Quad: " + currentPart.toString() + " with origin " + origin.toString());
 
           for(int l = 0; l < h; ++l) {
-            for(int k = 0; k < w; ++k) { mask[n + k + l * ChunkMap.CHUNK_SIZE] = null; }
+            for(int k = 0; k < w; ++k) { mask[n + k + l * size] = null; }
           }
 
           i += w;
@@ -168,10 +173,9 @@ public abstract class AbstractGreedyAlgorithm implements Disposable {
   }
 
   public static class GreedyQuad implements Pool.Poolable {
-    public final Vector3i currentDirection  = new Vector3i();
     public final Vector3i voxelPosition     = new Vector3i();
     public final Vector3i voxelSize         = new Vector3i();
-    public final Vector2 uvTiling          = new Vector2();
+    public final Vector2 uvTiling           = new Vector2();
     public Block block;
     public Voxel voxel;
 
@@ -183,7 +187,6 @@ public abstract class AbstractGreedyAlgorithm implements Disposable {
       voxel = null;
       voxelSize.setZero();
       voxelPosition.setZero();
-      currentDirection.setZero();
       uvTiling.setZero();
     }
 

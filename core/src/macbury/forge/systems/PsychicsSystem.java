@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.components.*;
 import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
 import macbury.forge.graphics.builders.Chunk;
+import macbury.forge.graphics.builders.ChunkPartCollider;
 import macbury.forge.terrain.TerrainEngine;
 import macbury.forge.utils.BulletUtils;
 
@@ -105,23 +106,17 @@ public class PsychicsSystem extends EntitySystem implements EntityListener, Disp
 
   @Override
   public void onChunkRemove(Chunk chunk, TerrainEngine engine) {
-
+    for (ChunkPartCollider collider : chunk.colliders) {
+      collider.dispose();
+    }
   }
 
   @Override
   public void onChunkAdded(Chunk chunk, TerrainEngine engine) {
-    for (VoxelChunkRenderable renderable : chunk.renderables) {
-      btConvexHullShape shape                                  = BulletUtils.createConvexHullShape(renderable.mesh, true);
-      btRigidBody.btRigidBodyConstructionInfo constructionInfo = new btRigidBody.btRigidBodyConstructionInfo(0, null, shape, Vector3.Zero);
-      btRigidBody voxelChunkBody                               = new btRigidBody(constructionInfo);
-
-      tempMat.idt();
-      tempMat.translate(chunk.worldPosition);
-      voxelChunkBody.setWorldTransform(tempMat);
-
-      voxelChunkBody.setCollisionFlags(voxelChunkBody.getCollisionFlags() | btCollisionObject.CollisionFlags.CF_CUSTOM_MATERIAL_CALLBACK);
-      bulletWorld.addRigidBody(voxelChunkBody);
+    for (ChunkPartCollider collider : chunk.colliders) {
+      collider.initializeAndAddToWorld(bulletWorld);
     }
+
   }
 
   private void initEntityBulletStuff(Entity entity) {

@@ -15,6 +15,7 @@ import java.util.HashMap;
 public class Block {
   private static final String DEV_TEXTURE_PLACEHOLDER_NAME = "dev";
 
+
   /*
         TODO: merge side with terrain builder.face :P
          */
@@ -168,6 +169,10 @@ public class Block {
     return solid;
   }
 
+
+  public boolean isNotSolid() {
+    return !solid;
+  }
 
   public class NoUvForBlockSide extends GdxRuntimeException {
     public NoUvForBlockSide(Side side, Block block) {

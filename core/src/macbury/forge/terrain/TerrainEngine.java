@@ -172,10 +172,11 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
 
   private void remove(Chunk chunk) {
     chunks.removeValue(chunk, true);
-    chunk.dispose();
+
     for (TerrainEngineListener listener : listeners) {
       listener.onChunkRemove(chunk, this);
     }
+    chunk.dispose();
   }
 
   @Override

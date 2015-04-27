@@ -1,5 +1,6 @@
 package macbury.forge.graphics.builders;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
@@ -10,15 +11,14 @@ import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
 import macbury.forge.graphics.mesh.MeshVertexInfo;
 import macbury.forge.graphics.mesh.VoxelsAssembler;
 import macbury.forge.terrain.greedy.AbstractGreedyAlgorithm;
+import macbury.forge.terrain.greedy.GreedyCollider;
 import macbury.forge.terrain.greedy.GreedyMesh;
-import macbury.forge.utils.Vector3i;
 import macbury.forge.voxel.ChunkMap;
 
 /**
  * Created by macbury on 16.10.14.
  */
 public class TerrainBuilder {
-
   private final VoxelsAssembler solidVoxelAssembler;
   private final VoxelsAssembler transparentVoxelAssembler;
 
@@ -27,13 +27,13 @@ public class TerrainBuilder {
   private final ChunkMap map;
   public final TerrainCursor cursor;
   private final GreedyMesh greedyMesh;
+  private final GreedyCollider greedyCollider;
   private Vector3 tempA = new Vector3();
   private Vector3 tempB = new Vector3();
   private Array<Block.Side> facesToBuild = new Array<Block.Side>();
 
-  private Vector3i nextTileToCheck = new Vector3i();
   private final VoxelDef voxelDef;
-  private Array<AbstractGreedyAlgorithm.GreedyQuad> terrainParts = new Array<AbstractGreedyAlgorithm.GreedyQuad>();
+  private Array<AbstractGreedyAlgorithm.GreedyQuad> quadParts = new Array<AbstractGreedyAlgorithm.GreedyQuad>();
 
 
   public TerrainBuilder(ChunkMap voxelMap) {
@@ -46,6 +46,7 @@ public class TerrainBuilder {
     this.transparentVoxelAssembler = new VoxelsAssembler();
 
     this.greedyMesh                = new GreedyMesh(map);
+    this.greedyCollider            = new GreedyCollider(map);
   }
 
 
@@ -77,12 +78,20 @@ public class TerrainBuilder {
     if (side == Block.Side.all || side == Block.Side.side) {
       throw new GdxRuntimeException("I cannot assemble chunk face for: " + side.toString());
     }
-    greedyMesh.greedy(side, chunk.start);
+    greedyMesh.begin(side, chunk.start); {
+      if (greedyMesh.haveResults()) {
+        greedyMesh.getResults(quadParts);
+        createTrianglesFor(side, quadParts, solidVoxelAssembler, transparentVoxelAssembler);
+        quadParts.clear();
 
-    if (greedyMesh.haveResults()) {
-      greedyMesh.getResults(terrainParts);
-      createTrianglesFor(side, terrainParts, solidVoxelAssembler, transparentVoxelAssembler);
-    }
+        greedyCollider.begin(side, chunk.start); {
+          if (greedyCollider.haveResults()) {
+            greedyCollider.getResults(quadParts);
+            createCollidersFor(side, quadParts, chunk);
+          }
+        } greedyCollider.end();
+      }
+    } greedyMesh.end();
   }
 
   public void assembleMesh(Chunk chunk) {
@@ -111,6 +120,17 @@ public class TerrainBuilder {
     }
   }
 
+  private void createCollidersFor(Block.Side side, Array<AbstractGreedyAlgorithm.GreedyQuad> quadParts, Chunk chunk) {
+    for(AbstractGreedyAlgorithm.GreedyQuad quad : quadParts) {
+      ChunkPartCollider chunkPartCollider = new ChunkPartCollider(quad);
+      if (chunkPartCollider.canAssemble(side)) {
+        chunkPartCollider.assemble(map.voxelSize, side);
+        chunk.colliders.add(chunkPartCollider);
+      } else {
+        chunkPartCollider.dispose();
+      }
+    }
+  }
 
   private void createTrianglesFor(Block.Side side, Array<AbstractGreedyAlgorithm.GreedyQuad> terrainParts, VoxelsAssembler solidVoxelAssembler, VoxelsAssembler transparentVoxelAssembler) {
     for (AbstractGreedyAlgorithm.GreedyQuad part : terrainParts) {
@@ -136,7 +156,7 @@ public class TerrainBuilder {
     solidVoxelAssembler.dispose();
     transparentVoxelAssembler.dispose();
     greedyMesh.dispose();
+    greedyCollider.dispose();
   }
-
 
 }
