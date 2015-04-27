@@ -1,11 +1,10 @@
-package macbury.forge.terrain;
+package macbury.forge.terrain.greedy;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Pool;
 import macbury.forge.blocks.Block;
-import macbury.forge.graphics.builders.TerrainPart;
 import macbury.forge.utils.Vector3i;
 import macbury.forge.voxel.ChunkMap;
 import macbury.forge.voxel.Voxel;
@@ -162,6 +161,10 @@ public abstract class AbstractGreedyAlgorithm implements Disposable {
     greedyQuadPool.freeAll(result);
     resetMask();
     result.clear();
+  }
+
+  public boolean haveResults() {
+    return result.size > 0;
   }
 
   public static class GreedyQuad implements Pool.Poolable {

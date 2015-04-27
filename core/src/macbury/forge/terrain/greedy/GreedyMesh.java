@@ -1,4 +1,4 @@
-package macbury.forge.terrain;
+package macbury.forge.terrain.greedy;
 
 import macbury.forge.blocks.Block;
 import macbury.forge.utils.Vector3i;
@@ -11,7 +11,7 @@ import macbury.forge.voxel.Voxel;
 public class GreedyMesh extends AbstractGreedyAlgorithm {
   private final ChunkMap map;
   private Vector3i nextTileToCheck = new Vector3i();
-  
+
   public GreedyMesh(ChunkMap map) {
     super(ChunkMap.CHUNK_SIZE);
     this.map = map;

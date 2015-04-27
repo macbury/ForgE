@@ -8,8 +8,8 @@ import macbury.forge.ForgE;
 import macbury.forge.blocks.Block;
 import macbury.forge.blocks.BlockShapePart;
 import macbury.forge.blocks.BlockShapeTriangle;
-import macbury.forge.graphics.builders.TerrainPart;
 import macbury.forge.graphics.builders.VoxelDef;
+import macbury.forge.terrain.greedy.AbstractGreedyAlgorithm;
 
 /**
  * Created by macbury on 16.10.14.
@@ -19,7 +19,7 @@ public class VoxelsAssembler extends MeshAssembler {
   private Vector3 tempVec      = new Vector3();
   private Vector2 tempVec2     = new Vector2();
 
-  private MeshVertexInfo vertex(VoxelDef voxelDef, BlockShapePart part, int index, TextureAtlas.AtlasRegion sideRegion, TerrainPart terrainPart) {
+  private MeshVertexInfo vertex(VoxelDef voxelDef, BlockShapePart part, int index, TextureAtlas.AtlasRegion sideRegion, AbstractGreedyAlgorithm.GreedyQuad terrainPart) {
     MeshVertexInfo vert = this.vertex().ao(voxelDef.ao).transparent(voxelDef.block.transparent);
 
     // Part first calculate position of vertex and rotate in the algiment path
@@ -76,7 +76,7 @@ public class VoxelsAssembler extends MeshAssembler {
     return vert;
   }
 
-  public void face(VoxelDef voxelDef, Block.Side side, TerrainPart part) {
+  public void face(VoxelDef voxelDef, Block.Side side, AbstractGreedyAlgorithm.GreedyQuad part) {
     BlockShapePart blockShapePart       = voxelDef.block.blockShape.get(side);
 
     if (blockShapePart != null) {
