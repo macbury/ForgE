@@ -181,4 +181,10 @@ public class PsychicsSystem extends EntitySystem implements EntityListener, Disp
     setProcessing(false);
   }
 
+  public class VoxelChunkRigidBody {
+    @Override
+    public boolean equals(Object obj) {
+      return super.equals(obj);
+    }
+  }
 }
