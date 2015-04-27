@@ -9,6 +9,7 @@ import macbury.forge.Config;
 import macbury.forge.ForgE;
 import macbury.forge.ForgEBootListener;
 import macbury.forge.screens.LoadingScreen;
+import macbury.forge.screens.test.TestModelsScreen;
 
 import javax.swing.*;
 
@@ -44,7 +45,8 @@ public class DesktopGame implements ForgEBootListener, Thread.UncaughtExceptionH
     if (ForgE.db.startPosition == null) {
       throw new GdxRuntimeException("Start position not found!");
     } else {
-      ForgE.screens.set(new LoadingScreen(ForgE.db.startPosition));
+      //ForgE.screens.set(new LoadingScreen(ForgE.db.startPosition));
+      ForgE.screens.set(new TestModelsScreen());
     }
   }
 

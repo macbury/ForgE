@@ -34,7 +34,6 @@ public class PlayerSystem extends IteratingSystem {
   private float mouseSensitivityX = 10f;
   private float mouseSensitivityY = 8f;
 
-
   private Vector3 tempA   = new Vector3();
   private Vector3 tempB   = new Vector3();
 
@@ -50,9 +49,10 @@ public class PlayerSystem extends IteratingSystem {
   @Override
   protected void processEntity(Entity entity, float deltaTime) {
     PlayerComponent playerComponent       = plm.get(entity);
-    Camera camera                         = playerComponent.camera;
     PositionComponent positionComponent   = pm.get(entity);
     CharacterComponent characterComponent = chm.get(entity);
+    Camera camera                         = playerComponent.camera;
+
     if (camera != null) {
       float deltaX = -Gdx.input.getDeltaX() * mouseSensitivityX * deltaTime;
       float deltaY = -Gdx.input.getDeltaY() * mouseSensitivityY * deltaTime;
@@ -93,6 +93,4 @@ public class PlayerSystem extends IteratingSystem {
       }
     }
   }
-
-
 }

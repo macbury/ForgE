@@ -15,7 +15,7 @@
     {
       class:            "player",
       headWobbleSpeed:  10,
-      headWobbleMax:    0.1f,
+      headWobbleMax:    0.06f,
       cameraOffset: { y: 0.4f },
 
     },
