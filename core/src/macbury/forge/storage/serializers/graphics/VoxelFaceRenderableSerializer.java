@@ -17,9 +17,6 @@ public class VoxelFaceRenderableSerializer extends Serializer<VoxelChunkRenderab
   public void write(Kryo kryo, Output output, VoxelChunkRenderable face) {
     kryo.writeObject(output, face.direction);
     kryo.writeObject(output, face.boundingBox);
-    output.writeBoolean(face.ssao);
-    output.writeBoolean(face.reflect);
-    output.writeBoolean(face.haveTransparency);
     output.writeInt(face.primitiveType);
     output.writeInt(face.triangleCount);
     kryo.writeObject(output, face.worldTransform);

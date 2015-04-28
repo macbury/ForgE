@@ -3,6 +3,7 @@ package macbury.forge.shaders;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.GL30;
+import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
 import macbury.forge.graphics.batch.renderable.SpriteRenderable;
@@ -15,7 +16,7 @@ import macbury.forge.shaders.utils.RenderableBaseShader;
 public class SpriteShader extends RenderableBaseShader<SpriteRenderable> {
   public final String UNIFORM_SPRITE_TEXTURE = "u_spriteTexture";
   @Override
-  public boolean canRender(BaseRenderable instance) {
+  public boolean canRender(Renderable instance) {
     return false;
   }
 

@@ -1,5 +1,6 @@
 package macbury.forge.shaders;
 
+import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import macbury.forge.ForgE;
@@ -30,7 +31,7 @@ public class ShaderProvider implements Disposable, ShaderReloadListener {
     this.sprite3DShader = (RenderableBaseShader)ForgE.shaders.get(SPRITE_SHADER);
   }
 
-  public RenderableBaseShader provide(BaseRenderable renderable) {
+  public RenderableBaseShader provide(Renderable renderable) {
     if (SpriteRenderable.class.isInstance(renderable)) {
       return sprite3DShader;
     } else if (VoxelChunkRenderable.class.isInstance(renderable)) {

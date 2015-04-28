@@ -15,7 +15,7 @@ public class SpriteRenderable extends BaseRenderable {
     this.mesh             = sprite.getMesh();
     this.primitiveType    = GL30.GL_TRIANGLES;
     this.triangleCount    = 2;
-    this.haveTransparency = sprite.haveTransparency();
+    //this.haveTransparency = sprite.haveTransparency();
     this.texture          = sprite.getTexture();
     sprite.applyToMatrix(this.worldTransform);
   }

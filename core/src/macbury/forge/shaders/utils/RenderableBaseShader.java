@@ -3,6 +3,7 @@ package macbury.forge.shaders.utils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GLTexture;
 import com.badlogic.gdx.graphics.Mesh;
+import com.badlogic.gdx.graphics.g3d.Renderable;
 import macbury.forge.ForgE;
 import macbury.forge.graphics.GraphicsUtils;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
@@ -10,12 +11,12 @@ import macbury.forge.graphics.batch.renderable.BaseRenderable;
 /**
  * Created by macbury on 20.10.14.
  */
-public abstract class RenderableBaseShader<T extends BaseRenderable> extends BaseShader {
+public abstract class RenderableBaseShader<T extends Renderable> extends BaseShader {
   protected Mesh currentMesh;
   public final String UNIFORM_WORLD_TRANSFORM = "u_worldTransform";
   public final String UNIFORM_NORMAL_MATRIX   = "u_normalMatrix";
 
-  public abstract boolean canRender (BaseRenderable instance);
+  public abstract boolean canRender (Renderable instance);
 
   /**
    * Setup local uniforms for renderable

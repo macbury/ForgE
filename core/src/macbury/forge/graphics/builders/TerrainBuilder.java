@@ -112,7 +112,7 @@ public class TerrainBuilder {
       renderable.mesh                  = assembler.mesh(MeshVertexInfo.AttributeType.Position, MeshVertexInfo.AttributeType.Normal, MeshVertexInfo.AttributeType.TextureCord, MeshVertexInfo.AttributeType.Material, MeshVertexInfo.AttributeType.TextureFullCords);
 
       renderable.worldTransform.idt();
-      renderable.haveTransparency = haveTransparency;
+      //renderable.haveTransparency = haveTransparency;
       renderable.worldTransform.translate(chunk.worldPosition);
       renderable.mesh.calculateBoundingBox(renderable.boundingBox);
       renderable.boundingBox.min.add(chunk.worldPosition);

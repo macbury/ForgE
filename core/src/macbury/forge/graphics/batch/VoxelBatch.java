@@ -3,6 +3,8 @@ package macbury.forge.graphics.batch;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g3d.Renderable;
+import com.badlogic.gdx.graphics.g3d.RenderableProvider;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
@@ -12,7 +14,6 @@ import macbury.forge.Config;
 import macbury.forge.ForgE;
 import macbury.forge.assets.assets.TextureAsset;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
-import macbury.forge.graphics.batch.renderable.BaseRenderableProvider;
 import macbury.forge.graphics.batch.renderable.SpriteRenderable;
 import macbury.forge.graphics.batch.sprites.Sprite3D;
 import macbury.forge.graphics.batch.sprites.Sprite3DCache;
@@ -29,10 +30,11 @@ public class VoxelBatch implements Disposable {
   private final CameraRenderableSorter sorter;
   private final ShaderProvider shaderProvider;
   private final Array<Sprite3DCache> spriteCache;
+  private final RenderablePool renderablePool;
   public long trianglesPerFrame;
   protected Camera camera;
   protected final RenderContext context;
-  protected final Array<BaseRenderable> renderables = new Array<BaseRenderable>();
+  protected final Array<Renderable> renderables = new Array<Renderable>();
   private boolean sorted;
   public int renderablesPerFrame;
 
@@ -43,6 +45,7 @@ public class VoxelBatch implements Disposable {
     this.sorter               = new CameraRenderableSorter();
     this.spriteRenderablePool = new SpriteRenderablePool();
     this.spriteCache          = new Array<Sprite3DCache>();
+    this.renderablePool       = new RenderablePool();
     renderablesPerFrame       = 0;
     trianglesPerFrame         = 0;
   }
@@ -77,7 +80,7 @@ public class VoxelBatch implements Disposable {
    * Add BaseRenderable to queue
    * @param renderable
    */
-  public void add(final BaseRenderable renderable) {
+  public void add(final Renderable renderable) {
     if (camera == null) throw new GdxRuntimeException("Call begin() first.");
     renderables.add(renderable);
     renderable.mesh.setAutoBind(false);
@@ -87,12 +90,12 @@ public class VoxelBatch implements Disposable {
    * Add BaseRenderable to queue
    * @param renderableProvider
    */
-  public void add(final BaseRenderableProvider renderableProvider) {
+  public void add(final RenderableProvider renderableProvider) {
     if (camera == null) throw new GdxRuntimeException("Call begin() first.");
     final int offset = renderables.size;
-    renderableProvider.getRenderables(renderables);
+    renderableProvider.getRenderables(renderables, renderablePool);
     for (int i = offset; i < renderables.size; i++) {
-      BaseRenderable renderable = renderables.get(i);
+      Renderable renderable = renderables.get(i);
       renderable.mesh.setAutoBind(false);
     }
   }
@@ -129,12 +132,12 @@ public class VoxelBatch implements Disposable {
       shapeRenderer.setProjectionMatrix(camera.combined);
       shapeRenderer.begin(ShapeRenderer.ShapeType.Line); {
         for (int i = 0; i < renderables.size; i++) {
-          final BaseRenderable renderable = renderables.get(i);
+          /*final BaseRenderable renderable = renderables.get(i);
           if (renderable.wireframe != null) {
             shapeRenderer.setTransformMatrix(renderable.worldTransform);
             renderable.wireframe.render(shapeRenderer, Color.WHITE);
             trianglesPerFrame += renderable.triangleCount;
-          }
+          }*/
         }
       } shapeRenderer.end();
     } context.end();
@@ -144,7 +147,7 @@ public class VoxelBatch implements Disposable {
     RenderableBaseShader currentShader = null;
     RenderableBaseShader currentRenderableShader = null;
     for (int i = 0; i < renderables.size; i++) {
-      final BaseRenderable renderable = renderables.get(i);
+      final Renderable renderable = renderables.get(i);
       currentRenderableShader         = shaderProvider.provide(renderable);
 
       if (currentShader != currentRenderableShader) {
@@ -153,7 +156,7 @@ public class VoxelBatch implements Disposable {
         currentShader.begin(camera, context, env);
       }
       currentShader.render(renderable);
-      trianglesPerFrame += renderable.triangleCount;
+      //trianglesPerFrame += renderable.triangleCount;
       if (SpriteRenderable.class.isInstance(renderable)) {
         spriteRenderablePool.free((SpriteRenderable)renderable);
       }
@@ -184,6 +187,7 @@ public class VoxelBatch implements Disposable {
     renderables.clear();
     spriteRenderablePool.flush();
     spriteCache.clear();
+    renderablePool.clear();
     camera = null;
   }
 

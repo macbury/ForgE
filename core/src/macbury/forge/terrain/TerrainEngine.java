@@ -1,13 +1,15 @@
 package macbury.forge.terrain;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g3d.Renderable;
+import com.badlogic.gdx.graphics.g3d.RenderableProvider;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.Pool;
 import macbury.forge.ForgE;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
-import macbury.forge.graphics.batch.renderable.BaseRenderableProvider;
 import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
 import macbury.forge.graphics.builders.Chunk;
 import macbury.forge.graphics.builders.TerrainBuilder;
@@ -25,7 +27,7 @@ import java.util.Comparator;
 /**
  * Created by macbury on 23.10.14.
  */
-public class TerrainEngine implements Disposable, ActionTimer.TimerListener, BaseRenderableProvider {
+public class TerrainEngine implements Disposable, ActionTimer.TimerListener, RenderableProvider {
   private static final float UPDATE_EVERY    = 0.02f;
   private static final String TAG = "TerrainEngine";
   private static final int CHUNK_TO_REBUILD_PER_TICK = 10;
@@ -188,17 +190,17 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Bas
     listeners.clear();
   }
 
-  @Override
-  public void getRenderables(Array<BaseRenderable> renderables) {
-    renderables.addAll(visibleFaces);
-  }
-
   public void addListener(TerrainEngineListener listener) {
     listeners.add(listener);
   }
 
   public void removeListener(TerrainEngineListener listener) {
     listeners.removeValue(listener, true);
+  }
+
+  @Override
+  public void getRenderables(Array<Renderable> renderables, Pool<Renderable> pool) {
+    renderables.addAll(visibleFaces);
   }
 
   public interface TerrainEngineListener {
