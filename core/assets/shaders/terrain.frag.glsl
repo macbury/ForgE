@@ -15,6 +15,7 @@ void main() {
   vec4 texture        = texture2D(u_diffuseTexture, tilingTextCord);
 
   vec4 diffuse        = v_lightDiffuse * texture;
+
   #ifdef normalsDebugFlag
     diffuse.rgb = v_normal;
   #endif

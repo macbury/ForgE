@@ -55,12 +55,18 @@ public abstract class BaseShader implements Disposable {
     } else {
       Gdx.app.error(TAG, "Error while compiling shader:");
       Gdx.app.error(TAG, newShaderProgram.getLog());
-      Gdx.app.error(TAG, "Fragment SRC === " + fragment);
-      Gdx.files.external("/tmp/debug.frag.glsl").writeString(fragment, false);
-      Gdx.app.error(TAG, fragmentSrc);
-      Gdx.app.error(TAG, "Vertex SRC ===" + vertex);
-      Gdx.files.external("/tmp/debug.vert.glsl").writeString(vertex, false);
-      Gdx.app.error(TAG, vertexSrc);
+      Gdx.app.error(TAG, "Fragment SRC === ");
+      int i = 0;
+      for (String line : fragmentSrc.split("\n")) {
+        Gdx.app.error(TAG, (++i) + " | " + line);
+      }
+      i = 0;
+      Gdx.app.error(TAG, "Vertex SRC ===");
+
+      for (String line : vertexSrc.split("\n")) {
+        Gdx.app.error(TAG, (++i) + " | " + line);
+      }
+
       return false;
     }
   }
