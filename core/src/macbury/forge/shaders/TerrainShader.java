@@ -33,13 +33,13 @@ public class TerrainShader extends RenderableBaseShader<VoxelChunkRenderable> {
     shader.setUniformMatrix(UNIFORM_WORLD_TRANSFORM, renderable.worldTransform);
     shader.setUniformMatrix(UNIFORM_NORMAL_MATRIX, tempNormalMatrix);
 
-    /*if (renderable.haveTransparency) {
+    if (renderable.haveTransparency()) {
       context.setBlending(true, GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
       context.setCullFace(GL30.GL_NONE);
-    } else {*/
+    } else {
       context.setBlending(false, GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
       context.setCullFace(GL30.GL_BACK);
-    //}
+    }
   }
 
 }

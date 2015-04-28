@@ -2,6 +2,8 @@ package macbury.forge.graphics.builders;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL30;
+import com.badlogic.gdx.graphics.g3d.Material;
+import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
@@ -112,6 +114,10 @@ public class TerrainBuilder {
       renderable.mesh                  = assembler.mesh(MeshVertexInfo.AttributeType.Position, MeshVertexInfo.AttributeType.Normal, MeshVertexInfo.AttributeType.TextureCord, MeshVertexInfo.AttributeType.Material, MeshVertexInfo.AttributeType.TextureFullCords);
 
       renderable.worldTransform.idt();
+      if (haveTransparency) {
+        renderable.material = new Material(new BlendingAttribute(true,1f));
+      }
+
       //renderable.haveTransparency = haveTransparency;
       renderable.worldTransform.translate(chunk.worldPosition);
       renderable.mesh.calculateBoundingBox(renderable.boundingBox);

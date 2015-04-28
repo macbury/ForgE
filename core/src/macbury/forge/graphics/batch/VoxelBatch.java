@@ -132,12 +132,14 @@ public class VoxelBatch implements Disposable {
       shapeRenderer.setProjectionMatrix(camera.combined);
       shapeRenderer.begin(ShapeRenderer.ShapeType.Line); {
         for (int i = 0; i < renderables.size; i++) {
-          /*final BaseRenderable renderable = renderables.get(i);
-          if (renderable.wireframe != null) {
-            shapeRenderer.setTransformMatrix(renderable.worldTransform);
-            renderable.wireframe.render(shapeRenderer, Color.WHITE);
-            trianglesPerFrame += renderable.triangleCount;
-          }*/
+          Renderable renderable = renderables.get(i);
+          if (BaseRenderable.class.isInstance(renderable)) {
+            BaseRenderable baseRenderable = (BaseRenderable)renderable;
+            if (baseRenderable.wireframe != null) {
+              shapeRenderer.setTransformMatrix(renderable.worldTransform);
+              baseRenderable.wireframe.render(shapeRenderer, Color.WHITE);
+            }
+          }
         }
       } shapeRenderer.end();
     } context.end();

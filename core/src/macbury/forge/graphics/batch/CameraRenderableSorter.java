@@ -2,6 +2,7 @@ package macbury.forge.graphics.batch;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g3d.Renderable;
+import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
@@ -23,14 +24,14 @@ public class CameraRenderableSorter implements Comparator<Renderable> {
   }
 
   public int compare (final Renderable o1, final Renderable o2) {
-    //final boolean b1 = o1.haveTransparency;
-    //final boolean b2 = o2.haveTransparency;
-    //if (b1 != b2) return b1 ? 1 : -1;
+    final boolean b1 = o1.material != null && o1.material.has(BlendingAttribute.Type) && ((BlendingAttribute)o1.material.get(BlendingAttribute.Type)).blended;
+    final boolean b2 = o2.material != null && o2.material.has(BlendingAttribute.Type) && ((BlendingAttribute)o2.material.get(BlendingAttribute.Type)).blended;
+    if (b1 != b2) return b1 ? 1 : -1;
 
     o1.worldTransform.getTranslation(tmpV1);
     o2.worldTransform.getTranslation(tmpV2);
     final float dst = (int)(SORT_FACTOR * camera.position.dst2(tmpV1)) - (int)(SORT_FACTOR * camera.position.dst2(tmpV2));
     final int result = dst < 0 ? -1 : (dst > 0 ? 1 : 0);
-    return /*b1 ? -result :*/ result;
+    return b1 ? -result : result;
   }
 }
