@@ -3,7 +3,7 @@ package macbury.forge.editor.controllers.tools.inspector.properties;
 import com.badlogic.gdx.graphics.Color;
 import com.l2fprod.common.beans.BaseBeanInfo;
 import com.l2fprod.common.beans.ExtendedPropertyDescriptor;
-import macbury.forge.editor.screens.EditorScreen;
+import macbury.forge.editor.screens.LevelEditorScreen;
 
 /**
  * Created by macbury on 15.03.15.
@@ -37,9 +37,9 @@ public class EditorScreenBeanInfo extends BaseBeanInfo {
   }
 
   public static class EditorScreenBean {
-    private final EditorScreen screen;
+    private final LevelEditorScreen screen;
 
-    public EditorScreenBean(EditorScreen screen) {
+    public EditorScreenBean(LevelEditorScreen screen) {
       this.screen = screen;
     }
 

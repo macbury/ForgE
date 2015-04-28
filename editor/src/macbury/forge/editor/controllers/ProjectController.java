@@ -3,7 +3,6 @@ package macbury.forge.editor.controllers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
-import com.ezware.dialog.task.TaskDialogs;
 import macbury.forge.ForgE;
 import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
 import macbury.forge.editor.parell.Job;
@@ -13,7 +12,7 @@ import macbury.forge.editor.parell.jobs.LoadLevelJob;
 import macbury.forge.editor.parell.jobs.NewLevelJob;
 import macbury.forge.editor.parell.jobs.SaveLevelJob;
 import macbury.forge.editor.runnables.UpdateStatusBar;
-import macbury.forge.editor.screens.EditorScreen;
+import macbury.forge.editor.screens.LevelEditorScreen;
 import macbury.forge.editor.windows.MainWindow;
 import macbury.forge.editor.windows.MapCreationWindow;
 import macbury.forge.editor.windows.ProgressTaskDialog;
@@ -29,19 +28,16 @@ import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by macbury on 18.10.14.
  */
-public class ProjectController implements JobListener, ShaderReloadListener, MapCreationWindow.Listener, EditorScreen.ForgeAfterRenderListener {
+public class ProjectController implements JobListener, ShaderReloadListener, MapCreationWindow.Listener, LevelEditorScreen.ForgeAfterRenderListener {
   private static final String LEVEL_STATE_LOADED_CALLBACK = "onLevelStateLoaded";
   private static final String TAG = "ProjectController";
   private static final String LEVEL_STATE_SAVE_CALLBACK = "onLevelStateSaved";
   private MainWindow mainWindow;
-  public EditorScreen editorScreen;
+  public LevelEditorScreen levelEditorScreen;
   private Array<OnMapChangeListener> onMapChangeListenerArray = new Array<OnMapChangeListener>();
   public JobManager jobs;
   private ProgressTaskDialog progressTaskDialog;
@@ -105,7 +101,7 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
   }
 
   private void updateUI() {
-    boolean editorScreenEnabled = editorScreen != null;
+    boolean editorScreenEnabled = levelEditorScreen != null;
     //TODO: change visibility of main ui
     mainWindow.mainSplitPane.setVisible(true);
     mainWindow.openGlContainer.setVisible(editorScreenEnabled);
@@ -148,14 +144,14 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
   }
 
   public void saveMap() {
-    SaveLevelJob job = new SaveLevelJob(editorScreen.level.state);
+    SaveLevelJob job = new SaveLevelJob(levelEditorScreen.level.state);
     job.setCallback(this, LEVEL_STATE_SAVE_CALLBACK);
     jobs.enqueue(job);
-    editorScreen.changeManager.clear();
+    levelEditorScreen.changeManager.clear();
   }
 
   public boolean closeAndSaveChangesMap() {
-    if (editorScreen != null && editorScreen.changeManager != null && editorScreen.changeManager.canUndo()) {
+    if (levelEditorScreen != null && levelEditorScreen.changeManager != null && levelEditorScreen.changeManager.canUndo()) {
 
       int response = JOptionPane.showOptionDialog(mainWindow,
           "There are changes in map. Do you want to save them?",
@@ -268,10 +264,10 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
 
   public void closeMap() {
     mainWindow.setTitle("");
-    if (editorScreen != null) {
+    if (levelEditorScreen != null) {
 
       for (OnMapChangeListener listener : onMapChangeListenerArray) {
-        listener.onCloseMap(ProjectController.this, ProjectController.this.editorScreen);
+        listener.onCloseMap(ProjectController.this, ProjectController.this.levelEditorScreen);
       }
 
       Gdx.app.postRunnable(new Runnable() {
@@ -282,7 +278,7 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
       });
     }
     currentLevelState = null;
-    editorScreen = null;
+    levelEditorScreen = null;
     updateUI();
   }
 
@@ -294,7 +290,7 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
         updateUI();
 
         for (OnMapChangeListener listener : onMapChangeListenerArray) {
-          listener.onMapSaved(ProjectController.this, ProjectController.this.editorScreen);
+          listener.onMapSaved(ProjectController.this, ProjectController.this.levelEditorScreen);
         }
       }
     });
@@ -314,28 +310,28 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
     mainWindow.setTitle(state.name);
     ForgE.db.save();
 
-    if (editorScreen != null) {
-      editorScreen.removeAfterRenderListener(this);
+    if (levelEditorScreen != null) {
+      levelEditorScreen.removeAfterRenderListener(this);
     }
 
-    this.editorScreen = new EditorScreen(state);
-    editorScreen.addAfterRenderListener(this);
+    this.levelEditorScreen = new LevelEditorScreen(state);
+    levelEditorScreen.addAfterRenderListener(this);
     Gdx.app.postRunnable(new Runnable() {
       @Override
       public void run() {
-        ForgE.screens.set(editorScreen);
+        ForgE.screens.set(levelEditorScreen);
 
         updateUI();
 
         for (OnMapChangeListener listener : onMapChangeListenerArray) {
-          listener.onNewMap(ProjectController.this, ProjectController.this.editorScreen);
+          listener.onNewMap(ProjectController.this, ProjectController.this.levelEditorScreen);
         }
       }
     });
   }
 
   @Override
-  public void forgeAfterRenderCallback(EditorScreen screen) {
+  public void forgeAfterRenderCallback(LevelEditorScreen screen) {
 
     if (updateStatusBar != null) {
       updateStatusBar.update();
@@ -406,15 +402,15 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
   }
 
   public void rebuildChunks() {
-    if (editorScreen != null) {
-      editorScreen.level.terrainMap.rebuildAll();
+    if (levelEditorScreen != null) {
+      levelEditorScreen.level.terrainMap.rebuildAll();
     }
 
   }
 
   public void clearUndoRedo() {
-    if (editorScreen != null) {
-      editorScreen.changeManager.clear();
+    if (levelEditorScreen != null) {
+      levelEditorScreen.changeManager.clear();
     }
   }
 

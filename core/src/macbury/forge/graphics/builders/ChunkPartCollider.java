@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.collision.btConvexHullShape;
+import com.badlogic.gdx.physics.bullet.collision.btShapeHull;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.utils.Disposable;
@@ -74,7 +75,7 @@ public class ChunkPartCollider implements Disposable {
   public void assemble(Vector3 voxelSize, Block.Side side) {
     BlockShapePart part = blockShape.get(side);
 
-    shape = new btConvexHullShape();
+    btConvexHullShape convexHullShape = new btConvexHullShape();
     for (Vector3 point : part.verticies) {
       VoxelsAssembler.vertexTranslationFromShape(
           Vector3i.ZERO,
@@ -85,12 +86,14 @@ public class ChunkPartCollider implements Disposable {
           point,
           tempPos
       );
-      shape.addPoint(tempPos, false);
+      convexHullShape.addPoint(tempPos, false);
     }
-    shape.recalcLocalAabb();
+    convexHullShape.recalcLocalAabb();
 
     position.applyTo(tempPos);
     transformMat.idt().translate(tempPos);
+
+    shape = convexHullShape;
 
     btRigidBody.btRigidBodyConstructionInfo constructionInfo = new btRigidBody.btRigidBodyConstructionInfo(0, null, shape, Vector3.Zero);
     this.body  = new btRigidBody(constructionInfo);

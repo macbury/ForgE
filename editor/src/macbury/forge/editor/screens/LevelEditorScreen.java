@@ -9,7 +9,6 @@ import com.badlogic.gdx.utils.Array;
 import macbury.forge.ForgE;
 import macbury.forge.editor.systems.SelectionSystem;
 import macbury.forge.editor.undo_redo.ChangeManager;
-import macbury.forge.graphics.batch.CameraRenderableSorter;
 import macbury.forge.graphics.camera.RTSCameraController;
 import macbury.forge.level.Level;
 import macbury.forge.level.LevelState;
@@ -19,7 +18,7 @@ import macbury.forge.ui.Overlay;
 /**
  * Created by macbury on 18.10.14.
  */
-public class EditorScreen extends AbstractScreen {
+public class LevelEditorScreen extends AbstractScreen {
   private static final String TAG = "EditorScreen";
   private static final float LEVEL_EDITOR_FAR_CAMERA = 200;
   private final LevelState state;
@@ -31,7 +30,7 @@ public class EditorScreen extends AbstractScreen {
   public ChangeManager changeManager;
   private DecalBatch decalBatch;
   private Array<ForgeAfterRenderListener> afterRenderListenerArray = new Array<ForgeAfterRenderListener>();
-  public EditorScreen(LevelState state) {
+  public LevelEditorScreen(LevelState state) {
     super();
     this.state = state;
   }
@@ -115,13 +114,13 @@ public class EditorScreen extends AbstractScreen {
 
   @Override
   public void dispose() {
-
+    GLProfiler.disable();
     level.dispose();
     changeManager.dispose();
     decalBatch.dispose();
   }
 
   public interface ForgeAfterRenderListener {
-    public void forgeAfterRenderCallback(EditorScreen screen);
+    public void forgeAfterRenderCallback(LevelEditorScreen screen);
   }
 }

@@ -1,7 +1,6 @@
 package macbury.forge.editor.runnables;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import macbury.forge.editor.controllers.ProjectController;
 import macbury.forge.utils.FormatUtils;
 
@@ -34,7 +33,7 @@ public class UpdateStatusBar {
 
     if (accumulator >= 0.25f){
       accumulator = 0f;
-      if (projectController.editorScreen == null || projectController.editorScreen.level == null) {
+      if (projectController.levelEditorScreen == null || projectController.levelEditorScreen.level == null) {
         fpsLabel.setText("...");
         statusMemoryLabel.setText("...");
         statusRenderablesLabel.setText("...");
@@ -43,10 +42,10 @@ public class UpdateStatusBar {
       } else {
         fpsLabel.setText("FPS: " + Gdx.graphics.getFramesPerSecond());
         statusMemoryLabel.setText("Memory: " + FormatUtils.humanReadableByteCount(Gdx.app.getNativeHeap(), true) + "/" + FormatUtils.humanReadableByteCount(Gdx.app.getJavaHeap(), true));
-        statusRenderablesLabel.setText("Renderables: " + String.valueOf(projectController.editorScreen.level.batch.renderablesPerFrame));
-        statusTriangleCountLabel.setText("Triangles: " + String.valueOf(Math.round(projectController.editorScreen.level.batch.trianglesPerFrame)));
+        statusRenderablesLabel.setText("Renderables: " + String.valueOf(projectController.levelEditorScreen.level.batch.renderablesPerFrame));
+        statusTriangleCountLabel.setText("Triangles: " + String.valueOf(Math.round(projectController.levelEditorScreen.level.batch.trianglesPerFrame)));
 
-        mapCursorPositionLabel.setText(projectController.editorScreen.selectionSystem.voxelCursor.replace.toString());
+        mapCursorPositionLabel.setText(projectController.levelEditorScreen.selectionSystem.voxelCursor.replace.toString());
       }
     }
 

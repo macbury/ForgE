@@ -56,8 +56,10 @@ public abstract class BaseShader implements Disposable {
       Gdx.app.error(TAG, "Error while compiling shader:");
       Gdx.app.error(TAG, newShaderProgram.getLog());
       Gdx.app.error(TAG, "Fragment SRC === " + fragment);
+      Gdx.files.external("/tmp/debug.frag.glsl").writeString(fragment, false);
       Gdx.app.error(TAG, fragmentSrc);
       Gdx.app.error(TAG, "Vertex SRC ===" + vertex);
+      Gdx.files.external("/tmp/debug.vert.glsl").writeString(vertex, false);
       Gdx.app.error(TAG, vertexSrc);
       return false;
     }

@@ -1,10 +1,9 @@
 package macbury.forge.editor.controllers.tools;
 
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import macbury.forge.editor.controllers.ProjectController;
 import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
-import macbury.forge.editor.screens.EditorScreen;
+import macbury.forge.editor.screens.LevelEditorScreen;
 import macbury.forge.editor.systems.SelectionSystem;
 
 import javax.swing.*;
@@ -52,12 +51,12 @@ public class ToolsController implements ChangeListener, OnMapChangeListener {
   }
 
   @Override
-  public void onCloseMap(ProjectController controller, EditorScreen screen) {
+  public void onCloseMap(ProjectController controller, LevelEditorScreen screen) {
 
   }
 
   @Override
-  public void onNewMap(ProjectController controller, EditorScreen screen) {
+  public void onNewMap(ProjectController controller, LevelEditorScreen screen) {
     currentSelectionSystem = screen.selectionSystem;
     updateSelectedTabState();
   }
@@ -68,7 +67,7 @@ public class ToolsController implements ChangeListener, OnMapChangeListener {
   }
 
   @Override
-  public void onMapSaved(ProjectController projectController, EditorScreen editorScreen) {
+  public void onMapSaved(ProjectController projectController, LevelEditorScreen levelEditorScreen) {
 
   }
 

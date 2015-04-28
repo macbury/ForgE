@@ -6,7 +6,7 @@ import macbury.forge.editor.controllers.tools.ToolsController;
 import macbury.forge.editor.controllers.tools.inspector.properties.DefaultBeanBinder;
 import macbury.forge.editor.controllers.tools.inspector.properties.EditorScreenBeanInfo;
 import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
-import macbury.forge.editor.screens.EditorScreen;
+import macbury.forge.editor.screens.LevelEditorScreen;
 import macbury.forge.editor.systems.SelectionSystem;
 import macbury.forge.editor.undo_redo.ChangeManager;
 import macbury.forge.editor.undo_redo.ChangeManagerListener;
@@ -14,7 +14,6 @@ import macbury.forge.editor.undo_redo.actions.PropertyChangeable;
 import macbury.forge.editor.views.MapPropertySheet;
 
 import javax.swing.*;
-import java.awt.*;
 import java.beans.PropertyChangeEvent;
 
 /**
@@ -23,7 +22,7 @@ import java.beans.PropertyChangeEvent;
 public class InspectorController implements OnMapChangeListener, DefaultBeanBinder.PropertyChangeListener, ChangeManagerListener, ToolsController.ToolControllerListener {
   private static final String TAG = "InspectorController";
   private final MapPropertySheet inspectorSheetPanel;
-  private EditorScreen screen;
+  private LevelEditorScreen screen;
   private DefaultBeanBinder binder;
   private ChangeManager changeManager;
   private boolean pause;
@@ -34,7 +33,7 @@ public class InspectorController implements OnMapChangeListener, DefaultBeanBind
   }
 
   @Override
-  public void onCloseMap(ProjectController controller, EditorScreen screen) {
+  public void onCloseMap(ProjectController controller, LevelEditorScreen screen) {
     screen.changeManager.removeListener(this);
     this.screen = null;
     if (binder != null){
@@ -43,7 +42,7 @@ public class InspectorController implements OnMapChangeListener, DefaultBeanBind
   }
 
   @Override
-  public void onNewMap(ProjectController controller, EditorScreen screen) {
+  public void onNewMap(ProjectController controller, LevelEditorScreen screen) {
     this.screen   = screen;
     changeManager = screen.changeManager;
 
@@ -56,7 +55,7 @@ public class InspectorController implements OnMapChangeListener, DefaultBeanBind
   }
 
   @Override
-  public void onMapSaved(ProjectController projectController, EditorScreen editorScreen) {
+  public void onMapSaved(ProjectController projectController, LevelEditorScreen levelEditorScreen) {
 
   }
 /*

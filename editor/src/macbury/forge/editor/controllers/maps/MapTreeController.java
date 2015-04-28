@@ -5,7 +5,7 @@ import macbury.forge.ForgE;
 import macbury.forge.ForgEBootListener;
 import macbury.forge.editor.controllers.ProjectController;
 import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
-import macbury.forge.editor.screens.EditorScreen;
+import macbury.forge.editor.screens.LevelEditorScreen;
 
 import javax.swing.*;
 import javax.swing.tree.*;
@@ -87,12 +87,12 @@ public class MapTreeController implements OnMapChangeListener, ForgEBootListener
 
 
   @Override
-  public void onCloseMap(ProjectController controller, EditorScreen screen) {
+  public void onCloseMap(ProjectController controller, LevelEditorScreen screen) {
 
   }
 
   @Override
-  public void onNewMap(ProjectController controller, EditorScreen screen) {
+  public void onNewMap(ProjectController controller, LevelEditorScreen screen) {
     reload();
   }
 
@@ -102,7 +102,7 @@ public class MapTreeController implements OnMapChangeListener, ForgEBootListener
   }
 
   @Override
-  public void onMapSaved(ProjectController projectController, EditorScreen editorScreen) {
+  public void onMapSaved(ProjectController projectController, LevelEditorScreen levelEditorScreen) {
     reload();
   }
 

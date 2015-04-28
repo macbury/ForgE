@@ -6,7 +6,7 @@ import icons.Utils;
 import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
 import macbury.forge.editor.input.GdxSwingInputProcessor;
 import macbury.forge.editor.input.KeyShortcutMapping;
-import macbury.forge.editor.screens.EditorScreen;
+import macbury.forge.editor.screens.LevelEditorScreen;
 import macbury.forge.editor.undo_redo.ChangeManager;
 import macbury.forge.editor.undo_redo.ChangeManagerListener;
 import macbury.forge.editor.views.MainMenu;
@@ -30,7 +30,7 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
   private final KeyShortcutMapping redoMapping;
   private final ProjectController projectController;
   private final JButton saveMapButton;
-  private EditorScreen screen;
+  private LevelEditorScreen screen;
 
   public MainToolbarController(ProjectController projectController, JToolBar mainToolbar, MainMenu mainMenu, GdxSwingInputProcessor inputProcessor) {
     this.editorModeButtonGroup = new ButtonGroup();
@@ -79,12 +79,12 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
   }
 
   @Override
-  public void onCloseMap(ProjectController controller, EditorScreen screen) {
+  public void onCloseMap(ProjectController controller, LevelEditorScreen screen) {
     setScreen(null);
   }
 
   @Override
-  public void onNewMap(ProjectController controller, EditorScreen screen) {
+  public void onNewMap(ProjectController controller, LevelEditorScreen screen) {
     setScreen(screen);
   }
 
@@ -94,7 +94,7 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
   }
 
   @Override
-  public void onMapSaved(ProjectController projectController, EditorScreen editorScreen) {
+  public void onMapSaved(ProjectController projectController, LevelEditorScreen levelEditorScreen) {
 
   }
 
@@ -115,7 +115,7 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
     }
   }
 
-  public void setScreen(EditorScreen newScreen) {
+  public void setScreen(LevelEditorScreen newScreen) {
     if (this.screen != null) {
       this.screen.changeManager.removeListener(this);
       this.screen = null;

@@ -5,8 +5,7 @@ import macbury.forge.ForgE;
 import macbury.forge.editor.controllers.BlocksController;
 import macbury.forge.editor.controllers.ProjectController;
 import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
-import macbury.forge.editor.parell.jobs.BuildBlocksTexture;
-import macbury.forge.editor.screens.EditorScreen;
+import macbury.forge.editor.screens.LevelEditorScreen;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -23,7 +22,7 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
   public JRadioButtonMenuItem debugWireframeItem;
   public JRadioButtonMenuItem debugTexturedItem;
   public JCheckBoxMenuItem debugRenderStaticOctree;
-  private EditorScreen editor;
+  private LevelEditorScreen editor;
   private JMenu debugRenderMenu;
   private JRadioButtonMenuItem debugNormalsItem;
   private JRadioButtonMenuItem debugLightingItem;
@@ -44,10 +43,10 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
 
   /**
    * Set Editor screen and refresh menu
-   * @param editorScreen
+   * @param levelEditorScreen
    */
-  public void setEditor(EditorScreen editorScreen) {
-    this.editor = editorScreen;
+  public void setEditor(LevelEditorScreen levelEditorScreen) {
+    this.editor = levelEditorScreen;
     refresh();
   }
 
@@ -201,12 +200,12 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
   }
 
   @Override
-  public void onCloseMap(ProjectController controller, EditorScreen screen) {
+  public void onCloseMap(ProjectController controller, LevelEditorScreen screen) {
     setEditor(null);
   }
 
   @Override
-  public void onNewMap(ProjectController controller, EditorScreen screen) {
+  public void onNewMap(ProjectController controller, LevelEditorScreen screen) {
     setEditor(screen);
   }
 
@@ -216,7 +215,7 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
   }
 
   @Override
-  public void onMapSaved(ProjectController projectController, EditorScreen editorScreen) {
+  public void onMapSaved(ProjectController projectController, LevelEditorScreen levelEditorScreen) {
 
   }
 }

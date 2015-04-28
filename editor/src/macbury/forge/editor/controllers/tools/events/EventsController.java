@@ -2,13 +2,11 @@ package macbury.forge.editor.controllers.tools.events;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 import macbury.forge.ForgE;
-import macbury.forge.db.models.PlayerStartPosition;
 import macbury.forge.editor.controllers.ProjectController;
 import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
 import macbury.forge.editor.controllers.tools.ToolsController;
-import macbury.forge.editor.screens.EditorScreen;
+import macbury.forge.editor.screens.LevelEditorScreen;
 import macbury.forge.editor.selection.AbstractSelection;
 import macbury.forge.editor.selection.EventSelection;
 import macbury.forge.editor.selection.SelectionInterface;
@@ -86,12 +84,12 @@ public class EventsController implements ToolsController.ToolControllerListener,
   }
 
   @Override
-  public void onCloseMap(ProjectController controller, EditorScreen screen) {
+  public void onCloseMap(ProjectController controller, LevelEditorScreen screen) {
 
   }
 
   @Override
-  public void onNewMap(ProjectController controller, EditorScreen screen) {
+  public void onNewMap(ProjectController controller, LevelEditorScreen screen) {
     this.levelId = screen.level.state.id;
   }
 
@@ -101,7 +99,7 @@ public class EventsController implements ToolsController.ToolControllerListener,
   }
 
   @Override
-  public void onMapSaved(ProjectController projectController, EditorScreen editorScreen) {
+  public void onMapSaved(ProjectController projectController, LevelEditorScreen levelEditorScreen) {
 
   }
 }

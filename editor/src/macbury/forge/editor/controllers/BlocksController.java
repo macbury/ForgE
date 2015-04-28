@@ -13,7 +13,7 @@ import macbury.forge.editor.parell.JobManager;
 import macbury.forge.editor.parell.jobs.BuildBlocksTexture;
 import macbury.forge.editor.reloader.DirectoryWatchJob;
 import macbury.forge.editor.reloader.DirectoryWatcher;
-import macbury.forge.editor.screens.EditorScreen;
+import macbury.forge.editor.screens.LevelEditorScreen;
 import macbury.forge.editor.views.BlockListRenderer;
 import macbury.forge.editor.views.ImagePanel;
 
@@ -110,12 +110,12 @@ public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.
   }
 
   @Override
-  public void onCloseMap(ProjectController controller, EditorScreen screen) {
+  public void onCloseMap(ProjectController controller, LevelEditorScreen screen) {
     resetSelectedItem();
   }
 
   @Override
-  public void onNewMap(ProjectController controller, EditorScreen screen) {
+  public void onNewMap(ProjectController controller, LevelEditorScreen screen) {
     this.controller = controller;
     reload();
     resetSelectedItem();
@@ -127,7 +127,7 @@ public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.
   }
 
   @Override
-  public void onMapSaved(ProjectController projectController, EditorScreen editorScreen) {
+  public void onMapSaved(ProjectController projectController, LevelEditorScreen levelEditorScreen) {
 
   }
 

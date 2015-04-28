@@ -10,7 +10,7 @@ import macbury.forge.editor.controllers.tools.ToolsController;
 import macbury.forge.editor.input.GdxSwingInputProcessor;
 import macbury.forge.editor.input.KeyShortcutMapping;
 import macbury.forge.editor.parell.JobManager;
-import macbury.forge.editor.screens.EditorScreen;
+import macbury.forge.editor.screens.LevelEditorScreen;
 import macbury.forge.editor.selection.*;
 import macbury.forge.editor.systems.SelectionSystem;
 import macbury.forge.editor.undo_redo.ChangeManager;
@@ -48,7 +48,7 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
   private SelectionSystem selectionSystem;
   private ChangeManager changeManager;
   private ChunkMap map;
-  private EditorScreen screen;
+  private LevelEditorScreen screen;
   private JobManager jobs;
 
   public TerrainToolsController(JToolBar terrainToolsToolbar, BlocksController blocksController, GdxSwingInputProcessor inputProcessor) {
@@ -128,7 +128,7 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
   }
 
   @Override
-  public void onCloseMap(ProjectController controller, EditorScreen screen) {
+  public void onCloseMap(ProjectController controller, LevelEditorScreen screen) {
     if (selectionSystem != null) {
       selectionSystem.removeListener(this);
     }
@@ -143,7 +143,7 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
   }
 
   @Override
-  public void onNewMap(ProjectController controller, EditorScreen screen) {
+  public void onNewMap(ProjectController controller, LevelEditorScreen screen) {
     brushTypeModel.reload();
     drawPencilButton.setSelected(true);
     this.screen          = screen;
@@ -163,7 +163,7 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
   }
 
   @Override
-  public void onMapSaved(ProjectController projectController, EditorScreen editorScreen) {
+  public void onMapSaved(ProjectController projectController, LevelEditorScreen levelEditorScreen) {
 
   }
 
