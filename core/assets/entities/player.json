@@ -10,7 +10,7 @@
       speed: { x: 0.10f, y: 0.10f, z: 0.10f },
       jumpSpeed: 9f,
       maxJumpHeight: 2f,
-      maxSlope: 0.785f
+      maxSlope: 1.1f
     },
     {
       class:            "player",

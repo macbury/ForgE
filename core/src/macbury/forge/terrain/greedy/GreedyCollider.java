@@ -19,7 +19,7 @@ public class GreedyCollider extends AbstractGreedyAlgorithm {
 
   @Override
   public boolean isVoxelsTheSame(Voxel a, Voxel b) {
-    return a != null && b != null && b.getBlock().isSolid() && a.getBlock().isSolid() && b.getBlock().blockShape == b.getBlock().blockShape && a.isScalable();
+    return a != null && b != null && b.getBlock().isSolid() && a.getBlock().isSolid() && b.getBlock().blockShape == b.getBlock().blockShape && a.isScalable() && b.isScalable();
   }
 
   @Override

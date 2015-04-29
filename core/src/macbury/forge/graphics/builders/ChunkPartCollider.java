@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import macbury.forge.blocks.Block;
 import macbury.forge.blocks.BlockShape;
 import macbury.forge.blocks.BlockShapePart;
+import macbury.forge.blocks.BlockShapeTriangle;
 import macbury.forge.graphics.mesh.VoxelsAssembler;
 import macbury.forge.terrain.greedy.AbstractGreedyAlgorithm;
 import macbury.forge.utils.Vector3i;
@@ -72,22 +73,31 @@ public class ChunkPartCollider implements Disposable {
     return blockShape.get(side) != null;
   }
 
+
+  private void helpAddPointToShape(Vector3 voxelSize, Vector3 point,  btConvexHullShape convexHullShape) {
+    VoxelsAssembler.vertexTranslationFromShape(
+        Vector3i.ZERO,
+        size,
+        tempPos.set(voxelSize).scl(0.5f),
+        voxel.alginTo,
+        block.rotation,
+        point,
+        tempPos
+    );
+    convexHullShape.addPoint(tempPos, false);
+  }
+
   public void assemble(Vector3 voxelSize, Block.Side side) {
     BlockShapePart part = blockShape.get(side);
 
     btConvexHullShape convexHullShape = new btConvexHullShape();
-    for (Vector3 point : part.verticies) {
-      VoxelsAssembler.vertexTranslationFromShape(
-          Vector3i.ZERO,
-          size,
-          tempPos.set(voxelSize).scl(0.5f),
-          voxel.alginTo,
-          block.rotation,
-          point,
-          tempPos
-      );
-      convexHullShape.addPoint(tempPos, false);
+    for (BlockShapeTriangle triangle : part.triangles) {
+      helpAddPointToShape(voxelSize, part.verticies.get(triangle.index1), convexHullShape);
+      helpAddPointToShape(voxelSize, part.verticies.get(triangle.index2), convexHullShape);
+      helpAddPointToShape(voxelSize, part.verticies.get(triangle.index3), convexHullShape);
+
     }
+
     convexHullShape.recalcLocalAabb();
 
     position.applyTo(tempPos);
