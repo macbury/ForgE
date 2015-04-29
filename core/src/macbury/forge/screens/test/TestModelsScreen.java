@@ -43,7 +43,6 @@ public class TestModelsScreen extends AbstractScreen {
     this.levelEnv          = new LevelEnv();
     this.camera            = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     camera.near = 0.1f;
-    camera.far = 1000f;
     camera.position.set(5, 5, 5);
     camera.lookAt(0.1f, 0.1f, 0.1f);
 

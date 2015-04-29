@@ -6,7 +6,6 @@ varying vec3   v_normal;
 varying vec4   v_position;
 varying vec2   v_textCoord;
 varying float  v_transparent;
-varying float  v_fogPower;
 varying vec2   v_uvStart;
 varying vec2   v_uvMul;
 

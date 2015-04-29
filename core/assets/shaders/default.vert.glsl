@@ -13,6 +13,7 @@ attribute vec3 a_normal;
 varying vec4   v_lightDiffuse;
 varying vec4   v_color;
 varying vec3   v_normal;
+varying vec4   v_position;
 
 void main() {
   v_normal          = normalize(u_normalMatrix * a_normal);
@@ -20,6 +21,6 @@ void main() {
 
   vec3 lightDiffuse = directionalLightDiffuse(u_mainLight, v_normal);
   v_lightDiffuse    = u_ambientLight + vec4(lightDiffuse, 1.0f);
-
-  gl_Position       = u_projectionMatrix * u_worldTransform * a_position;
+  v_position        = u_projectionMatrix * u_worldTransform * a_position;
+  gl_Position       = v_position;
 }

@@ -5,11 +5,13 @@
   uniforms: [
     "WorldTransform",
     "Normals",
+    "Sky",
+    "EyePosition",
     "Sun",
     "ColorDiffuse"
   ],
   helpers: {
-    vertex: ["directional_light"],
-    fragment: []
+    vertex: ["directional_light", "fog"],
+    fragment: ["fog"]
   }
 }
