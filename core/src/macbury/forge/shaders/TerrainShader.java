@@ -24,7 +24,7 @@ public class TerrainShader extends RenderableBaseShader<VoxelChunkRenderable> {
 
   @Override
   public boolean canRender(Renderable instance) {
-    return TerrainChunkRenderable.class.isInstance(instance);
+    return VoxelChunkRenderable.class.isInstance(instance);
   }
 
   @Override

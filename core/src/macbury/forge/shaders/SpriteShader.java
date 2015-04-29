@@ -17,7 +17,7 @@ public class SpriteShader extends RenderableBaseShader<SpriteRenderable> {
   public final String UNIFORM_SPRITE_TEXTURE = "u_spriteTexture";
   @Override
   public boolean canRender(Renderable instance) {
-    return false;
+    return SpriteRenderable.class.isInstance(instance);
   }
 
   @Override

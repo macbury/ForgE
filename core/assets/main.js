@@ -1,5 +1,8 @@
 
-function main($game, $log, $db) {
+function main($args, $game, $log, $db) {
   $log.info(TAG, "Initialized game!!!!");
-  $game.teleport($db.playerStartPosition);
+
+  if ($args['testLevel'] != null) {
+    $game.teleport($db.playerStartPosition);
+  }
 }
