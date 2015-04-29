@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.Json;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.Collection;
 import java.util.HashMap;
 
 /**
@@ -18,10 +19,12 @@ public class ShadersManager {
   private static final String TAG = "ShadersManager";
   private Array<ShaderReloadListener> shaderReloadListeners;
   private HashMap<String, BaseShader> shaders;
+  private final Array<BaseShader> shaderList;
 
   public ShadersManager() {
     this.shaderReloadListeners = new Array<ShaderReloadListener>();
     this.shaders               = new HashMap<String, BaseShader>();
+    this.shaderList            = new Array<BaseShader>();
     reload();
   }
 
@@ -35,7 +38,7 @@ public class ShadersManager {
       shaders.get(key).dispose();
     }
     shaders.clear();
-
+    shaderList.clear();
     FileHandle[] shadersToImport = Gdx.files.internal(SHADERS_PATH).list(new FilenameFilter() {
       @Override
       public boolean accept(File dir, String name) {
@@ -56,11 +59,13 @@ public class ShadersManager {
 
       if (shader.load(this)) {
         shaders.put(file.nameWithoutExtension(), shader);
+        shaderList.add(shader);
       } else {
         triggerOnShaderError(shader);
         Gdx.app.log(TAG, shader.getLog());
       }
     }
+
     triggerOnShaderReload();
   }
 
@@ -88,4 +93,7 @@ public class ShadersManager {
     }
   }
 
+  public Array<BaseShader> all() {
+    return shaderList;
+  }
 }

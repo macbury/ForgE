@@ -1,0 +1,13 @@
+{
+  class: macbury.forge.shaders.Default,
+  fragment: "default",
+  vertex:   "default",
+  uniforms: [
+    "Sky",
+    "Sun",
+  ],
+  helpers: {
+    vertex: ["directional_light", "fog"],
+    fragment: ["fog"]
+  }
+}
