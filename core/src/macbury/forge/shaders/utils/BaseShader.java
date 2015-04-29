@@ -2,13 +2,14 @@ package macbury.forge.shaders.utils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import macbury.forge.ForgE;
 import macbury.forge.level.LevelEnv;
-import macbury.forge.shaders.uniforms.BaseUniform;
 
 import java.util.HashMap;
 
@@ -29,11 +30,14 @@ public abstract class BaseShader implements Disposable {
   private HashMap<String, Array<String>> helpers;
   private Array<String> uniforms;
   private Array<BaseUniform> globalUniforms;
+  private Array<BaseRenderableUniform> localUniforms;
   protected LevelEnv env;
 
   public boolean load(ShadersManager manager) {
+    this.globalUniforms               = new Array<BaseUniform>();
+    this.localUniforms                = new Array<BaseRenderableUniform>();
+
     ShaderProgram.pedantic = false;
-    globalUniforms         = new Array<BaseUniform>();
 
     String fragmentSrc   = Gdx.files.internal(ShadersManager.SHADERS_PATH +fragment+".frag.glsl").readString();
     String   vertexSrc   = Gdx.files.internal(ShadersManager.SHADERS_PATH +vertex+".vert.glsl").readString();
@@ -42,7 +46,7 @@ public abstract class BaseShader implements Disposable {
     }
 
     if (uniforms != null) {
-      loadGlobalUniforms();
+      loadGlobalAndLocalUniforms();
     }
 
     fragmentSrc = applyDebugPrefixes() + loadHelpers(FRAGMENT_HELPER_KEY) + fragmentSrc;
@@ -71,21 +75,31 @@ public abstract class BaseShader implements Disposable {
     }
   }
 
-  private void loadGlobalUniforms() {
+  private void loadGlobalAndLocalUniforms() {
     for (String uniformName : uniforms) {
       try {
         String uniformClassName = BaseUniform.CLASS_PREFIX+uniformName;
-        Gdx.app.log(TAG, "Adding uniform: "+uniformClassName);
+
         BaseUniform uniform = (BaseUniform)Class.forName(uniformClassName).newInstance();
-        globalUniforms.add(uniform);
+        if (BaseRenderableUniform.class.isInstance(uniform)) {
+          Gdx.app.log(TAG, "Adding local uniform: "+uniformClassName);
+          localUniforms.add((BaseRenderableUniform) uniform);
+        } else {
+          Gdx.app.log(TAG, "Adding global uniform: "+uniformClassName);
+          globalUniforms.add(uniform);
+        }
+
       } catch (InstantiationException e) {
         e.printStackTrace();
       } catch (IllegalAccessException e) {
         e.printStackTrace();
       } catch (ClassNotFoundException e) {
-        e.printStackTrace();
+        throw new GdxRuntimeException("Could not find uniform " + uniformName);
       }
     }
+
+    Gdx.app.log(TAG, "Local uniforms: " + localUniforms.size);
+    Gdx.app.log(TAG, "Global uniforms: " + globalUniforms.size);
   }
 
   private String applyDebugPrefixes() {
@@ -142,6 +156,12 @@ public abstract class BaseShader implements Disposable {
   protected void bindGlobalUniforms(Camera camera, RenderContext context, LevelEnv env) {
     for (BaseUniform uniform : globalUniforms) {
       uniform.bind(shader, env, context, camera);
+    }
+  }
+
+  protected void bindLocalUniforms(Renderable renderable) {
+    for (BaseRenderableUniform uniform : localUniforms) {
+      uniform.bind(shader, env, context, camera, renderable);
     }
   }
 

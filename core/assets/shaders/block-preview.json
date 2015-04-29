@@ -4,6 +4,7 @@
   vertex:   "block-preview",
   uniforms: [
     "DiffuseTerrainTexture",
+    "WorldTransform",
   ],
   helpers: {
     vertex: [],

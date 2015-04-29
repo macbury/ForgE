@@ -13,8 +13,6 @@ import macbury.forge.graphics.batch.renderable.BaseRenderable;
  */
 public abstract class RenderableBaseShader<T extends Renderable> extends BaseShader {
   protected Mesh currentMesh;
-  public final String UNIFORM_WORLD_TRANSFORM = "u_worldTransform";
-  public final String UNIFORM_NORMAL_MATRIX   = "u_normalMatrix";
 
   public abstract boolean canRender (Renderable instance);
 
@@ -25,8 +23,6 @@ public abstract class RenderableBaseShader<T extends Renderable> extends BaseSha
   public abstract void beforeRender(final T renderable);
 
   public void render(final T renderable) {
-    beforeRender(renderable);
-
     if (currentMesh != renderable.mesh) {
       if (currentMesh != null) {
         currentMesh.unbind(shader);
@@ -34,6 +30,9 @@ public abstract class RenderableBaseShader<T extends Renderable> extends BaseSha
       currentMesh = renderable.mesh;
       currentMesh.bind(shader);
     }
+
+    beforeRender(renderable);
+    bindLocalUniforms(renderable);
     renderWithCurrentMesh(renderable);
   }
 

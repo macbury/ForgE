@@ -3,6 +3,8 @@
   fragment: "terrain",
   vertex:   "terrain",
   uniforms: [
+    "WorldTransform",
+    "Normals",
     "DiffuseTerrainTexture",
     "EyePosition",
     "MapSize",

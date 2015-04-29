@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import macbury.forge.ForgE;
 import macbury.forge.level.LevelEnv;
+import macbury.forge.shaders.utils.BaseUniform;
 
 /**
  * Created by macbury on 13.03.15.

@@ -59,7 +59,12 @@ public class ShadersManager {
 
       if (shader.load(this)) {
         shaders.put(file.nameWithoutExtension(), shader);
-        shaderList.add(shader);
+        if (!file.nameWithoutExtension().contains("-preview") && !file.nameWithoutExtension().contains("-debug")) {
+          shaderList.add(shader);
+        } else {
+          Gdx.app.log(TAG, "Skipping preview and debug shader");
+        }
+
       } else {
         triggerOnShaderError(shader);
         Gdx.app.log(TAG, shader.getLog());

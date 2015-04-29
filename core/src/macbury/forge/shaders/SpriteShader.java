@@ -30,7 +30,6 @@ public class SpriteShader extends RenderableBaseShader<SpriteRenderable> {
   @Override
   public void beforeRender(SpriteRenderable renderable) {
     shader.setUniformi(UNIFORM_SPRITE_TEXTURE, context.textureBinder.bind(renderable.texture));
-    shader.setUniformMatrix(UNIFORM_WORLD_TRANSFORM, renderable.worldTransform);
 
     context.setBlending(true, GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
     context.setCullFace(GL30.GL_BACK);

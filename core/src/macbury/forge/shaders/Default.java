@@ -10,7 +10,7 @@ import macbury.forge.shaders.utils.RenderableBaseShader;
 public class Default  extends RenderableBaseShader<Renderable> {
   @Override
   public boolean canRender(Renderable instance) {
-    return Renderable.class.isInstance(instance);
+    return false;// Renderable.class.isInstance(instance);
   }
 
   @Override

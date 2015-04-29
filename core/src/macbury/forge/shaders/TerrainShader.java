@@ -13,14 +13,11 @@ import macbury.forge.shaders.utils.RenderableBaseShader;
  * Created by macbury on 18.10.14.
  */
 public class TerrainShader extends RenderableBaseShader<VoxelChunkRenderable> {
-  private final Matrix3 tempNormalMatrix = new Matrix3();
-
 
   @Override
   public void afterBegin() {
     context.setDepthTest(GL20.GL_LEQUAL);
   }
-
 
   @Override
   public boolean canRender(Renderable instance) {
@@ -29,10 +26,6 @@ public class TerrainShader extends RenderableBaseShader<VoxelChunkRenderable> {
 
   @Override
   public void beforeRender(VoxelChunkRenderable renderable) {
-    tempNormalMatrix.set(renderable.worldTransform).inv().transpose();
-    shader.setUniformMatrix(UNIFORM_WORLD_TRANSFORM, renderable.worldTransform);
-    shader.setUniformMatrix(UNIFORM_NORMAL_MATRIX, tempNormalMatrix);
-
     if (renderable.haveTransparency()) {
       context.setBlending(true, GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
       context.setCullFace(GL30.GL_NONE);
