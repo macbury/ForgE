@@ -3,11 +3,10 @@
   fragment: "default",
   vertex:   "default",
   uniforms: [
-    "Sky",
-    "Sun",
+    "WorldTransform",
   ],
   helpers: {
-    vertex: ["directional_light", "fog"],
-    fragment: ["fog"]
+    vertex: [],
+    fragment: []
   }
 }
