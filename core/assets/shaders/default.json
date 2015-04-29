@@ -4,9 +4,12 @@
   vertex:   "default",
   uniforms: [
     "WorldTransform",
+    "Normals",
+    "Sun",
+    "ColorDiffuse"
   ],
   helpers: {
-    vertex: [],
+    vertex: ["directional_light"],
     fragment: []
   }
 }

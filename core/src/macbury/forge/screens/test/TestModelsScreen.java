@@ -55,15 +55,15 @@ public class TestModelsScreen extends AbstractScreen {
     this.modelBatch        = new ModelBatch();
     this.voxelBatch        = new VoxelBatch(new RenderContext(new DefaultTextureBinder(DefaultTextureBinder.WEIGHTED)));
     ModelLoader g3djLoader = new G3dModelLoader(new UBJsonReader());
-    model                  = g3djLoader.loadModel(Gdx.files.internal("raw-models/teapot.g3db"));
+    model                  = g3djLoader.loadModel(Gdx.files.internal("raw-models/test.g3db"));
 
     modelInstance          = new ModelInstance(model);
 
     modelInstance.calculateBoundingBox(bounds);
-    camera.position.set(1, 1, 1).nor().scl(bounds.getDimensions(tmpV1).len() * 0.75f + bounds.getCenter(tmpV2).len());
+    camera.position.set(1, 1, 1).nor().scl(bounds.getDimensions(tmpV1).len() * 1.75f + bounds.getCenter(tmpV2).len());
     camera.up.set(0, 1, 0);
     camera.lookAt(0, 0, 0);
-    camera.far = 50f + bounds.getDimensions(tmpV1).len() * 2.0f;
+    camera.far = 50f + bounds.getDimensions(tmpV1).len() * 3.0f;
     camera.update(true);
   }
 
@@ -71,6 +71,7 @@ public class TestModelsScreen extends AbstractScreen {
   public void render(float delta) {
     camera.update();
     ForgE.graphics.clearAll(Color.BLACK);
+    modelInstance.transform.rotate(Vector3.Y, 23 * delta);
     voxelBatch.begin(camera); {
       voxelBatch.add(modelInstance);
 
