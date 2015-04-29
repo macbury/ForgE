@@ -3,7 +3,6 @@ package macbury.forge.editor.controllers.tools.terrain;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
-import javafx.scene.control.ComboBox;
 import macbury.forge.editor.undo_redo.actions.ApplyCustomBrushChangeable;
 
 import javax.swing.*;
