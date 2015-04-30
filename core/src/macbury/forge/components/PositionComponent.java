@@ -68,6 +68,7 @@ public class PositionComponent extends BaseComponent implements OctreeObject {
     outBox.set(vector, temp.set(vector).add(size));
   }
 
+
   @Override
   public void setOctreeParent(OctreeNode parent) {
     this.parent = parent;

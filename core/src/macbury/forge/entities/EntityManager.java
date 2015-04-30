@@ -33,6 +33,7 @@ public class EntityManager implements Disposable {
     json.addClassTag("player",        PlayerComponent.class);
     json.addClassTag("character",     CharacterComponent.class);
     json.addClassTag("entity_state",  EntityStateComponent.class);
+    json.addClassTag("renderable",    RenderableComponent.class);
   }
 
   private void reload() {

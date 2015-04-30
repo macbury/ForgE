@@ -6,6 +6,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.assets.assets.Asset;
+import macbury.forge.assets.assets.ModelAsset;
 import macbury.forge.assets.assets.TextureAsset;
 
 import java.util.HashMap;
@@ -49,6 +50,10 @@ public class AssetsManager implements Disposable {
 
   public TextureAsset getTexture(String path) {
     return (TextureAsset)getAsset(TextureAsset.class, path);
+  }
+
+  public ModelAsset getModel(String path) {
+    return (ModelAsset)getAsset(ModelAsset.class, path);
   }
 
   public void loadPending() {

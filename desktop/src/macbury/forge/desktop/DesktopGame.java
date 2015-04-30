@@ -30,9 +30,9 @@ public class DesktopGame implements ForgEBootListener, Thread.UncaughtExceptionH
     config.fullscreen     = false;
 
     Config forgeConfig            = new Config();
-    forgeConfig.debug             = false;
+    forgeConfig.debug             = true;
     forgeConfig.renderBulletDebug = false;
-    forgeConfig.renderBoundingBox = false;
+    forgeConfig.renderBoundingBox = true;
     //forgeConfig.cacheGeometry = true; //TODO: check in terrain engine if there is geometry in file
 
     ForgE engine              = new ForgE(forgeConfig);
@@ -45,8 +45,8 @@ public class DesktopGame implements ForgEBootListener, Thread.UncaughtExceptionH
     if (ForgE.db.startPosition == null) {
       throw new GdxRuntimeException("Start position not found!");
     } else {
-      //ForgE.screens.set(new LoadingScreen(ForgE.db.startPosition));
-      ForgE.screens.set(new TestModelsScreen());
+      ForgE.screens.set(new LoadingScreen(ForgE.db.startPosition));
+      //ForgE.screens.set(new TestModelsScreen());
     }
   }
 

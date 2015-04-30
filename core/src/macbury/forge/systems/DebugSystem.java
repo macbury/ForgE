@@ -48,6 +48,7 @@ public class DebugSystem extends IteratingSystem implements Disposable {
   private ComponentMapper<CursorComponent>     cm = ComponentMapper.getFor(CursorComponent.class);
   private final BoundingBox tempBox;
   private final Vector3     tempVec;
+  private final Vector3     tempVec2 = new Vector3();
   private Sprite3D          startPositionSprite;
 
   public DebugSystem(Level level) {
@@ -77,7 +78,11 @@ public class DebugSystem extends IteratingSystem implements Disposable {
     CursorComponent cursorComponent   = cm.get(entity);
 
     if (positionComponent.visible && ForgE.config.renderBoundingBox) {
-      positionComponent.getBoundingBox(tempBox);
+      //positionComponent.getBoundingBox(tempBox);
+      tempVec.set(positionComponent.size).scl(0.5f);
+      tempVec2.set(positionComponent.vector).sub(tempVec);
+      tempVec.add(positionComponent.vector);
+      tempBox.set(tempVec2,tempVec);
       DebugShape.draw(batch.shapeRenderer, tempBox);
     }
 

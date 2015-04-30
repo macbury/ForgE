@@ -3,8 +3,13 @@ package macbury.forge.screens;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.assets.loaders.ModelLoader;
+import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
 import com.badlogic.gdx.graphics.g3d.utils.FirstPersonCameraController;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.UBJsonReader;
 import macbury.forge.ForgE;
 import macbury.forge.components.*;
 import macbury.forge.db.models.Teleport;
@@ -38,10 +43,14 @@ public class GameplayScreen extends AbstractScreen {
     level.terrainMap.localVoxelPositionToWorldPosition(teleport.voxelPosition, playerEntity.getComponent(PositionComponent.class).vector);
     playerEntity.getComponent(PositionComponent.class).vector.sub(-0.5f);
     level.entities.addEntity(playerEntity);
+
+    level.entities.addEntity(ForgE.entities.get("teapot").build(level.entities));
+
   }
 
   @Override
   public void render(float delta) {
+    ForgE.assets.loadPending();
     cameraController.update(delta);
     level.render(delta);
 

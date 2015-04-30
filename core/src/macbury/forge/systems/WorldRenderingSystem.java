@@ -50,12 +50,7 @@ public class WorldRenderingSystem extends IteratingSystem {
     RenderableComponent renderable = rm.get(entity);
 
     if (position.visible) {
-      BaseRenderable baseRenderable = renderable.instance;
-      if (renderable.useWorldTransform) {
-        baseRenderable.worldTransform.set(position.worldTransform);
-      }
-
-      batch.add(baseRenderable);
+      renderable.addToBatch(batch, position.worldTransform);
     }
   }
 }
