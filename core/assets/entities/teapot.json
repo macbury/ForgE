@@ -3,7 +3,7 @@
   components: [
     {
       class: "position",
-      vector: { x: 5,  y: 2, z: 5 },
+      vector: { x: 5,  y: 1.5, z: 5 },
       size:   { x: 0.4f,   y: 0.4f, z: 0.2f }
     },
     {

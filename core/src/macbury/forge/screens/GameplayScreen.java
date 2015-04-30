@@ -44,13 +44,15 @@ public class GameplayScreen extends AbstractScreen {
     playerEntity.getComponent(PositionComponent.class).vector.sub(-0.5f);
     level.entities.addEntity(playerEntity);
 
-    level.entities.addEntity(ForgE.entities.get("teapot").build(level.entities));
+    Entity teapotEntity      = ForgE.entities.get("teapot").build(level.entities);
+    teapotEntity.getComponent(PositionComponent.class).vector.set(playerEntity.getComponent(PositionComponent.class).vector).add(0,1,-4);
+    level.entities.addEntity(teapotEntity);
 
   }
 
   @Override
   public void render(float delta) {
-    ForgE.assets.loadPending();
+    ForgE.assets.loadPendingInChunks();
     cameraController.update(delta);
     level.render(delta);
 

@@ -28,23 +28,23 @@ public class RenderableComponent extends BaseComponent implements Pool.Poolable 
   public RenderableComponent() {
   }
 
-  public void addToBatch(VoxelBatch batch, Matrix4 worldTransform) {
+  public ModelAsset getAsset() {
     if (asset == null) {
       asset = ForgE.assets.getModel(path);
       path  = null;
     }
+    return asset;
+  }
 
-    if (asset.isLoaded()) {
-      if (instance == null) {
-        instance = new ModelInstance(asset.get());
-      }
-
-      instance.transform.idt();
-      worldTransform.getTranslation(tempVec);
-      instance.transform.setTranslation(tempVec);
-      batch.add(instance);
-
+  public void addToBatch(VoxelBatch batch, Matrix4 worldTransform) {
+    if (instance == null) {
+      instance = getAsset().buildModelInstance();
     }
+
+    instance.transform.idt();
+    worldTransform.getTranslation(tempVec);
+    instance.transform.setTranslation(tempVec);
+    batch.add(instance);
   }
 
 

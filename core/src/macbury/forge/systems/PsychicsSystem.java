@@ -131,7 +131,7 @@ public class PsychicsSystem extends EntitySystem implements EntityListener, Disp
         tempMat.idt();
         tempMat.translate(positionComponent.vector);
         tempA.set(positionComponent.size).scl(PsychicsSystem.BULLET_SIZE);
-        bulletPsychicsComponent.initBullet(tempMat, bulletWorld,tempA);
+        bulletPsychicsComponent.initBullet(tempMat, bulletWorld,tempA, entity);
       }
     }
   }

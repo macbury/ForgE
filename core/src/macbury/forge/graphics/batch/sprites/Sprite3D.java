@@ -29,7 +29,7 @@ public class Sprite3D extends BaseSprite3D {
   }
 
   private Sprite3DCache getSpriteCache() {
-    if (spriteCache == null && asset.isLoaded()) {
+    if (spriteCache == null) {
       if (textureRegion == null) {
         textureRegion = new TextureRegion(asset.get());
         //textureRegion.setTexture();

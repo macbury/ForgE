@@ -21,6 +21,6 @@ void main() {
 
   vec3 lightDiffuse = directionalLightDiffuse(u_mainLight, v_normal);
   v_lightDiffuse    = u_ambientLight + vec4(lightDiffuse, 1.0f);
-  v_position        = u_projectionMatrix * u_worldTransform * a_position;
-  gl_Position       = v_position;
+  v_position        = u_worldTransform * a_position;
+  gl_Position       = u_projectionMatrix * v_position;
 }

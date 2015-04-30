@@ -35,11 +35,12 @@ public abstract class Asset<T extends Disposable> implements Disposable {
 
   protected abstract T loadObject(FileHandle file);
 
-  public boolean isLoaded() {
+  private boolean isLoaded() {
     return object != null;
   }
 
   public T get() {
+    load();
     return object;
   }
 

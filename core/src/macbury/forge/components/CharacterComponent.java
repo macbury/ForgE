@@ -1,5 +1,8 @@
 package macbury.forge.components;
 
+import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btBroadphaseProxy;
@@ -27,7 +30,7 @@ public class CharacterComponent extends BulletPsychicsComponent {
   public float maxSlope;
 
   @Override
-  public void initBullet(Matrix4 transform, btDiscreteDynamicsWorld world, Vector3 size) {
+  public void initBullet(Matrix4 transform, btDiscreteDynamicsWorld world, Vector3 size, Entity entity) {
     this.world          = world;
     this.ghostObject    = new btPairCachingGhostObject();
     ghostObject.setWorldTransform(transform);

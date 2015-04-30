@@ -32,12 +32,13 @@ public class AssetsManager implements Disposable {
     if (!loadedAssets.containsKey(path)) {
       Asset tempAsset = null;
       try {
-        Gdx.app.log(TAG, "Adding pending asset: " + path);
+        //Gdx.app.log(TAG, "Adding pending asset: " + path);
         tempAsset = assetClass.newInstance();
         tempAsset.setManager(this);
         tempAsset.setPath(path);
         loadedAssets.put(path, tempAsset);
         pendingAssets.add(tempAsset);
+        Gdx.app.log(TAG, "Loading: " + tempAsset.getPath());
       } catch (InstantiationException e) {
         e.printStackTrace();
       } catch (IllegalAccessException e) {
@@ -56,7 +57,7 @@ public class AssetsManager implements Disposable {
     return (ModelAsset)getAsset(ModelAsset.class, path);
   }
 
-  public void loadPending() {
+  private void loadPending() {
     while(pendingAssets.size > 0) {
       Asset asset = pendingAssets.pop();
       Gdx.app.log(TAG, "Loading: " + asset.getPath());

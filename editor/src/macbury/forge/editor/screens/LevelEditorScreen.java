@@ -70,7 +70,7 @@ public class LevelEditorScreen extends AbstractScreen {
 
   @Override
   public void render(float delta) {
-    ForgE.assets.loadPending();
+    ForgE.assets.loadPendingInChunks();
     stage.act(delta);
     cameraController.update(delta);
     level.render(delta);

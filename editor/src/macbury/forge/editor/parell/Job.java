@@ -4,6 +4,7 @@ package macbury.forge.editor.parell;
  * Created by macbury on 06.11.14.
  */
 
+import com.badlogic.gdx.Gdx;
 import macbury.forge.utils.MethodInvoker;
 
 import javax.swing.*;
@@ -38,7 +39,7 @@ public abstract class Job<T> {
         final Class<?>[] fallbackSig = { Object.class, getClass() };
 
         if (performCallbackOnOpenGlThread()) {
-          SwingUtilities.invokeLater(new Runnable() {
+          Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {
               Object handler = whandler.get();
