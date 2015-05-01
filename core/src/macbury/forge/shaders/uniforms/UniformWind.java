@@ -16,8 +16,8 @@ public class UniformWind extends BaseUniform {
 
   @Override
   public void bind(ShaderProgram shader, LevelEnv env, RenderContext context, Camera camera) {
-    if (env.windDisplacementTexture != null && env.windDisplacementTexture.isLoaded()) {
-      shader.setUniformi(UNIFORM_WIND_DISPLACEMENT_TEXTURE, context.textureBinder.bind(env.windDisplacementTexture.get()));
+    if (env.windDisplacementTextureAsset != null) {
+      shader.setUniformi(UNIFORM_WIND_DISPLACEMENT_TEXTURE, context.textureBinder.bind(env.getWindDisplacementTextureAsset()));
       shader.setUniformf(UNIFORM_WIND_DIR, env.windDirection);
     }
   }

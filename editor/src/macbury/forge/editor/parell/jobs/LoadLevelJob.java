@@ -29,6 +29,7 @@ public class LoadLevelJob extends Job<LevelState> {
   @Override
   public LevelState perform() {
     LevelState state = ForgE.levels.load(levelToLoad);
+    ForgE.assets.unloadUnusedAssets();
     return state;
   }
 }

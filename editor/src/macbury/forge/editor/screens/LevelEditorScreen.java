@@ -58,6 +58,8 @@ public class LevelEditorScreen extends AbstractScreen {
 
 
     stage.addActor(overlay);
+
+
   }
 
   public void addAfterRenderListener(ForgeAfterRenderListener listener) {

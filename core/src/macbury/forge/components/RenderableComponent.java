@@ -47,9 +47,11 @@ public class RenderableComponent extends BaseComponent implements Pool.Poolable 
     batch.add(instance);
   }
 
-
   @Override
   public void reset() {
+    if (asset != null) {
+      asset.release();
+    }
     instance = null;
     asset    = null;
     path     = null;

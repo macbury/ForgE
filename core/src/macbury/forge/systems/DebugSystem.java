@@ -142,9 +142,7 @@ public class DebugSystem extends IteratingSystem implements Disposable {
         context.setDepthTest(GL20.GL_LEQUAL);
         level.entities.psychics.debugDraw(camera);
       } context.end();
-
     }
-
   }
 
   private void renderStartPosition() {

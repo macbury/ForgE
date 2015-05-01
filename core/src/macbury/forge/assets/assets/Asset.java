@@ -12,6 +12,7 @@ public abstract class Asset<T extends Disposable> implements Disposable {
   protected AssetsManager manager;
   private T object;
   private String path;
+  private int retainCount = 0;
 
   public Asset() {
   }
@@ -44,9 +45,25 @@ public abstract class Asset<T extends Disposable> implements Disposable {
     return object;
   }
 
+  public boolean isUnused() {
+    return retainCount <= 0;
+  }
+
+  public void retain() {
+    retainCount++;
+  }
+
+  public void release() {
+    retainCount--;
+  }
+
   @Override
   public void dispose() {
-    object.dispose();
+    if (isLoaded()) {
+      object.dispose();
+    }
+
+    retainCount = 0;
   }
 
   public String getPath() {

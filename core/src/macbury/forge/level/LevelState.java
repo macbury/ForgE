@@ -1,7 +1,5 @@
 package macbury.forge.level;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import macbury.forge.ForgE;
 import macbury.forge.db.GameDatabase;
 import macbury.forge.voxel.ChunkMap;
@@ -46,7 +44,8 @@ public class LevelState {
     terrainMap.buildFloor();
     terrainMap.rebuildAll();
     env.terrainMap              = terrainMap;
-    env.windDisplacementTexture = ForgE.assets.getTexture("textures/wind_bump.jpg");
+    env.windDisplacementTextureAsset = ForgE.assets.getTexture("textures/wind_bump.jpg");
+    env.windDisplacementTextureAsset.retain();
   }
 
 

@@ -14,6 +14,7 @@ public class Sprite3D extends BaseSprite3D {
   protected Sprite3DCache spriteCache;
   protected TextureRegion textureRegion;
   private TextureAsset asset;
+  private Texture texture;
 
   public Sprite3D(VoxelBatch manager) {
     super(manager);
@@ -31,7 +32,7 @@ public class Sprite3D extends BaseSprite3D {
   private Sprite3DCache getSpriteCache() {
     if (spriteCache == null) {
       if (textureRegion == null) {
-        textureRegion = new TextureRegion(asset.get());
+        textureRegion = new TextureRegion(getTexture());
         //textureRegion.setTexture();
         //textureRegion.setRegion(0,0,1,1);
       }
@@ -42,10 +43,20 @@ public class Sprite3D extends BaseSprite3D {
 
   @Override
   public Texture getTexture() {
-    if (asset.isLoaded()) {
-      return asset.get();
+    if (texture == null) {
+      texture = asset.get();
     }
-    return null;
+    return texture;
   }
 
+
+  @Override
+  public void dispose() {
+    texture = null;
+    textureRegion = null;
+    if (asset != null) {
+      asset.release();
+      asset = null;
+    }
+  }
 }

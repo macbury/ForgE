@@ -1,6 +1,7 @@
 package macbury.forge.level;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GLTexture;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.math.Vector2;
@@ -12,15 +13,16 @@ import macbury.forge.voxel.ChunkMap;
 /**
  * Created by macbury on 28.10.14.
  */
-public class LevelEnv {
+public class LevelEnv implements Disposable {
   public DirectionalLight mainLight;
   public Color ambientLight;
   public Color skyColor;
   public ChunkMap terrainMap;
 
-  public TextureAsset windDisplacementTexture;
+  public TextureAsset windDisplacementTextureAsset;
   public Vector2 windDirection = new Vector2(0.1f,0);
   public Vector3 gravity = new Vector3(0, -6f, 0);
+  private Texture windDisplacementTexture;
 
   public LevelEnv() {
     skyColor     = Color.valueOf("3498db");
@@ -68,5 +70,21 @@ public class LevelEnv {
 
   public void setMainLight(DirectionalLight mainLight) {
     this.mainLight = mainLight;
+  }
+
+  @Override
+  public void dispose() {
+    if (windDisplacementTextureAsset != null) {
+      windDisplacementTextureAsset.release();
+      windDisplacementTextureAsset = null;
+      windDisplacementTexture = null;
+    }
+  }
+
+  public GLTexture getWindDisplacementTextureAsset() {
+    if (windDisplacementTexture == null) {
+      windDisplacementTexture = windDisplacementTextureAsset.get();
+    }
+    return windDisplacementTexture;
   }
 }

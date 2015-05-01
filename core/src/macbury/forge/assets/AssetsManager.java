@@ -10,6 +10,7 @@ import macbury.forge.assets.assets.ModelAsset;
 import macbury.forge.assets.assets.TextureAsset;
 
 import java.util.HashMap;
+import java.util.Set;
 
 /**
  * Created by macbury on 16.10.14.
@@ -38,7 +39,7 @@ public class AssetsManager implements Disposable {
         tempAsset.setPath(path);
         loadedAssets.put(path, tempAsset);
         pendingAssets.add(tempAsset);
-        Gdx.app.log(TAG, "Loading: " + tempAsset.getPath());
+        Gdx.app.log(TAG, "Added to pending: " + tempAsset.getPath());
       } catch (InstantiationException e) {
         e.printStackTrace();
       } catch (IllegalAccessException e) {
@@ -46,7 +47,9 @@ public class AssetsManager implements Disposable {
       }
     }
 
-    return loadedAssets.get(path);
+    Asset asset = loadedAssets.get(path);
+    asset.retain();
+    return asset;
   }
 
   public TextureAsset getTexture(String path) {
@@ -75,6 +78,19 @@ public class AssetsManager implements Disposable {
     }
 
     return pendingAssets.size == 0;
+  }
+
+  public void unloadUnusedAssets() {
+    Gdx.app.log(TAG, "Removing unused assets");
+    Set<String> keys = loadedAssets.keySet();
+    for (String key : keys) {
+      Asset asset = loadedAssets.get(key);
+      if (asset.isUnused()) {
+        Gdx.app.log(TAG, "Disposing: " + asset.getPath());
+        loadedAssets.remove(key);
+        asset.dispose();
+      }
+    }
   }
 
   @Override

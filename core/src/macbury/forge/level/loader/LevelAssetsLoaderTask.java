@@ -24,6 +24,7 @@ public class LevelAssetsLoaderTask extends GdxFutureTask<Level, Level> {
   @Override
   public void tick(float delta) {
     if (ForgE.assets.loadPendingInChunks()) {
+      ForgE.assets.unloadUnusedAssets();
       done(level);
     }
   }

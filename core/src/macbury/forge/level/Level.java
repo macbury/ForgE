@@ -47,7 +47,6 @@ public class Level implements Disposable {
     this.entities            = new EntitySystemsManager(this);
 
     octree.setBounds(terrainMap.getBounds(ChunkMap.TERRAIN_TILE_SIZE));
-
   }
 
   public void resize(int width, int height) {
@@ -66,6 +65,7 @@ public class Level implements Disposable {
 
   @Override
   public void dispose() {
+    env.dispose();
     batch.dispose();
     terrainMap.dispose();
     entities.dispose();

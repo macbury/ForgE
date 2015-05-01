@@ -10,13 +10,14 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import macbury.forge.graphics.batch.VoxelBatch;
 
 /**
  * Created by macbury on 27.05.14.
  */
-public abstract class BaseSprite3D {
+public abstract class BaseSprite3D implements Disposable {
   protected boolean staticSprite;
   protected VoxelBatch manager;
 
