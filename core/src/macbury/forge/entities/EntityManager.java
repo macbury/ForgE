@@ -34,6 +34,7 @@ public class EntityManager implements Disposable {
     json.addClassTag("character",     CharacterComponent.class);
     json.addClassTag("entity_state",  EntityStateComponent.class);
     json.addClassTag("renderable",    RenderableComponent.class);
+    json.addClassTag("rigidbody",    RigidBodyComoponent.class);
   }
 
   private void reload() {

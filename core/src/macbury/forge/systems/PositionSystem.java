@@ -18,7 +18,7 @@ public class PositionSystem extends IteratingSystem {
 
   @Override
   protected void processEntity(Entity entity, float deltaTime) {
-    PositionComponent positionComponent = pm.get(entity);
-    positionComponent.updateTransformMatrix();
+    //PositionComponent positionComponent = pm.get(entity);
+   // positionComponent.updateTransformMatrix();
   }
 }

@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import macbury.forge.ForgE;
 import macbury.forge.components.PositionComponent;
 import macbury.forge.components.RenderableComponent;
@@ -50,7 +51,10 @@ public class WorldRenderingSystem extends IteratingSystem {
     RenderableComponent renderable = rm.get(entity);
 
     if (position.visible) {
-      renderable.addToBatch(batch, position.worldTransform);
+      ModelInstance modelInstance = renderable.getModelInstance();
+
+      position.applyWorldTransform(modelInstance.transform);
+      batch.add(modelInstance);
     }
   }
 }

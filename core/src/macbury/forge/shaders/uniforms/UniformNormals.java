@@ -15,7 +15,7 @@ public class UniformNormals extends BaseRenderableUniform {
 
   @Override
   public void bind(ShaderProgram shader, LevelEnv env, RenderContext context, Camera camera, Renderable renderable) {
-    //tempMatrix.set(renderable.worldTransform).inv().transpose();
+    tempMatrix.set(renderable.worldTransform).inv().transpose();
     shader.setUniformMatrix(UNIFORM_NORMAL_MATRIX, tempMatrix);
   }
 

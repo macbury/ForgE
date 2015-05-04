@@ -33,7 +33,7 @@ public class GameplayScreen extends AbstractScreen {
 
   @Override
   protected void initialize() {
-    //Gdx.input.setCursorCatched(true);
+    Gdx.input.setCursorCatched(true);
     this.cameraController     = new FirstPersonCameraController(level.camera);
     level.camera.far          = FAR_CAMERA;
     level.camera.near         = NEAR_CAMERA;
@@ -44,7 +44,7 @@ public class GameplayScreen extends AbstractScreen {
     playerEntity.getComponent(PositionComponent.class).vector.sub(-0.5f);
     level.entities.addEntity(playerEntity);
 
-    Entity teapotEntity      = ForgE.entities.get("teapot").build(level.entities);
+    Entity teapotEntity      = ForgE.entities.get("crate").build(level.entities);
     teapotEntity.getComponent(PositionComponent.class).vector.set(playerEntity.getComponent(PositionComponent.class).vector).add(0,1,-4);
     level.entities.addEntity(teapotEntity);
 

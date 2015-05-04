@@ -5,7 +5,9 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
+import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.utils.Pool;
+import macbury.forge.systems.PsychicsSystem;
 import macbury.forge.voxel.ChunkMap;
 import macbury.forge.octree.OctreeNode;
 import macbury.forge.octree.OctreeObject;
@@ -82,5 +84,28 @@ public class PositionComponent extends BaseComponent implements OctreeObject {
     }
 
     return worldTransform;
+  }
+
+  public void getBulletMatrix(Matrix4 out) {
+    out.idt();
+    out.translate(vector);
+    out.rotate(rotation);
+  }
+
+  public void setFromBulletMatrix(Matrix4 in) {
+    in.getTranslation(vector);
+    in.getRotation(rotation);
+    dirty = true;
+  }
+
+  public void applyWorldTransform(Matrix4 out) {
+    if (dirty) {
+      updateTransformMatrix();
+      out.idt();
+      out.translate(vector);
+      //out.scl()
+      out.rotate(rotation);
+    }
+
   }
 }

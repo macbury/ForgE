@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.Pool;
@@ -21,6 +22,7 @@ import macbury.forge.graphics.batch.renderable.BaseRenderable;
  */
 public class RenderableComponent extends BaseComponent implements Pool.Poolable {
   private static Vector3 tempVec = new Vector3();
+  private static Quaternion tempQuat = new Quaternion();
   private ModelInstance instance;
   private ModelAsset    asset;
   public String        path;
@@ -36,15 +38,13 @@ public class RenderableComponent extends BaseComponent implements Pool.Poolable 
     return asset;
   }
 
-  public void addToBatch(VoxelBatch batch, Matrix4 worldTransform) {
+
+  public ModelInstance getModelInstance() {
     if (instance == null) {
       instance = getAsset().buildModelInstance();
     }
 
-    instance.transform.idt();
-    worldTransform.getTranslation(tempVec);
-    instance.transform.setTranslation(tempVec);
-    batch.add(instance);
+    return instance;
   }
 
   @Override

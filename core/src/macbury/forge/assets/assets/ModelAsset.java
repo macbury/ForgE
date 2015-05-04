@@ -44,4 +44,13 @@ public class ModelAsset extends AssetWithDependencies<Model> implements TextureP
     addDependency(asset);
     return asset.get();
   }
+
+  @Override
+  public void dispose() {
+    super.dispose();
+    if (collisionShape != null) {
+      collisionShape.dispose();
+      collisionShape = null;
+    }
+  }
 }

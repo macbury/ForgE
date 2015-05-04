@@ -28,7 +28,7 @@ public class PsychicsSystem extends EntitySystem implements EntityListener, Disp
   private static final float MIN_TIME_STEPS  = 1f / 30f;
   private static final int MAX_SUB_STEPS     = 5;
   private static final float FIXED_TIME_STEP = 1f / 60f;
-  private static final float BULLET_SIZE = 0.5f;
+  public static final float BULLET_SIZE = 0.5f;
   private final Family familyCharacterAndPosition;
   private DebugDrawer debugDrawer;
   private btSequentialImpulseConstraintSolver constraintSolver;
@@ -40,13 +40,13 @@ public class PsychicsSystem extends EntitySystem implements EntityListener, Disp
   private btCollisionDispatcher dispatcher;
   private btDiscreteDynamicsWorld bulletWorld;
   private final Vector3 tempA = new Vector3();
-  private final Matrix4 tempMat = new Matrix4();
+
   private btGhostPairCallback ghostCallback;
   private Array<Entity> entitiesWithBullet = new Array<Entity>();
 
   public PsychicsSystem() {
     super();
-    familyCharacterAndPosition = Family.getFor(PositionComponent.class,CharacterComponent.class);
+    familyCharacterAndPosition = Family.getFor(PositionComponent.class);
     createWorld();
   }
 
@@ -128,10 +128,8 @@ public class PsychicsSystem extends EntitySystem implements EntityListener, Disp
 
       if (BulletPsychicsComponent.class.isInstance(component)) {
         BulletPsychicsComponent bulletPsychicsComponent = (BulletPsychicsComponent)component;
-        tempMat.idt();
-        tempMat.translate(positionComponent.vector);
         tempA.set(positionComponent.size).scl(PsychicsSystem.BULLET_SIZE);
-        bulletPsychicsComponent.initBullet(tempMat, bulletWorld,tempA, entity);
+        bulletPsychicsComponent.initBullet(positionComponent, bulletWorld,tempA, entity);
       }
     }
   }

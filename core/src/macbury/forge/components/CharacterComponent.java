@@ -30,10 +30,11 @@ public class CharacterComponent extends BulletPsychicsComponent {
   public float maxSlope;
 
   @Override
-  public void initBullet(Matrix4 transform, btDiscreteDynamicsWorld world, Vector3 size, Entity entity) {
+  public void initBullet(PositionComponent positionComponent, btDiscreteDynamicsWorld world, Vector3 size, Entity entity) {
     this.world          = world;
+    positionComponent.getBulletMatrix(tempMat);
     this.ghostObject    = new btPairCachingGhostObject();
-    ghostObject.setWorldTransform(transform);
+    ghostObject.setWorldTransform(tempMat);
     this.ghostShape     = new btCapsuleShape(size.x, size.y);
     ghostObject.setCollisionShape(ghostShape);
     ghostObject.setCollisionFlags(btCollisionObject.CollisionFlags.CF_CHARACTER_OBJECT);

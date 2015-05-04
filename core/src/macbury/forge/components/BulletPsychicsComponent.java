@@ -13,7 +13,8 @@ import com.badlogic.gdx.utils.compression.lzma.Base;
  */
 public abstract class BulletPsychicsComponent extends BaseComponent {
   protected btDiscreteDynamicsWorld world;
-  public abstract void initBullet(Matrix4 transform, btDiscreteDynamicsWorld world, Vector3 size, Entity entity);
+  protected static final Matrix4 tempMat = new Matrix4();
+  public abstract void initBullet(PositionComponent positionComponent, btDiscreteDynamicsWorld world, Vector3 size, Entity entity);
   public abstract void disposeBullet();
 
   @Override
