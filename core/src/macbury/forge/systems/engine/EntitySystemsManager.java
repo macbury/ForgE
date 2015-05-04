@@ -16,13 +16,11 @@ public class EntitySystemsManager extends PooledEngine implements Disposable {
   private final PlayerSystem player;
   //private final CollisionSystem collision;
   public final PsychicsSystem psychics;
-  public final PositionSystem position;
   public final CharacterSystem character;
 
   public EntitySystemsManager(Level level) {
     psychics  = new PsychicsSystem();
     rendering = new WorldRenderingSystem(level);
-    position  = new PositionSystem();
     octree    = new OctreeSystem(level);
     debug     = new DebugSystem(level);
     culling   = new CullingSystem(level);
@@ -38,8 +36,6 @@ public class EntitySystemsManager extends PooledEngine implements Disposable {
 
     addSystem(character);
     addSystem(psychics);
-
-    addSystem(position);
 
     addSystem(rendering);
     addSystem(debug);

@@ -5,14 +5,14 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
-import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
+import com.badlogic.gdx.physics.bullet.collision.*;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.physics.bullet.linearmath.btMotionState;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import javafx.geometry.Pos;
 import macbury.forge.ForgE;
+import macbury.forge.systems.PsychicsSystem;
 
 /**
  * Created by macbury on 30.04.15.
@@ -20,6 +20,7 @@ import macbury.forge.ForgE;
 public class RigidBodyComoponent extends BulletPsychicsComponent {
   private btCollisionShape collisionShape;
   public Vector3 localInertia = new Vector3();
+  public Vector3 initialImpulse = new Vector3();
   public float mass           = 0f;
   private btRigidBody.btRigidBodyConstructionInfo constructionInfo;
   private btRigidBody rigidBody;
@@ -33,21 +34,28 @@ public class RigidBodyComoponent extends BulletPsychicsComponent {
       throw new GdxRuntimeException("Could not find renderable component for this entity: " + entity.toString());
     }
 
-
-    this.collisionShape = renderableComponent.getAsset().getCollisionShape();
+    this.collisionShape = new btBoxShape(new Vector3(0.5f, 0.5f, 0.5f));//renderableComponent.getAsset().getCollisionShape();
     if (mass > 0f)
       collisionShape.calculateLocalInertia(mass, localInertia);
     else
       localInertia.set(0, 0, 0);
 
-    motionState = new RigidBodyComponentMotionState();
+    motionState      = new RigidBodyComponentMotionState();
     motionState.setPositionComponent(positionComponent);
     constructionInfo = new btRigidBody.btRigidBodyConstructionInfo(mass, motionState, collisionShape, localInertia);
-    this.rigidBody = new btRigidBody(constructionInfo);
-    this.rigidBody.setCollisionFlags(rigidBody.getCollisionFlags() | btCollisionObject.CollisionFlags.CF_CUSTOM_MATERIAL_CALLBACK);
-    world.addRigidBody(rigidBody);
-    constructionInfo.dispose();
+    this.rigidBody   = new btRigidBody(constructionInfo);
 
+    //this.rigidBody.setCollisionFlags(rigidBody.getCollisionFlags() | btCollisionObject.CollisionFlags.CF_CUSTOM_MATERIAL_CALLBACK | btCollisionObject.CollisionFlags.CF_KINEMATIC_OBJECT);
+    if (!initialImpulse.isZero()) {
+      rigidBody.applyCentralImpulse(initialImpulse);
+    }
+
+    world.addRigidBody(
+        rigidBody,
+        PsychicsSystem.Flags.Object.mask,
+        PsychicsSystem.Flags.All.mask
+    );
+    constructionInfo.dispose();
   }
 
   @Override
@@ -60,6 +68,7 @@ public class RigidBodyComoponent extends BulletPsychicsComponent {
   public void set(BaseComponent otherComponent) {
     RigidBodyComoponent otherRigidBody = (RigidBodyComoponent)otherComponent;
     this.localInertia.set(otherRigidBody.localInertia);
+    this.initialImpulse.set(otherRigidBody.initialImpulse);
     this.mass = otherRigidBody.mass;
   }
 
@@ -67,6 +76,7 @@ public class RigidBodyComoponent extends BulletPsychicsComponent {
   public void reset() {
     super.reset();
     localInertia.setZero();
+    initialImpulse.setZero();
     mass  = 0;
   }
 

@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.collision.btPairCachingGhostObject;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btKinematicCharacterController;
+import macbury.forge.systems.PsychicsSystem;
 
 /**
  * Created by macbury on 24.04.15.
@@ -44,8 +45,9 @@ public class CharacterComponent extends BulletPsychicsComponent {
     characterController.setMaxJumpHeight(maxJumpHeight);
     characterController.setMaxSlope(maxSlope);
     world.addCollisionObject(
-        ghostObject, (short) btBroadphaseProxy.CollisionFilterGroups.CharacterFilter,
-        (short)(btBroadphaseProxy.CollisionFilterGroups.StaticFilter | btBroadphaseProxy.CollisionFilterGroups.DefaultFilter)
+        ghostObject,
+        PsychicsSystem.Flags.Object.mask,
+        PsychicsSystem.Flags.All.mask
     );
     world.addAction(characterController);
   }

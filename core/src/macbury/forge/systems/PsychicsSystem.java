@@ -29,6 +29,16 @@ public class PsychicsSystem extends EntitySystem implements EntityListener, Disp
   private static final int MAX_SUB_STEPS     = 5;
   private static final float FIXED_TIME_STEP = 1f / 60f;
   public static final float BULLET_SIZE = 0.5f;
+
+  public enum Flags {
+    All(-1), Object(1<<9), Ground(1<<8);
+    public final short mask;
+    Flags(int mask) {
+      this.mask = (short)mask;
+    }
+  }
+
+
   private final Family familyCharacterAndPosition;
   private DebugDrawer debugDrawer;
   private btSequentialImpulseConstraintSolver constraintSolver;

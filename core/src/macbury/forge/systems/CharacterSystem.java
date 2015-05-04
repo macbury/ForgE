@@ -18,6 +18,7 @@ public class CharacterSystem extends IteratingSystem {
   private final Vector3 tempVec = new Vector3();
   private ComponentMapper<PositionComponent> pm     = ComponentMapper.getFor(PositionComponent.class);
   private ComponentMapper<CharacterComponent> chm   = ComponentMapper.getFor(CharacterComponent.class);
+  private com.badlogic.gdx.math.Quaternion tempQuat;
 
   public CharacterSystem() {
     super(Family.getFor(CharacterComponent.class, PositionComponent.class));
@@ -30,5 +31,6 @@ public class CharacterSystem extends IteratingSystem {
     characterComponent.ghostObject.getWorldTransform(tempMat);
     tempMat.getTranslation(tempVec);
     positionComponent.setVector(tempVec);
+    tempMat.getRotation(positionComponent.rotation);
   }
 }

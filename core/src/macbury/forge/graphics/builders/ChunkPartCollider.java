@@ -15,6 +15,7 @@ import macbury.forge.blocks.BlockShape;
 import macbury.forge.blocks.BlockShapePart;
 import macbury.forge.blocks.BlockShapeTriangle;
 import macbury.forge.graphics.mesh.VoxelsAssembler;
+import macbury.forge.systems.PsychicsSystem;
 import macbury.forge.terrain.greedy.AbstractGreedyAlgorithm;
 import macbury.forge.utils.Vector3i;
 import macbury.forge.voxel.Voxel;
@@ -65,7 +66,7 @@ public class ChunkPartCollider implements Disposable {
 
   public void initializeAndAddToWorld(btDiscreteDynamicsWorld bulletWorld) {
     //Gdx.app.log(TAG, "adding collider to bullet world at " + position.toString() + " size: " + size.toString());
-    bulletWorld.addRigidBody(body);
+    bulletWorld.addRigidBody(body, PsychicsSystem.Flags.Ground.mask, PsychicsSystem.Flags.All.mask);
     this.bulletWorld = bulletWorld;
   }
 
