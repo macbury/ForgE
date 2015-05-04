@@ -5,7 +5,10 @@ import macbury.forge.ForgE;
 import macbury.forge.ForgEBootListener;
 import macbury.forge.editor.controllers.ProjectController;
 import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
+import macbury.forge.editor.controllers.tools.ToolsController;
 import macbury.forge.editor.screens.LevelEditorScreen;
+import macbury.forge.editor.selection.EventSelection;
+import macbury.forge.editor.systems.SelectionSystem;
 
 import javax.swing.*;
 import javax.swing.tree.*;
@@ -20,7 +23,7 @@ import java.awt.event.MouseListener;
 /**
  * Created by macbury on 10.03.15.
  */
-public class MapTreeController implements OnMapChangeListener, ForgEBootListener, MapNodeTreeMoveDragController.Listener {
+public class MapTreeController implements OnMapChangeListener, ForgEBootListener, MapNodeTreeMoveDragController.Listener, ToolsController.ToolControllerListener {
   private static final String TAG = "MapTreeController";
   private final JTree mapTree;
   private final ProjectController projectController;
@@ -28,6 +31,8 @@ public class MapTreeController implements OnMapChangeListener, ForgEBootListener
   private final MapTreePopupHandlerController popupController;
   private final MapTreeModel mapTreeModel;
   private final DropTarget dropTarget;
+  private LevelEditorScreen screen;
+  private SelectionSystem selectionSystem;
 
   public MapTreeController(final JTree mapTree, ProjectController projectController) {
     this.popupController   = new MapTreePopupHandlerController(mapTree, projectController);
@@ -88,12 +93,13 @@ public class MapTreeController implements OnMapChangeListener, ForgEBootListener
 
   @Override
   public void onCloseMap(ProjectController controller, LevelEditorScreen screen) {
-
+    screen = null;
   }
 
   @Override
   public void onNewMap(ProjectController controller, LevelEditorScreen screen) {
     reload();
+    this.screen = screen;
   }
 
   @Override
@@ -116,5 +122,16 @@ public class MapTreeController implements OnMapChangeListener, ForgEBootListener
   @Override
   public void onMapMoved(MapTreeModel.BaseNode target, MapTreeModel.BaseNode dragedNode) {
     projectController.moveMap(dragedNode.getPathFile(), target.getPathFile());
+  }
+
+  @Override
+  public void onToolPaneUnSelected(SelectionSystem system) {
+
+  }
+
+  @Override
+  public void onToolPaneSelected(ToolsController.ToolControllerListener selectedToolController, SelectionSystem system) {
+    this.selectionSystem = system;
+    selectionSystem.setSelection(new EventSelection());
   }
 }

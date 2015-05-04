@@ -1,6 +1,7 @@
 package macbury.forge.editor.runnables;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import macbury.forge.editor.controllers.ProjectController;
 import macbury.forge.utils.FormatUtils;
 
@@ -43,7 +44,8 @@ public class UpdateStatusBar {
         fpsLabel.setText("FPS: " + Gdx.graphics.getFramesPerSecond());
         statusMemoryLabel.setText("Memory: " + FormatUtils.humanReadableByteCount(Gdx.app.getNativeHeap(), true) + "/" + FormatUtils.humanReadableByteCount(Gdx.app.getJavaHeap(), true));
         statusRenderablesLabel.setText("Renderables: " + String.valueOf(projectController.levelEditorScreen.level.batch.renderablesPerFrame));
-        statusTriangleCountLabel.setText("Triangles: " + String.valueOf(Math.round(projectController.levelEditorScreen.level.batch.trianglesPerFrame)));
+
+        statusTriangleCountLabel.setText("Vertex avg: " + String.valueOf(Math.round(GLProfiler.vertexCount.average)));
 
         mapCursorPositionLabel.setText(projectController.levelEditorScreen.selectionSystem.voxelCursor.replace.toString());
       }

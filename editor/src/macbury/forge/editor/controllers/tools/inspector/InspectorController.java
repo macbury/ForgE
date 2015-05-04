@@ -1,6 +1,7 @@
 package macbury.forge.editor.controllers.tools.inspector;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import macbury.forge.editor.controllers.ProjectController;
 import macbury.forge.editor.controllers.tools.ToolsController;
 import macbury.forge.editor.controllers.tools.inspector.properties.DefaultBeanBinder;
@@ -84,29 +85,26 @@ public class InspectorController implements OnMapChangeListener, DefaultBeanBind
 
   @Override
   public void onToolPaneUnSelected(SelectionSystem system) {
-    if (binder != null) {
-      binder.unbind();
-    }
-    this.binder = null;
+    throw new GdxRuntimeException("This should not happen!");
   }
 
   @Override
   public void onToolPaneSelected(ToolsController.ToolControllerListener selectedToolController, SelectionSystem system) {
-    if (selectedToolController == this) {
-      this.binder   = new DefaultBeanBinder(new EditorScreenBeanInfo.EditorScreenBean(screen), inspectorSheetPanel, new EditorScreenBeanInfo());
-      this.binder.setListener(this);
-
-      inspectorSheetPanel.updateUI();
+    if (binder != null) {
+      binder.unbind();
     }
+    this.binder   = new DefaultBeanBinder(new EditorScreenBeanInfo.EditorScreenBean(screen), inspectorSheetPanel, new EditorScreenBeanInfo());
+    inspectorSheetPanel.updateUI();
+    this.binder.setListener(this);
   }
 
   @Override
   public void onPropertyChange(DefaultBeanBinder binder, PropertyChangeEvent event, Object object) {
     Gdx.app.log(TAG, "On property change event");
-    //this.binder.setListener(null);
+    this.binder.setListener(null);
     PropertyChangeable propertyChangeable = new PropertyChangeable(object, event, this);
     changeManager.addChangeable(propertyChangeable).apply();
-    //this.binder.setListener(this);
+    this.binder.setListener(this);
   }
 
   public void stopListeningForPropertyChanges() {

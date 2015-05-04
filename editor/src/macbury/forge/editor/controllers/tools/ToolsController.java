@@ -1,8 +1,10 @@
 package macbury.forge.editor.controllers.tools;
 
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import macbury.forge.editor.controllers.ProjectController;
 import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
+import macbury.forge.editor.controllers.tools.inspector.InspectorController;
 import macbury.forge.editor.screens.LevelEditorScreen;
 import macbury.forge.editor.systems.SelectionSystem;
 
@@ -10,6 +12,7 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.util.HashMap;
+import java.util.StringJoiner;
 
 /**
  * Created by macbury on 25.03.15.
@@ -18,9 +21,11 @@ public class ToolsController implements ChangeListener, OnMapChangeListener {
   private final JTabbedPane toolsPane;
   private HashMap<Integer, ToolControllerListener> listeners;
   private SelectionSystem currentSelectionSystem;
+  private Array<ToolControllerListener> callbacks;
 
   public ToolsController(JTabbedPane toolsPane) {
     listeners = new HashMap<Integer, ToolControllerListener>();
+    callbacks = new Array<ToolControllerListener>();
     this.toolsPane = toolsPane;
     toolsPane.addChangeListener(this);
   }
@@ -43,6 +48,10 @@ public class ToolsController implements ChangeListener, OnMapChangeListener {
       } else {
         listener.onToolPaneUnSelected(currentSelectionSystem);
       }
+    }
+
+    for (ToolControllerListener listener : callbacks) {
+      listener.onToolPaneSelected(currentListener, currentSelectionSystem);
     }
   }
 
@@ -69,6 +78,10 @@ public class ToolsController implements ChangeListener, OnMapChangeListener {
   @Override
   public void onMapSaved(ProjectController projectController, LevelEditorScreen levelEditorScreen) {
 
+  }
+
+  public void addCallback(ToolControllerListener toolController) {
+    callbacks.add(toolController);
   }
 
   public interface ToolControllerListener {

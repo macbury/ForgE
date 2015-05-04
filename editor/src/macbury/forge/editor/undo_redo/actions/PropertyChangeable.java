@@ -1,6 +1,7 @@
 package macbury.forge.editor.undo_redo.actions;
 
 import com.badlogic.gdx.Gdx;
+import com.esotericsoftware.kryo.Kryo;
 import com.l2fprod.common.propertysheet.Property;
 import macbury.forge.editor.controllers.tools.inspector.InspectorController;
 import macbury.forge.editor.undo_redo.Changeable;
@@ -26,8 +27,9 @@ public class PropertyChangeable extends Changeable {
     this.event  = event;
     this.inspector = inspectorController;
     this.prop     = (Property) event.getSource();
-    this.oldValue = event.getOldValue();
-    this.newValue = event.getNewValue();
+    Kryo kryo = new Kryo();
+    this.oldValue = kryo.copy(event.getOldValue());
+    this.newValue = kryo.copy(event.getNewValue());
     Gdx.app.log(TAG, "New value: " + newValue);
     Gdx.app.log(TAG, "Old value: " + oldValue);
   }
@@ -36,7 +38,7 @@ public class PropertyChangeable extends Changeable {
   public void revert() {
     inspector.stopListeningForPropertyChanges();
     try {
-      Gdx.app.log(TAG, "Revert from " + oldValue + " to " + newValue + " for " + object);
+      Gdx.app.log(TAG, "Revert from " + newValue + " to " + oldValue + " for " + object);
       prop.setValue(oldValue);
       prop.writeToObject(object);
     } catch (Exception e) {

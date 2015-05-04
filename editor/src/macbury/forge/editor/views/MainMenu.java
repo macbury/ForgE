@@ -32,14 +32,14 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
 
     this.controller = projectController;
     this.blocksController = blocksController;
-
-    createProjectMenu();
+    createMapMenu();
     addSeparator();
     createDebugWindow();
     addSeparator();
     createPiplineMenu();
     //add(Box.createRigidArea(new Dimension(320,28)));
   }
+
 
   /**
    * Set Editor screen and refresh menu
@@ -173,6 +173,18 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
         ForgE.config.renderBoundingBox = debugBoundingBox.getState();
       }
     });
+  }
+
+
+  private void createMapMenu() {
+    JMenuItem newProjectItem    = new JMenuItem("Create a new map");
+    newProjectItem.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        controller.newMap();
+      }
+    });
+    add(newProjectItem);
   }
 
   private void createProjectMenu() {
