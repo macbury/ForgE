@@ -273,7 +273,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     mainContentPane.add(mainSplitPane, BorderLayout.CENTER);
     final JSplitPane splitPane1 = new JSplitPane();
     splitPane1.setContinuousLayout(true);
-    splitPane1.setDividerLocation(473);
+    splitPane1.setDividerLocation(446);
     splitPane1.setOrientation(0);
     splitPane1.setPreferredSize(new Dimension(320, 527));
     splitPane1.setResizeWeight(0.6);
@@ -285,7 +285,6 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     panel1.add(toolsPane, BorderLayout.CENTER);
     final JPanel panel2 = new JPanel();
     panel2.setLayout(new BorderLayout(0, 0));
-
     toolsPane.addTab("", new ImageIcon(getClass().getResource("/icons/soil_layers.png")), panel2, "Terrain");
     terrainToolsToolbar = new JToolBar();
     terrainToolsToolbar.setBackground(UIManager.getColor("List.background"));
@@ -334,16 +333,21 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     toolsPane.addTab("", new ImageIcon(getClass().getResource("/icons/ice_cube.png")), panel6, "Events");
     list1 = new JList();
     panel6.add(list1, BorderLayout.CENTER);
-    mapSettingsPanel = new JPanel();
-    mapSettingsPanel.setLayout(new BorderLayout(0, 0));
-    toolsPane.addTab("", new ImageIcon(getClass().getResource("/icons/map_settings.png")), mapSettingsPanel, "Map");
+    final JTabbedPane tabbedPane1 = new JTabbedPane();
+    splitPane1.setRightComponent(tabbedPane1);
+    final JPanel panel7 = new JPanel();
+    panel7.setLayout(new BorderLayout(0, 0));
+    tabbedPane1.addTab("Maps", panel7);
     final JScrollPane scrollPane2 = new JScrollPane();
-    splitPane1.setRightComponent(scrollPane2);
+    panel7.add(scrollPane2, BorderLayout.CENTER);
     mapTree = new JTree();
     mapTree.setRootVisible(true);
     mapTree.setShowsRootHandles(true);
     mapTree.putClientProperty("JTree.lineStyle", "");
     scrollPane2.setViewportView(mapTree);
+    mapSettingsPanel = new JPanel();
+    mapSettingsPanel.setLayout(new BorderLayout(0, 0));
+    tabbedPane1.addTab("Inspector", null, mapSettingsPanel, "");
     openGlContainer = new JPanel();
     openGlContainer.setLayout(new BorderLayout(0, 0));
     openGlContainer.setBackground(new Color(-16711423));

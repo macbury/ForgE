@@ -30,6 +30,7 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
   private final KeyShortcutMapping redoMapping;
   private final ProjectController projectController;
   private final JButton saveMapButton;
+  private final JButton playMapButton;
   private LevelEditorScreen screen;
 
   public MainToolbarController(ProjectController projectController, JToolBar mainToolbar, MainMenu mainMenu, GdxSwingInputProcessor inputProcessor) {
@@ -43,6 +44,7 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
     this.editorUndoButton        = buildButton("undo");
 
     this.saveMapButton           = buildButton("save");
+    this.playMapButton           = buildButton("play");
     undoMapping = inputProcessor.registerMapping(Input.Keys.CONTROL_LEFT, Input.Keys.Z, this);
     redoMapping = inputProcessor.registerMapping(Input.Keys.CONTROL_LEFT, Input.Keys.Y, this);
 
@@ -55,8 +57,9 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
     mainToolbar.addSeparator();
     mainToolbar.add(editorUndoButton);
     mainToolbar.add(editorRedoButton);
-
     mainToolbar.add(Box.createHorizontalGlue());
+    mainToolbar.add(playMapButton);
+
     updateRedoUndoButtons();
   }
 

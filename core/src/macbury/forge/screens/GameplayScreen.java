@@ -25,6 +25,7 @@ public class GameplayScreen extends AbstractScreen {
   private final Level level;
   private final Teleport teleport;
   private FirstPersonCameraController cameraController;
+  private Entity playerEntity;
 
   public GameplayScreen(Teleport teleport, Level level) {
     this.level    = level;
@@ -38,7 +39,7 @@ public class GameplayScreen extends AbstractScreen {
     level.camera.far          = FAR_CAMERA;
     level.camera.near         = NEAR_CAMERA;
     level.camera.fieldOfView  = 70;
-    Entity playerEntity       = ForgE.entities.get("player").build(level.entities);
+    this.playerEntity       = ForgE.entities.get("player").build(level.entities);
     playerEntity.getComponent(PlayerComponent.class).camera = level.camera;
     level.terrainMap.localVoxelPositionToWorldPosition(teleport.voxelPosition, playerEntity.getComponent(PositionComponent.class).vector);
     playerEntity.getComponent(PositionComponent.class).vector.sub(-0.5f);
@@ -58,6 +59,12 @@ public class GameplayScreen extends AbstractScreen {
 
     if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
       Gdx.app.exit();
+    }
+
+    if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
+      Entity teapotEntity      = ForgE.entities.get("crate").build(level.entities);
+      teapotEntity.getComponent(PositionComponent.class).vector.set(playerEntity.getComponent(PositionComponent.class).vector).add(0,1,-4);
+      level.entities.addEntity(teapotEntity);
     }
   }
 

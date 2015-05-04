@@ -10,10 +10,10 @@
       class: "renderable",
       path:  "raw-models/Crate.g3db"
     },
-    
+
     {
       class: "rigidbody",
-      mass: 5f,
+      mass: 1f,
     }
   ]
 }

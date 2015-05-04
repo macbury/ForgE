@@ -141,7 +141,7 @@
             <constraints border-constraint="West"/>
             <properties>
               <continuousLayout value="true"/>
-              <dividerLocation value="473"/>
+              <dividerLocation value="446"/>
               <orientation value="0"/>
               <preferredSize width="320" height="527"/>
               <resizeWeight value="0.6"/>
@@ -276,39 +276,55 @@
                           </component>
                         </children>
                       </grid>
-                      <grid id="207bd" binding="mapSettingsPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
-                        <constraints>
-                          <tabbedpane title="" icon="icons/map_settings.png">
-                            <tooltip value="Map"/>
-                          </tabbedpane>
-                        </constraints>
-                        <properties/>
-                        <border type="none"/>
-                        <children/>
-                      </grid>
                     </children>
                   </tabbedpane>
                 </children>
               </grid>
-              <scrollpane id="78059">
+              <tabbedpane id="71c05">
                 <constraints>
                   <splitpane position="right"/>
                 </constraints>
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="303cd" class="javax.swing.JTree" binding="mapTree">
-                    <constraints/>
-                    <properties>
-                      <rootVisible value="true"/>
-                      <showsRootHandles value="true"/>
-                    </properties>
-                    <clientProperties>
-                      <JTree.lineStyle class="java.lang.String" value=""/>
-                    </clientProperties>
-                  </component>
+                  <grid id="48bba" layout-manager="BorderLayout" hgap="0" vgap="0">
+                    <constraints>
+                      <tabbedpane title="Maps"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <scrollpane id="78059">
+                        <constraints border-constraint="Center"/>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <component id="303cd" class="javax.swing.JTree" binding="mapTree">
+                            <constraints/>
+                            <properties>
+                              <rootVisible value="true"/>
+                              <showsRootHandles value="true"/>
+                            </properties>
+                            <clientProperties>
+                              <JTree.lineStyle class="java.lang.String" value=""/>
+                            </clientProperties>
+                          </component>
+                        </children>
+                      </scrollpane>
+                    </children>
+                  </grid>
+                  <grid id="207bd" binding="mapSettingsPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
+                    <constraints>
+                      <tabbedpane title="Inspector">
+                        <tooltip value=""/>
+                      </tabbedpane>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
                 </children>
-              </scrollpane>
+              </tabbedpane>
             </children>
           </splitpane>
           <grid id="31e25" binding="openGlContainer" layout-manager="BorderLayout" hgap="0" vgap="0">
