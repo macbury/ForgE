@@ -13,7 +13,10 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.pool.KryoFactory;
 import com.esotericsoftware.kryo.pool.KryoPool;
+import com.esotericsoftware.kryo.serializers.TaggedFieldSerializer;
 import macbury.forge.assets.assets.Asset;
+import macbury.forge.assets.assets.ModelAsset;
+import macbury.forge.assets.assets.TextureAsset;
 import macbury.forge.db.GameDatabase;
 import macbury.forge.db.models.PlayerStartPosition;
 import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
@@ -60,6 +63,9 @@ public class StorageManager {
       kryo.register(Matrix4.class, new Matrix4Serializer());
       kryo.register(Vector3i.class, new Vector3iSerializer());
       kryo.register(PlayerStartPosition.class, new PlayerStartPositionSerializer());
+      kryo.register(TextureAsset.class, new AssetSerializer());
+      kryo.register(ModelAsset.class, new AssetSerializer());
+      kryo.setDefaultSerializer(TaggedFieldSerializer.class);
       return kryo;
     }
   };

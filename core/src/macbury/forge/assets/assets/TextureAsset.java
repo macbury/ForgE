@@ -15,7 +15,7 @@ public class TextureAsset extends Asset<Texture> {
   protected Texture loadObject(FileHandle file) {
     Texture texture = new Texture(file);
     texture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
-
+    texture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
     return texture;
   }
 

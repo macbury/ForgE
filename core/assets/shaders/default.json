@@ -8,7 +8,8 @@
     "Sky",
     "EyePosition",
     "Sun",
-    "ColorDiffuse"
+    "ColorDiffuse",
+    "DiffuseTexture"
   ],
   helpers: {
     vertex: ["directional_light", "fog"],

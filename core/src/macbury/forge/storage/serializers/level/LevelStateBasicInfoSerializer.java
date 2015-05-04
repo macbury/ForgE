@@ -20,8 +20,6 @@ public class LevelStateBasicInfoSerializer extends Serializer<LevelState> {
     output.writeInt(object.getWidth());
     output.writeInt(object.getHeight());
     output.writeInt(object.getDepth());
-
-    kryo.writeObject(output, object.env);
   }
 
   @Override
@@ -33,8 +31,6 @@ public class LevelStateBasicInfoSerializer extends Serializer<LevelState> {
     state.setWidth(input.readInt());
     state.setHeight(input.readInt());
     state.setDepth(input.readInt());
-    state.env = kryo.readObject(input, LevelEnv.class);
-
     return state;
   }
 }

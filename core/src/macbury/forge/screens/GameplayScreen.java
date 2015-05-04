@@ -33,7 +33,7 @@ public class GameplayScreen extends AbstractScreen {
 
   @Override
   protected void initialize() {
-    Gdx.input.setCursorCatched(true);
+    //Gdx.input.setCursorCatched(true);
     this.cameraController     = new FirstPersonCameraController(level.camera);
     level.camera.far          = FAR_CAMERA;
     level.camera.near         = NEAR_CAMERA;
@@ -52,7 +52,7 @@ public class GameplayScreen extends AbstractScreen {
 
   @Override
   public void render(float delta) {
-    ForgE.assets.loadPendingInChunks();
+    ForgE.assets.update();
     cameraController.update(delta);
     level.render(delta);
 

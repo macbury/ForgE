@@ -3,6 +3,8 @@ package macbury.forge.assets;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g3d.utils.TextureProvider;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.assets.assets.Asset;
@@ -61,23 +63,28 @@ public class AssetsManager implements Disposable {
   }
 
   private void loadPending() {
-    while(pendingAssets.size > 0) {
-      Asset asset = pendingAssets.pop();
-      Gdx.app.log(TAG, "Loading: " + asset.getPath());
-      asset.load();
-    }
+    while(update()) { }
   }
 
   public boolean loadPendingInChunks() {
     int toLoadLeft = MAX_TO_LOAD_PER_TICK;
     while(pendingAssets.size > 0 || toLoadLeft == 0) {
-      Asset asset = pendingAssets.pop();
-      Gdx.app.log(TAG, "Loading: " + asset.getPath());
-      asset.load();
+      update();
       toLoadLeft--;
     }
 
     return pendingAssets.size == 0;
+  }
+
+  public boolean update() {
+    if (pendingAssets.size > 0) {
+      Asset asset = pendingAssets.pop();
+      Gdx.app.log(TAG, "Loading: " + asset.getPath());
+      asset.load();
+      return true;
+    } else {
+      return false;
+    }
   }
 
   public void unloadUnusedAssets() {
@@ -106,4 +113,5 @@ public class AssetsManager implements Disposable {
   public FileHandle resolvePath(Asset asset, String path) {
     return Gdx.files.internal(path);
   }
+
 }

@@ -20,6 +20,7 @@ public class LevelEnvSerializer extends Serializer<LevelEnv> {
     kryo.writeObject(output, object.mainLight);
     kryo.writeObject(output, object.skyColor);
     kryo.writeObject(output, object.ambientLight);
+
     kryo.writeObjectOrNull(output, object.windDisplacementTextureAsset, TextureAsset.class);
   }
 
@@ -30,6 +31,7 @@ public class LevelEnvSerializer extends Serializer<LevelEnv> {
     env.mainLight               = kryo.readObject(input, DirectionalLight.class);
     env.skyColor                = kryo.readObject(input, Color.class);
     env.ambientLight            = kryo.readObject(input, Color.class);
+
     env.windDisplacementTextureAsset = kryo.readObjectOrNull(input, TextureAsset.class);
     return env;
   }
