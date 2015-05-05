@@ -14,6 +14,10 @@
     {
       class: "rigidbody",
       mass: 2f,
+//      shape: {
+//        type: "box",
+//        size: { x: 1f,   y: 1f, z: 1f }
+//      }
     }
   ]
 }

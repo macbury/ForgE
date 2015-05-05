@@ -185,6 +185,15 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
       }
     });
     add(newProjectItem);
+
+    JMenuItem closeMapItem    = new JMenuItem("Close map");
+    closeMapItem.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        controller.closeAndSaveChangesMap();
+      }
+    });
+    add(closeMapItem);
   }
 
   private void createProjectMenu() {

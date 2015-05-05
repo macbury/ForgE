@@ -93,9 +93,9 @@ public class InspectorController implements OnMapChangeListener, DefaultBeanBind
     if (binder != null) {
       binder.unbind();
     }
-    this.binder   = new DefaultBeanBinder(new EditorScreenBeanInfo.EditorScreenBean(screen), inspectorSheetPanel, new EditorScreenBeanInfo());
-    inspectorSheetPanel.updateUI();
-    this.binder.setListener(this);
+    //this.binder   = new DefaultBeanBinder(new EditorScreenBeanInfo.EditorScreenBean(screen), inspectorSheetPanel, new EditorScreenBeanInfo());
+    //inspectorSheetPanel.updateUI();
+    //this.binder.setListener(this);
   }
 
   @Override

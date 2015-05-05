@@ -7,6 +7,7 @@ import macbury.forge.systems.engine.EntitySystemsManager;
 
 public class EntityBuilder {
   private String name;
+  private String parent;
   private Array<BaseComponent> components;
 
   public Entity build(EntitySystemsManager engine) {

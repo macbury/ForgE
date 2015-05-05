@@ -96,12 +96,12 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
     boolean interfaceEnabled = screen != null;
     boolean showAppend       = !ereaserButton.isSelected();
 
-
     toolbar.setEnabled(interfaceEnabled);
     drawPencilButton.setEnabled(interfaceEnabled);
     drawRectButton.setEnabled(interfaceEnabled);
     drawTreePencil.setEnabled(interfaceEnabled);
-
+    drawBrushButton.setEnabled(interfaceEnabled);
+    ereaserButton.setEnabled(interfaceEnabled);
     boolean brushOptionsEnabled = interfaceEnabled && drawBrushButton.isSelected();
     brushSizeSpinner.setEnabled(brushOptionsEnabled);
     brushTypeComboBox.setEnabled(brushOptionsEnabled);

@@ -51,6 +51,8 @@ public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.
     this.blockList           = blockList;
     this.blockListRenderer   = new BlockListRenderer();
     this.jobs                = jobs;
+
+    blockList.setEnabled(false);
     blockList.setFixedCellWidth(TILE_SIZE);
     blockList.setFixedCellHeight(TILE_SIZE);
     blockList.setValueIsAdjusting(true);
@@ -112,11 +114,13 @@ public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.
   @Override
   public void onCloseMap(ProjectController controller, LevelEditorScreen screen) {
     resetSelectedItem();
+    blockList.setEnabled(false);
   }
 
   @Override
   public void onNewMap(ProjectController controller, LevelEditorScreen screen) {
     this.controller = controller;
+    blockList.setEnabled(true);
     reload();
     resetSelectedItem();
   }
