@@ -31,14 +31,15 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
   private final ProjectController projectController;
   private final JButton saveMapButton;
   private final JButton playMapButton;
+  private final PlayerController playerController;
   private LevelEditorScreen screen;
 
-  public MainToolbarController(ProjectController projectController, JToolBar mainToolbar, MainMenu mainMenu, GdxSwingInputProcessor inputProcessor) {
+  public MainToolbarController(ProjectController projectController, JToolBar mainToolbar, MainMenu mainMenu, GdxSwingInputProcessor inputProcessor, PlayerController playerController) {
     this.editorModeButtonGroup = new ButtonGroup();
     this.mainToolbar           = mainToolbar;
     this.projectController     = projectController;
     moreButton                 = new MoreToolbarButton(mainMenu);
-
+    this.playerController      = playerController;
 
     this.editorRedoButton        = buildButton("redo");
     this.editorUndoButton        = buildButton("undo");
@@ -142,6 +143,11 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
 
     if (e.getSource() == saveMapButton) {
       projectController.saveMap();
+    }
+
+    if (e.getSource() == playMapButton) {
+
+      playerController.runGame();
     }
   }
 

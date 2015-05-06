@@ -8,6 +8,21 @@
 		<excludeFolder url="file://$MODULE_DIR$/.gradle"/>
 		<excludeFolder url="file://$MODULE_DIR$/build"/>
 	</contentEntry>
+	<lib name="commons-io-1.3.2.jar" scope="COMPILE">
+		<srcroot url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-io/1.3.2/b41a5f39fa90007a6c247175933555ba5f166d70/commons-io-1.3.2-sources.jar!/"/>
+	</lib>
+	<lib name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-io/commons-io/1.3.2/b6dde38349ba9bb5e6ea6320531eae969985dae5/commons-io-1.3.2.jar" scope="COMPILE">
+		<srcroot url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-io/commons-io/1.3.2/b41a5f39fa90007a6c247175933555ba5f166d70/commons-io-1.3.2-sources.jar!/"/>
+	</lib>
+	<lib name="gdx-bullet-1.4.0.jar" scope="COMPILE">
+		<srcroot url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-bullet/1.4.0/1f3c7d1465fbeb02f8e0719e5bd2895bc072dda8/gdx-bullet-1.4.0-sources.jar!/"/>
+	</lib>
+	<lib name="gdx-1.4.1.jar" scope="COMPILE">
+		<srcroot url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx/1.4.1/a36f5d3e6a3b0fa3c625f8ce88216daf99435bce/gdx-1.4.1-sources.jar!/"/>
+	</lib>
+	<lib name="ColorPicker.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/libs/ColorPicker.jar!/"/>
+	</lib>
 	<lib name="task-dialog-1.3.5.jar" scope="COMPILE">
 		<relative-module-cls project-related="jar://$PROJECT_DIR$/libs/task-dialog-1.3.5.jar!/"/>
 	</lib>
@@ -17,16 +32,13 @@
 	<lib name="miglayout-3.7.2.jar" scope="COMPILE">
 		<relative-module-cls project-related="jar://$PROJECT_DIR$/libs/miglayout-3.7.2.jar!/"/>
 	</lib>
-	<lib name="ColorPicker.jar" scope="COMPILE">
-		<relative-module-cls project-related="jar://$PROJECT_DIR$/libs/ColorPicker.jar!/"/>
-	</lib>
-	<lib name="Gradle: forms_rt-14.0.3" scope="COMPILE">
+	<lib name="forms_rt-14.0.3.jar" scope="COMPILE">
 		<relative-module-cls project-related="jar://$PROJECT_DIR$/libs/forms_rt-14.0.3.jar!/"/>
 	</lib>
-	<lib name="Gradle: docking-frames-core" scope="COMPILE">
+	<lib name="docking-frames-core.jar" scope="COMPILE">
 		<relative-module-cls project-related="jar://$PROJECT_DIR$/libs/docking-frames-core.jar!/"/>
 	</lib>
-	<lib name="Gradle: docking-frames-common" scope="COMPILE">
+	<lib name="docking-frames-common.jar" scope="COMPILE">
 		<relative-module-cls project-related="jar://$PROJECT_DIR$/libs/docking-frames-common.jar!/"/>
 	</lib>
 	<levels>

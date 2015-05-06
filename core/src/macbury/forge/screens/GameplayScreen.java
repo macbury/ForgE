@@ -72,6 +72,28 @@ public class GameplayScreen extends AbstractScreen {
       teapotEntity.getComponent(RigidBodyComoponent.class).initialImpulse.set(temp);
       level.entities.addEntity(teapotEntity);
     }
+    if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+      Entity teapotEntity      = ForgE.entities.get("barell").build(level.entities);
+      PositionComponent playerPositionComponent = playerEntity.getComponent(PositionComponent.class);
+      Vector3 temp = new Vector3(level.camera.direction).scl(2);
+      temp.add(level.camera.position);
+
+      teapotEntity.getComponent(PositionComponent.class).vector.set(temp);
+      temp.set(level.camera.direction).scl(15);
+      teapotEntity.getComponent(RigidBodyComoponent.class).initialImpulse.set(temp);
+      level.entities.addEntity(teapotEntity);
+    }
+    if (Gdx.input.isKeyJustPressed(Input.Keys.T)) {
+      Entity teapotEntity      = ForgE.entities.get("ham").build(level.entities);
+      PositionComponent playerPositionComponent = playerEntity.getComponent(PositionComponent.class);
+      Vector3 temp = new Vector3(level.camera.direction).scl(2);
+      temp.add(level.camera.position);
+
+      teapotEntity.getComponent(PositionComponent.class).vector.set(temp);
+      temp.set(level.camera.direction).scl(15);
+      teapotEntity.getComponent(RigidBodyComoponent.class).initialImpulse.set(temp);
+      level.entities.addEntity(teapotEntity);
+    }
   }
 
   @Override

@@ -151,6 +151,10 @@ public class ChangeManager implements Disposable {
     clear();
   }
 
+  public boolean haveChanges() {
+    return canUndo() || canRedo();
+  }
+
   private class Node {
     private Node left  = null;
     private Node right = null;

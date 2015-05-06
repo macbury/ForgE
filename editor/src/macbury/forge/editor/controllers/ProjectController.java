@@ -144,10 +144,13 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
   }
 
   public void saveMap() {
-    SaveLevelJob job = new SaveLevelJob(levelEditorScreen.level.state);
-    job.setCallback(this, LEVEL_STATE_SAVE_CALLBACK);
-    jobs.enqueue(job);
-    levelEditorScreen.changeManager.clear();
+    if (levelEditorScreen.changeManager.haveChanges()) {
+      SaveLevelJob job = new SaveLevelJob(levelEditorScreen.level.state);
+      job.setCallback(this, LEVEL_STATE_SAVE_CALLBACK);
+      jobs.enqueue(job);
+      levelEditorScreen.changeManager.clear();
+    }
+
   }
 
   public boolean closeAndSaveChangesMap() {

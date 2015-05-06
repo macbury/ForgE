@@ -1,0 +1,23 @@
+{
+  name: "barell",
+  components: [
+    {
+      class: "position",
+      vector: { x: 5,  y: 1.5, z: 5 },
+      size:   { x: 1f,   y: 1f, z: 1f }
+    },
+    {
+      class: "renderable",
+      path:  "raw-models/barell.g3db"
+    },
+
+    {
+      class: "rigidbody",
+      mass: 2f,
+      shape: {
+        type: "Capsule",
+        size: { x: 0.5f,   y: 0.5f }
+      }
+    }
+  ]
+}

@@ -58,7 +58,7 @@ public class JobManager extends Thread {
     while(!pendingJobs.isEmpty()) {
       pushedJobs = true;
 
-      currentJob = pendingJobs.pop();
+      currentJob = pendingJobs.remove(0);
       onJobStart(currentJob);
 
       Exception jobError = currentJob.start();
