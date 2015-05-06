@@ -79,7 +79,7 @@ public class PlayerSystem extends IteratingSystem {
         tempB.set(camera.direction).crs(camera.up).nor();
       }
 
-      if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+      if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && characterComponent.characterController.canJump()) {
         characterComponent.characterController.jump();
       }
 

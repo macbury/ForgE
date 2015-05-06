@@ -34,7 +34,7 @@ public class EntityManager implements Disposable {
     json.addClassTag("character",     CharacterComponent.class);
     json.addClassTag("entity_state",  EntityStateComponent.class);
     json.addClassTag("renderable",    RenderableComponent.class);
-    json.addClassTag("rigidbody",    RigidBodyComoponent.class);
+    json.addClassTag("rigidbody",     RigidBodyComoponent.class);
   }
 
   private void reload() {
@@ -49,6 +49,7 @@ public class EntityManager implements Disposable {
 
     for (FileHandle handle : entityJsons) {
       EntityBuilder builder = json.fromJson(EntityBuilder.class, handle.readString());
+      builder.setManager(this);
       builders.put(builder.getName(), builder);
       Gdx.app.log(TAG, "Loaded: " + builder.getName() + " from " + handle.path());
     }

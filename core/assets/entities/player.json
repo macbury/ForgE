@@ -10,13 +10,17 @@
       speed: { x: 0.10f, y: 0.10f, z: 0.10f },
       jumpSpeed: 9f,
       maxJumpHeight: 2f,
-      maxSlope: 1.1f
+      maxSlope: 1.1f,
+      shape: {
+        type: "Capsule",
+        size: { x: 0.5f, y: 0.80f }
+      }
     },
     {
       class:            "player",
       headWobbleSpeed:  10,
       headWobbleMax:    0.06f,
-      cameraOffset: { y: 0.9f },
+      cameraOffset: { y: 0.75f },
 
     },
   ]

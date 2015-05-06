@@ -45,7 +45,7 @@ public class GameplayScreen extends AbstractScreen {
     playerEntity.getComponent(PositionComponent.class).vector.sub(-0.5f);
     level.entities.addEntity(playerEntity);
 
-    Entity teapotEntity      = ForgE.entities.get("crate").build(level.entities);
+    Entity teapotEntity      = ForgE.entities.get("crate-p").build(level.entities);
     teapotEntity.getComponent(PositionComponent.class).vector.set(playerEntity.getComponent(PositionComponent.class).vector).add(0,1,-4);
     level.entities.addEntity(teapotEntity);
 

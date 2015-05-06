@@ -18,7 +18,6 @@ import macbury.forge.systems.PsychicsSystem;
  * Created by macbury on 30.04.15.
  */
 public class RigidBodyComoponent extends BulletPsychicsComponent {
-  private btCollisionShape collisionShape;
   public Vector3 localInertia = new Vector3();
   public Vector3 initialImpulse = new Vector3();
   public float mass           = 0f;
@@ -34,7 +33,11 @@ public class RigidBodyComoponent extends BulletPsychicsComponent {
       throw new GdxRuntimeException("Could not find renderable component for this entity: " + entity.toString());
     }
 
-    this.collisionShape = new btBoxShape(new Vector3(0.5f, 0.5f, 0.5f));//renderableComponent.getAsset().getCollisionShape();
+    if (shape == null) {
+      throw new GdxRuntimeException("Could not find shape for this component: " + this.getClass().toString());
+    }
+
+    this.collisionShape = shape.build();
     if (mass > 0f)
       collisionShape.calculateLocalInertia(mass, localInertia);
     else
@@ -66,6 +69,7 @@ public class RigidBodyComoponent extends BulletPsychicsComponent {
 
   @Override
   public void set(BaseComponent otherComponent) {
+    super.set(otherComponent);
     RigidBodyComoponent otherRigidBody = (RigidBodyComoponent)otherComponent;
     this.localInertia.set(otherRigidBody.localInertia);
     this.initialImpulse.set(otherRigidBody.initialImpulse);

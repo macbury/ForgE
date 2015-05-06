@@ -1,0 +1,14 @@
+{
+  parent: "crate",
+  name: "crate-p",
+  components: [
+    {
+      class: "rigidbody",
+      mass: 20f,
+      shape: {
+        type: "Box",
+        size: { x: 0.5f,   y: 0.5f, z: 0.5f }
+      }
+    }
+  ]
+}

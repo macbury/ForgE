@@ -5,10 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.bullet.collision.btBroadphaseProxy;
-import com.badlogic.gdx.physics.bullet.collision.btCapsuleShape;
-import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
-import com.badlogic.gdx.physics.bullet.collision.btPairCachingGhostObject;
+import com.badlogic.gdx.physics.bullet.collision.*;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btKinematicCharacterController;
 import macbury.forge.systems.PsychicsSystem;
@@ -22,7 +19,6 @@ public class CharacterComponent extends BulletPsychicsComponent {
   private static final float DEFAULT_MAX_JUMP_HEIGHT = 2;
   private static final float DEFAULT_SLOPE = 0.78f;
   public btPairCachingGhostObject ghostObject;
-  private btCapsuleShape ghostShape;
   public btKinematicCharacterController characterController;
   public Vector3 speed        = new Vector3();
   private float stepHeight = DEFAULT_STEP_HEIGHT;
@@ -36,11 +32,11 @@ public class CharacterComponent extends BulletPsychicsComponent {
     positionComponent.getBulletMatrix(tempMat);
     this.ghostObject    = new btPairCachingGhostObject();
     ghostObject.setWorldTransform(tempMat);
-    this.ghostShape     = new btCapsuleShape(size.x, size.y);
-    ghostObject.setCollisionShape(ghostShape);
+    this.collisionShape = shape.build();
+    ghostObject.setCollisionShape(collisionShape);
     ghostObject.setCollisionFlags(btCollisionObject.CollisionFlags.CF_CHARACTER_OBJECT);
 
-    characterController = new btKinematicCharacterController(ghostObject, ghostShape, stepHeight);
+    characterController = new btKinematicCharacterController(ghostObject, (btConvexShape)collisionShape, stepHeight);
     characterController.setJumpSpeed(jumpSpeed);
     characterController.setMaxJumpHeight(maxJumpHeight);
     characterController.setMaxSlope(maxSlope);
@@ -67,12 +63,12 @@ public class CharacterComponent extends BulletPsychicsComponent {
     world.removeAction(characterController);
     world.removeCollisionObject(ghostObject);
     characterController.dispose();
-    ghostShape.dispose();
     ghostObject.dispose();
   }
 
   @Override
   public void set(BaseComponent otherComponent) {
+    super.set(otherComponent);
     CharacterComponent chc = (CharacterComponent)otherComponent;
     this.speed.set( chc.speed );
     this.jumpSpeed = chc.jumpSpeed;
