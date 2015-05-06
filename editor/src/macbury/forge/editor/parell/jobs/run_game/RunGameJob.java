@@ -88,6 +88,7 @@ public class RunGameJob extends Job<Void> {
     argumentsList.add("/bin/bash");
     argumentsList.add("gradlew");
     argumentsList.add("desktop:run");
+    argumentsList.add("-PappArgs\"['--fullscreen']\"");
 
     ProcessBuilder processBuilder = new ProcessBuilder(argumentsList.toArray(new String[argumentsList.size()]));
     processBuilder.redirectErrorStream(true);

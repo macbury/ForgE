@@ -427,4 +427,7 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
     }
   }
 
+  public boolean haveOpenedMap() {
+    return levelEditorScreen != null;
+  }
 }

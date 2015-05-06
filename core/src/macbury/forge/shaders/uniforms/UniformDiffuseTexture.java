@@ -11,10 +11,11 @@ import macbury.forge.shaders.utils.BaseRenderableMaterialUniform;
  */
 public class UniformDiffuseTexture extends BaseRenderableMaterialUniform<TextureAttribute> {
   private static final String UNIFORM_DIFFUSE_TEXTURE = "u_diffuseTexture";
-
+  private static final String UNIFORM_DIFFUSE_UV_TRANSFORM = "u_diffuseUVTransform";
   @Override
   public void bindAttribute(ShaderProgram shader, RenderContext context, TextureAttribute attribute) {
     shader.setUniformi(UNIFORM_DIFFUSE_TEXTURE, context.textureBinder.bind(attribute.textureDescription));
+    shader.setUniformf(UNIFORM_DIFFUSE_UV_TRANSFORM, attribute.offsetU, attribute.offsetV, attribute.scaleU, attribute.scaleV);
   }
 
   @Override

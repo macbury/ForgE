@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 
 public class DesktopLauncher {
   public static void main (String[] arg) {
-    DesktopGame game = new DesktopGame();
+    DesktopGame game = new DesktopGame(arg);
 
   }
 }

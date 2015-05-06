@@ -1,5 +1,6 @@
 package macbury.forge.editor.parell.jobs;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import macbury.forge.ForgE;
 import macbury.forge.editor.parell.Job;
@@ -29,7 +30,12 @@ public class LoadLevelJob extends Job<LevelState> {
   @Override
   public LevelState perform() {
     LevelState state = ForgE.levels.load(levelToLoad);
-    ForgE.assets.unloadUnusedAssets();
+    Gdx.app.postRunnable(new Runnable() {
+      @Override
+      public void run() {
+        ForgE.assets.unloadUnusedAssets();
+      }
+    });
     return state;
   }
 }

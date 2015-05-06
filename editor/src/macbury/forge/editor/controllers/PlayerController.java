@@ -25,7 +25,10 @@ public class PlayerController implements RunGameJob.Listener {
   }
 
   public void runGame() {
-    projectController.saveMap();
+    if (projectController.haveOpenedMap()) {
+      projectController.saveMap();
+    }
+
     currentRunGameJob = new RunGameJob(this);
     jobs.enqueue(currentRunGameJob);
   }

@@ -1,6 +1,7 @@
 package macbury.forge.desktop;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.utils.GdxRuntimeException;
@@ -10,6 +11,7 @@ import macbury.forge.ForgE;
 import macbury.forge.ForgEBootListener;
 import macbury.forge.screens.LoadingScreen;
 import macbury.forge.screens.test.TestModelsScreen;
+import macbury.forge.utils.ArgsParser;
 
 import javax.swing.*;
 
@@ -17,17 +19,25 @@ import javax.swing.*;
  * Created by macbury on 24.03.15.
  */
 public class DesktopGame implements ForgEBootListener, Thread.UncaughtExceptionHandler {
+  private final ArgsParser args;
 
-  public DesktopGame() {
+  public DesktopGame(String[] arg) {
+    this.args = new ArgsParser(arg);
     Thread.setDefaultUncaughtExceptionHandler(this);
     LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
     config.resizable      = false;
-    config.width          = 1360;
-    config.height         = 768;
-    //config.width          = 1920;
-    //config.height         = 1080;
     config.foregroundFPS  = 30;
-    //config.fullscreen     = true;
+
+    if (args.fullscreen) {
+      config.width          = 1920;
+      config.height         = 1080;
+      config.fullscreen     = true;
+    } else {
+      config.width          = 1360;
+      config.height         = 768;
+      config.fullscreen     = false;
+    }
+
 
     Config forgeConfig            = new Config();
     forgeConfig.debug             = false;
