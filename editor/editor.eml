@@ -20,6 +20,15 @@
 	<lib name="ColorPicker.jar" scope="COMPILE">
 		<relative-module-cls project-related="jar://$PROJECT_DIR$/libs/ColorPicker.jar!/"/>
 	</lib>
+	<lib name="Gradle: forms_rt-14.0.3" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/libs/forms_rt-14.0.3.jar!/"/>
+	</lib>
+	<lib name="Gradle: docking-frames-core" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/libs/docking-frames-core.jar!/"/>
+	</lib>
+	<lib name="Gradle: docking-frames-common" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/libs/docking-frames-common.jar!/"/>
+	</lib>
 	<levels>
 		<level name="Gradle: net.contentobjects.jnotify:jnotify:0.94" value="project"/>
 		<level name="Gradle: org.nuiton.thirdparty:l2fprod-common:0.1" value="project"/>

@@ -48,6 +48,8 @@ project(":editor") {
       compile files("${rootDir}/libs/swing-bits-0.5.0.jar")
       compile files("${rootDir}/libs/miglayout-3.7.2.jar")
       compile files("${rootDir}/libs/forms_rt-14.0.3.jar")
+      compile files("${rootDir}/libs/docking-frames-core.jar")
+      compile files("${rootDir}/libs/docking-frames-common.jar")
   }
 }
 
