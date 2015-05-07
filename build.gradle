@@ -34,8 +34,8 @@ allprojects {
 project(":editor") {
     apply plugin: 'java'
     compileJava {
-        sourceCompatibility "1.7"
-        targetCompatibility "1.7"
+        sourceCompatibility "1.8"
+        targetCompatibility "1.8"
     }
   dependencies {
     compile project(":desktop")
@@ -44,12 +44,11 @@ project(":editor") {
       compile 'org.apache.commons:commons-io:1.3+'
       compile "com.badlogicgames.gdx:gdx-bullet-platform:$gdxVersion:natives-desktop"
         compile 'org.nuiton.thirdparty:l2fprod-common:0.1'
+      compile 'org.dockingframes:docking-frames-common:1.1.2-SNAPSHOT'
       compile files("${rootDir}/libs/task-dialog-1.3.5.jar")
       compile files("${rootDir}/libs/swing-bits-0.5.0.jar")
       compile files("${rootDir}/libs/miglayout-3.7.2.jar")
       compile files("${rootDir}/libs/forms_rt-14.0.3.jar")
-      compile files("${rootDir}/libs/docking-frames-core.jar")
-      compile files("${rootDir}/libs/docking-frames-common.jar")
   }
 }
 

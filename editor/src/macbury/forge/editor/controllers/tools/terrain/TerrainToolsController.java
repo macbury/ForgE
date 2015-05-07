@@ -7,6 +7,7 @@ import macbury.forge.editor.controllers.BlocksController;
 import macbury.forge.editor.controllers.ProjectController;
 import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
 import macbury.forge.editor.controllers.tools.ToolsController;
+import macbury.forge.editor.controllers.tools.inspector.properties.DefaultBeanBinder;
 import macbury.forge.editor.input.GdxSwingInputProcessor;
 import macbury.forge.editor.input.KeyShortcutMapping;
 import macbury.forge.editor.parell.JobManager;
@@ -16,6 +17,7 @@ import macbury.forge.editor.systems.SelectionSystem;
 import macbury.forge.editor.undo_redo.ChangeManager;
 import macbury.forge.editor.undo_redo.Changeable;
 import macbury.forge.editor.undo_redo.actions.*;
+import macbury.forge.editor.views.MapPropertySheet;
 import macbury.forge.voxel.ChunkMap;
 
 import javax.swing.*;
@@ -221,6 +223,11 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
     this.currentSelection = currentSelection;
     this.selectionSystem.setSelection(currentSelection);
     updateUI();
+  }
+
+  @Override
+  public DefaultBeanBinder getBeanBinderForInspector(MapPropertySheet sheet) {
+    return null;
   }
 
   @Override

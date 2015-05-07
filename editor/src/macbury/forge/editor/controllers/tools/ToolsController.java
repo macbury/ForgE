@@ -5,14 +5,15 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import macbury.forge.editor.controllers.ProjectController;
 import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
 import macbury.forge.editor.controllers.tools.inspector.InspectorController;
+import macbury.forge.editor.controllers.tools.inspector.properties.DefaultBeanBinder;
 import macbury.forge.editor.screens.LevelEditorScreen;
 import macbury.forge.editor.systems.SelectionSystem;
+import macbury.forge.editor.views.MapPropertySheet;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.util.HashMap;
-import java.util.StringJoiner;
 
 /**
  * Created by macbury on 25.03.15.
@@ -85,6 +86,7 @@ public class ToolsController implements ChangeListener, OnMapChangeListener {
   }
 
   public interface ToolControllerListener {
+    public DefaultBeanBinder getBeanBinderForInspector(MapPropertySheet sheet);
     public void onToolPaneUnSelected(SelectionSystem system);
     public void onToolPaneSelected(ToolControllerListener selectedToolController, SelectionSystem system);
   }

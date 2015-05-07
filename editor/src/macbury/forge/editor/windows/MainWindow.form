@@ -270,16 +270,6 @@
                           </grid>
                         </children>
                       </grid>
-                      <grid id="8907d" layout-manager="BorderLayout" hgap="0" vgap="0">
-                        <constraints>
-                          <tabbedpane title="" icon="icons/places.png">
-                            <tooltip value="Objects"/>
-                          </tabbedpane>
-                        </constraints>
-                        <properties/>
-                        <border type="none"/>
-                        <children/>
-                      </grid>
                       <grid id="81fbb" layout-manager="BorderLayout" hgap="0" vgap="0">
                         <constraints>
                           <tabbedpane title="" icon="icons/ice_cube.png">
@@ -289,10 +279,41 @@
                         <properties/>
                         <border type="none"/>
                         <children>
-                          <component id="9abbd" class="javax.swing.JList" binding="list1" default-binding="true">
+                          <splitpane id="69d53">
                             <constraints border-constraint="Center"/>
-                            <properties/>
-                          </component>
+                            <properties>
+                              <orientation value="0"/>
+                            </properties>
+                            <border type="none"/>
+                            <children>
+                              <scrollpane id="eaab2">
+                                <constraints>
+                                  <splitpane position="left"/>
+                                </constraints>
+                                <properties/>
+                                <border type="none"/>
+                                <children>
+                                  <component id="2474d" class="javax.swing.JTree" binding="tree1" default-binding="true">
+                                    <constraints/>
+                                    <properties/>
+                                  </component>
+                                </children>
+                              </scrollpane>
+                              <scrollpane id="fb122">
+                                <constraints>
+                                  <splitpane position="right"/>
+                                </constraints>
+                                <properties/>
+                                <border type="none"/>
+                                <children>
+                                  <component id="4dcde" class="javax.swing.JTree" binding="tree2" default-binding="true">
+                                    <constraints/>
+                                    <properties/>
+                                  </component>
+                                </children>
+                              </scrollpane>
+                            </children>
+                          </splitpane>
                         </children>
                       </grid>
                     </children>

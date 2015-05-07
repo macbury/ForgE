@@ -64,6 +64,11 @@ public class InspectorController implements OnMapChangeListener, DefaultBeanBind
   }
 
   @Override
+  public DefaultBeanBinder getBeanBinderForInspector(MapPropertySheet sheet) {
+    throw new GdxRuntimeException("This should not happen!");
+  }
+
+  @Override
   public void onToolPaneUnSelected(SelectionSystem system) {
     throw new GdxRuntimeException("This should not happen!");
   }
@@ -72,17 +77,19 @@ public class InspectorController implements OnMapChangeListener, DefaultBeanBind
   public void onToolPaneSelected(ToolsController.ToolControllerListener selectedToolController, SelectionSystem system) {
     unbind();
     if (screen != null) {
-      this.binder   = new DefaultBeanBinder(new EditorScreenBeanInfo.EditorScreenBean(screen), inspectorSheetPanel, new EditorScreenBeanInfo());
-      inspectorSheetPanel.updateUI();
-      this.binder.setListener(this);
+      binder = selectedToolController.getBeanBinderForInspector(inspectorSheetPanel);
+      //this.binder   = new DefaultBeanBinder(new EditorScreenBeanInfo.EditorScreenBean(screen), inspectorSheetPanel, new EditorScreenBeanInfo());
+      if (binder != null) {
+        inspectorSheetPanel.updateUI();
+        startListeningForPropertyChanges();
+      }
     }
-
   }
 
   private void unbind() {
     if (binder != null) {
       binder.unbind();
-      binder.setListener(null);
+      stopListeningForPropertyChanges();
     }
     binder = null;
     inspectorSheetPanel.updateUI();
@@ -91,10 +98,10 @@ public class InspectorController implements OnMapChangeListener, DefaultBeanBind
   @Override
   public void onPropertyChange(DefaultBeanBinder binder, PropertyChangeEvent event, Object object) {
     Gdx.app.log(TAG, "On property change event");
-    this.binder.setListener(null);
+    stopListeningForPropertyChanges();
     PropertyChangeable propertyChangeable = new PropertyChangeable(object, event, this);
     changeManager.addChangeable(propertyChangeable).apply();
-    this.binder.setListener(this);
+    startListeningForPropertyChanges();
   }
 
   public void stopListeningForPropertyChanges() {

@@ -22,6 +22,8 @@ public class DesktopGame implements ForgEBootListener, Thread.UncaughtExceptionH
   private final ArgsParser args;
 
   public DesktopGame(String[] arg) {
+    SwingThemeHelper.useGTK();
+
     this.args = new ArgsParser(arg);
     Thread.setDefaultUncaughtExceptionHandler(this);
     LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();

@@ -6,11 +6,13 @@ import macbury.forge.ForgE;
 import macbury.forge.editor.controllers.ProjectController;
 import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
 import macbury.forge.editor.controllers.tools.ToolsController;
+import macbury.forge.editor.controllers.tools.inspector.properties.DefaultBeanBinder;
 import macbury.forge.editor.screens.LevelEditorScreen;
 import macbury.forge.editor.selection.AbstractSelection;
 import macbury.forge.editor.selection.EventSelection;
 import macbury.forge.editor.selection.SelectionInterface;
 import macbury.forge.editor.systems.SelectionSystem;
+import macbury.forge.editor.views.MapPropertySheet;
 import macbury.forge.editor.windows.MainWindow;
 import macbury.forge.utils.Vector3i;
 
@@ -41,6 +43,11 @@ public class EventsController implements ToolsController.ToolControllerListener,
     mntmSetStartPosition.addActionListener(this);
     eventPopupMenu.add(mntmSetStartPosition);
     this.eventSelection = new EventSelection();
+  }
+
+  @Override
+  public DefaultBeanBinder getBeanBinderForInspector(MapPropertySheet sheet) {
+    return null;
   }
 
   @Override
