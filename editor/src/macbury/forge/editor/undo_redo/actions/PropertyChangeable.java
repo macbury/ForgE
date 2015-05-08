@@ -3,6 +3,7 @@ package macbury.forge.editor.undo_redo.actions;
 import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryo.Kryo;
 import com.l2fprod.common.propertysheet.Property;
+import macbury.forge.editor.controllers.tools.events.EventsController;
 import macbury.forge.editor.controllers.tools.inspector.InspectorController;
 import macbury.forge.editor.undo_redo.Changeable;
 
@@ -20,9 +21,9 @@ public class PropertyChangeable extends Changeable {
   private final Property prop;
   private final Object oldValue;
   private final Object newValue;
-  private final InspectorController inspector;
+  private final EventsController inspector;
 
-  public PropertyChangeable(Object object, PropertyChangeEvent event, InspectorController inspectorController) {
+  public PropertyChangeable(Object object, PropertyChangeEvent event, EventsController inspectorController) {
     this.object = object;
     this.event  = event;
     this.inspector = inspectorController;

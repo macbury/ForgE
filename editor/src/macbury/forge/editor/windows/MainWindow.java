@@ -11,7 +11,6 @@ import macbury.forge.Config;
 import macbury.forge.ForgE;
 import macbury.forge.ForgEBootListener;
 import macbury.forge.editor.controllers.*;
-import macbury.forge.editor.controllers.tools.inspector.InspectorController;
 import macbury.forge.editor.controllers.maps.MapTreeController;
 import macbury.forge.editor.controllers.tools.events.EventsController;
 import macbury.forge.editor.controllers.tools.terrain.TerrainToolsController;
@@ -36,7 +35,6 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
   private final GdxSwingInputProcessor inputProcessor;
   private final LwjglAWTInput input;
   private final MapTreeController mapTreeController;
-  private final InspectorController inspectorController;
   private final EventsController eventsToolsController;
   public static MainWindow current;
   private final PlayerController playerController;
@@ -63,7 +61,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
   private JToolBar terrainToolsToolbar;
   public JProgressBar jobProgressBar;
   private JList blockList;
-  public JPanel inspectorContainerPanel;
+  public JPanel objectInspectorContainerPanel;
   private JPanel panelPrimaryBlock;
   private JPanel panelSecondaryBlock;
   public JPanel mainSplitPane;
@@ -72,6 +70,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
   private JTree tree2;
   public JPanel terrainPanel;
   public JScrollPane mapTreeScroll;
+  public JScrollPane logsScrollView;
   private JComboBox brushTypeComboBox;
   private JSpinner brushSizeSpinner;
   private JPanel brushPropertiesPanel;
@@ -117,7 +116,6 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     mainToolbarController = new MainToolbarController(projectController, mainToolbar, mainMenu, inputProcessor, playerController);
     shadersController = new ShadersController(directoryWatcher);
     mapTreeController = new MapTreeController(mapTree, projectController);
-    inspectorController = new InspectorController(inspectorContainerPanel);
 
     engine.addBootListener(this);
     engine.addBootListener(blocksController);
@@ -138,8 +136,8 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
 
     mainToolbarController.editorModeListeners.addListener(terrainToolsController);
     mainToolbarController.editorModeListeners.addListener(dockFrameController);
+    mainToolbarController.editorModeListeners.addListener(eventsToolsController);
     projectController.addOnMapChangeListener(terrainToolsController);
-    projectController.addOnMapChangeListener(inspectorController);
     projectController.addOnMapChangeListener(mainMenu);
     projectController.addOnMapChangeListener(mainToolbarController);
 
@@ -348,9 +346,9 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     splitPane2.setRightComponent(scrollPane3);
     tree2 = new JTree();
     scrollPane3.setViewportView(tree2);
-    inspectorContainerPanel = new JPanel();
-    inspectorContainerPanel.setLayout(new BorderLayout(0, 0));
-    splitPane1.setRightComponent(inspectorContainerPanel);
+    objectInspectorContainerPanel = new JPanel();
+    objectInspectorContainerPanel.setLayout(new BorderLayout(0, 0));
+    splitPane1.setRightComponent(objectInspectorContainerPanel);
     openGlContainer = new JPanel();
     openGlContainer.setLayout(new BorderLayout(0, 0));
     openGlContainer.setBackground(new Color(-16711423));

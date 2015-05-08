@@ -157,7 +157,7 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
     singleBlockSelection.setVoxelSize(map.voxelSize);
     rectSelection.setVoxelSize(map.voxelSize);
     selectionSystem = screen.selectionSystem;
-    selectionSystem.addListener(this);
+
   }
 
   @Override
@@ -229,11 +229,15 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
   @Override
   public void onEditorModeChange(MainToolbarController.EditorMode editorMode) {
     if (editorMode == MainToolbarController.EditorMode.Terrain) {
+      selectionSystem.addListener(this);
       if (currentSelection == null) {
         setCurrentSelection(singleBlockSelection);
       } else {
         setCurrentSelection(currentSelection);
       }
+    } else {
+      if (selectionSystem != null)
+        selectionSystem.removeListener(this);
     }
 
 

@@ -2,6 +2,7 @@ package macbury.forge.editor.controllers.tools.inspector;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import macbury.forge.editor.controllers.MainToolbarController;
 import macbury.forge.editor.controllers.ProjectController;
 import macbury.forge.editor.controllers.tools.inspector.properties.DefaultBeanBinder;
 import macbury.forge.editor.controllers.tools.inspector.properties.EditorScreenBeanInfo;
@@ -15,11 +16,12 @@ import macbury.forge.editor.views.MapPropertySheet;
 
 import javax.swing.*;
 import java.beans.PropertyChangeEvent;
+import java.util.Objects;
 
 /**
  * Created by macbury on 15.03.15.
  */
-public class InspectorController implements OnMapChangeListener, DefaultBeanBinder.PropertyChangeListener, ChangeManagerListener {
+public class InspectorController implements OnMapChangeListener, DefaultBeanBinder.PropertyChangeListener, ChangeManagerListener, MainToolbarController.EditorModeListener {
   private static final String TAG = "InspectorController";
   private final MapPropertySheet inspectorSheetPanel;
   private LevelEditorScreen screen;
@@ -62,28 +64,6 @@ public class InspectorController implements OnMapChangeListener, DefaultBeanBind
     inspectorSheetPanel.updateUI();
   }
 
- /* @Override
-  public DefaultBeanBinder getBeanBinderForInspector(MapPropertySheet sheet) {
-    throw new GdxRuntimeException("This should not happen!");
-  }
-
-  @Override
-  public void onToolPaneUnSelected(SelectionSystem system) {
-    throw new GdxRuntimeException("This should not happen!");
-  }
-
-  @Override
-  public void onToolPaneSelected(ToolsController.ToolControllerListener selectedToolController, SelectionSystem system) {
-    unbind();
-    if (screen != null) {
-      binder = selectedToolController.getBeanBinderForInspector(inspectorSheetPanel);
-      //this.binder   = new DefaultBeanBinder(new EditorScreenBeanInfo.EditorScreenBean(screen), inspectorSheetPanel, new EditorScreenBeanInfo());
-      if (binder != null) {
-        inspectorSheetPanel.updateUI();
-        startListeningForPropertyChanges();
-      }
-    }
-  }*/
 
   private void unbind() {
     if (binder != null) {
@@ -98,8 +78,8 @@ public class InspectorController implements OnMapChangeListener, DefaultBeanBind
   public void onPropertyChange(DefaultBeanBinder binder, PropertyChangeEvent event, Object object) {
     Gdx.app.log(TAG, "On property change event");
     stopListeningForPropertyChanges();
-    PropertyChangeable propertyChangeable = new PropertyChangeable(object, event, this);
-    changeManager.addChangeable(propertyChangeable).apply();
+    //PropertyChangeable propertyChangeable = new PropertyChangeable(object, event, this);
+   // changeManager.addChangeable(propertyChangeable).apply();
     startListeningForPropertyChanges();
   }
 
@@ -109,5 +89,20 @@ public class InspectorController implements OnMapChangeListener, DefaultBeanBind
 
   public void startListeningForPropertyChanges() {
     this.binder.setListener(this);
+  }
+
+  @Override
+  public void onEditorModeChange(MainToolbarController.EditorMode editorMode) {
+    /*unbind();
+    if (editorMode == MainToolbarController.EditorMode.Objects) {
+      if (screen != null) {
+        binder = selectedToolController.getBeanBinderForInspector(inspectorSheetPanel);
+        //this.binder   = new DefaultBeanBinder(new EditorScreenBeanInfo.EditorScreenBean(screen), inspectorSheetPanel, new EditorScreenBeanInfo());
+        if (binder != null) {
+          inspectorSheetPanel.updateUI();
+          startListeningForPropertyChanges();
+        }
+      }
+    }*/
   }
 }

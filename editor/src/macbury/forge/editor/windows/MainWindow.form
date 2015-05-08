@@ -320,7 +320,7 @@
                   </tabbedpane>
                 </children>
               </grid>
-              <grid id="207bd" binding="inspectorContainerPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
+              <grid id="207bd" binding="objectInspectorContainerPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
                 <constraints>
                   <splitpane position="right"/>
                 </constraints>

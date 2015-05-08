@@ -15,7 +15,7 @@ public class RunningGameConsoleFrame extends JDialog {
   private JButton buttonOK;
   private JButton buttonCancel;
   private JTextPane logTextPane;
-  private JScrollPane scrollPane;
+  private JScrollPane logsScrollPane;
 
   public RunningGameConsoleFrame() {
     setContentPane(contentPane);
@@ -63,7 +63,7 @@ public class RunningGameConsoleFrame extends JDialog {
       e.printStackTrace();
     }
 
-    JScrollBar vertical = scrollPane.getVerticalScrollBar();
+    JScrollBar vertical = logsScrollPane.getVerticalScrollBar();
     vertical.setValue(vertical.getMaximum());
   }
 
@@ -98,16 +98,16 @@ public class RunningGameConsoleFrame extends JDialog {
     final JPanel panel3 = new JPanel();
     panel3.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
     contentPane.add(panel3, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-    scrollPane = new JScrollPane();
-    scrollPane.setVerticalScrollBarPolicy(22);
-    panel3.add(scrollPane, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+    logsScrollPane = new JScrollPane();
+    logsScrollPane.setVerticalScrollBarPolicy(22);
+    panel3.add(logsScrollPane, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
     logTextPane = new JTextPane();
     logTextPane.setBackground(new Color(-16777216));
     logTextPane.setEditable(false);
     logTextPane.setFont(new Font("Ubuntu Mono", logTextPane.getFont().getStyle(), 14));
     logTextPane.setForeground(new Color(-7237231));
     logTextPane.setText("test");
-    scrollPane.setViewportView(logTextPane);
+    logsScrollPane.setViewportView(logTextPane);
   }
 
   /**
