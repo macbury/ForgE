@@ -1,7 +1,6 @@
 package macbury.forge.editor.controllers.tools.terrain;
 
 import com.badlogic.gdx.Input;
-import macbury.forge.blocks.Block;
 import icons.Utils;
 import macbury.forge.editor.controllers.BlocksController;
 import macbury.forge.editor.controllers.MainToolbarController;
@@ -15,7 +14,6 @@ import macbury.forge.editor.screens.LevelEditorScreen;
 import macbury.forge.editor.selection.*;
 import macbury.forge.editor.systems.SelectionSystem;
 import macbury.forge.editor.undo_redo.ChangeManager;
-import macbury.forge.editor.undo_redo.Changeable;
 import macbury.forge.editor.undo_redo.actions.*;
 import macbury.forge.editor.views.MapPropertySheet;
 import macbury.forge.voxel.ChunkMap;
@@ -45,6 +43,7 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
   private final JComboBox brushTypeComboBox;
   private final BrushTypeModel brushTypeModel;
   private final BrushSelection brushSelection;
+  private final MapPropertySheet inspectorSheetPanel;
   private AbstractSelection currentSelection;
   private final JToggleButton drawRectButton;
   private SelectionSystem selectionSystem;
@@ -52,8 +51,10 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
   private ChunkMap map;
   private LevelEditorScreen screen;
   private JobManager jobs;
+  private DefaultBeanBinder binder;
+  private CursorChangeable currentTask;
 
-  public TerrainToolsController(JToolBar terrainToolsToolbar, BlocksController blocksController, GdxSwingInputProcessor inputProcessor) {
+  public TerrainToolsController(JToolBar terrainToolsToolbar, BlocksController blocksController, GdxSwingInputProcessor inputProcessor, MapPropertySheet terrainInspectorPanel) {
     toolbar                   = terrainToolsToolbar;
     this.blocksController     = blocksController;
     this.brushSizeSpinner     = new JSpinner();
@@ -76,7 +77,7 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
     //buildToogleButton("draw_elipsis", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.Q);
     ereaserButton = buildToogleButton("draw_eraser", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.E);
 
-    toolbar.addSeparator();
+    //toolbar.addSeparator();
     SpinnerNumberModel spinnerNumberModel = new SpinnerNumberModel();
     spinnerNumberModel.setMinimum(1);
     spinnerNumberModel.setValue(1);
@@ -89,15 +90,17 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
     brushTypeComboBox.setSize(200, brushTypeComboBox.getPreferredSize().height);
     brushTypeComboBox.setModel(brushTypeModel);
     brushTypeComboBox.setRenderer(new BrushListRenderer());
-    toolbar.add(brushTypeComboBox);
-    toolbar.add(brushSizeSpinner);
+    //toolbar.add(brushTypeComboBox);
+    //toolbar.add(brushSizeSpinner);
+
+    this.inspectorSheetPanel = terrainInspectorPanel;
     updateUI();
   }
 
   private void updateUI() {
     boolean interfaceEnabled = screen != null;
     boolean showAppend       = !ereaserButton.isSelected();
-
+    inspectorSheetPanel.updateUI();
     toolbar.setEnabled(interfaceEnabled);
     drawPencilButton.setEnabled(interfaceEnabled);
     drawRectButton.setEnabled(interfaceEnabled);
@@ -131,6 +134,7 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
 
   @Override
   public void onCloseMap(ProjectController controller, LevelEditorScreen screen) {
+    unbindInspector();
     if (selectionSystem != null) {
       selectionSystem.removeListener(this);
     }
@@ -200,29 +204,46 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
 
   @Override
   public void onSelectionEnd(AbstractSelection selection) {
-    createTaskForSelection(selection);
+    currentTask.setSelection(selection);
+    currentTask.setBlockPrimary(blocksController.getCurrentPrimaryBlock());
+    currentTask.setBlockSecondary(blocksController.getCurrentSecondaryBlock());
+    changeManager.addChangeable(currentTask).apply();
+
+    putNewTask(selection);
   }
 
-  private void createTaskForSelection(AbstractSelection selection) {
-    Changeable task = null;
-    Block blockToDraw = selection.getSelectedMouseButton() == Input.Buttons.LEFT ? blocksController.getCurrentPrimaryBlock() : blocksController.getCurrentSecondaryBlock();
-    if (selection == singleBlockSelection) {
-      task = new ApplyBlock(selection, map, blockToDraw);
-    } else if (selection == rectSelection) {
-      task = new ApplyRangeBlock(selection, map, blockToDraw);
-    } else if (selection == ereaseSelection) {
-      task = new EraserBlock(selection, map);
-    } else if (selection == treeSelection) {
-      task = new TreeBuilderChangeable(selection, map, blocksController.getCurrentPrimaryBlock(), blocksController.getCurrentSecondaryBlock());
-    } else if (selection == brushSelection) {
-      task = new ApplyCustomBrushChangeable(selection, map,(Integer)brushSizeSpinner.getValue(), (ApplyCustomBrushChangeable.BrushType)brushTypeModel.getSelectedItem(), blockToDraw);
+  private void putNewTask(AbstractSelection selection) {
+    unbindInspector();
+    currentTask = createTaskForSelection(selection);
+    if (TaskPropertySheetProvider.class.isInstance(currentTask)) {
+      TaskPropertySheetProvider provider = (TaskPropertySheetProvider)currentTask;
+      binder = provider.getPropertySheetBeanBinder(inspectorSheetPanel);
     }
-    changeManager.addChangeable(task).apply();
+  }
+
+  private CursorChangeable createTaskForSelection(AbstractSelection selection) {
+    CursorChangeable task = null;
+    if (selection == singleBlockSelection) {
+      task = new ApplyBlock(map);
+    } else if (selection == rectSelection) {
+      task = new ApplyRangeBlock(map);
+    } else if (selection == ereaseSelection) {
+      task = new EraserBlock(map);
+    } else if (selection == treeSelection) {
+      task = new TreeBuilderChangeable(map);
+    } else if (selection == brushSelection) {
+      task = new ApplyCustomBrushChangeable(map,(Integer)brushSizeSpinner.getValue(), (ApplyCustomBrushChangeable.BrushType)brushTypeModel.getSelectedItem());
+    }
+    //
+    return task;
   }
 
   private void setCurrentSelection(AbstractSelection currentSelection) {
     this.currentSelection = currentSelection;
     this.selectionSystem.setSelection(currentSelection);
+
+    putNewTask(currentSelection);
+
     updateUI();
   }
 
@@ -236,11 +257,19 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
         setCurrentSelection(currentSelection);
       }
     } else {
+      unbindInspector();
       if (selectionSystem != null)
         selectionSystem.removeListener(this);
     }
 
+  }
 
+  private void unbindInspector() {
+    if (binder != null) {
+      binder.unbind();
+    }
+    binder = null;
+    inspectorSheetPanel.updateUI();
   }
 
 }

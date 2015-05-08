@@ -7,8 +7,15 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import com.l2fprod.common.beans.BaseBeanInfo;
+import com.l2fprod.common.beans.ExtendedPropertyDescriptor;
+import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
 import macbury.forge.blocks.Block;
+import macbury.forge.editor.controllers.tools.inspector.properties.DefaultBeanBinder;
+import macbury.forge.editor.controllers.tools.inspector.properties.EditorScreenBeanInfo;
 import macbury.forge.editor.selection.AbstractSelection;
+import macbury.forge.editor.selection.TaskPropertySheetProvider;
+import macbury.forge.editor.views.MapPropertySheet;
 import macbury.forge.utils.Vector3i;
 import macbury.forge.voxel.Voxel;
 import macbury.forge.voxel.VoxelMap;
@@ -20,20 +27,20 @@ import java.util.HashMap;
 /**
  * Created by macbury on 17.03.15.
  */
-public class ApplyCustomBrushChangeable extends TerrainCursorChangeable {
+public class ApplyCustomBrushChangeable extends TerrainCursorChangeable implements TaskPropertySheetProvider {
   private static final String TAG = "ApplyCustomBrushChangeable";
   private final Pixmap pixmap;
-  private final Block blockToDraw;
+  private final int scale;
 
   private Array<BlockSave> oldBlocks;
   private Vector3i start  = new Vector3i();
   private Vector3i end    = new Vector3i();
   private Vector3i cursor = new Vector3i();
 
-  public ApplyCustomBrushChangeable(AbstractSelection selection, VoxelMap map, int scale, BrushType brushType, Block blockToDraw) {
-    super(selection, map);
+  public ApplyCustomBrushChangeable(VoxelMap map, int scale, BrushType brushType) {
+    super(map);
+    this.scale       = scale;
     this.pixmap      = brushType.getForScale(scale);
-    this.blockToDraw = blockToDraw;
     this.oldBlocks   = new Array<BlockSave>();
   }
 
@@ -85,9 +92,32 @@ public class ApplyCustomBrushChangeable extends TerrainCursorChangeable {
             }
 
           }
-          putBlock(blockToDraw, cursor);
+          putBlock(getBlockBySelectionMouse(), cursor);
         }
       }
+    }
+  }
+
+  @Override
+  public DefaultBeanBinder getPropertySheetBeanBinder(MapPropertySheet mapPropertySheet) {
+    return new DefaultBeanBinder(this, mapPropertySheet, new BrushBeanInfo());
+  }
+
+  public int getScale() {
+    return scale;
+  }
+
+  public class BrushBeanInfo extends BaseBeanInfo {
+
+    private static final String BRUSH_CATEGORY = "Brush settings";
+
+    public BrushBeanInfo() {
+      super(ApplyCustomBrushChangeable.class);
+
+      ExtendedPropertyDescriptor scaleProperty = addProperty("scale");
+      scaleProperty.setDisplayName("Brush size");
+      scaleProperty.setCategory(BRUSH_CATEGORY);
+      scaleProperty.setPropertyEditorClass(ComboBoxPropertyEditor.class);
     }
   }
 

@@ -4,6 +4,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import macbury.forge.blocks.Block;
+import macbury.forge.editor.controllers.tools.inspector.properties.DefaultBeanBinder;
+import macbury.forge.editor.views.MapPropertySheet;
 import macbury.forge.utils.Vector3i;
 import macbury.forge.utils.VoxelCursor;
 

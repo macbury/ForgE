@@ -9,8 +9,7 @@ import macbury.forge.voxel.VoxelMap;
 public abstract class TerrainCursorChangeable extends CursorChangeable {
   protected final VoxelMap map;
 
-  public TerrainCursorChangeable(AbstractSelection selection, VoxelMap map) {
-    super(selection);
+  public TerrainCursorChangeable(VoxelMap map) {
     this.map = map;
   }
 }

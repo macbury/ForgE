@@ -55,7 +55,7 @@ public class EventsController implements SelectionInterface, ActionListener, OnM
     this.eventSelection = new EventSelection();
 
     this.inspectorSheetPanel = new MapPropertySheet();
-    mainWindow.objectInspectorContainerPanel.add(inspectorSheetPanel);
+    mainWindow.objectInspectorContainerPanel.add(inspectorSheetPanel, BorderLayout.CENTER);
   }
 
   private void unbindInspector() {

@@ -15,7 +15,6 @@ import java.awt.*;
  * Created by macbury on 07.05.15.
  */
 public class DockFramesController implements MainToolbarController.EditorModeListener {
-  private static final double RIGHT_PANELS_WIDTH = 0.25;
   private final CControl control;
   public final RootMenuPiece menu;
   private final DefaultSingleCDockable mapEditorDockable;
@@ -44,10 +43,10 @@ public class DockFramesController implements MainToolbarController.EditorModeLis
     mapEditorDockable.setExternalizable(false);
 
     this.terrainToolsDockable   = createDockablePanel("Terrain", mainWindow.terrainPanel, true);
-    this.resourcesDockable      = createDockable( "Resources", Color.RED );
-    this.objectsDockable        = createDockable( "Objects", Color.RED );
+    this.resourcesDockable      = createDockablePanel("Resources", new JScrollPane(new JTree()), true);
+    this.objectsDockable        = createDockablePanel("Objects", new JScrollPane(new JTree()), true);
     this.objectInspectorDockable = createDockablePanel("Object Properties", mainWindow.objectInspectorContainerPanel, true);
-    this.terrainInspectorDockable = createDockablePanel("Terrain Properties", new JPanel(), true);
+    this.terrainInspectorDockable = createDockablePanel("Terrain Properties", mainWindow.terrainInspectorPanel, true);
     this.mapTreeDockable        = createDockablePanel("Maps", mainWindow.mapTreeScroll, true);
 
 

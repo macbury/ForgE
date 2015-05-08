@@ -18,15 +18,11 @@ import java.util.HashMap;
 public class TreeBuilderChangeable extends TerrainCursorChangeable {
   private static final float MAX_HEIGHT = 2;
   private static final double MIN_HEIHGT = 5;
-  private final Block leafesBlock;
-  private final Block woodBlock;
   private final int height;
   private Array<BlockSave> oldBlocks;
 
-  public TreeBuilderChangeable(AbstractSelection selection, VoxelMap map, Block woodBlock, Block leafesBlock) {
-    super(selection, map);
-    this.leafesBlock = leafesBlock;
-    this.woodBlock   = woodBlock;
+  public TreeBuilderChangeable(VoxelMap map) {
+    super(map);
     this.height      = (int)Math.round(MIN_HEIHGT + Math.random() * MAX_HEIGHT);
     this.oldBlocks   = new Array<BlockSave>();
   }
@@ -54,7 +50,7 @@ public class TreeBuilderChangeable extends TerrainCursorChangeable {
     Vector3i cursor = new Vector3i();
     for (int y = 0; y < height; y++) {
       cursor.set(from).add(0, y, 0);
-      putBlock(woodBlock, cursor);
+      putBlock(blockPrimary, cursor);
     }
 
     int size = (int)Math.round(1 + Math.random());
@@ -66,11 +62,11 @@ public class TreeBuilderChangeable extends TerrainCursorChangeable {
             continue;
           }
 
-          putBlock(leafesBlock, cursor.set(from).add(x + 1, y+height, z));
-          putBlock(leafesBlock, cursor.set(from).add(x - 1, y+height, z));
-          putBlock(leafesBlock, cursor.set(from).add(x, y+height, z + 1));
-          putBlock(leafesBlock, cursor.set(from).add(x, y+height, z - 1));
-          putBlock(leafesBlock, cursor.set(from).add(x, y+height+1, z));
+          putBlock(blockSecondary, cursor.set(from).add(x + 1, y+height, z));
+          putBlock(blockSecondary, cursor.set(from).add(x - 1, y+height, z));
+          putBlock(blockSecondary, cursor.set(from).add(x, y+height, z + 1));
+          putBlock(blockSecondary, cursor.set(from).add(x, y+height, z - 1));
+          putBlock(blockSecondary, cursor.set(from).add(x, y+height+1, z));
         }
       }
     }

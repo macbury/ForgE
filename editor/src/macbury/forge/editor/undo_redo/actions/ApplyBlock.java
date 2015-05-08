@@ -11,12 +11,10 @@ import macbury.forge.voxel.VoxelMap;
  */
 public class ApplyBlock extends TerrainCursorChangeable {
   private static final String TAG = "ApplyBlock";
-  private final Block block;
   private Voxel oldVoxel;
 
-  public ApplyBlock(AbstractSelection selection, VoxelMap map, Block currentBlock) {
-    super(selection, map);
-    this.block = currentBlock;
+  public ApplyBlock(VoxelMap map) {
+    super(map);
   }
 
   @Override
@@ -35,7 +33,7 @@ public class ApplyBlock extends TerrainCursorChangeable {
 
     Voxel currentVoxel   = map.findOrInitializeVoxelForPosition(from);
     if (currentVoxel != null) {
-      currentVoxel.blockId = block.id;
+      currentVoxel.blockId = getBlockBySelectionMouse().id;
       currentVoxel.alginTo = alignToSide;
       map.setVoxelForPosition(currentVoxel, from);
     }

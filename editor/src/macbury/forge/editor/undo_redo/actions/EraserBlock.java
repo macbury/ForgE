@@ -12,8 +12,8 @@ public class EraserBlock extends TerrainCursorChangeable {
   private Voxel oldVoxels[][][];
   private Vector3i tempA = new Vector3i();
 
-  public EraserBlock(AbstractSelection selection, VoxelMap map) {
-    super(selection, map);
+  public EraserBlock(VoxelMap map) {
+    super(map);
   }
 
   @Override

@@ -19,6 +19,7 @@ import macbury.forge.editor.parell.JobManager;
 import macbury.forge.editor.reloader.DirectoryWatcher;
 import macbury.forge.editor.views.ImagePanel;
 import macbury.forge.editor.views.MainMenu;
+import macbury.forge.editor.views.MapPropertySheet;
 
 import javax.swing.*;
 import java.awt.*;
@@ -70,6 +71,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
   private JTree tree2;
   public JPanel terrainPanel;
   public JScrollPane mapTreeScroll;
+  public MapPropertySheet terrainInspectorPanel;
   public JScrollPane logsScrollView;
   private JComboBox brushTypeComboBox;
   private JSpinner brushSizeSpinner;
@@ -84,6 +86,8 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     Thread.setDefaultUncaughtExceptionHandler(this);
     setContentPane(mainContentPane);
     mainContentPane.remove(mainSplitPane);
+
+    terrainInspectorPanel = new MapPropertySheet();
 
     this.dockFrameController = new DockFramesController(this);
 
@@ -111,7 +115,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     projectController = new ProjectController();
     mainMenu = new MainMenu(projectController, blocksController, dockFrameController);
     eventsToolsController = new EventsController(this);
-    terrainToolsController = new TerrainToolsController(terrainToolsToolbar, blocksController, inputProcessor);
+    terrainToolsController = new TerrainToolsController(terrainToolsToolbar, blocksController, inputProcessor, terrainInspectorPanel);
     playerController = new PlayerController(projectController, jobs);
     mainToolbarController = new MainToolbarController(projectController, mainToolbar, mainMenu, inputProcessor, playerController);
     shadersController = new ShadersController(directoryWatcher);
