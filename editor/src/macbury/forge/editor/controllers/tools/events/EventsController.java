@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input;
 import macbury.forge.ForgE;
 import macbury.forge.editor.controllers.ProjectController;
 import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
-import macbury.forge.editor.controllers.tools.ToolsController;
 import macbury.forge.editor.controllers.tools.inspector.properties.DefaultBeanBinder;
 import macbury.forge.editor.screens.LevelEditorScreen;
 import macbury.forge.editor.selection.AbstractSelection;
@@ -24,7 +23,7 @@ import java.awt.event.ActionListener;
 /**
  * Created by macbury on 25.03.15.
  */
-public class EventsController implements ToolsController.ToolControllerListener, SelectionInterface, ActionListener, OnMapChangeListener {
+public class EventsController implements SelectionInterface, ActionListener, OnMapChangeListener {
 
   private static final String TAG = "EventsController";
   private final JPopupMenu eventPopupMenu;
@@ -44,7 +43,7 @@ public class EventsController implements ToolsController.ToolControllerListener,
     eventPopupMenu.add(mntmSetStartPosition);
     this.eventSelection = new EventSelection();
   }
-
+/*
   @Override
   public DefaultBeanBinder getBeanBinderForInspector(MapPropertySheet sheet) {
     return null;
@@ -60,7 +59,7 @@ public class EventsController implements ToolsController.ToolControllerListener,
     system.addListener(this);
     system.setSelection(eventSelection);
   }
-
+*/
   @Override
   public void onSelectionStart(AbstractSelection selection) {
 

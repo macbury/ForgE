@@ -5,7 +5,6 @@ import macbury.forge.ForgE;
 import macbury.forge.ForgEBootListener;
 import macbury.forge.editor.controllers.ProjectController;
 import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
-import macbury.forge.editor.controllers.tools.ToolsController;
 import macbury.forge.editor.controllers.tools.inspector.properties.DefaultBeanBinder;
 import macbury.forge.editor.screens.LevelEditorScreen;
 import macbury.forge.editor.selection.EventSelection;
@@ -25,7 +24,7 @@ import java.awt.event.MouseListener;
 /**
  * Created by macbury on 10.03.15.
  */
-public class MapTreeController implements OnMapChangeListener, ForgEBootListener, MapNodeTreeMoveDragController.Listener, ToolsController.ToolControllerListener {
+public class MapTreeController implements OnMapChangeListener, ForgEBootListener, MapNodeTreeMoveDragController.Listener {
   private static final String TAG = "MapTreeController";
   private final JTree mapTree;
   private final ProjectController projectController;
@@ -126,19 +125,5 @@ public class MapTreeController implements OnMapChangeListener, ForgEBootListener
     projectController.moveMap(dragedNode.getPathFile(), target.getPathFile());
   }
 
-  @Override
-  public DefaultBeanBinder getBeanBinderForInspector(MapPropertySheet sheet) {
-    return null;
-  }
 
-  @Override
-  public void onToolPaneUnSelected(SelectionSystem system) {
-
-  }
-
-  @Override
-  public void onToolPaneSelected(ToolsController.ToolControllerListener selectedToolController, SelectionSystem system) {
-    this.selectionSystem = system;
-    selectionSystem.setSelection(new EventSelection());
-  }
 }

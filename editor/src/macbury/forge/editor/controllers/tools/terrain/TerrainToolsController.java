@@ -4,9 +4,9 @@ import com.badlogic.gdx.Input;
 import macbury.forge.blocks.Block;
 import icons.Utils;
 import macbury.forge.editor.controllers.BlocksController;
+import macbury.forge.editor.controllers.MainToolbarController;
 import macbury.forge.editor.controllers.ProjectController;
 import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
-import macbury.forge.editor.controllers.tools.ToolsController;
 import macbury.forge.editor.controllers.tools.inspector.properties.DefaultBeanBinder;
 import macbury.forge.editor.input.GdxSwingInputProcessor;
 import macbury.forge.editor.input.KeyShortcutMapping;
@@ -27,7 +27,7 @@ import java.awt.event.ActionListener;
 /**
  * Created by macbury on 04.11.14.
  */
-public class TerrainToolsController implements OnMapChangeListener, ActionListener, SelectionInterface, ToolsController.ToolControllerListener {
+public class TerrainToolsController implements OnMapChangeListener, ActionListener, SelectionInterface, MainToolbarController.EditorModeListener {
   private final JToolBar toolbar;
   private final ButtonGroup toolsGroup;
   private final JToggleButton drawPencilButton;
@@ -156,7 +156,8 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
 
     singleBlockSelection.setVoxelSize(map.voxelSize);
     rectSelection.setVoxelSize(map.voxelSize);
-
+    selectionSystem = screen.selectionSystem;
+    selectionSystem.addListener(this);
   }
 
   @Override
@@ -226,24 +227,16 @@ public class TerrainToolsController implements OnMapChangeListener, ActionListen
   }
 
   @Override
-  public DefaultBeanBinder getBeanBinderForInspector(MapPropertySheet sheet) {
-    return null;
-  }
-
-  @Override
-  public void onToolPaneUnSelected(SelectionSystem system) {
-    system.removeListener(this);
-  }
-
-  @Override
-  public void onToolPaneSelected(ToolsController.ToolControllerListener selectedToolController, SelectionSystem system) {
-    selectionSystem = system;
-    system.addListener(this);
-
-    if (currentSelection == null) {
-      setCurrentSelection(singleBlockSelection);
-    } else {
-      setCurrentSelection(currentSelection);
+  public void onEditorModeChange(MainToolbarController.EditorMode editorMode) {
+    if (editorMode == MainToolbarController.EditorMode.Terrain) {
+      if (currentSelection == null) {
+        setCurrentSelection(singleBlockSelection);
+      } else {
+        setCurrentSelection(currentSelection);
+      }
     }
+
+
   }
+
 }

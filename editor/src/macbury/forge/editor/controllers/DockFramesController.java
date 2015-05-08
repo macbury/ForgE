@@ -5,6 +5,7 @@ import bibliothek.gui.dock.common.menu.SingleCDockableListMenuPiece;
 import bibliothek.gui.dock.common.mode.ExtendedMode;
 import bibliothek.gui.dock.common.theme.ThemeMap;
 import bibliothek.gui.dock.facile.menu.RootMenuPiece;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
 import macbury.forge.editor.screens.LevelEditorScreen;
 import macbury.forge.editor.windows.MainWindow;
@@ -15,12 +16,14 @@ import java.awt.*;
 /**
  * Created by macbury on 07.05.15.
  */
-public class DockFramesController {
+public class DockFramesController implements MainToolbarController.EditorModeListener {
   private final CControl control;
   public final RootMenuPiece menu;
   private final DefaultSingleCDockable mapEditorDockable;
   private final DefaultSingleCDockable terrainToolsDockable;
   private final DefaultSingleCDockable inspectorDockable;
+  private final DefaultSingleCDockable resourcesDockable;
+  private final DefaultSingleCDockable objectsDockable;
 
   public DockFramesController(MainWindow mainWindow) {
     control = new CControl( mainWindow );
@@ -36,18 +39,21 @@ public class DockFramesController {
     mapEditorDockable.setExternalizable(false);
 
     this.terrainToolsDockable   = createDockablePanel("Terrain", mainWindow.terrainPanel, true);
-    terrainToolsDockable.setLocation( CLocation.base().minimalSouth() );
+
 
     DefaultSingleCDockable mapTreeDockable   = createDockablePanel("Maps", mainWindow.mapTreeScroll, true);
+    mapTreeDockable.setLocation( CLocation.base().minimalEast() );
     this.inspectorDockable = createDockablePanel("Properties", mainWindow.inspectorContainerPanel, true);
-    
+
+    this.resourcesDockable = createDockable( "Resources", Color.RED );
+    this.objectsDockable   = createDockable( "Objects", Color.RED );
     CGrid grid = new CGrid( control );
 
     grid.add( 11, 1, 1, 2, mapTreeDockable);
     grid.add( 11, 0, 1, 2, terrainToolsDockable );
 
-    grid.add( 0, 0, 2, 1, createDockable( "Resources", Color.RED ) );
-    grid.add( 0, 1, 2, 1, createDockable( "Objects", Color.RED ) );
+    grid.add( 0, 0, 2, 1, resourcesDockable );
+    grid.add( 0, 1, 2, 1, objectsDockable );
     grid.add( 0, 2, 2, 1, inspectorDockable);
 
     grid.add( 2, 0, 9, 3, mapEditorDockable);
@@ -72,4 +78,30 @@ public class DockFramesController {
     return dockable;
   }
 
+  @Override
+  public void onEditorModeChange(MainToolbarController.EditorMode editorMode) {
+    boolean objectsDock = false;
+    boolean terrainDock = false;
+
+    switch (editorMode) {
+      case Terrain:
+        objectsDock = false;
+        terrainDock = true;
+        break;
+      case Objects:
+        objectsDock = true;
+        terrainDock = false;
+        break;
+      case None:
+        objectsDock = false;
+        terrainDock = false;
+        break;
+      default: throw new GdxRuntimeException("No support for: " + editorMode);
+    }
+
+    terrainToolsDockable.setVisible(terrainDock);
+    inspectorDockable.setVisible(objectsDock);
+    objectsDockable.setVisible(objectsDock);
+    resourcesDockable.setVisible(objectsDock);
+  }
 }

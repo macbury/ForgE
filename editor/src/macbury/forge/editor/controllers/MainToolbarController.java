@@ -2,6 +2,7 @@ package macbury.forge.editor.controllers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import icons.Utils;
 import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
 import macbury.forge.editor.input.GdxSwingInputProcessor;
@@ -9,6 +10,7 @@ import macbury.forge.editor.input.KeyShortcutMapping;
 import macbury.forge.editor.screens.LevelEditorScreen;
 import macbury.forge.editor.undo_redo.ChangeManager;
 import macbury.forge.editor.undo_redo.ChangeManagerListener;
+import macbury.forge.editor.utils.InterfaceTrigger;
 import macbury.forge.editor.views.MainMenu;
 import macbury.forge.editor.views.MoreToolbarButton;
 
@@ -35,6 +37,7 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
   private final JToggleButton terrainEditButton;
   private final JToggleButton entitiesEditButton;
   private LevelEditorScreen screen;
+  public final InterfaceTrigger<EditorModeListener> editorModeListeners = new InterfaceTrigger<EditorModeListener>();
 
   public MainToolbarController(ProjectController projectController, JToolBar mainToolbar, MainMenu mainMenu, GdxSwingInputProcessor inputProcessor, PlayerController playerController) {
     this.editorModeButtonGroup = new ButtonGroup();
@@ -75,6 +78,13 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
 
 
     updateRedoUndoButtons();
+
+    editorModeListeners.trigger(new InterfaceTrigger.Trigger<EditorModeListener>() {
+      @Override
+      public void onListenerTrigger(EditorModeListener listener) {
+        listener.onEditorModeChange(EditorMode.None);
+      }
+    });
   }
 
   private JToggleButton buildToogleButton(String iconName) {
@@ -83,6 +93,7 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
     button.setHorizontalTextPosition(SwingConstants.LEADING);
     button.setIcon(Utils.getIcon(iconName));
     button.setEnabled(false);
+    button.addActionListener(this);
     return button;
   }
 
@@ -99,11 +110,42 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
   @Override
   public void onCloseMap(ProjectController controller, LevelEditorScreen screen) {
     setScreen(null);
+    terrainEditButton.setEnabled(false);
+    entitiesEditButton.setEnabled(false);
+
+    editorModeListeners.trigger(new InterfaceTrigger.Trigger<EditorModeListener>() {
+      @Override
+      public void onListenerTrigger(EditorModeListener listener) {
+        listener.onEditorModeChange(EditorMode.None);
+      }
+    });
   }
 
   @Override
   public void onNewMap(ProjectController controller, LevelEditorScreen screen) {
     setScreen(screen);
+    terrainEditButton.setEnabled(true);
+    entitiesEditButton.setEnabled(true);
+    selectEditorMode(EditorMode.Terrain);
+  }
+
+  private void selectEditorMode(final EditorMode mode) {
+    switch (mode) {
+      case Terrain:
+        terrainEditButton.setSelected(true);
+        break;
+      case Objects:
+        entitiesEditButton.setSelected(true);
+        break;
+      default: throw new GdxRuntimeException("No support for mode: " +mode);
+    }
+
+    editorModeListeners.trigger(new InterfaceTrigger.Trigger<EditorModeListener>() {
+      @Override
+      public void onListenerTrigger(EditorModeListener listener) {
+        listener.onEditorModeChange(mode);
+      }
+    });
   }
 
   @Override
@@ -144,9 +186,7 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
     }
     updateRedoUndoButtons();
 
-    boolean visible = screen != null;
-    terrainEditButton.setEnabled(visible);
-    entitiesEditButton.setEnabled(visible);
+
   }
 
   @Override
@@ -166,6 +206,14 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
     if (e.getSource() == playMapButton) {
 
       playerController.runGame();
+    }
+
+    if (e.getSource() == terrainEditButton) {
+      selectEditorMode(EditorMode.Terrain);
+    }
+
+    if (e.getSource() == entitiesEditButton) {
+      selectEditorMode(EditorMode.Objects);
     }
   }
 
@@ -189,5 +237,13 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
     } else if (redoMapping == shortcutMapping) {
       redo();
     }
+  }
+
+  public enum EditorMode {
+    Terrain, Objects, None
+  }
+
+  public interface EditorModeListener {
+    public void onEditorModeChange(EditorMode editorMode);
   }
 }

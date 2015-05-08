@@ -13,7 +13,6 @@ import macbury.forge.ForgEBootListener;
 import macbury.forge.editor.controllers.*;
 import macbury.forge.editor.controllers.tools.inspector.InspectorController;
 import macbury.forge.editor.controllers.maps.MapTreeController;
-import macbury.forge.editor.controllers.tools.ToolsController;
 import macbury.forge.editor.controllers.tools.events.EventsController;
 import macbury.forge.editor.controllers.tools.terrain.TerrainToolsController;
 import macbury.forge.editor.input.GdxSwingInputProcessor;
@@ -38,7 +37,6 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
   private final LwjglAWTInput input;
   private final MapTreeController mapTreeController;
   private final InspectorController inspectorController;
-  private final ToolsController toolsController;
   private final EventsController eventsToolsController;
   public static MainWindow current;
   private final PlayerController playerController;
@@ -109,7 +107,6 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
 
     engine = new ForgE(config);
 
-    toolsController = new ToolsController(toolsPane);
     blocksController = new BlocksController(blockList, directoryWatcher, jobs, (ImagePanel) panelPrimaryBlock, (ImagePanel) panelSecondaryBlock);
     this.progressTaskDialog = new ProgressTaskDialog();
     projectController = new ProjectController();
@@ -139,18 +136,16 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
 
     projectController.setStatusLabel(statusFpsLabel, statusMemoryLabel, statusRenderablesLabel, mapCursorPositionLabel, statusTriangleCountLabel);
 
+    mainToolbarController.editorModeListeners.addListener(terrainToolsController);
+    mainToolbarController.editorModeListeners.addListener(dockFrameController);
+    projectController.addOnMapChangeListener(terrainToolsController);
     projectController.addOnMapChangeListener(inspectorController);
     projectController.addOnMapChangeListener(mainMenu);
     projectController.addOnMapChangeListener(mainToolbarController);
-    projectController.addOnMapChangeListener(terrainToolsController);
+
     projectController.addOnMapChangeListener(blocksController);
     projectController.addOnMapChangeListener(mapTreeController);
-    projectController.addOnMapChangeListener(toolsController);
     projectController.addOnMapChangeListener(eventsToolsController);
-    toolsController.register(mapTreeController, 0);
-    toolsController.register(terrainToolsController, 1);
-    toolsController.register(eventsToolsController, 2);
-    toolsController.addCallback(inspectorController);
     mainContentPane.setVisible(true);
     invalidate();
     addWindowFocusListener(this);

@@ -3,7 +3,6 @@ package macbury.forge.editor.controllers.tools.inspector;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import macbury.forge.editor.controllers.ProjectController;
-import macbury.forge.editor.controllers.tools.ToolsController;
 import macbury.forge.editor.controllers.tools.inspector.properties.DefaultBeanBinder;
 import macbury.forge.editor.controllers.tools.inspector.properties.EditorScreenBeanInfo;
 import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
@@ -20,7 +19,7 @@ import java.beans.PropertyChangeEvent;
 /**
  * Created by macbury on 15.03.15.
  */
-public class InspectorController implements OnMapChangeListener, DefaultBeanBinder.PropertyChangeListener, ChangeManagerListener, ToolsController.ToolControllerListener {
+public class InspectorController implements OnMapChangeListener, DefaultBeanBinder.PropertyChangeListener, ChangeManagerListener {
   private static final String TAG = "InspectorController";
   private final MapPropertySheet inspectorSheetPanel;
   private LevelEditorScreen screen;
@@ -63,7 +62,7 @@ public class InspectorController implements OnMapChangeListener, DefaultBeanBind
     inspectorSheetPanel.updateUI();
   }
 
-  @Override
+ /* @Override
   public DefaultBeanBinder getBeanBinderForInspector(MapPropertySheet sheet) {
     throw new GdxRuntimeException("This should not happen!");
   }
@@ -84,7 +83,7 @@ public class InspectorController implements OnMapChangeListener, DefaultBeanBind
         startListeningForPropertyChanges();
       }
     }
-  }
+  }*/
 
   private void unbind() {
     if (binder != null) {
