@@ -35,6 +35,7 @@ public class DockFramesController implements MainToolbarController.EditorModeLis
     mapEditorDockable.setSticky(false);
     mapEditorDockable.setCloseable(false);
     mapEditorDockable.setMaximizable(false);
+    mapEditorDockable.setStackable(false);
     mapEditorDockable.setMinimizable(false);
     mapEditorDockable.setExternalizable(false);
 
