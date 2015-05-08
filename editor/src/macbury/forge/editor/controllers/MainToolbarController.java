@@ -32,6 +32,8 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
   private final JButton saveMapButton;
   private final JButton playMapButton;
   private final PlayerController playerController;
+  private final JToggleButton terrainEditButton;
+  private final JToggleButton entitiesEditButton;
   private LevelEditorScreen screen;
 
   public MainToolbarController(ProjectController projectController, JToolBar mainToolbar, MainMenu mainMenu, GdxSwingInputProcessor inputProcessor, PlayerController playerController) {
@@ -46,11 +48,18 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
 
     this.saveMapButton           = buildButton("save");
     this.playMapButton           = buildButton("play");
+
+    this.terrainEditButton       = buildToogleButton("terrain");
+    this.entitiesEditButton      = buildToogleButton("entities");
     undoMapping = inputProcessor.registerMapping(Input.Keys.CONTROL_LEFT, Input.Keys.Z, this);
     redoMapping = inputProcessor.registerMapping(Input.Keys.CONTROL_LEFT, Input.Keys.Y, this);
 
     undoMapping.addListener(this);
     redoMapping.addListener(this);
+
+    ButtonGroup editButtonsGroup = new ButtonGroup();
+    editButtonsGroup.add(terrainEditButton);
+    editButtonsGroup.add(entitiesEditButton);
 
     mainToolbar.add(moreButton);
     mainToolbar.addSeparator();
@@ -58,8 +67,12 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
     mainToolbar.addSeparator();
     mainToolbar.add(editorUndoButton);
     mainToolbar.add(editorRedoButton);
+    mainToolbar.addSeparator();
+    mainToolbar.add(terrainEditButton);
+    mainToolbar.add(entitiesEditButton);
     mainToolbar.add(Box.createHorizontalGlue());
     mainToolbar.add(playMapButton);
+
 
     updateRedoUndoButtons();
   }
@@ -69,6 +82,7 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
     button.setFocusable(false);
     button.setHorizontalTextPosition(SwingConstants.LEADING);
     button.setIcon(Utils.getIcon(iconName));
+    button.setEnabled(false);
     return button;
   }
 
@@ -129,6 +143,10 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
       screen.changeManager.addListener(this);
     }
     updateRedoUndoButtons();
+
+    boolean visible = screen != null;
+    terrainEditButton.setEnabled(visible);
+    entitiesEditButton.setEnabled(visible);
   }
 
   @Override

@@ -41,16 +41,18 @@ public class CullingSystem extends IteratingSystem {
     super.update(deltaTime);
     octreeVisibleObjects.clear();
     camera.update();
-    //camera.extendFov();
-    frustrumOctreeQuery.setFrustum(camera.normalOrDebugFrustrum());
-    rootNode.retrieve(octreeVisibleObjects, frustrumOctreeQuery);
+    camera.extendFov(); {
+      frustrumOctreeQuery.setFrustum(camera.normalOrDebugFrustrum());
+      rootNode.retrieve(octreeVisibleObjects, frustrumOctreeQuery);
 
-    for (int i = 0; i < octreeVisibleObjects.size; i++) {
-      PositionComponent position = (PositionComponent) octreeVisibleObjects.get(i);
-      position.visible  = true;
-    }
+      for (int i = 0; i < octreeVisibleObjects.size; i++) {
+        PositionComponent position = (PositionComponent) octreeVisibleObjects.get(i);
+        position.visible  = true;
+      }
 
-    //camera.restoreFov();
+    } camera.restoreFov();
+
+    //
   }
 
   @Override

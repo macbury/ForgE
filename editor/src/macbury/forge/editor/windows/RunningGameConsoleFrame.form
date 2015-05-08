@@ -56,7 +56,7 @@
             <properties>
               <verticalScrollBarPolicy value="22"/>
             </properties>
-            <border type="bevel-lowered"/>
+            <border type="none"/>
             <children>
               <component id="131da" class="javax.swing.JTextPane" binding="logTextPane">
                 <constraints/>

@@ -3,6 +3,7 @@ package macbury.forge.editor.views;
 import macbury.forge.Config;
 import macbury.forge.ForgE;
 import macbury.forge.editor.controllers.BlocksController;
+import macbury.forge.editor.controllers.DockFramesController;
 import macbury.forge.editor.controllers.ProjectController;
 import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
 import macbury.forge.editor.screens.LevelEditorScreen;
@@ -27,7 +28,7 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
   private JRadioButtonMenuItem debugNormalsItem;
   private JRadioButtonMenuItem debugLightingItem;
 
-  public MainMenu(ProjectController projectController, BlocksController blocksController) {
+  public MainMenu(ProjectController projectController, BlocksController blocksController, DockFramesController dockFrameController) {
     super();
 
     this.controller = projectController;
@@ -37,6 +38,8 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
     createDebugWindow();
     addSeparator();
     createPiplineMenu();
+    addSeparator();
+    add(dockFrameController.menu.getMenu());
     //add(Box.createRigidArea(new Dimension(320,28)));
   }
 

@@ -160,7 +160,7 @@
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <scrollpane id="78059">
+                      <scrollpane id="78059" binding="mapTreeScroll">
                         <constraints>
                           <tabbedpane title="" icon="icons/node_root.png"/>
                         </constraints>
@@ -179,7 +179,7 @@
                           </component>
                         </children>
                       </scrollpane>
-                      <grid id="c58e8" layout-manager="BorderLayout" hgap="0" vgap="0">
+                      <grid id="c58e8" binding="terrainPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
                         <constraints>
                           <tabbedpane title="" icon="icons/soil_layers.png">
                             <tooltip value="Terrain"/>

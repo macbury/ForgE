@@ -101,7 +101,6 @@ public class RunningGameConsoleFrame extends JDialog {
     scrollPane = new JScrollPane();
     scrollPane.setVerticalScrollBarPolicy(22);
     panel3.add(scrollPane, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
-    scrollPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(), null));
     logTextPane = new JTextPane();
     logTextPane.setBackground(new Color(-16777216));
     logTextPane.setEditable(false);

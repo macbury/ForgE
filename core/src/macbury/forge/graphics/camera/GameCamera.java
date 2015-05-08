@@ -12,7 +12,7 @@ import macbury.forge.graphics.frustrum.DebugFrustrum;
  */
 public class GameCamera extends PerspectiveCamera {
   private static final float BASE_FOV = 67;
-  private static final float EXTEND_FOV_BY = 10;
+  private static final float EXTEND_FOV_BY = 15;
   private final Vector3 debugDirection;
   private final Vector3 debugPosition;
   private DebugFrustrum debugFrustrum;
