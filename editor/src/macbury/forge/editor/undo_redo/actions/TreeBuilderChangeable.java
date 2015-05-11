@@ -16,14 +16,16 @@ import java.util.HashMap;
  * Created by macbury on 16.03.15.
  */
 public class TreeBuilderChangeable extends TerrainCursorChangeable {
-  private static final float MAX_HEIGHT = 2;
-  private static final double MIN_HEIHGT = 5;
+  public static final int MAX_HEIGHT = 10;
+  public static final int MIN_HEIGHT = 2;
   private final int height;
+  private final int radius;
   private Array<BlockSave> oldBlocks;
 
-  public TreeBuilderChangeable(VoxelMap map) {
+  public TreeBuilderChangeable(VoxelMap map, int height, int radius) {
     super(map);
-    this.height      = (int)Math.round(MIN_HEIHGT + Math.random() * MAX_HEIGHT);
+    this.radius      = radius;
+    this.height      = height;
     this.oldBlocks   = new Array<BlockSave>();
   }
 
@@ -53,7 +55,7 @@ public class TreeBuilderChangeable extends TerrainCursorChangeable {
       putBlock(blockPrimary, cursor);
     }
 
-    int size = (int)Math.round(1 + Math.random());
+    int size = radius;
 
     for (int x = -size; x <= size; x++) {
       for (int y = -size; y <= size; y++) {
