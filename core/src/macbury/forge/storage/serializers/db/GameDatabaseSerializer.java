@@ -5,7 +5,7 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import macbury.forge.db.GameDatabase;
-import macbury.forge.db.models.PlayerStartPosition;
+import macbury.forge.db.models.Teleport;
 
 /**
  * Created by macbury on 10.11.14.
@@ -17,7 +17,7 @@ public class GameDatabaseSerializer extends Serializer<GameDatabase> {
     output.writeInt(gameDatabase.currentyUID);
     output.writeString(gameDatabase.title);
     output.writeLong(gameDatabase.build++);
-    kryo.writeObjectOrNull(output, gameDatabase.startPosition, PlayerStartPosition.class);
+    kryo.writeObjectOrNull(output, gameDatabase.startPosition, Teleport.class);
     output.writeInt(gameDatabase.lastOpenedMapId);
   }
 
@@ -28,7 +28,7 @@ public class GameDatabaseSerializer extends Serializer<GameDatabase> {
     db.currentyUID   = input.readInt();
     db.title         = input.readString();
     db.build         = input.readLong();
-    db.startPosition = kryo.readObjectOrNull(input, PlayerStartPosition.class);
+    db.startPosition = kryo.readObjectOrNull(input, Teleport.class);
     db.lastOpenedMapId = input.readInt();
     return db;
   }

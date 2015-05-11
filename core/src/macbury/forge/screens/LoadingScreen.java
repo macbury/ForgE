@@ -11,7 +11,6 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.PerformanceCounter;
 import macbury.forge.ForgE;
-import macbury.forge.db.models.PlayerStartPosition;
 import macbury.forge.db.models.Teleport;
 import macbury.forge.level.loader.AsyncLevelLoader;
 import macbury.forge.level.Level;
@@ -36,10 +35,6 @@ public class LoadingScreen extends AbstractScreen implements Promise<Level> {
   private ShapeRenderer shapeRenderer;
   private Matrix4 boxTransMat;
   private float indicatorRotation;
-
-  public LoadingScreen(PlayerStartPosition startPosition) {
-    this(startPosition.toTeleport());
-  }
 
   public LoadingScreen(Teleport teleport) {
     super();

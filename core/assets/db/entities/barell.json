@@ -8,7 +8,7 @@
     },
     {
       class: "renderable",
-      path:  "raw-models/barell.g3db"
+      path:  "graphics/models/barell.g3db"
     },
 
     {

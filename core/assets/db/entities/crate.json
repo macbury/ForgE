@@ -8,7 +8,7 @@
     },
     {
       class: "renderable",
-      path:  "raw-models/Crate.g3db"
+      path:  "graphics/models/Crate.g3db"
     },
 
     {

@@ -8,7 +8,7 @@
     },
     {
       class: "renderable",
-      path:  "raw-models/Ham.g3db"
+      path:  "graphics/models/Ham.g3db"
     },
 
     {

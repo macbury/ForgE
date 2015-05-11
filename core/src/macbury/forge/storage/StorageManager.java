@@ -18,7 +18,7 @@ import macbury.forge.assets.assets.Asset;
 import macbury.forge.assets.assets.ModelAsset;
 import macbury.forge.assets.assets.TextureAsset;
 import macbury.forge.db.GameDatabase;
-import macbury.forge.db.models.PlayerStartPosition;
+import macbury.forge.db.models.Teleport;
 import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
 import macbury.forge.level.LevelEnv;
 import macbury.forge.level.LevelState;
@@ -62,7 +62,7 @@ public class StorageManager {
       kryo.register(VoxelChunkRenderable.class, new VoxelFaceRenderableSerializer());
       kryo.register(Matrix4.class, new Matrix4Serializer());
       kryo.register(Vector3i.class, new Vector3iSerializer());
-      kryo.register(PlayerStartPosition.class, new PlayerStartPositionSerializer());
+      kryo.register(Teleport.class, new PlayerStartPositionSerializer());
       kryo.register(TextureAsset.class, new AssetSerializer());
       kryo.register(ModelAsset.class, new AssetSerializer());
       kryo.setDefaultSerializer(TaggedFieldSerializer.class);
@@ -104,4 +104,11 @@ public class StorageManager {
   }
 
 
+  public Kryo begin() {
+    return pool.borrow();
+  }
+
+  public void end(Kryo kryo) {
+    pool.release(kryo);
+  }
 }
