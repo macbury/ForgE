@@ -1,6 +1,8 @@
 package macbury.forge.editor.controllers.tools.terrain;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.l2fprod.common.propertysheet.Property;
 import icons.Utils;
 import macbury.forge.ForgE;
 import macbury.forge.ForgEBootListener;
@@ -24,11 +26,13 @@ import macbury.forge.voxel.ChunkMap;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
 
 /**
  * Created by macbury on 04.11.14.
  */
-public class TerrainToolsController implements OnMapChangeListener, SelectionInterface, MainToolbarController.EditorModeListener, ForgEBootListener {
+public class TerrainToolsController implements OnMapChangeListener, SelectionInterface, MainToolbarController.EditorModeListener, ForgEBootListener, DefaultBeanBinder.PropertyChangeListener {
+  private static final String TAG = "TErrainToolsController";
   private final JToolBar toolbar;
   private final ButtonGroup toolsGroup;
   private JToggleButton drawPencilButton;
@@ -205,6 +209,7 @@ public class TerrainToolsController implements OnMapChangeListener, SelectionInt
   private void unbindInspector() {
     inspectorSheetPanel.clearLosePropertyEditors();
     if (binder != null) {
+      binder.setListener(null);
       binder.unbind();
     }
     binder = null;
@@ -216,6 +221,18 @@ public class TerrainToolsController implements OnMapChangeListener, SelectionInt
     setCurrentSelection(currentProvider.getSelection());
     unbindInspector();
     binder = currentProvider.getPropertySheetBeanBinder(inspectorSheetPanel);
+    binder.setListener(this);
   }
 
+  @Override
+  public void onPropertyChange(DefaultBeanBinder binder, PropertyChangeEvent event, Object object) {
+    Property prop = (Property) event.getSource();
+    try {
+      Gdx.app.log(TAG, "Revert from " + event.getNewValue() + " to " + event.getOldValue()+ " for " + object);
+      prop.setValue(event.getNewValue());
+      prop.writeToObject(object);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
 }
