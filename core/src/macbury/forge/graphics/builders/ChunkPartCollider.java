@@ -25,6 +25,7 @@ import macbury.forge.voxel.Voxel;
  */
 public class ChunkPartCollider implements Disposable {
   private static final String TAG = "ChunkPartCollider";
+  private static final float CHUNK_FRICTION = 10;
   public final Vector3i position = new Vector3i();
   public final Vector3i size     = new Vector3i();
   public final static Matrix4 transformMat = new Matrix4();
@@ -107,6 +108,7 @@ public class ChunkPartCollider implements Disposable {
     shape = convexHullShape;
 
     btRigidBody.btRigidBodyConstructionInfo constructionInfo = new btRigidBody.btRigidBodyConstructionInfo(0, null, shape, Vector3.Zero);
+    constructionInfo.setFriction(CHUNK_FRICTION);
     this.body  = new btRigidBody(constructionInfo);
     body.setWorldTransform(transformMat);
     body.setCollisionFlags(body.getCollisionFlags() | btCollisionObject.CollisionFlags.CF_CUSTOM_MATERIAL_CALLBACK);

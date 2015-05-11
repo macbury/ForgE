@@ -124,7 +124,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     engine.addBootListener(this);
     engine.addBootListener(blocksController);
     engine.addBootListener(mapTreeController);
-
+    engine.addBootListener(terrainToolsController);
     openGLCanvas = new LwjglAWTCanvas(engine);
     input = (LwjglAWTInput) openGLCanvas.getInput();
     mainContentPane.addMouseListener(input);

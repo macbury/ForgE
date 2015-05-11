@@ -3,7 +3,7 @@ package macbury.forge.editor.controllers.tools.terrain;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
-import macbury.forge.editor.undo_redo.actions.ApplyCustomBrushChangeable;
+import macbury.forge.editor.controllers.tools.terrain.properties.CustomBrushChangeableProvider;
 
 import javax.swing.*;
 import javax.swing.event.ListDataListener;
@@ -13,17 +13,17 @@ import java.io.FilenameFilter;
 /**
  * Created by macbury on 17.03.15.
  */
-public class BrushTypeModel implements ComboBoxModel<ApplyCustomBrushChangeable.BrushType> {
+public class BrushTypeModel implements ComboBoxModel<CustomBrushChangeableProvider.BrushType> {
   private static final String TAG = "BrushTypeModel";
-  private final Array<ApplyCustomBrushChangeable.BrushType> brushes;
-  private ApplyCustomBrushChangeable.BrushType selectedBrushType;
+  private final Array<CustomBrushChangeableProvider.BrushType> brushes;
+  private CustomBrushChangeableProvider.BrushType selectedBrushType;
 
   public BrushTypeModel() {
-    this.brushes = new Array<ApplyCustomBrushChangeable.BrushType>();
+    this.brushes = new Array<CustomBrushChangeableProvider.BrushType>();
   }
 
   public void reload() {
-    for (ApplyCustomBrushChangeable.BrushType brush : brushes) {
+    for (CustomBrushChangeableProvider.BrushType brush : brushes) {
       brush.dispose();
     }
     brushes.clear();
@@ -36,7 +36,7 @@ public class BrushTypeModel implements ComboBoxModel<ApplyCustomBrushChangeable.
     });
 
     for (FileHandle brushFile : brushFiles) {
-      brushes.add(new ApplyCustomBrushChangeable.BrushType(brushFile));
+      brushes.add(new CustomBrushChangeableProvider.BrushType(brushFile));
     }
 
     selectedBrushType = brushes.get(0);
@@ -44,7 +44,7 @@ public class BrushTypeModel implements ComboBoxModel<ApplyCustomBrushChangeable.
 
   @Override
   public void setSelectedItem(Object anItem) {
-    selectedBrushType = (ApplyCustomBrushChangeable.BrushType) anItem;
+    selectedBrushType = (CustomBrushChangeableProvider.BrushType) anItem;
   }
 
   @Override
@@ -58,7 +58,7 @@ public class BrushTypeModel implements ComboBoxModel<ApplyCustomBrushChangeable.
   }
 
   @Override
-  public ApplyCustomBrushChangeable.BrushType getElementAt(int index) {
+  public CustomBrushChangeableProvider.BrushType getElementAt(int index) {
     return brushes.get(index);
   }
 
