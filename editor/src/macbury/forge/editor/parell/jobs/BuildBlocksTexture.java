@@ -32,7 +32,7 @@ public class BuildBlocksTexture extends Job<Boolean> {
     settings.square = true;
     settings.paddingX = 2;
     settings.paddingY = 2;
-    TexturePacker.process(settings, Gdx.files.internal("textures/blocks").path(), Gdx.files.internal("textures/").path(), "tilemap.atlas");
+    TexturePacker.process(settings, Gdx.files.internal("raw-blocks").path(), Gdx.files.internal("graphics/textures/").path(), "tilemap.atlas");
     try {
       Thread.sleep(1000);
     } catch (InterruptedException e) {

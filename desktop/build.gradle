@@ -4,16 +4,14 @@ sourceCompatibility = 1.8
 sourceSets.main.java.srcDirs = [ "src/" ]
 
 project.ext.mainClassName = "macbury.forge.desktop.DesktopLauncher"
-project.ext.assetsDir = new File("../core/assets");
+project.ext.assetsDir     = new File("../core/assets");
 
 task run(dependsOn: classes, type: JavaExec) {
-    main = project.mainClassName
-    classpath = sourceSets.main.runtimeClasspath
-    standardInput = System.in
-    workingDir = project.assetsDir
-    if ( project.hasProperty("appArgs") ) {
-        args Eval.me(appArgs)
-    }
+    main            = project.mainClassName
+    classpath       = sourceSets.main.runtimeClasspath
+    standardInput   = System.in
+    workingDir      = project.assetsDir
+
     ignoreExitValue = true
 }
 
@@ -21,10 +19,23 @@ task dist(type: Jar) {
     from files(sourceSets.main.output.classesDir)
     from files(sourceSets.main.output.resourcesDir)
     from {configurations.compile.collect {zipTree(it)}}
-    from files(project.assetsDir);
+    //from files(project.assetsDir);
  
     manifest {
         attributes 'Main-Class': project.mainClassName
+    }
+    copy {
+        from "${assetsDir}/db"
+        into "${buildDir}/libs/db"
+    }
+    copy {
+        from "${assetsDir}/audio"
+        into "${buildDir}/libs/audio"
+    }
+
+    copy {
+        from "${assetsDir}/graphics"
+        into "${buildDir}/libs/graphics"
     }
 }
 

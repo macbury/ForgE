@@ -19,12 +19,12 @@ import java.util.HashMap;
  * Created by macbury on 11.11.14.
  */
 public class BlocksProvider implements Disposable {
-  public final static String BLOCKS_PATH = "blocks/";
+  public final static String BLOCKS_PATH = "db/blocks/";
   public final static String BLOCKS_SHAPE_PATH = BLOCKS_PATH + "shapes/";
   public final static String BLOCK_EXT = "block";
   public final static String SHAPE_EXT = "shape";
   private static final String TAG = "BlocksProvider";
-  private static final String TILEMAP_PATH = "textures/tilemap.atlas";
+  private static final String TILEMAP_PATH = "graphics/textures/tilemap.atlas";
   private Block[] blocks;
   private TextureAtlas textureAtlas;
   private boolean reloadAtlas;

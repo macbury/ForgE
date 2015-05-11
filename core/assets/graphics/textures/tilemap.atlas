@@ -1,0 +1,188 @@
+
+tilemap.png
+size: 1024,64
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+autumn_leaves
+  rotate: false
+  xy: 2, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+brick
+  rotate: false
+  xy: 36, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+cactus_bottom
+  rotate: false
+  xy: 70, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+cactus_top
+  rotate: false
+  xy: 70, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+cactus_side
+  rotate: false
+  xy: 104, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+crops7
+  rotate: false
+  xy: 138, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+dev
+  rotate: false
+  xy: 172, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+dirt
+  rotate: false
+  xy: 206, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+flower_allium
+  rotate: false
+  xy: 240, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+flower_rose
+  rotate: false
+  xy: 274, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+flower_tulip_orange
+  rotate: false
+  xy: 308, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+glass
+  rotate: false
+  xy: 342, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+glass_yellow
+  rotate: false
+  xy: 376, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+grass_side
+  rotate: false
+  xy: 410, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+grass_side_snowed
+  rotate: false
+  xy: 444, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+grass_top
+  rotate: false
+  xy: 478, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+leaves_oak
+  rotate: false
+  xy: 512, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+log_big_oak
+  rotate: false
+  xy: 546, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+log_big_oak_top
+  rotate: false
+  xy: 580, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+potatoes_stage
+  rotate: false
+  xy: 614, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+sand
+  rotate: false
+  xy: 648, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+snow
+  rotate: false
+  xy: 682, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+stone
+  rotate: false
+  xy: 716, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+stone_andesite_smooth
+  rotate: false
+  xy: 750, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+stonebrick
+  rotate: false
+  xy: 784, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+wheat_stage
+  rotate: false
+  xy: 818, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1

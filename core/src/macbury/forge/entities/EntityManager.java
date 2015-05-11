@@ -15,7 +15,7 @@ import java.util.HashMap;
  */
 public class EntityManager implements Disposable {
   private static final String TAG = "EntityManager";
-  private static final String ENTITIES_STORAGE = "entities/";
+  private static final String ENTITIES_STORAGE = "db/entities/";
   private static final String ENTITY_EXT = ".json";
   public HashMap<String, EntityBuilder> builders;
   private Json json;
