@@ -25,7 +25,7 @@ import macbury.forge.voxel.Voxel;
  */
 public class ChunkPartCollider implements Disposable {
   private static final String TAG = "ChunkPartCollider";
-  private static final float CHUNK_FRICTION = 10;
+  private static final float CHUNK_FRICTION = 0.85f;
   public final Vector3i position = new Vector3i();
   public final Vector3i size     = new Vector3i();
   public final static Matrix4 transformMat = new Matrix4();

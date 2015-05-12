@@ -12,7 +12,7 @@ import macbury.forge.graphics.GraphicsUtils;
 import macbury.forge.input.InputManager;
 import macbury.forge.level.LevelManager;
 import macbury.forge.screens.ScreenManager;
-import macbury.forge.script.ScriptManager;
+import macbury.forge.scripts.ScriptManager;
 import macbury.forge.shaders.utils.ShadersManager;
 import macbury.forge.storage.StorageManager;
 import macbury.forge.entities.EntityManager;

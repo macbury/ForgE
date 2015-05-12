@@ -36,6 +36,7 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
   private final PlayerController playerController;
   private final JToggleButton terrainEditButton;
   private final JToggleButton entitiesEditButton;
+  private final JButton codeEditorButton;
   private LevelEditorScreen screen;
   public final InterfaceTrigger<EditorModeListener> editorModeListeners = new InterfaceTrigger<EditorModeListener>();
 
@@ -51,6 +52,8 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
 
     this.saveMapButton           = buildButton("save");
     this.playMapButton           = buildButton("play");
+
+    this.codeEditorButton        = buildButton("code");
 
     this.terrainEditButton       = buildToogleButton("terrain");
     this.entitiesEditButton      = buildToogleButton("entities");
@@ -73,6 +76,8 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
     mainToolbar.addSeparator();
     mainToolbar.add(terrainEditButton);
     mainToolbar.add(entitiesEditButton);
+    mainToolbar.addSeparator();
+    mainToolbar.add(codeEditorButton);
     mainToolbar.add(Box.createHorizontalGlue());
     mainToolbar.add(playMapButton);
 

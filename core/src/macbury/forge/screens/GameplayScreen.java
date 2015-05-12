@@ -79,7 +79,7 @@ public class GameplayScreen extends AbstractScreen {
       temp.add(level.camera.position);
 
       teapotEntity.getComponent(PositionComponent.class).vector.set(temp);
-      temp.set(level.camera.direction).scl(15);
+      temp.set(level.camera.direction).scl(30);
       teapotEntity.getComponent(RigidBodyComoponent.class).initialImpulse.set(temp);
       level.entities.addEntity(teapotEntity);
     }
@@ -90,7 +90,7 @@ public class GameplayScreen extends AbstractScreen {
       temp.add(level.camera.position);
 
       teapotEntity.getComponent(PositionComponent.class).vector.set(temp);
-      temp.set(level.camera.direction).scl(15);
+      temp.set(level.camera.direction).scl(30);
       teapotEntity.getComponent(RigidBodyComoponent.class).initialImpulse.set(temp);
       level.entities.addEntity(teapotEntity);
     }

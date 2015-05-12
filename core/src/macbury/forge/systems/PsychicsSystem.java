@@ -70,7 +70,7 @@ public class PsychicsSystem extends EntitySystem implements EntityListener, Disp
     sweep.getOverlappingPairCache().setInternalGhostPairCallback(ghostCallback);
     bulletWorld      = new btDiscreteDynamicsWorld(dispatcher, sweep, constraintSolver, collisionConfig);
 
-    bulletWorld.setGravity(new Vector3(0, -2f, 0));
+    bulletWorld.setGravity(new Vector3(0, -9f, 0));
     debugDrawer.setDebugMode(btIDebugDraw.DebugDrawModes.DBG_MAX_DEBUG_DRAW_MODE);
 
     //createGround();

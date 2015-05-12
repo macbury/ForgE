@@ -7,9 +7,15 @@ import bibliothek.gui.dock.common.theme.ThemeMap;
 import bibliothek.gui.dock.facile.menu.RootMenuPiece;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import macbury.forge.editor.windows.MainWindow;
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
+import org.fife.ui.rsyntaxtextarea.Theme;
+import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 
 /**
  * Created by macbury on 07.05.15.
@@ -60,8 +66,25 @@ public class DockFramesController implements MainToolbarController.EditorModeLis
     grid.add( 0, 2, 2, 1, objectInspectorDockable);
     grid.add( 0, 2, 2, 1, terrainInspectorDockable);
 
-    grid.add( 2, 0, 9, 3, mapEditorDockable);
 
+
+    /*RSyntaxTextArea textArea = new RSyntaxTextArea(20, 60);
+    textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
+    textArea.setCodeFoldingEnabled(true);
+    textArea.setFont(new Font("Ubuntu Mono", textArea.getFont().getStyle(), 14));
+    Theme theme = null;
+    try {
+      theme = Theme.load(getClass().getResourceAsStream("/org/fife/ui/rsyntaxtextarea/themes/dark.xml"));
+      theme.apply(textArea);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+
+    RTextScrollPane sp = new RTextScrollPane(textArea);
+    grid.add( 2, 0, 9, 3, createDockablePanel("Code", sp, true));*/
+
+    grid.add( 2, 0, 9, 3, mapEditorDockable);
 
     control.getContentArea().deploy( grid );
 
