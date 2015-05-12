@@ -33,5 +33,6 @@
 		<level name="Gradle: com.badlogicgames.gdx:gdx:1.4.1" value="project"/>
 		<level name="Gradle: org.dockingframes:docking-frames-common:1.1.2-SNAPSHOT" value="project"/>
 		<level name="Gradle: org.dockingframes:docking-frames-core:1.1.2-SNAPSHOT" value="project"/>
+		<level name="Gradle: com.fifesoft:rsyntaxtextarea:2.5.6" value="project"/>
 	</levels>
 </component>

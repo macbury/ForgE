@@ -12,6 +12,7 @@ import macbury.forge.graphics.GraphicsUtils;
 import macbury.forge.input.InputManager;
 import macbury.forge.level.LevelManager;
 import macbury.forge.screens.ScreenManager;
+import macbury.forge.script.ScriptManager;
 import macbury.forge.shaders.utils.ShadersManager;
 import macbury.forge.storage.StorageManager;
 import macbury.forge.entities.EntityManager;
@@ -27,9 +28,10 @@ public class ForgE extends Game {
   public static BlocksProvider      blocks;
   public static InputManager        input;
   public static EntityManager       entities;
-  private Array<ForgEBootListener>  bootListeners;
-
   public static LevelManager        levels;
+  public static ScriptManager       scripts;
+
+  private Array<ForgEBootListener>  bootListeners;
 
 
   public ForgE(Config config) {
@@ -51,6 +53,7 @@ public class ForgE extends Game {
     blocks        = new BlocksProvider();
     levels        = new LevelManager(storage);
     entities      = new EntityManager();
+    scripts       = new ScriptManager();
     Gdx.input.setInputProcessor(input);
     for (ForgEBootListener listener : bootListeners) {
       listener.afterEngineCreate(this);
@@ -70,6 +73,7 @@ public class ForgE extends Game {
 
   @Override
   public void dispose() {
+    scripts.dispose();
     super.dispose();
   }
 
