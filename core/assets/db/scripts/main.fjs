@@ -1,14 +1,8 @@
-game.module("$log", function () {
-  return {
-    info: function(tag, text) {
-      Gdx.app.log(tag, text);
-    },
-    debug: function(tag, text) {
-      Gdx.app.debug(tag, text);
-    }
-  };
-});
-
-game.run(function ($log) {
+game.run(function ($log, $startPosition) {
   $log.info("main.js", "Initialized game...");
+  if ($startPosition == null) {
+    throw "Could not find start position!!!";
+  } else {
+
+  }
 });

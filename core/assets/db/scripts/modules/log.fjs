@@ -1,0 +1,10 @@
+/*game.module("$log", function () {
+  return {
+    info: function(tag, text) {
+      Gdx.app.log(tag, text);
+    },
+    debug: function(tag, text) {
+      Gdx.app.debug(tag, text);
+    }
+  };
+});*/
