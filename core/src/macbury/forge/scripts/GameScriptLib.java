@@ -1,11 +1,8 @@
 package macbury.forge.scripts;
 
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import macbury.forge.db.models.Teleport;
-import macbury.forge.scripts.modules.BaseGameScriptModule;
-import macbury.forge.scripts.modules.InjectableGameScriptModule;
-import macbury.forge.scripts.modules.LoggingGameScriptModule;
-import macbury.forge.scripts.modules.ObjectGameScriptModule;
+import macbury.forge.scripts.modules.*;
 import org.mozilla.javascript.BaseFunction;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ScriptableObject;
@@ -18,10 +15,11 @@ import java.util.HashMap;
 public class GameScriptLib {
   private final HashMap<String, BaseGameScriptModule> modules;
   private final Wrapper wrapper;
-  private InjectableGameScriptModule mainRunFunction;
+  private Array<InjectableGameScriptModule> runFunctions;
 
   public GameScriptLib() {
-    modules = new HashMap<String, BaseGameScriptModule>();
+    modules       = new HashMap<String, BaseGameScriptModule>();
+    runFunctions  = new Array<InjectableGameScriptModule>();
     wrapper = new Wrapper();
   }
 
@@ -29,24 +27,26 @@ public class GameScriptLib {
     return wrapper;
   }
 
-  public BaseGameScriptModule get(String name, Context context, ScriptableObject scope) {
+  public BaseGameScriptModule get(String name, Context context, ScriptableObject mainScope) {
     BaseGameScriptModule module = modules.get(name);
     if (module == null) {
       throw new GdxRuntimeException("Could not find module with name: " + name);
     } else {
-      module.compile(context, scope);
+      module.compile(context, mainScope);
       return module;
     }
   }
 
-  public void compileModules(Context context, ScriptableObject scope) {
+  public void compileModules(Context context, ScriptableObject mainScope) {
     for(String moduleName : modules.keySet()) {
-      get(moduleName, context, scope);
+      get(moduleName, context, mainScope);
     }
-    if (mainRunFunction == null) {
+    if (runFunctions.size == 0) {
       throw new GdxRuntimeException("No main run function!!!");
     } else {
-      mainRunFunction.compile(context,scope);
+      for (int i = 0; i < runFunctions.size; i++) {
+        runFunctions.get(i).compile(context, mainScope);
+      }
     }
   }
 
@@ -63,8 +63,12 @@ public class GameScriptLib {
       modules.put(name, new InjectableGameScriptModule(function, GameScriptLib.this));
     }
 
+    public void provider(String name, BaseFunction function) {
+      modules.put(name, new InjectableProviderGameScriptModule(function, GameScriptLib.this));
+    }
+
     public void run(BaseFunction callback) {
-      mainRunFunction = new InjectableGameScriptModule(callback, GameScriptLib.this);
+      runFunctions.add(new InjectableGameScriptModule(callback, GameScriptLib.this));
     }
   }
 }

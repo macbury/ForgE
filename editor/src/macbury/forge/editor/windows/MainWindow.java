@@ -40,6 +40,8 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
   public static MainWindow current;
   private final PlayerController playerController;
   private final DockFramesController dockFrameController;
+  public final CodeEditorWindow codeEditorWindow;
+  private final CodeEditorController codeEditorController;
   private LwjglAWTCanvas openGLCanvas;
   private ForgE engine;
   private ProjectController projectController;
@@ -87,14 +89,15 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     setContentPane(mainContentPane);
     mainContentPane.remove(mainSplitPane);
 
-    terrainInspectorPanel = new MapPropertySheet();
-
-    this.dockFrameController = new DockFramesController(this);
-
+    terrainInspectorPanel =     new MapPropertySheet();
+    this.codeEditorWindow     = new CodeEditorWindow();
+    this.dockFrameController  = new DockFramesController(this);
+    this.codeEditorController = new CodeEditorController(codeEditorWindow);
     setResizable(true);
     mainContentPane.setVisible(false);
     setSize(1360, 760);
     setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+
 
     setTitle(null);
     setVisible(true);
@@ -117,7 +120,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     eventsToolsController = new EventsController(this);
     terrainToolsController = new TerrainToolsController(terrainToolsToolbar, blocksController, inputProcessor, terrainInspectorPanel);
     playerController = new PlayerController(projectController, jobs);
-    mainToolbarController = new MainToolbarController(projectController, mainToolbar, mainMenu, inputProcessor, playerController);
+    mainToolbarController = new MainToolbarController(projectController, mainToolbar, mainMenu, inputProcessor, playerController, codeEditorController);
     shadersController = new ShadersController(directoryWatcher);
     mapTreeController = new MapTreeController(mapTree, projectController);
 
@@ -125,6 +128,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     engine.addBootListener(blocksController);
     engine.addBootListener(mapTreeController);
     engine.addBootListener(terrainToolsController);
+    engine.addBootListener(codeEditorController);
     openGLCanvas = new LwjglAWTCanvas(engine);
     input = (LwjglAWTInput) openGLCanvas.getInput();
     mainContentPane.addMouseListener(input);

@@ -1,8 +1,4 @@
-game.run(function ($log, $startPosition) {
+game.run(function ($log, $teleport) {
   $log.info("main.js", "Initialized game...");
-  if ($startPosition == null) {
-    throw "Could not find start position!!!";
-  } else {
-
-  }
+  $teleport.toStartPosition();
 });

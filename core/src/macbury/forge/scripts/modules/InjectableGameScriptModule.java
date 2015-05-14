@@ -5,16 +5,15 @@ import macbury.forge.scripts.GameScriptLib;
 import macbury.forge.scripts.ScriptAnnotateHelper;
 import org.mozilla.javascript.BaseFunction;
 import org.mozilla.javascript.Context;
-import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
 /**
  * Created by macbury on 12.05.15.
  */
 public class InjectableGameScriptModule extends BaseGameScriptModule {
-  public final Array<String> inject;
-  public final BaseFunction function;
-  private final GameScriptLib moduleProvider;
+  private Array<String> inject;
+  protected BaseFunction function;
+  private GameScriptLib moduleProvider;
   private boolean compiled;
 
   public InjectableGameScriptModule(BaseFunction function, GameScriptLib moduleProvider) {
@@ -23,16 +22,24 @@ public class InjectableGameScriptModule extends BaseGameScriptModule {
     this.moduleProvider = moduleProvider;
   }
 
+  protected Object[] getAttributes(Context context, ScriptableObject mainScope) {
+    Object[] args = new Object[inject.size];
+    for (int i = 0; i < inject.size; i++) {
+      args[i] = moduleProvider.get(inject.get(i), context, mainScope).get();
+    }
+
+    return args;
+  }
 
   @Override
-  public void compile(Context context, ScriptableObject scope) {
+  public void compile(Context context, ScriptableObject mainScope) {
     if (!compiled) {
-      Object[] args = new Object[inject.size];
-      for (int i = 0; i < inject.size; i++) {
-        args[i] = moduleProvider.get(inject.get(i), context, scope).get();
-      }
-      moduleObject = function.call(context, scope, scope, args);
+      ScriptableObject scope = context.initStandardObjects();
+      scope.setParentScope(mainScope);
+      scope.setParentScope(null);
+      moduleObject = function.call(context, scope, scope, getAttributes(context, mainScope));
       compiled     = true;
     }
   }
+
 }

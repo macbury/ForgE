@@ -15,8 +15,8 @@ public class ObjectGameScriptModule extends BaseGameScriptModule {
   }
 
   @Override
-  public void compile(Context context, ScriptableObject scope) {
+  public void compile(Context context, ScriptableObject mainScope) {
     if (moduleObject == null)
-      moduleObject = Context.javaToJS(toJava, scope);
+      moduleObject = Context.javaToJS(toJava, context.initStandardObjects());
   }
 }

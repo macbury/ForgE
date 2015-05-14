@@ -10,9 +10,9 @@ import org.mozilla.javascript.ScriptableObject;
 public class LoggingGameScriptModule extends BaseGameScriptModule {
 
   @Override
-  public void compile(Context context, ScriptableObject scope) {
+  public void compile(Context context, ScriptableObject mainScope) {
     if (moduleObject == null)
-      moduleObject = Context.javaToJS(new LoggerWrapper(), scope);
+      moduleObject = Context.javaToJS(new LoggerWrapper(), context.initStandardObjects());
   }
 
   public class LoggerWrapper {

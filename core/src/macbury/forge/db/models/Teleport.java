@@ -14,4 +14,8 @@ public class Teleport  {
     this.mapId         = mapId;
   }
 
+  @Override
+  public String toString() {
+    return "Teleport: "+mapId+" at "+voxelPosition.toString();
+  }
 }

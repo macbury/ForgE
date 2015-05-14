@@ -37,11 +37,13 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
   private final JToggleButton terrainEditButton;
   private final JToggleButton entitiesEditButton;
   private final JButton codeEditorButton;
+  private final CodeEditorController codeEditorController;
   private LevelEditorScreen screen;
   public final InterfaceTrigger<EditorModeListener> editorModeListeners = new InterfaceTrigger<EditorModeListener>();
 
-  public MainToolbarController(ProjectController projectController, JToolBar mainToolbar, MainMenu mainMenu, GdxSwingInputProcessor inputProcessor, PlayerController playerController) {
+  public MainToolbarController(ProjectController projectController, JToolBar mainToolbar, MainMenu mainMenu, GdxSwingInputProcessor inputProcessor, PlayerController playerController, CodeEditorController codeEditorController) {
     this.editorModeButtonGroup = new ButtonGroup();
+    this.codeEditorController  = codeEditorController;
     this.mainToolbar           = mainToolbar;
     this.projectController     = projectController;
     moreButton                 = new MoreToolbarButton(mainMenu);
@@ -211,6 +213,10 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
     if (e.getSource() == playMapButton) {
 
       playerController.runGame();
+    }
+
+    if (e.getSource() == codeEditorButton) {
+      codeEditorController.show();
     }
 
     if (e.getSource() == terrainEditButton) {

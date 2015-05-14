@@ -9,8 +9,10 @@ import org.mozilla.javascript.ScriptableObject;
 public abstract class BaseGameScriptModule {
   protected Object moduleObject;
 
+
+
   public Object get() {
     return moduleObject;
   }
-  public abstract void compile(Context context, ScriptableObject scope);
+  public abstract void compile(Context context, ScriptableObject mainScope);
 }

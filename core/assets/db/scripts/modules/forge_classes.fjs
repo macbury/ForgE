@@ -1,0 +1,11 @@
+game.module("$forge", function () {
+  return {
+    shapeRenderer: function () {
+      return new Packages.com.badlogic.gdx.graphics.glutils.ShapeRenderer();
+    },
+
+    perspectiveCamera: function () {
+      return Packages.com.badlogic.gdx.graphics.PerspectiveCamera();
+    }
+  };
+});

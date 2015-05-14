@@ -1,6 +1,7 @@
 package macbury.forge.editor.controllers;
 
 import bibliothek.gui.dock.common.*;
+import bibliothek.gui.dock.common.intern.DefaultCDockable;
 import bibliothek.gui.dock.common.location.CBaseLocation;
 import bibliothek.gui.dock.common.menu.SingleCDockableListMenuPiece;
 import bibliothek.gui.dock.common.theme.ThemeMap;
@@ -23,7 +24,7 @@ import java.io.IOException;
 public class DockFramesController implements MainToolbarController.EditorModeListener {
   private final CControl control;
   public final RootMenuPiece menu;
-  private final DefaultSingleCDockable mapEditorDockable;
+  private final DefaultCDockable mapEditorDockable;
   private final DefaultSingleCDockable terrainToolsDockable;
   private final DefaultSingleCDockable objectInspectorDockable;
   private final DefaultSingleCDockable resourcesDockable;
@@ -39,12 +40,14 @@ public class DockFramesController implements MainToolbarController.EditorModeLis
     mainWindow.mainContentPane.add(control.getContentArea(), BorderLayout.CENTER);
 
     this.mapEditorDockable = new DefaultSingleCDockable( "Map", "Map", mainWindow.openGlContainer );
+    //mapEditorDockable = new DefaultMultipleCDockable("Map", "Map", mainWindow.openGlContainer);
     //mapEditorDockable.setExtendedMode(ExtendedMode.MAXIMIZED);
     mapEditorDockable.setLocation(base.normal());
     mapEditorDockable.setSticky(false);
     mapEditorDockable.setCloseable(false);
     mapEditorDockable.setMaximizable(false);
     mapEditorDockable.setStackable(false);
+    mapEditorDockable.setSingleTabShown(true);
     mapEditorDockable.setMinimizable(false);
     mapEditorDockable.setExternalizable(false);
 
@@ -67,23 +70,10 @@ public class DockFramesController implements MainToolbarController.EditorModeLis
     grid.add( 0, 2, 2, 1, terrainInspectorDockable);
 
 
+/*
 
-    /*RSyntaxTextArea textArea = new RSyntaxTextArea(20, 60);
-    textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
-    textArea.setCodeFoldingEnabled(true);
-    textArea.setFont(new Font("Ubuntu Mono", textArea.getFont().getStyle(), 14));
-    Theme theme = null;
-    try {
-      theme = Theme.load(getClass().getResourceAsStream("/org/fife/ui/rsyntaxtextarea/themes/dark.xml"));
-      theme.apply(textArea);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-
-
-    RTextScrollPane sp = new RTextScrollPane(textArea);
-    grid.add( 2, 0, 9, 3, createDockablePanel("Code", sp, true));*/
-
+    grid.add( 2, 0, 9, 3, createDockablePanel("Code", sp, true));
+*/
     grid.add( 2, 0, 9, 3, mapEditorDockable);
 
     control.getContentArea().deploy( grid );
