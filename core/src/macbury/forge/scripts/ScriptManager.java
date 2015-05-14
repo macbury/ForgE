@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.ForgE;
+import macbury.forge.screens.AbstractScreen;
 import macbury.forge.scripts.modules.BaseGameScriptModule;
 import macbury.forge.scripts.modules.LoggingGameScriptModule;
 import org.mozilla.javascript.Context;
@@ -34,7 +35,8 @@ public class ScriptManager implements Disposable {
           PerspectiveCamera.class,
           ShapeRenderer.class,
           Vector3.class,
-          GL20.class
+          GL20.class,
+          AbstractScreen.class
       }
   );
   private final Context context;
@@ -84,7 +86,8 @@ public class ScriptManager implements Disposable {
     gameScript.registerObjectAsModule("$screens", ForgE.screens);
     gameScript.registerObjectAsModule("$graphics", Gdx.graphics);
     gameScript.registerObjectAsModule("$gl", Gdx.gl);
-
+    gameScript.registerObjectAsModule("$gdxApp", Gdx.app);
+    gameScript.registerObjectAsModule("$levels", ForgE.levels);
     //TODO: Find better solution!
     for (int i = 0; i < packagesToImport.size; i++) {
       String classToImport = packagesToImport.get(i).getName();

@@ -1,51 +1,70 @@
-game.provider("$LoadingScreen", function($log, $screens, $graphics, $gl) {
+game.provider("$LoadingScreen", function($log, $screens, $graphics, $gl, $thread, $levels, $gdxApp) {
   var TAG                    = "$LoadingScreen";
   var ROTATION_SPEED         = 80.0;
   var STANDARD_CUBE_ROTATION = 60.0;
 
-  var LoadingScreen = {
+  function LoadingScreenAction(teleport) {
+    $log.info(TAG, "Initialazing loading screen...");
+    this.teleport      = teleport;
 
-    initialize: function() {
-      $log.info(TAG, "Initialazing loading screen...");
-      this.camera        = new PerspectiveCamera(67, $graphics.getWidth(), $graphics.getHeight());
-      this.boxTransMat   = new Matrix4();
-      this.shapeRenderer = new ShapeRenderer();
+    this.camera        = new PerspectiveCamera(67, $graphics.getWidth(), $graphics.getHeight());
+    this.boxTransMat   = new Matrix4();
+    this.shapeRenderer = new ShapeRenderer();
 
-      this.camera.position.set(0, 8, 0);
-      this.camera.lookAt(Vector3.Zero);
+    this.camera.position.set(0, 8, 0);
+    this.camera.lookAt(Vector3.Zero);
+    this.indicatorRotation = 0.0;
 
-      $log.info(TAG, "Preparing to load: " + this.teleport.mapId);
-      this.indicatorRotation = 0.0;
-    },
+    $log.info(TAG, "Preparing to load: " + this.teleport.mapId);
 
-    resize: function(width, height) {
-      this.camera.update();
-    },
+    $thread.run(this.loadLevelState.bind(this)).then(this.buildGeometry.bind(this));
+  }
 
-    render: function (delta) {
-      this.camera.update();
-      $gl.glClearColor(0,0,0,0);
-      $gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-      this.indicatorRotation += ROTATION_SPEED * delta;
-      this.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        this.shapeRenderer.setProjectionMatrix(this.camera.combined);
-        this.shapeRenderer.identity();
-        this.shapeRenderer.translate(6, 0, 4);
-        this.shapeRenderer.rotate(0,0,1, STANDARD_CUBE_ROTATION);
-        this.shapeRenderer.rotate(0,0,1, this.indicatorRotation);
-        this.shapeRenderer.box(-0.5,-0.5,-0.5, 1, 1, 1);
-      this.shapeRenderer.end();
-    },
+  LoadingScreenAction.prototype.buildGeometry = function (justLoadedLevelState) {
+    this.levelState = justLoadedLevelState;
+    $log.info(TAG, "Loaded: " + this.levelState);
+  }
 
-    dispose: function() {
-      this.shapeRenderer.dispose();
-    }
-  };
+  LoadingScreenAction.prototype.loadLevelState = function(result) {
+    var levelState = $levels.load(this.teleport.mapId)
+    result.resolve(levelState);
+  }
+
+  LoadingScreenAction.prototype.render = function(delta) {
+    this.camera.update();
+    $gl.glClearColor(0,0,0,0);
+    $gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+    this.indicatorRotation += ROTATION_SPEED * delta;
+    this.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+      this.shapeRenderer.setProjectionMatrix(this.camera.combined);
+      this.shapeRenderer.identity();
+      this.shapeRenderer.translate(6, 0, 4);
+      this.shapeRenderer.rotate(0,0,1, STANDARD_CUBE_ROTATION);
+      this.shapeRenderer.rotate(0,0,1, this.indicatorRotation);
+      this.shapeRenderer.box(-0.5,-0.5,-0.5, 1, 1, 1);
+    this.shapeRenderer.end();
+  }
+
+  LoadingScreenAction.prototype.dispose = function() {
+    this.shapeRenderer.dispose();
+  }
+
 
   return {
     get: function(teleport) {
-      var loadingScreenInstance      = new Packages.macbury.forge.screens.AbstractScreen(LoadingScreen);
-      loadingScreenInstance.teleport = teleport;
+      var loadingScreenInstance      = new AbstractScreen({
+        initialize: function() {
+          this.action = new LoadingScreenAction(teleport);
+        },
+
+        render: function (delta) {
+          this.action.render(delta);
+        },
+
+        dispose: function() {
+          this.action.dispose();
+        }
+      });
       return loadingScreenInstance;
     }
   };

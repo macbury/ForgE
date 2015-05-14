@@ -1,0 +1,20 @@
+game.provider("$thread", function($Defer, $gdxApp) {
+  return {
+    run: function(backgroundFunction) {
+      var defer    = new $Defer();
+
+      var thread = new java.lang.Thread(new java.lang.Runnable({
+        run: function() {
+          backgroundFunction(defer);
+        }
+      }));
+
+      $gdxApp.postRunnable(new java.lang.Runnable({
+        run: function() {
+          thread.start();
+        }
+      }));
+      return defer.promise;
+    }
+  };
+});

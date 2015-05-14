@@ -1,0 +1,53 @@
+game.module("$promise", function() {
+  var Promise = function () {
+    this.okCallbacks = [];
+    this.koCallbacks = [];
+  };
+
+  Promise.prototype = {
+    okCallbacks: null,
+    koCallbacks: null,
+    then: function (okCallback, koCallback) {
+      this.okCallbacks.push(okCallback);
+      if (koCallback) {
+        this.koCallbacks.push(koCallback);
+      }
+    }
+  };
+
+  return Promise;
+});
+
+game.module("$Defer", function($promise, $gdxApp) {
+
+
+  var Defer = function () {
+    this.promise = new $promise();
+  };
+
+  Defer.prototype = {
+    promise: null,
+    resolve: function (data) {
+      this.promise.okCallbacks.forEach(function(callback) {
+        $gdxApp.postRunnable(new java.lang.Runnable({
+          run: function() {
+            callback(data);
+          }
+        }));
+
+      });
+    },
+
+    reject: function (error) {
+      this.promise.koCallbacks.forEach(function(callback) {
+        $gdxApp.postRunnable(new java.lang.Runnable({
+          run: function() {
+            callback(error);
+          }
+        }));
+      });
+    }
+  };
+
+  return Defer;
+});
