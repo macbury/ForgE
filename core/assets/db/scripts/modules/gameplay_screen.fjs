@@ -1,0 +1,60 @@
+game.provider("$GameplayScreen", function($log, $input, $entities, $assets, $gdxApp) {
+  var TAG                    = "$GameplayScreen";
+  var FAR_CAMERA             = 100;
+  var NEAR_CAMERA            = 0.01;
+  var FIELD_OF_VIEW          = 70;
+  function GameplayController(teleport, level) {
+    $log.info(TAG, "Initialazing screen...");
+    this.teleport      = teleport;
+    this.level         = level;
+    $input.setCursorCatched(true);
+
+    this.cameraController          = new FirstPersonCameraController(level.camera);
+    this.level.camera.far          = FAR_CAMERA;
+    this.level.camera.near         = NEAR_CAMERA;
+    this.level.camera.fieldOfView  = FIELD_OF_VIEW;
+
+    this.spawnPlayer();
+  }
+
+  GameplayController.prototype.spawnPlayer = function() {
+    var playerEntity       = $entities.get("player").build(this.level.entities);
+    playerEntity.getComponent(PlayerComponent).camera = this.level.camera;
+    this.level.terrainMap.localVoxelPositionToWorldPosition(this.teleport.voxelPosition, playerEntity.getComponent(PositionComponent).vector);
+    playerEntity.getComponent(PositionComponent).vector.sub(-0.5);
+    this.level.entities.addEntity(playerEntity);
+  }
+
+  GameplayController.prototype.render = function(delta) {
+    $assets.update();
+    this.cameraController.update(delta);
+    this.level.render(delta);
+
+    if ($input.isKeyPressed(Input.Keys.ESCAPE)) {
+      $gdxApp.exit();
+    }
+  }
+
+  GameplayController.prototype.dispose = function() {
+    this.level = null;
+    this.teleport = null;
+  }
+
+  return {
+    create: function(teleport, level) {
+      return new AbstractScreen({
+        initialize: function() {
+          this.controller = new GameplayController(teleport, level);
+        },
+
+        render: function (delta) {
+          this.controller.render(delta);
+        },
+
+        dispose: function() {
+          this.controller.dispose();
+        }
+      });
+    }
+  };
+});

@@ -102,7 +102,7 @@ public class BlockPreviews extends AbstractScreen {
 
       builder.assembleMesh(mainChunk);
     } builder.end();
-
+    mainChunk.buildMesh();
     mainChunk.updateBoundingBox();
 
     if (mainChunk.renderables.size == 0) {

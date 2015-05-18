@@ -1,10 +1,13 @@
 package macbury.forge.entities;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Json;
 import macbury.forge.components.*;
+import macbury.forge.db.models.Teleport;
+import macbury.forge.systems.engine.EntitySystemsManager;
 
 import java.io.File;
 import java.io.FilenameFilter;

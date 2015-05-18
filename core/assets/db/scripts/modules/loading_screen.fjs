@@ -1,4 +1,4 @@
-game.provider("$LoadingScreen", function($log, $screens, $graphics, $gl, $thread, $levels, $gdxApp, $assets) {
+game.provider("$LoadingScreen", function($log, $screens, $graphics, $gl, $thread, $levels, $gdxApp, $assets, $GameplayScreen) {
   var TAG                    = "$LoadingScreen";
   var ROTATION_SPEED         = 80.0;
   var STANDARD_CUBE_ROTATION = 60.0;
@@ -35,7 +35,7 @@ game.provider("$LoadingScreen", function($log, $screens, $graphics, $gl, $thread
   LoadingScreenAction.prototype.buildGeometry = function(result) {
     $log.info(TAG, "Building geometry...");
     while(true){
-      if (this.level.terrainEngine.rebuild(100, false)) {
+      if (this.level.terrainEngine.rebuild(10, false)) {
         break;
       }
     }
@@ -53,7 +53,8 @@ game.provider("$LoadingScreen", function($log, $screens, $graphics, $gl, $thread
   LoadingScreenAction.prototype.loadAssets = function () {
     if ($assets.loadPendingInChunks()) {
       $assets.unloadUnusedAssets();
-      $screens.set(new GameplayScreen(this.teleport, this.level));
+      $log.info(TAG, "Loading done! Showing screen!");
+      $screens.set($GameplayScreen.create(this.teleport, this.level));
     } else {
       $thread.main(this.loadAssets.bind(this));
     }

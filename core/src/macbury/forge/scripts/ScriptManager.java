@@ -1,15 +1,19 @@
 package macbury.forge.scripts;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.g3d.utils.FirstPersonCameraController;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.ForgE;
+import macbury.forge.components.PlayerComponent;
+import macbury.forge.components.PositionComponent;
 import macbury.forge.level.Level;
 import macbury.forge.screens.AbstractScreen;
 import macbury.forge.screens.GameplayScreen;
@@ -40,7 +44,10 @@ public class ScriptManager implements Disposable {
           GL20.class,
           AbstractScreen.class,
           Level.class,
-          GameplayScreen.class
+          FirstPersonCameraController.class,
+          Input.class,
+          PositionComponent.class,
+          PlayerComponent.class
       }
   );
   private final Context context;
@@ -93,6 +100,8 @@ public class ScriptManager implements Disposable {
     gameScript.registerObjectAsModule("$gdxApp", Gdx.app);
     gameScript.registerObjectAsModule("$levels", ForgE.levels);
     gameScript.registerObjectAsModule("$assets", ForgE.assets);
+    gameScript.registerObjectAsModule("$input", Gdx.input);
+    gameScript.registerObjectAsModule("$entities", ForgE.entities);
     //TODO: Find better solution!
     for (int i = 0; i < packagesToImport.size; i++) {
       String classToImport = packagesToImport.get(i).getName();
