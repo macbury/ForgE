@@ -106,12 +106,12 @@ public class TerrainBuilder {
   private void buildFaceForChunkWithAssembler(Chunk chunk, VoxelsAssembler assembler, boolean haveTransparency) {
     if (!assembler.isEmpty()) {
       VoxelChunkRenderable renderable   = new VoxelChunkRenderable();
-      renderable.primitiveType         = GL30.GL_TRIANGLES;
+      renderable.primitiveType          = GL30.GL_TRIANGLES;
 
       if (ForgE.config.generateWireframe)
         renderable.wireframe           = assembler.wireframe();
       renderable.triangleCount         = assembler.getTriangleCount();
-      renderable.mesh                  = assembler.mesh(MeshVertexInfo.AttributeType.Position, MeshVertexInfo.AttributeType.Normal, MeshVertexInfo.AttributeType.TextureCord, MeshVertexInfo.AttributeType.Material, MeshVertexInfo.AttributeType.TextureFullCords);
+      renderable.meshFactory           = assembler.meshFactory(MeshVertexInfo.AttributeType.Position, MeshVertexInfo.AttributeType.Normal, MeshVertexInfo.AttributeType.TextureCord, MeshVertexInfo.AttributeType.Material, MeshVertexInfo.AttributeType.TextureFullCords);
 
       renderable.worldTransform.idt();
       if (haveTransparency) {
@@ -119,10 +119,10 @@ public class TerrainBuilder {
       }
 
       //renderable.haveTransparency = haveTransparency;
-      renderable.worldTransform.translate(chunk.worldPosition);
+      /*renderable.worldTransform.translate(chunk.worldPosition);
       renderable.mesh.calculateBoundingBox(renderable.boundingBox);
       renderable.boundingBox.min.add(chunk.worldPosition);
-      renderable.boundingBox.max.add(chunk.worldPosition);
+      renderable.boundingBox.max.add(chunk.worldPosition);*/
       //Gdx.app.log(TAG, "Bounding box for renderable: " + cursor.size.toString());
       chunk.addFace(renderable);
     }

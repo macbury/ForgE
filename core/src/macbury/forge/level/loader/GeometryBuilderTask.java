@@ -31,7 +31,7 @@ public class GeometryBuilderTask extends GdxFutureTask<LevelState, Level> {
 
   @Override
   public void tick(float delta) {
-    if (level.terrainEngine.rebuild(CHUNK_TO_REBUILD_PER_TICK)) {
+    if (level.terrainEngine.rebuild(CHUNK_TO_REBUILD_PER_TICK, false)) {
       done(level);
     }
   }

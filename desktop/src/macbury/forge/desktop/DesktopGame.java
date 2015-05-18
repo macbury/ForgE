@@ -54,6 +54,7 @@ public class DesktopGame implements ForgEBootListener, Thread.UncaughtExceptionH
 
   @Override
   public void afterEngineCreate(ForgE engine) {
+    ForgE.blocks.loadAtlasAndUvsIfNull();
     ForgE.scripts.loadAndRun();
     /*if (ForgE.db.startPosition == null) {
       throw new GdxRuntimeException("Start position not found!");

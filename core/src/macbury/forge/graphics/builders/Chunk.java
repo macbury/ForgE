@@ -85,4 +85,10 @@ public class Chunk implements OctreeObject, Disposable {
   public VoxelChunkRenderable getFace(int i) {
     return renderables.get(i);
   }
+
+  public void buildMesh() {
+    for (VoxelChunkRenderable renderable : renderables){
+      renderable.buildMeshFromFactory();
+    }
+  }
 }

@@ -55,7 +55,7 @@ public class MeshAssembler implements Disposable {
     return triangle;
   }
 
-  public Mesh mesh(MeshVertexInfo.AttributeType... attributtes) {
+  public MeshFactory meshFactory(MeshVertexInfo.AttributeType... attributtes) {
     VertexAttribute meshAttributtes[] = new VertexAttribute[attributtes.length];
     int vertiesArraySize = 0;
     int cursor           = 0;
@@ -72,16 +72,16 @@ public class MeshAssembler implements Disposable {
       switch (attr) {
         case Position:
           usingPosition = true;
-        break;
+          break;
         case Normal:
           usingNormal = true;
-        break;
+          break;
         case TextureCord:
           usingTexture = true;
-        break;
+          break;
         case Color:
           usingColor = true;
-        break;
+          break;
 
         case TextureFullCords:
           usingTextureFullCords = true;
@@ -89,7 +89,7 @@ public class MeshAssembler implements Disposable {
 
         case Material:
           usingMaterial = true;
-        break;
+          break;
       }
     }
 
@@ -140,12 +140,16 @@ public class MeshAssembler implements Disposable {
       }
     }
 
-    Mesh mesh = new Mesh(true, verties.length, indices.length, meshAttributtes);
-    mesh.setVertices(verties);
-    mesh.setIndices(indices);
-    mesh.setAutoBind(false);
+    MeshFactory tempMeshData = new MeshFactory(verties, indices, meshAttributtes);
 
     clear();
+    return tempMeshData;
+  }
+
+  public Mesh mesh(MeshVertexInfo.AttributeType... attributtes) {
+    MeshFactory meshFactory = meshFactory(attributtes);
+    Mesh mesh               = meshFactory.get();
+    meshFactory.dispose();
     return mesh;
   }
 
@@ -187,5 +191,31 @@ public class MeshAssembler implements Disposable {
 
   public int getTriangleCount() {
     return this.triangleArrayList.size();
+  }
+
+  public class MeshFactory implements Disposable {
+    private final VertexAttribute[] attributes;
+    private float verties[];
+    private short indices[];
+
+    public MeshFactory(float[] verties, short[] indices, VertexAttribute[] meshAttributtes) {
+      this.verties    = verties;
+      this.indices    = indices;
+      this.attributes = meshAttributtes;
+    }
+
+    public Mesh get() {
+      Mesh mesh = new Mesh(true, verties.length, indices.length, attributes);
+      mesh.setVertices(verties);
+      mesh.setIndices(indices);
+      mesh.setAutoBind(false);
+      return mesh;
+    }
+
+    @Override
+    public void dispose() {
+      verties = null;
+      indices = null;
+    }
   }
 }

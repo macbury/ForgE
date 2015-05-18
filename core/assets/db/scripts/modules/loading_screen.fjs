@@ -1,4 +1,4 @@
-game.provider("$LoadingScreen", function($log, $screens, $graphics, $gl, $thread, $levels, $gdxApp) {
+game.provider("$LoadingScreen", function($log, $screens, $graphics, $gl, $thread, $levels, $gdxApp, $assets) {
   var TAG                    = "$LoadingScreen";
   var ROTATION_SPEED         = 80.0;
   var STANDARD_CUBE_ROTATION = 60.0;
@@ -27,12 +27,36 @@ game.provider("$LoadingScreen", function($log, $screens, $graphics, $gl, $thread
 
   LoadingScreenAction.prototype.onLoadLevelStateFinished = function (justLoadedLevelState) {
     this.levelState = justLoadedLevelState;
+    this.level      = new Level(this.levelState);
     $log.info(TAG, "Loaded level state: " + this.levelState);
-    $thread.run(this.buildGeometry.bind(this));
+    $thread.run(this.buildGeometry.bind(this)).then(this.onGeometryDone.bind(this));
   }
 
   LoadingScreenAction.prototype.buildGeometry = function(result) {
-    result.resolve(0);
+    $log.info(TAG, "Building geometry...");
+    while(true){
+      if (this.level.terrainEngine.rebuild(100, false)) {
+        break;
+      }
+    }
+    result.resolve();
+  }
+
+  LoadingScreenAction.prototype.onGeometryDone = function () {
+    $log.info(TAG, "Geometry data done, transforming into meshes!");
+    this.level.terrainEngine.buildMeshForAvalibleChunks();
+    $log.info(TAG, "Mesh data done, Loading pending assets...");
+
+    $thread.main(this.loadAssets.bind(this));
+  }
+
+  LoadingScreenAction.prototype.loadAssets = function () {
+    if ($assets.loadPendingInChunks()) {
+      $assets.unloadUnusedAssets();
+      $screens.set(new GameplayScreen(this.teleport, this.level));
+    } else {
+      $thread.main(this.loadAssets.bind(this));
+    }
   }
 
   LoadingScreenAction.prototype.render = function(delta) {
@@ -52,6 +76,9 @@ game.provider("$LoadingScreen", function($log, $screens, $graphics, $gl, $thread
 
   LoadingScreenAction.prototype.dispose = function() {
     this.shapeRenderer.dispose();
+    this.level = null;
+    this.teleport = null;
+    this.levelState = null;
   }
 
   return {

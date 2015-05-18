@@ -124,14 +124,14 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Ren
   }
 
   public boolean rebuild() {
-    return rebuild(CHUNK_TO_REBUILD_PER_TICK);
+    return rebuild(CHUNK_TO_REBUILD_PER_TICK, true);
   }
 
   /**
    * Rebuild pending chunks in queue, return true if everything has been rebuilded
    * @return
    */
-  public boolean rebuild(int i) {
+  public boolean rebuild(int i, boolean buildNowMesh) {
     if (map.chunkToRebuild.size > 0) {
       ForgE.blocks.loadAtlasAndUvsIfNull();
       Gdx.app.log(TAG, "Chunks to rebuild: " + map.chunkToRebuild.size);
@@ -144,7 +144,17 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Ren
       occulsion();
     }
 
+    if (buildNowMesh) {
+      buildMeshForAvalibleChunks();
+    }
+
     return map.chunkToRebuild.size == 0;
+  }
+
+  public void buildMeshForAvalibleChunks() {
+    for (Chunk chunk : chunks) {
+      chunk.buildMesh();
+    }
   }
 
   private void buildChunkGeometry(Chunk chunk) {
