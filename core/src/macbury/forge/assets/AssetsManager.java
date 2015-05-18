@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g3d.utils.TextureProvider;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.assets.assets.Asset;
+import macbury.forge.assets.assets.CubemapAsset;
 import macbury.forge.assets.assets.ModelAsset;
 import macbury.forge.assets.assets.TextureAsset;
 
@@ -56,6 +57,10 @@ public class AssetsManager implements Disposable {
 
   public TextureAsset getTexture(String path) {
     return (TextureAsset)getAsset(TextureAsset.class, path);
+  }
+
+  public CubemapAsset getCubemap(String path) {
+    return (CubemapAsset)getAsset(CubemapAsset.class, path);
   }
 
   public ModelAsset getModel(String path) {
@@ -113,5 +118,6 @@ public class AssetsManager implements Disposable {
   public FileHandle resolvePath(Asset asset, String path) {
     return Gdx.files.internal(path);
   }
+
 
 }

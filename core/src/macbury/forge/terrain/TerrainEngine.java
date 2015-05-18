@@ -132,6 +132,7 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Ren
    * @return
    */
   public boolean rebuild(int i, boolean buildNowMesh) {
+    boolean notDone = map.chunkToRebuild.size > 0;
     if (map.chunkToRebuild.size > 0) {
       ForgE.blocks.loadAtlasAndUvsIfNull();
       Gdx.app.log(TAG, "Chunks to rebuild: " + map.chunkToRebuild.size);
@@ -141,12 +142,31 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Ren
         i--;
         if (i <= 0) break;
       }
+    }
+
+    if (buildNowMesh || notDone) {
+      buildMeshForAvalibleChunks();
+    }
+
+    if (notDone) {
       occulsion();
     }
 
-    if (buildNowMesh) {
-      buildMeshForAvalibleChunks();
+    return !notDone;
+  }
+
+  public boolean rebuildInBackground(int i) {
+    if (map.chunkToRebuild.size > 0) {
+      ForgE.blocks.loadAtlasAndUvsIfNull();
+      Gdx.app.log(TAG, "Chunks to rebuild: " + map.chunkToRebuild.size);
+      while(map.chunkToRebuild.size > 0) {
+        Chunk chunk = map.chunkToRebuild.pop();
+        buildChunkGeometry(chunk);
+        i--;
+        if (i <= 0) break;
+      }
     }
+
 
     return map.chunkToRebuild.size == 0;
   }

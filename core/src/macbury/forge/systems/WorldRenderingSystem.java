@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import macbury.forge.ForgE;
 import macbury.forge.components.PositionComponent;
 import macbury.forge.components.RenderableComponent;
+import macbury.forge.graphics.Skybox;
 import macbury.forge.graphics.batch.VoxelBatch;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
 import macbury.forge.graphics.camera.GameCamera;
@@ -22,6 +23,7 @@ public class WorldRenderingSystem extends IteratingSystem {
   private final GameCamera camera;
   private final LevelEnv env;
   private final TerrainEngine terrain;
+  private final Skybox skybox;
   private ComponentMapper<PositionComponent>   pm = ComponentMapper.getFor(PositionComponent.class);
   private ComponentMapper<RenderableComponent> rm = ComponentMapper.getFor(RenderableComponent.class);
   private VoxelBatch batch;
@@ -33,12 +35,14 @@ public class WorldRenderingSystem extends IteratingSystem {
     this.batch   = level.batch;
     this.env     = level.env;
     this.camera  = level.camera;
+    this.skybox  = level.skybox;
   }
 
   @Override
   public void update(float deltaTime) {
     ForgE.graphics.clearAll(env.skyColor);
     batch.begin(camera); {
+      batch.add(skybox);
       batch.add(terrain);
       super.update(deltaTime);
       batch.render(env);

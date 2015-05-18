@@ -3,6 +3,7 @@ package macbury.forge.level;
 import com.badlogic.gdx.graphics.g3d.utils.DefaultTextureBinder;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.utils.Disposable;
+import macbury.forge.graphics.Skybox;
 import macbury.forge.graphics.batch.VoxelBatch;
 import macbury.forge.graphics.camera.GameCamera;
 import macbury.forge.graphics.frustrum.FrustrumDebugAndRenderer;
@@ -31,6 +32,7 @@ public class Level implements Disposable {
   public final FrustrumDebugAndRenderer frustrumDebugger;
   public final TerrainEngine            terrainEngine;
   public final LevelEnv                 env;
+  public final Skybox                   skybox;
 
   public Level(LevelState state) {
     this.env                 = state.env;
@@ -40,6 +42,7 @@ public class Level implements Disposable {
 
     this.octree              = OctreeNode.root();
 
+    this.skybox              = new Skybox(env);
     this.batch               = new VoxelBatch(renderContext);
     this.camera              = new GameCamera();
     this.frustrumDebugger    = new FrustrumDebugAndRenderer(camera);
@@ -72,6 +75,7 @@ public class Level implements Disposable {
     octree.dispose();
     frustrumDebugger.dispose();
     terrainEngine.dispose();
+    skybox.dispose();
   }
 
 }

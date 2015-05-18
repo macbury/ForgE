@@ -15,7 +15,6 @@ import java.util.HashMap;
 public class Block {
   private static final String DEV_TEXTURE_PLACEHOLDER_NAME = "dev";
 
-
   /*
         TODO: merge side with terrain builder.face :P
          */
@@ -66,6 +65,11 @@ public class Block {
    */
   public String shape = "cube";
   public BlockShape blockShape;
+
+  /**
+   * Is a liquid block
+   */
+  public boolean liquid = false;
 
   /**
    * Is block solid and collidable

@@ -1,12 +1,14 @@
 package macbury.forge.level;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Cubemap;
 import com.badlogic.gdx.graphics.GLTexture;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
+import macbury.forge.assets.assets.CubemapAsset;
 import macbury.forge.assets.assets.TextureAsset;
 import macbury.forge.voxel.ChunkMap;
 
@@ -18,11 +20,12 @@ public class LevelEnv implements Disposable {
   public Color ambientLight;
   public Color skyColor;
   public ChunkMap terrainMap;
-
+  public CubemapAsset skyboxAsset;
   public TextureAsset windDisplacementTextureAsset;
   public Vector2 windDirection = new Vector2(0.1f,0);
   public Vector3 gravity = new Vector3(0, -6f, 0);
   private Texture windDisplacementTexture;
+  private Cubemap skyboxCubemap;
 
   public LevelEnv() {
     skyColor     = Color.valueOf("3498db");
@@ -79,6 +82,15 @@ public class LevelEnv implements Disposable {
       windDisplacementTextureAsset = null;
       windDisplacementTexture = null;
     }
+
+    if (skyboxAsset != null) {
+      if (skyboxCubemap != null) {
+        skyboxCubemap.dispose();
+        skyboxCubemap = null;
+      }
+      skyboxAsset.release();
+      skyboxAsset = null;
+    }
   }
 
   public GLTexture getWindDisplacementTextureAsset() {
@@ -86,5 +98,12 @@ public class LevelEnv implements Disposable {
       windDisplacementTexture = windDisplacementTextureAsset.get();
     }
     return windDisplacementTexture;
+  }
+
+  public Cubemap getSkyboxCubemap() {
+    if (skyboxCubemap == null) {
+      skyboxCubemap = skyboxAsset.get();
+    }
+    return skyboxCubemap;
   }
 }

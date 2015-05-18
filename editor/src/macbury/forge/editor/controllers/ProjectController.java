@@ -122,7 +122,7 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
   }
 
   public void newMap() {
-    newMap(Gdx.files.internal("maps/").file().getAbsolutePath());
+    newMap(Gdx.files.internal(LevelState.MAP_STORAGE_DIR).file().getAbsolutePath());
   }
 
   @Override

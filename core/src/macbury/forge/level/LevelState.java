@@ -46,6 +46,9 @@ public class LevelState {
     env.terrainMap              = terrainMap;
     env.windDisplacementTextureAsset = ForgE.assets.getTexture("graphics/textures/wind_bump.jpg");
     env.windDisplacementTextureAsset.retain();
+
+    env.skyboxAsset                  = ForgE.assets.getCubemap("graphics/textures/skybox/day.png");
+    env.skyboxAsset.retain();
   }
 
 

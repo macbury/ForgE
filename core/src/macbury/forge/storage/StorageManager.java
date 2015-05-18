@@ -15,6 +15,7 @@ import com.esotericsoftware.kryo.pool.KryoFactory;
 import com.esotericsoftware.kryo.pool.KryoPool;
 import com.esotericsoftware.kryo.serializers.TaggedFieldSerializer;
 import macbury.forge.assets.assets.Asset;
+import macbury.forge.assets.assets.CubemapAsset;
 import macbury.forge.assets.assets.ModelAsset;
 import macbury.forge.assets.assets.TextureAsset;
 import macbury.forge.db.GameDatabase;
@@ -65,6 +66,7 @@ public class StorageManager {
       kryo.register(Teleport.class, new PlayerStartPositionSerializer());
       kryo.register(TextureAsset.class, new AssetSerializer());
       kryo.register(ModelAsset.class, new AssetSerializer());
+      kryo.register(CubemapAsset.class, new AssetSerializer());
       kryo.setDefaultSerializer(TaggedFieldSerializer.class);
       return kryo;
     }
