@@ -11,7 +11,7 @@ import macbury.forge.shaders.utils.BaseRenderableUniform;
  * Created by macbury on 29.04.15.
  */
 public class UniformWorldTransform extends BaseRenderableUniform {
-  public final String UNIFORM_WORLD_TRANSFORM = "u_worldTransform";
+  public static final String UNIFORM_WORLD_TRANSFORM = "u_worldTransform";
 
   @Override
   public void bind(ShaderProgram shader, LevelEnv env, RenderContext context, Camera camera, Renderable renderable) {

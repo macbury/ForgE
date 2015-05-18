@@ -1,0 +1,13 @@
+{
+  class: macbury.forge.shaders.SkyboxShader,
+  fragment: "skybox",
+  vertex:   "skybox",
+  uniforms: [
+    "Sky"
+  ],
+  helpers: {
+    vertex: 	[],
+    fragment: 	[]
+  },
+
+}

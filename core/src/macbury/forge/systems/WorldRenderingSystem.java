@@ -41,8 +41,10 @@ public class WorldRenderingSystem extends IteratingSystem {
   @Override
   public void update(float deltaTime) {
     ForgE.graphics.clearAll(env.skyColor);
+
     batch.begin(camera); {
       batch.add(skybox);
+      batch.render(env);
       batch.add(terrain);
       super.update(deltaTime);
       batch.render(env);

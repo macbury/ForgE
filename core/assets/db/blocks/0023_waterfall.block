@@ -1,7 +1,7 @@
 {
   shadeAO: true,
   envAO: true,
-  shape: "liquid",
+  shape: "waterfall",
   solid: false,
   liquid: true,
   textures: {

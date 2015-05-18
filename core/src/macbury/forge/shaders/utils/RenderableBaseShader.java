@@ -37,7 +37,7 @@ public abstract class RenderableBaseShader<T extends Renderable> extends BaseSha
   }
 
   protected void renderWithCurrentMesh(final T renderable) {
-    currentMesh.render(shader, renderable.primitiveType, 0, currentMesh.getMaxIndices() > 0 ? currentMesh.getMaxIndices() : currentMesh.getMaxVertices(), false);
+    currentMesh.render(shader, renderable.primitiveType, renderable.meshPartOffset, currentMesh.getMaxIndices() > 0 ? currentMesh.getMaxIndices() : currentMesh.getMaxVertices(), false);
   }
 
   @Override
