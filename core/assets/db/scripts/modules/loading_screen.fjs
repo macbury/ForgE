@@ -17,17 +17,22 @@ game.provider("$LoadingScreen", function($log, $screens, $graphics, $gl, $thread
 
     $log.info(TAG, "Preparing to load: " + this.teleport.mapId);
 
-    $thread.run(this.loadLevelState.bind(this)).then(this.buildGeometry.bind(this));
-  }
-
-  LoadingScreenAction.prototype.buildGeometry = function (justLoadedLevelState) {
-    this.levelState = justLoadedLevelState;
-    $log.info(TAG, "Loaded: " + this.levelState);
+    $thread.run(this.loadLevelState.bind(this)).then(this.onLoadLevelStateFinished.bind(this));
   }
 
   LoadingScreenAction.prototype.loadLevelState = function(result) {
     var levelState = $levels.load(this.teleport.mapId)
     result.resolve(levelState);
+  }
+
+  LoadingScreenAction.prototype.onLoadLevelStateFinished = function (justLoadedLevelState) {
+    this.levelState = justLoadedLevelState;
+    $log.info(TAG, "Loaded level state: " + this.levelState);
+    $thread.run(this.buildGeometry.bind(this));
+  }
+
+  LoadingScreenAction.prototype.buildGeometry = function(result) {
+    result.resolve(0);
   }
 
   LoadingScreenAction.prototype.render = function(delta) {
@@ -48,7 +53,6 @@ game.provider("$LoadingScreen", function($log, $screens, $graphics, $gl, $thread
   LoadingScreenAction.prototype.dispose = function() {
     this.shapeRenderer.dispose();
   }
-
 
   return {
     get: function(teleport) {
