@@ -22,6 +22,7 @@ import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
 import macbury.forge.graphics.batch.sprites.Sprite3D;
 import macbury.forge.graphics.builders.Chunk;
 import macbury.forge.graphics.camera.GameCamera;
+import macbury.forge.graphics.fbo.FrameBufferManager;
 import macbury.forge.graphics.frustrum.FrustrumDebugAndRenderer;
 import macbury.forge.level.Level;
 import macbury.forge.octree.OctreeNode;
@@ -54,7 +55,7 @@ public class DebugSystem extends IteratingSystem implements Disposable {
   public DebugSystem(Level level) {
     super(Family.getFor(PositionComponent.class));
     this.level            = level;
-    this.batch            = level.batch;
+    this.batch            = level.colorBatch;
     this.context          = level.renderContext;
     this.dynamicOctree    = level.octree;
     this.terrainOctree    = level.octree;
@@ -94,6 +95,7 @@ public class DebugSystem extends IteratingSystem implements Disposable {
 
   @Override
   public void update(float deltaTime) {
+    ForgE.fb.begin(FrameBufferManager.FRAMEBUFFER_MAIN_COLOR);
     batch.begin(camera);
     context.begin();
     context.setDepthTest(GL30.GL_LEQUAL);
@@ -143,6 +145,8 @@ public class DebugSystem extends IteratingSystem implements Disposable {
         level.entities.psychics.debugDraw(camera);
       } context.end();
     }
+
+    ForgE.fb.end();
   }
 
   private void renderStartPosition() {

@@ -17,6 +17,7 @@ public class EntitySystemsManager extends PooledEngine implements Disposable {
   //private final CollisionSystem collision;
   public final PsychicsSystem psychics;
   public final CharacterSystem character;
+  public final LightRenderingSystem lighting;
 
   public EntitySystemsManager(Level level) {
     psychics  = new PsychicsSystem();
@@ -26,7 +27,7 @@ public class EntitySystemsManager extends PooledEngine implements Disposable {
     culling   = new CullingSystem(level);
     character = new CharacterSystem();
     player    = new PlayerSystem();
-
+    lighting  = new LightRenderingSystem(level);
     level.terrainEngine.addListener(psychics);
 
     addSystem(culling);
@@ -37,6 +38,7 @@ public class EntitySystemsManager extends PooledEngine implements Disposable {
     addSystem(character);
     addSystem(psychics);
 
+    addSystem(lighting);
     addSystem(rendering);
     addSystem(debug);
 

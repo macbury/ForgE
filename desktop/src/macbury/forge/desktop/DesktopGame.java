@@ -28,7 +28,7 @@ public class DesktopGame implements ForgEBootListener, Thread.UncaughtExceptionH
     Thread.setDefaultUncaughtExceptionHandler(this);
     LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
     config.resizable      = false;
-    config.foregroundFPS  = 30;
+    config.foregroundFPS  = 60;
 
     if (args.fullscreen) {
       config.width          = 1920;

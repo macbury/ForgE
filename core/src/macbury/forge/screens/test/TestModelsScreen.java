@@ -11,17 +11,16 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
-import com.badlogic.gdx.graphics.g3d.model.data.ModelData;
 import com.badlogic.gdx.graphics.g3d.utils.DefaultTextureBinder;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
-import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.UBJsonReader;
 import macbury.forge.ForgE;
 import macbury.forge.graphics.batch.VoxelBatch;
 import macbury.forge.level.LevelEnv;
 import macbury.forge.screens.AbstractScreen;
+import macbury.forge.shaders.providers.ColorShaderProvider;
 
 /**
  * Created by macbury on 27.04.15.
@@ -52,7 +51,7 @@ public class TestModelsScreen extends AbstractScreen {
 
 
     this.modelBatch        = new ModelBatch();
-    this.voxelBatch        = new VoxelBatch(new RenderContext(new DefaultTextureBinder(DefaultTextureBinder.WEIGHTED)));
+    this.voxelBatch        = new VoxelBatch(new RenderContext(new DefaultTextureBinder(DefaultTextureBinder.WEIGHTED)), new ColorShaderProvider());
     ModelLoader g3djLoader = new G3dModelLoader(new UBJsonReader());
     model                  = g3djLoader.loadModel(Gdx.files.internal("raw-models/test.g3db"));
 

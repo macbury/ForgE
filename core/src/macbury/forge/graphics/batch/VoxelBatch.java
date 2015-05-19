@@ -15,10 +15,11 @@ import macbury.forge.ForgE;
 import macbury.forge.assets.assets.TextureAsset;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
 import macbury.forge.graphics.batch.renderable.SpriteRenderable;
+import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
 import macbury.forge.graphics.batch.sprites.Sprite3D;
 import macbury.forge.graphics.batch.sprites.Sprite3DCache;
 import macbury.forge.level.LevelEnv;
-import macbury.forge.shaders.ShaderProvider;
+import macbury.forge.shaders.providers.ShaderProvider;
 import macbury.forge.shaders.utils.RenderableBaseShader;
 
 /**
@@ -38,9 +39,9 @@ public class VoxelBatch implements Disposable {
   private boolean sorted;
   public int renderablesPerFrame;
 
-  public VoxelBatch(RenderContext customRenderContext) {
+  public VoxelBatch(RenderContext customRenderContext, ShaderProvider shaderProvider) {
     this.context              = customRenderContext;
-    this.shaderProvider       = new ShaderProvider();
+    this.shaderProvider       = shaderProvider;
     this.shapeRenderer        = new ShapeRenderer();
     this.sorter               = new CameraRenderableSorter();
     this.spriteRenderablePool = new SpriteRenderablePool();
@@ -74,6 +75,12 @@ public class VoxelBatch implements Disposable {
       add(renderable);
     }
 
+  }
+
+  public void add(Array<Renderable> renderableArray) {
+    for (Renderable renderable : renderableArray) {
+      add(renderable);
+    }
   }
 
   /**
@@ -190,9 +197,9 @@ public class VoxelBatch implements Disposable {
     spriteRenderablePool.flush();
     spriteCache.clear();
     renderablePool.clear();
+    shaderProvider.dispose();
     camera = null;
   }
-
 
   public Sprite3DCache findSpriteCacheForRegion(TextureRegion textureRegion) {
     Sprite3DCache found = null;
@@ -208,4 +215,5 @@ public class VoxelBatch implements Disposable {
     }
     return found;
   }
+
 }

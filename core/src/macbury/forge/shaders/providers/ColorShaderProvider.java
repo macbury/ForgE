@@ -1,13 +1,9 @@
-package macbury.forge.shaders;
+package macbury.forge.shaders.providers;
 
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import macbury.forge.ForgE;
-import macbury.forge.graphics.batch.renderable.BaseRenderable;
-import macbury.forge.graphics.batch.renderable.SpriteRenderable;
-import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
 import macbury.forge.shaders.utils.BaseShader;
 import macbury.forge.shaders.utils.RenderableBaseShader;
 import macbury.forge.shaders.utils.ShaderReloadListener;
@@ -16,10 +12,10 @@ import macbury.forge.shaders.utils.ShadersManager;
 /**
  * Created by macbury on 29.10.14.
  */
-public class ShaderProvider implements Disposable, ShaderReloadListener {
+public class ColorShaderProvider implements ShaderReloadListener, ShaderProvider {
   private final Array<RenderableBaseShader> shaders = new Array<RenderableBaseShader>();
 
-  public ShaderProvider() {
+  public ColorShaderProvider() {
     reloadShaderCache();
     ForgE.shaders.addOnShaderReloadListener(this);
   }
@@ -33,6 +29,7 @@ public class ShaderProvider implements Disposable, ShaderReloadListener {
     }
   }
 
+  @Override
   public RenderableBaseShader provide(Renderable renderable) {
     for (RenderableBaseShader shader : shaders) {
       if (shader.canRender(renderable)) {

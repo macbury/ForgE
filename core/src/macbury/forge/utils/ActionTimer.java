@@ -13,7 +13,10 @@ public class ActionTimer {
     this.time = time;
   }
   public void start() {
+    if (!running)
+      currentTime = time;
     running = true;
+
   }
   public void stop() {
     this.running = false;

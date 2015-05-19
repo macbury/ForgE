@@ -8,6 +8,8 @@ import com.badlogic.gdx.Gdx;
 public class Config {
 
 
+  public int depthMapSize = 512;
+
   public enum RenderDebug {
     Textured, Wireframe, Normals, Lighting
   }

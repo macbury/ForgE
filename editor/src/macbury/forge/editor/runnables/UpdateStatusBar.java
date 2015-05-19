@@ -43,7 +43,7 @@ public class UpdateStatusBar {
       } else {
         fpsLabel.setText("FPS: " + Gdx.graphics.getFramesPerSecond());
         statusMemoryLabel.setText("Memory: " + FormatUtils.humanReadableByteCount(Gdx.app.getNativeHeap(), true) + "/" + FormatUtils.humanReadableByteCount(Gdx.app.getJavaHeap(), true));
-        statusRenderablesLabel.setText("Renderables: " + String.valueOf(projectController.levelEditorScreen.level.batch.renderablesPerFrame));
+        statusRenderablesLabel.setText("Renderables: " + String.valueOf(projectController.levelEditorScreen.level.colorBatch.renderablesPerFrame));
 
         statusTriangleCountLabel.setText("Vertex avg: " + String.valueOf(Math.round(GLProfiler.vertexCount.average)));
 

@@ -27,44 +27,33 @@ import java.util.Comparator;
 /**
  * Created by macbury on 23.10.14.
  */
-public class TerrainEngine implements Disposable, ActionTimer.TimerListener, RenderableProvider {
-  private static final float UPDATE_EVERY    = 0.02f;
+public class TerrainEngine implements Disposable {
   private static final String TAG = "TerrainEngine";
   private static final int CHUNK_TO_REBUILD_PER_TICK = 10;
-  private final ActionTimer       timer;
   private final ChunkMap          map;
   private final OctreeNode        octree;
-  private final GameCamera        camera;
   private final TerrainBuilder    builder;
   public  final Array<Chunk>      chunks;
-  public  final Array<VoxelChunkRenderable> visibleFaces;
   public  final Array<OctreeObject> tempObjects;
   public  final Vector3 tempA  = new Vector3();
   public  final Vector3 tempC  = new Vector3();
   public  final Vector3i tempB = new Vector3i();
   private  final BoundingBox tempBox;
-  private final Array<Chunk> visibleChunks;
-  private final Comparator<Chunk> sorter;
   private final FrustrumClassFilterOctreeQuery frustrumOctreeQuery;
 
   private final Array<TerrainEngineListener> listeners = new Array<TerrainEngineListener>();
 
   public TerrainEngine(Level level) {
-    this.timer = new ActionTimer(UPDATE_EVERY, this);
-    this.timer.start();
     this.frustrumOctreeQuery  = new FrustrumClassFilterOctreeQuery();
     this.tempObjects          = new Array<OctreeObject>();
-    this.visibleChunks        = new Array<Chunk>();
-    this.visibleFaces         = new Array<VoxelChunkRenderable>();
     this.chunks               = new Array<Chunk>();
     this.map                  = level.terrainMap;
     this.octree               = level.octree;
-    this.camera               = level.camera;
     this.builder              = new TerrainBuilder(map);
     this.tempBox              = new BoundingBox();
     frustrumOctreeQuery.setKlass(Chunk.class);
 
-    this.sorter               = new Comparator<Chunk>() {
+    /*this.sorter               = new Comparator<Chunk>() {
       @Override
       public int compare(Chunk o1, Chunk o2) {
         tempA.set(o1.worldPosition);
@@ -78,23 +67,18 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Ren
       public boolean equals(Object obj) {
         return false;
       }
-    };
+    };*/
   }
 
   public void update() {
-    timer.update(Gdx.graphics.getDeltaTime());
     rebuild();
   }
 
-  @Override
-  public void onTimerTick(ActionTimer timer) {
-    occulsion();
-  }
 
   /**
    * Check which chunks with its renderables are visible!
    */
-  private void occulsion() {
+  public void occulsion(GameCamera camera, Array<Chunk> visibleChunks, Array<VoxelChunkRenderable> visibleFaces) {
     visibleFaces.clear();
     visibleChunks.clear();
     tempObjects.clear();
@@ -119,7 +103,6 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Ren
         }
       }
     }
-    visibleChunks.sort(sorter);
     camera.restoreFov();
   }
 
@@ -148,9 +131,6 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Ren
       buildMeshForAvalibleChunks();
     }
 
-    if (notDone) {
-      occulsion();
-    }
 
     return !notDone;
   }
@@ -226,11 +206,6 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Ren
 
   public void removeListener(TerrainEngineListener listener) {
     listeners.removeValue(listener, true);
-  }
-
-  @Override
-  public void getRenderables(Array<Renderable> renderables, Pool<Renderable> pool) {
-    renderables.addAll(visibleFaces);
   }
 
   public interface TerrainEngineListener {

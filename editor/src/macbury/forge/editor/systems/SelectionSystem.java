@@ -45,7 +45,7 @@ public class SelectionSystem extends EntitySystem {
     this.voxelPicker             = new VoxelPicker(level.terrainMap);
     this.camera                  = level.camera;
     this.map                     = level.terrainMap;
-    this.shapeRenderer           = level.batch.shapeRenderer;
+    this.shapeRenderer           = level.colorBatch.shapeRenderer;
     this.renderContext           = level.renderContext;
     Entity cursorEntity          = level.entities.createEntity();
 
