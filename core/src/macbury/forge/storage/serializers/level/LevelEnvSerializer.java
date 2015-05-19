@@ -9,6 +9,7 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import macbury.forge.assets.assets.CubemapAsset;
 import macbury.forge.assets.assets.TextureAsset;
+import macbury.forge.graphics.Skybox;
 import macbury.forge.level.LevelEnv;
 
 /**
@@ -22,8 +23,8 @@ public class LevelEnvSerializer extends Serializer<LevelEnv> {
     kryo.writeObject(output, object.skyColor);
     kryo.writeObject(output, object.ambientLight);
 
-    kryo.writeObjectOrNull(output, object.windDisplacementTextureAsset, TextureAsset.class);
-    kryo.writeObjectOrNull(output, object.skyboxAsset, CubemapAsset.class);
+    kryo.writeObjectOrNull(output, object.getWindDisplacementTextureAsset(), TextureAsset.class);
+    kryo.writeObjectOrNull(output, object.skybox, Skybox.class);
   }
 
   @Override
@@ -34,8 +35,8 @@ public class LevelEnvSerializer extends Serializer<LevelEnv> {
     env.skyColor                = kryo.readObject(input, Color.class);
     env.ambientLight            = kryo.readObject(input, Color.class);
 
-    env.windDisplacementTextureAsset = kryo.readObjectOrNull(input, TextureAsset.class);
-    env.skyboxAsset = kryo.readObjectOrNull(input, CubemapAsset.class);
+    env.setWindDisplacementTextureAsset(kryo.readObjectOrNull(input, TextureAsset.class));
+    env.skybox                  = kryo.readObjectOrNull(input, Skybox.class);
     return env;
   }
 }

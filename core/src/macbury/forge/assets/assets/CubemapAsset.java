@@ -21,13 +21,14 @@ public class CubemapAsset extends AssetWithDependencies<Cubemap> {
       FileHandle sideHandle = Gdx.files.internal(file.pathWithoutExtension() + sideName + "." + file.extension());
       if (sideHandle.exists()) {
         TextureAsset sideAsset = manager.getTexture(sideHandle.file().getAbsolutePath());
+        Texture texture        = sideAsset.get();
         addDependency(sideAsset);
-        textures.add(sideAsset.get().getTextureData());
+        textures.add(texture.getTextureData());
       } else {
         throw new GdxRuntimeException("Could not find " + sideHandle.path());
       }
     }
-    return new Cubemap(
+    Cubemap cm = new Cubemap(
         textures.get(0),
         textures.get(1),
         textures.get(2),
@@ -35,5 +36,9 @@ public class CubemapAsset extends AssetWithDependencies<Cubemap> {
         textures.get(4),
         textures.get(5)
     );
+
+    cm.setWrap(Texture.TextureWrap.ClampToEdge, Texture.TextureWrap.ClampToEdge);
+    cm.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+    return cm;
   }
 }

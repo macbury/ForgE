@@ -32,7 +32,6 @@ public class Level implements Disposable {
   public final FrustrumDebugAndRenderer frustrumDebugger;
   public final TerrainEngine            terrainEngine;
   public final LevelEnv                 env;
-  public final Skybox                   skybox;
 
   public Level(LevelState state) {
     this.env                 = state.env;
@@ -42,7 +41,6 @@ public class Level implements Disposable {
 
     this.octree              = OctreeNode.root();
 
-    this.skybox              = new Skybox(env);
     this.batch               = new VoxelBatch(renderContext);
     this.camera              = new GameCamera();
     this.frustrumDebugger    = new FrustrumDebugAndRenderer(camera);
@@ -59,6 +57,7 @@ public class Level implements Disposable {
   }
 
   public void render(float delta) {
+    env.skybox.update(delta);
     batch.resetStats();
     camera.update();
     terrainEngine.update();
@@ -75,7 +74,6 @@ public class Level implements Disposable {
     octree.dispose();
     frustrumDebugger.dispose();
     terrainEngine.dispose();
-    skybox.dispose();
   }
 
 }

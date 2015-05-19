@@ -44,13 +44,9 @@ public class LevelState {
     terrainMap.buildFloor();
     terrainMap.rebuildAll();
     env.terrainMap              = terrainMap;
-    env.windDisplacementTextureAsset = ForgE.assets.getTexture("graphics/textures/wind_bump.jpg");
-    env.windDisplacementTextureAsset.retain();
-
-    env.skyboxAsset                  = ForgE.assets.getCubemap("graphics/textures/skybox/day.png");
-    env.skyboxAsset.retain();
+    env.setWindDisplacementTextureAsset(ForgE.assets.getTexture("graphics/textures/wind_bump.jpg"));
+    env.skybox.setSkyboxAsset(ForgE.assets.getCubemap("graphics/textures/skybox/day.png"));
   }
-
 
   public void setTerrainMap(ChunkMap chunkMap) {
     env.terrainMap = chunkMap;

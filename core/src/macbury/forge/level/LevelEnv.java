@@ -10,24 +10,25 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.assets.assets.CubemapAsset;
 import macbury.forge.assets.assets.TextureAsset;
+import macbury.forge.graphics.Skybox;
 import macbury.forge.voxel.ChunkMap;
 
 /**
  * Created by macbury on 28.10.14.
  */
 public class LevelEnv implements Disposable {
+  public Skybox skybox;
   public DirectionalLight mainLight;
   public Color ambientLight;
   public Color skyColor;
   public ChunkMap terrainMap;
-  public CubemapAsset skyboxAsset;
-  public TextureAsset windDisplacementTextureAsset;
+  private TextureAsset windDisplacementTextureAsset;
   public Vector2 windDirection = new Vector2(0.1f,0);
   public Vector3 gravity = new Vector3(0, -6f, 0);
   private Texture windDisplacementTexture;
-  private Cubemap skyboxCubemap;
 
   public LevelEnv() {
+    skybox       = new Skybox(null);
     skyColor     = Color.valueOf("3498db");
     mainLight    = new DirectionalLight();
     mainLight.set(1f, 1f, 1f,-1, -1, 0.5f);
@@ -77,33 +78,31 @@ public class LevelEnv implements Disposable {
 
   @Override
   public void dispose() {
-    if (windDisplacementTextureAsset != null) {
-      windDisplacementTextureAsset.release();
-      windDisplacementTextureAsset = null;
-      windDisplacementTexture = null;
-    }
+    setWindDisplacementTextureAsset(null);
 
-    if (skyboxAsset != null) {
-      if (skyboxCubemap != null) {
-        skyboxCubemap.dispose();
-        skyboxCubemap = null;
-      }
-      skyboxAsset.release();
-      skyboxAsset = null;
-    }
+    skybox.dispose();
   }
 
-  public GLTexture getWindDisplacementTextureAsset() {
+  public GLTexture getWindDisplacementTexture() {
     if (windDisplacementTexture == null) {
       windDisplacementTexture = windDisplacementTextureAsset.get();
     }
     return windDisplacementTexture;
   }
 
-  public Cubemap getSkyboxCubemap() {
-    if (skyboxCubemap == null) {
-      skyboxCubemap = skyboxAsset.get();
+
+  public void setWindDisplacementTextureAsset(TextureAsset newWindDisplacementTextureAsset) {
+    if (windDisplacementTextureAsset != null) {
+      windDisplacementTextureAsset.release();
+      windDisplacementTextureAsset = null;
+      windDisplacementTexture = null;
     }
-    return skyboxCubemap;
+    this.windDisplacementTextureAsset = newWindDisplacementTextureAsset;
+    if(windDisplacementTextureAsset != null)
+      windDisplacementTextureAsset.retain();
+  }
+
+  public TextureAsset getWindDisplacementTextureAsset() {
+    return windDisplacementTextureAsset;
   }
 }

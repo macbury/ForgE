@@ -35,7 +35,7 @@ public class WorldRenderingSystem extends IteratingSystem {
     this.batch   = level.batch;
     this.env     = level.env;
     this.camera  = level.camera;
-    this.skybox  = level.skybox;
+    this.skybox  = level.env.skybox;
   }
 
   @Override
@@ -45,8 +45,10 @@ public class WorldRenderingSystem extends IteratingSystem {
     batch.begin(camera); {
       batch.add(skybox);
       batch.render(env);
+
       batch.add(terrain);
       super.update(deltaTime);
+
       batch.render(env);
     } batch.end();
   }

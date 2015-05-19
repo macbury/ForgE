@@ -31,7 +31,7 @@ public class SkyboxShader extends RenderableBaseShader<SkyboxRenderable> {
     tempMat.val[Matrix4.M03] = 0;
     tempMat.val[Matrix4.M13] = 0;
     tempMat.val[Matrix4.M23] = 0;
-
+    tempMat.rotate(env.skybox.rotationDirection, env.skybox.rotation);
     tempMat.inv().tra();
 
     mvp.set(camera.projection).mul(tempMat);
@@ -42,7 +42,7 @@ public class SkyboxShader extends RenderableBaseShader<SkyboxRenderable> {
     shader.setUniformMatrix(MODELVIEW_UNIFORM, mvp);
     shader.setUniformi(
         UNIFORM_CUBEMAP,
-        context.textureBinder.bind(env.getSkyboxCubemap())
+        context.textureBinder.bind(env.skybox.getSkyboxCubemap())
     );
   }
 

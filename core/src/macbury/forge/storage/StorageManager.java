@@ -20,6 +20,7 @@ import macbury.forge.assets.assets.ModelAsset;
 import macbury.forge.assets.assets.TextureAsset;
 import macbury.forge.db.GameDatabase;
 import macbury.forge.db.models.Teleport;
+import macbury.forge.graphics.Skybox;
 import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
 import macbury.forge.level.LevelEnv;
 import macbury.forge.level.LevelState;
@@ -68,6 +69,7 @@ public class StorageManager {
       kryo.register(ModelAsset.class, new AssetSerializer());
       kryo.register(CubemapAsset.class, new AssetSerializer());
       kryo.setDefaultSerializer(TaggedFieldSerializer.class);
+      kryo.register(Skybox.class, new SkyboxSerializer());
       return kryo;
     }
   };
