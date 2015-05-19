@@ -27,7 +27,6 @@ public class Skybox implements Disposable, RenderableProvider {
   public float rotation;
 
   public Skybox(CubemapAsset asset) {
-
     setSkyboxAsset(asset);
   }
 
