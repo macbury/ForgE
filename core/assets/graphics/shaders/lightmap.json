@@ -1,0 +1,13 @@
+{
+  class: macbury.forge.shaders.FrameBufferShader,
+  fragment: "lightmap",
+  vertex:   "framebuffer_default",
+  uniforms: [
+    "SunDepthMap"
+  ],
+  helpers: {
+    vertex: [],
+    fragment: []
+  },
+
+}

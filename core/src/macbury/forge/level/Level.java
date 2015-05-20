@@ -66,10 +66,12 @@ public class Level implements Disposable {
 
     ui.addActor(new FullScreenFrameBufferResult());
 
-    DebugFrameBufferResult testColor = new DebugFrameBufferResult(FrameBufferManager.FRAMEBUFFER_SUN_DEPTH);
+    DebugFrameBufferResult testColor = new DebugFrameBufferResult(FrameBufferManager.FRAMEBUFFER_LIGHT_MAP);
     testColor.setWidth(512);
     testColor.setHeight(512);
     ui.addActor(testColor);
+
+
   }
 
   public void resize(int width, int height) {
@@ -87,7 +89,7 @@ public class Level implements Disposable {
     terrainEngine.update();
     entities.update(delta);
 
-    ForgE.graphics.clearAll(Color.CLEAR);
+    ForgE.graphics.clearAll(Color.BLACK);
 
     ui.act(delta);
     ui.draw();

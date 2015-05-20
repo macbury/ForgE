@@ -10,6 +10,13 @@ import macbury.forge.graphics.camera.GameCamera;
 public class SunLight extends GameCamera {
   public final Color color = new Color(0, 0, 0, 1);
 
+  public SunLight() {
+    super();
+    fieldOfView = 120;
+    far         = 100;
+    near        = 1f;
+  }
+
   public SunLight set (final SunLight copyFrom) {
     return set(copyFrom.color, copyFrom.direction);
   }

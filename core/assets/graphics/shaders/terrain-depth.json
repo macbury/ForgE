@@ -1,0 +1,14 @@
+{
+  class: macbury.forge.shaders.TerrainDepthShader,
+  fragment: "terrain_depth",
+  vertex:   "terrain_depth",
+  uniforms: [
+    "WorldTransform",
+    "Sun"
+  ],
+  helpers: {
+    vertex: ["directional_light"],
+    fragment: ["directional_light"]
+  },
+
+}

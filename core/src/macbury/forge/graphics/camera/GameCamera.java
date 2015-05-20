@@ -11,12 +11,12 @@ import macbury.forge.graphics.frustrum.DebugFrustrum;
  * Created by macbury on 23.10.14.
  */
 public class GameCamera extends PerspectiveCamera {
-  private static final float BASE_FOV = 67;
-  private static final float EXTEND_FOV_BY = 15;
-  private final Vector3 debugDirection;
-  private final Vector3 debugPosition;
-  private DebugFrustrum debugFrustrum;
-  private float oldFieldOfView;
+  protected static final float BASE_FOV = 67;
+  protected static final float EXTEND_FOV_BY = 15;
+  protected final Vector3 debugDirection;
+  protected final Vector3 debugPosition;
+  protected DebugFrustrum debugFrustrum;
+  protected float oldFieldOfView;
 
   public GameCamera() {
     super(BASE_FOV, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -24,6 +24,8 @@ public class GameCamera extends PerspectiveCamera {
     this.debugPosition = new Vector3();
     this.far           = 100;
   }
+
+
 
   public void saveDebugFrustrum() {
     this.debugFrustrum = new DebugFrustrum(frustum, invProjectionView);

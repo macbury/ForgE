@@ -1,6 +1,8 @@
 struct DirectionalLight {
     vec3 direction;
     vec4 color;
+    float far;
+    vec3 position;
 };
 vec3 directionalLightDiffuse(DirectionalLight source, vec3 normal) {
     vec3 lightDir = -source.direction;

@@ -9,6 +9,8 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
 import macbury.forge.ForgE;
+import macbury.forge.shaders.FrameBufferShader;
+import macbury.forge.shaders.utils.BaseShader;
 
 /**
  * Created by macbury on 19.05.15.
@@ -17,6 +19,7 @@ public class FrameBufferManager implements Disposable {
   public final static String FRAMEBUFFER_MAIN_COLOR = "FRAMEBUFFER_MAIN_COLOR";
   public final static String FRAMEBUFFER_SUN_DEPTH  = "FRAMEBUFFER_SUN_DEPTH";
   private static final String TAG                   = "FrameBufferManager";
+  public static final String FRAMEBUFFER_LIGHT_MAP  = "FRAMEBUFFER_LIGHT_MAP";
   private ObjectMap<String, FrameBuffer> frameBuffers;
   private Mesh screenQuad;
   private OrthographicCamera screenCamera;
@@ -32,6 +35,22 @@ public class FrameBufferManager implements Disposable {
 
   public FrameBuffer get(String key) {
     return  frameBuffers.get(key);
+  }
+
+  public void renderFB(RenderContext renderContext, String outputFrameBufferId, String shaderName) {
+    BaseShader baseShader = ForgE.shaders.get(shaderName);
+    if (FrameBufferShader.class.isInstance(baseShader)) {
+      FrameBufferShader shader = (FrameBufferShader)baseShader;
+      renderContext.begin(); {
+        begin(outputFrameBufferId); {
+          shader.begin(screenCamera, renderContext, null); {
+            shader.render(screenQuad, GL30.GL_TRIANGLE_STRIP);
+          } shader.end();
+        } end();
+      } renderContext.end();
+    } else {
+      throw new GdxRuntimeException(shaderName + " is not FrameBufferShader");
+    }
   }
 
   /**
@@ -121,7 +140,8 @@ public class FrameBufferManager implements Disposable {
 
   public void createDefaultFrameBuffers() {
     create(FRAMEBUFFER_MAIN_COLOR);
-    //create(FRAMEBUFFER_SUN_DEPTH, Pixmap.Format.Alpha, ForgE.config.depthMapSize, ForgE.config.depthMapSize, true);
-    create(FRAMEBUFFER_SUN_DEPTH, Pixmap.Format.RGBA8888, ForgE.config.depthMapSize, ForgE.config.depthMapSize, true);
+    create(FRAMEBUFFER_SUN_DEPTH, Pixmap.Format.Alpha, ForgE.config.depthMapSize, ForgE.config.depthMapSize, true);
+    create(FRAMEBUFFER_LIGHT_MAP, Pixmap.Format.RGBA8888, ForgE.config.depthMapSize, ForgE.config.depthMapSize, true);
+    //create(FRAMEBUFFER_SUN_DEPTH, Pixmap.Format.RGBA8888, ForgE.config.depthMapSize, ForgE.config.depthMapSize, true);
   }
 }

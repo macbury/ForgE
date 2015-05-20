@@ -13,12 +13,15 @@ public class UniformSun extends BaseUniform {
   public final String UNIFORM_AMBIENT_LIGHT          = "u_ambientLight";
   public final String UNIFORM_MAIN_LIGHT_COLOR       = "u_mainLight.color";
   public final String UNIFORM_MAIN_LIGHT_DIRECTION   = "u_mainLight.direction";
-
+  public final String UNIFORM_MAIN_LIGHT_POSITION    = "u_mainLight.position";
+  public final String UNIFORM_MAIN_LIGHT_FAR         = "u_mainLight.far";
   @Override
   public void bind(ShaderProgram shader, LevelEnv env, RenderContext context, Camera camera) {
     shader.setUniformf(UNIFORM_AMBIENT_LIGHT, env.ambientLight);
     shader.setUniformf(UNIFORM_MAIN_LIGHT_COLOR, env.mainLight.color);
     shader.setUniformf(UNIFORM_MAIN_LIGHT_DIRECTION, env.mainLight.direction);
+    shader.setUniformf(UNIFORM_MAIN_LIGHT_POSITION, env.mainLight.position);
+    shader.setUniformf(UNIFORM_MAIN_LIGHT_FAR, env.mainLight.far);
   }
 
   @Override

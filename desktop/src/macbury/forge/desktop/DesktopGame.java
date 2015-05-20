@@ -66,6 +66,11 @@ public class DesktopGame implements ForgEBootListener, Thread.UncaughtExceptionH
 
   @Override
   public void uncaughtException(Thread t, Throwable e) {
+    try {
+      Gdx.input.setCursorCatched(false);
+    } catch (Exception errr) {
+
+    }
     TaskDialogs.showException(e);
     e.printStackTrace();
     Gdx.app.exit();
