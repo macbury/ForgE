@@ -43,7 +43,7 @@ public class WorldRenderingSystem extends IteratingSystem implements ActionTimer
     this.terrain = level.terrainEngine;
     this.batch   = level.colorBatch;
     this.env     = level.env;
-    this.camera  = level.camera;
+    this.camera  = level.env.camera;
     this.skybox  = level.env.skybox;
     this.timer   = new OcculsionTimer(this);
     timer.start();

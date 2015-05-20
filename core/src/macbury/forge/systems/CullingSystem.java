@@ -29,7 +29,7 @@ public class CullingSystem extends IteratingSystem {
     super(Family.getFor(PositionComponent.class));
 
     this.rootNode              = level.octree;
-    this.camera                = level.camera;
+    this.camera                = level.env.camera;
     this.frustrumDebugger      = level.frustrumDebugger;
     this.octreeVisibleObjects  = new Array<OctreeObject>();
     this.frustrumOctreeQuery   = new FrustrumClassFilterOctreeQuery();

@@ -14,5 +14,5 @@ uniform DirectionalLight u_mainLight;
 varying vec4 v_position;
 
 void main() {
-  gl_FragColor = vec4(length(v_position.xyz-u_mainLight.position)/u_mainLight.far);
+  gl_FragColor = vec4(length(v_position.xyz-u_mainLight.position.xyz)/u_mainLight.far);
 }

@@ -9,17 +9,17 @@ game.provider("$GameplayScreen", function($log, $input, $entities, $assets, $gdx
     this.level         = level;
     $input.setCursorCatched(true);
 
-    this.cameraController          = new FirstPersonCameraController(level.camera);
-    this.level.camera.far          = FAR_CAMERA;
-    this.level.camera.near         = NEAR_CAMERA;
-    this.level.camera.fieldOfView  = FIELD_OF_VIEW;
+    this.cameraController              = new FirstPersonCameraController(this.level.env.camera);
+    this.level.env.camera.far          = FAR_CAMERA;
+    this.level.env.camera.near         = NEAR_CAMERA;
+    this.level.env.camera.fieldOfView  = FIELD_OF_VIEW;
 
     this.spawnPlayer();
   }
 
   GameplayController.prototype.spawnPlayer = function() {
     var playerEntity       = $entities.get("player").build(this.level.entities);
-    playerEntity.getComponent(PlayerComponent).camera = this.level.camera;
+    playerEntity.getComponent(PlayerComponent).camera = this.level.env.camera;
     this.level.terrainMap.localVoxelPositionToWorldPosition(this.teleport.voxelPosition, playerEntity.getComponent(PositionComponent).vector);
     playerEntity.getComponent(PositionComponent).vector.sub(-0.5);
     this.level.entities.addEntity(playerEntity);

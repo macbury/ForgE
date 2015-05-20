@@ -45,11 +45,11 @@ public class LevelEditorScreen extends AbstractScreen {
     this.level                = new Level(state);
     this.selectionSystem      = new SelectionSystem(level);
     this.cameraController     = new RTSCameraController();
-    this.decalBatch           = new DecalBatch(new CameraGroupStrategy(level.camera));
-    level.camera.far          = LEVEL_EDITOR_FAR_CAMERA;
+    this.decalBatch           = new DecalBatch(new CameraGroupStrategy(level.env.camera));
+    level.env.camera.far          = LEVEL_EDITOR_FAR_CAMERA;
 
     cameraController.setCenter(level.terrainMap.getWidth() / 2, level.terrainMap.getDepth() / 2);
-    cameraController.setCamera(level.camera);
+    cameraController.setCamera(level.env.camera);
     cameraController.setOverlay(overlay);
 
     selectionSystem.setOverlay(overlay);

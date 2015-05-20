@@ -21,7 +21,7 @@ varying vec4   v_position;
 varying vec2   v_textCoord;
 varying vec2   v_uvStart;
 varying vec2   v_uvMul;
-
+varying vec4   v_positionLightTrans;
 varying float  v_transparent;
 
 void main() {
@@ -39,6 +39,8 @@ void main() {
   v_textCoord       = a_texCoord0;
   v_position        = u_worldTransform * a_position;
   v_position        = applyWind(u_time, u_windDirection, waviness, v_position, u_mapSize, u_windDisplacementTexture);
+
+  v_positionLightTrans = u_mainLight.transMatrix * a_position;
 
   gl_Position       = u_projectionMatrix * v_position;
 }

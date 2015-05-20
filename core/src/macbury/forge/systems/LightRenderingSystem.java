@@ -44,7 +44,7 @@ public class LightRenderingSystem extends IteratingSystem implements ActionTimer
     this.terrain    = level.terrainEngine;
     this.batch      = level.depthBatch;
     this.env        = level.env;
-    this.mainCamera = level.camera;
+    this.mainCamera = level.env.camera;
     this.renderContext = level.renderContext;
     timer.start();
   }
@@ -59,12 +59,8 @@ public class LightRenderingSystem extends IteratingSystem implements ActionTimer
     timer.update(deltaTime);
     updateLightPosition();
     renderDepthMap(deltaTime);
-    renderLightMap();
   }
 
-  private void renderLightMap() {
-    ForgE.fb.renderFB(renderContext, FrameBufferManager.FRAMEBUFFER_LIGHT_MAP, SHADER_LIGHTMAP);
-  }
 
   private void renderDepthMap(float deltaTime) {
     ForgE.fb.begin(FrameBufferManager.FRAMEBUFFER_SUN_DEPTH); {
@@ -73,7 +69,7 @@ public class LightRenderingSystem extends IteratingSystem implements ActionTimer
         super.update(deltaTime);
 
         for (VoxelChunkRenderable renderable : visibleFaces) {
-          if (renderable.mesh != null)
+          if (renderable.mesh != null && !renderable.haveTransparency())
             batch.add(renderable);
         }
 
@@ -83,7 +79,7 @@ public class LightRenderingSystem extends IteratingSystem implements ActionTimer
   }
 
   private void updateLightPosition() {
-    tempVec.set(mainCamera.position).add(1,10,1);
+    tempVec.set(mainCamera.position).add(0,10,0);
     env.mainLight.position.set(tempVec);
     env.mainLight.lookAt(mainCamera.position);
   }

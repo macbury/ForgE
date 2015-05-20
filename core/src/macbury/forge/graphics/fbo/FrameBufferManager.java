@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
 import macbury.forge.ForgE;
+import macbury.forge.level.LevelEnv;
 import macbury.forge.shaders.FrameBufferShader;
 import macbury.forge.shaders.utils.BaseShader;
 
@@ -37,13 +38,13 @@ public class FrameBufferManager implements Disposable {
     return  frameBuffers.get(key);
   }
 
-  public void renderFB(RenderContext renderContext, String outputFrameBufferId, String shaderName) {
+  public void renderFB(RenderContext renderContext, LevelEnv env, String outputFrameBufferId, String shaderName) {
     BaseShader baseShader = ForgE.shaders.get(shaderName);
     if (FrameBufferShader.class.isInstance(baseShader)) {
       FrameBufferShader shader = (FrameBufferShader)baseShader;
       renderContext.begin(); {
         begin(outputFrameBufferId); {
-          shader.begin(screenCamera, renderContext, null); {
+          shader.begin(screenCamera, renderContext, env); {
             shader.render(screenQuad, GL30.GL_TRIANGLE_STRIP);
           } shader.end();
         } end();

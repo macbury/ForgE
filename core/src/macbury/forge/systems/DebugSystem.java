@@ -59,7 +59,7 @@ public class DebugSystem extends IteratingSystem implements Disposable {
     this.context          = level.renderContext;
     this.dynamicOctree    = level.octree;
     this.terrainOctree    = level.octree;
-    this.camera           = level.camera;
+    this.camera           = level.env.camera;
     this.terrain          = level.terrainEngine;
     this.frustrumDebugger = level.frustrumDebugger;
     this.tempBox          = new BoundingBox();

@@ -35,8 +35,8 @@ public class GameplayScreen extends AbstractScreen {
   @Override
   protected void initialize() {
     Gdx.input.setCursorCatched(true);
-    this.cameraController     = new FirstPersonCameraController(level.camera);
-    level.camera.far          = FAR_CAMERA;
+    this.cameraController     = new FirstPersonCameraController(level.env.camera);
+    /*evel.camera.far          = FAR_CAMERA;
     level.camera.near         = NEAR_CAMERA;
     level.camera.fieldOfView  = 70;
     this.playerEntity       = ForgE.entities.get("player").build(level.entities);
@@ -48,11 +48,11 @@ public class GameplayScreen extends AbstractScreen {
     Entity teapotEntity      = ForgE.entities.get("crate-p").build(level.entities);
     teapotEntity.getComponent(PositionComponent.class).vector.set(playerEntity.getComponent(PositionComponent.class).vector).add(0,1,-4);
     level.entities.addEntity(teapotEntity);
-
+*/
   }
 
   @Override
-  public void render(float delta) {
+  public void render(float delta) {/*
     ForgE.assets.update();
     cameraController.update(delta);
     level.render(delta);
@@ -93,7 +93,7 @@ public class GameplayScreen extends AbstractScreen {
       temp.set(level.camera.direction).scl(30);
       teapotEntity.getComponent(RigidBodyComoponent.class).initialImpulse.set(temp);
       level.entities.addEntity(teapotEntity);
-    }
+    }*/
   }
 
   @Override

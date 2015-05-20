@@ -15,6 +15,7 @@ public class UniformSun extends BaseUniform {
   public final String UNIFORM_MAIN_LIGHT_DIRECTION   = "u_mainLight.direction";
   public final String UNIFORM_MAIN_LIGHT_POSITION    = "u_mainLight.position";
   public final String UNIFORM_MAIN_LIGHT_FAR         = "u_mainLight.far";
+  public final String UNIFORM_MAIN_LIGHT_TRANS_MAT   = "u_mainLight.transMatrix";
   @Override
   public void bind(ShaderProgram shader, LevelEnv env, RenderContext context, Camera camera) {
     shader.setUniformf(UNIFORM_AMBIENT_LIGHT, env.ambientLight);
@@ -22,6 +23,7 @@ public class UniformSun extends BaseUniform {
     shader.setUniformf(UNIFORM_MAIN_LIGHT_DIRECTION, env.mainLight.direction);
     shader.setUniformf(UNIFORM_MAIN_LIGHT_POSITION, env.mainLight.position);
     shader.setUniformf(UNIFORM_MAIN_LIGHT_FAR, env.mainLight.far);
+    shader.setUniformMatrix(UNIFORM_MAIN_LIGHT_TRANS_MAT, env.mainLight.combined);
   }
 
   @Override

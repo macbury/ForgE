@@ -3,11 +3,12 @@
   fragment: "lightmap",
   vertex:   "framebuffer_default",
   uniforms: [
-    "SunDepthMap"
+    "SunDepthMap",
+    "Sun"
   ],
   helpers: {
     vertex: [],
-    fragment: []
+    fragment: ["directional_light"]
   },
 
 }

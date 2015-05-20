@@ -26,7 +26,6 @@ import macbury.forge.voxel.ChunkMap;
  */
 public class Level implements Disposable {
   public final EntitySystemsManager entities;
-  public final GameCamera               camera;
   public final VoxelBatch colorBatch;
   public final ChunkMap                 terrainMap;
   public final LevelState               state;
@@ -57,8 +56,8 @@ public class Level implements Disposable {
 
     this.colorBatch          = new VoxelBatch(renderContext, new ColorShaderProvider());
     this.depthBatch          = new VoxelBatch(renderContext, new DepthShaderProvider());
-    this.camera              = new GameCamera();
-    this.frustrumDebugger    = new FrustrumDebugAndRenderer(camera);
+
+    this.frustrumDebugger    = new FrustrumDebugAndRenderer(this.env.camera);
     this.terrainEngine       = new TerrainEngine(this);
     this.entities            = new EntitySystemsManager(this);
 
@@ -66,18 +65,16 @@ public class Level implements Disposable {
 
     ui.addActor(new FullScreenFrameBufferResult());
 
-    DebugFrameBufferResult testColor = new DebugFrameBufferResult(FrameBufferManager.FRAMEBUFFER_LIGHT_MAP);
+    DebugFrameBufferResult testColor = new DebugFrameBufferResult(FrameBufferManager.FRAMEBUFFER_SUN_DEPTH);
     testColor.setWidth(512);
     testColor.setHeight(512);
     ui.addActor(testColor);
-
-
   }
 
   public void resize(int width, int height) {
-    camera.viewportWidth  = width;
-    camera.viewportHeight = height;
-    camera.update(true);
+    env.camera.viewportWidth  = width;
+    env.camera.viewportHeight = height;
+    env.camera.update(true);
     ui.getViewport().update(width, height, true);
   }
 
@@ -85,7 +82,7 @@ public class Level implements Disposable {
     fpsLogger.log();
     env.skybox.update(delta);
     colorBatch.resetStats();
-    camera.update();
+    env.camera.update();
     terrainEngine.update();
     entities.update(delta);
 

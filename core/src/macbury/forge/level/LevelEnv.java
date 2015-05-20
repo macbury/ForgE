@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.assets.assets.CubemapAsset;
 import macbury.forge.assets.assets.TextureAsset;
 import macbury.forge.graphics.Skybox;
+import macbury.forge.graphics.camera.GameCamera;
 import macbury.forge.graphics.lighting.SunLight;
 import macbury.forge.voxel.ChunkMap;
 
@@ -18,6 +19,8 @@ import macbury.forge.voxel.ChunkMap;
  * Created by macbury on 28.10.14.
  */
 public class LevelEnv implements Disposable {
+
+  public GameCamera camera;
   public Skybox skybox;
   public SunLight mainLight;
   public Color ambientLight;
@@ -29,6 +32,7 @@ public class LevelEnv implements Disposable {
   private Texture windDisplacementTexture;
 
   public LevelEnv() {
+    this.camera  = new GameCamera();
     skybox       = new Skybox(null);
     skyColor     = Color.valueOf("3498db");
     mainLight    = new SunLight();

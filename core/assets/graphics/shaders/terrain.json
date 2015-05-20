@@ -11,11 +11,12 @@
     "Sky",
     "Sun",
     "Time",
-    "Wind"
+    "Wind",
+    "SunDepthMap",
   ],
   helpers: {
     vertex: ["directional_light", "fog", "foliage"],
-    fragment: ["fog"]
+    fragment: ["fog", "directional_light"]
   },
-  
+
 }
