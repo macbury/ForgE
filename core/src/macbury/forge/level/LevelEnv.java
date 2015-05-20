@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.assets.assets.CubemapAsset;
 import macbury.forge.assets.assets.TextureAsset;
 import macbury.forge.graphics.Skybox;
+import macbury.forge.graphics.lighting.SunLight;
 import macbury.forge.voxel.ChunkMap;
 
 /**
@@ -18,7 +19,7 @@ import macbury.forge.voxel.ChunkMap;
  */
 public class LevelEnv implements Disposable {
   public Skybox skybox;
-  public DirectionalLight mainLight;
+  public SunLight mainLight;
   public Color ambientLight;
   public Color skyColor;
   public ChunkMap terrainMap;
@@ -30,7 +31,7 @@ public class LevelEnv implements Disposable {
   public LevelEnv() {
     skybox       = new Skybox(null);
     skyColor     = Color.valueOf("3498db");
-    mainLight    = new DirectionalLight();
+    mainLight    = new SunLight();
     mainLight.set(1f, 1f, 1f,-1, -1, 0.5f);
 
     ambientLight = Color.GRAY;
@@ -68,11 +69,11 @@ public class LevelEnv implements Disposable {
     this.ambientLight = ambientLight;
   }
 
-  public DirectionalLight getMainLight() {
+  public SunLight getMainLight() {
     return mainLight;
   }
 
-  public void setMainLight(DirectionalLight mainLight) {
+  public void setMainLight(SunLight mainLight) {
     this.mainLight = mainLight;
   }
 

@@ -18,12 +18,13 @@ import macbury.forge.level.Level;
 import macbury.forge.level.LevelEnv;
 import macbury.forge.terrain.TerrainEngine;
 import macbury.forge.utils.ActionTimer;
+import macbury.forge.utils.OcculsionTimer;
 
 /**
  * Created by macbury on 19.05.15.
  */
 public class LightRenderingSystem extends IteratingSystem implements ActionTimer.TimerListener {
-  public static final float OCCULSION_TIMER_DELAY = 0.05f;
+
   private final TerrainEngine terrain;
   private final VoxelBatch batch;
   private final LevelEnv env;
@@ -37,7 +38,7 @@ public class LightRenderingSystem extends IteratingSystem implements ActionTimer
     visibleChunks = new Array<Chunk>();
     visibleFaces  = new Array<VoxelChunkRenderable>();
 
-    this.timer   = new ActionTimer(OCCULSION_TIMER_DELAY, this);
+    this.timer   = new OcculsionTimer(this);
     this.terrain = level.terrainEngine;
     this.batch   = level.colorBatch;
     this.env     = level.env;
@@ -70,8 +71,6 @@ public class LightRenderingSystem extends IteratingSystem implements ActionTimer
 
   @Override
   public void onTimerTick(ActionTimer timer) {
-    visibleChunks.clear();
-    visibleFaces.clear();
     terrain.occulsion(camera, visibleChunks, visibleFaces);
   }
 }

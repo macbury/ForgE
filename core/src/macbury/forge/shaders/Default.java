@@ -8,12 +8,13 @@ import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import macbury.forge.graphics.batch.renderable.SpriteRenderable;
 import macbury.forge.graphics.mesh.MeshVertexInfo;
+import macbury.forge.shaders.utils.ColorRenderableBaseShader;
 import macbury.forge.shaders.utils.RenderableBaseShader;
 
 /**
  * Created by macbury on 29.04.15.
  */
-public class Default  extends RenderableBaseShader<Renderable> {
+public class Default  extends ColorRenderableBaseShader<Renderable> {
 
   @Override
   public boolean canRender(Renderable instance) {

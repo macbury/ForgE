@@ -4,10 +4,7 @@ import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import macbury.forge.ForgE;
-import macbury.forge.shaders.utils.BaseShader;
-import macbury.forge.shaders.utils.RenderableBaseShader;
-import macbury.forge.shaders.utils.ShaderReloadListener;
-import macbury.forge.shaders.utils.ShadersManager;
+import macbury.forge.shaders.utils.*;
 
 /**
  * Created by macbury on 29.10.14.
@@ -23,7 +20,7 @@ public class ColorShaderProvider implements ShaderReloadListener, ShaderProvider
   private void reloadShaderCache() {
     shaders.clear();
     for (BaseShader shader : ForgE.shaders.all()) {
-      if (RenderableBaseShader.class.isInstance(shader)) {
+      if (ColorRenderableBaseShader.class.isInstance(shader)) {
         shaders.add((RenderableBaseShader) shader);
       }
     }

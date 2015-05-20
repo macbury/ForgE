@@ -22,6 +22,7 @@ import macbury.forge.db.GameDatabase;
 import macbury.forge.db.models.Teleport;
 import macbury.forge.graphics.Skybox;
 import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
+import macbury.forge.graphics.lighting.SunLight;
 import macbury.forge.level.LevelEnv;
 import macbury.forge.level.LevelState;
 import macbury.forge.storage.serializers.assets.AssetSerializer;
@@ -58,7 +59,7 @@ public class StorageManager {
       kryo.register(LevelEnv.class, new LevelEnvSerializer());
       kryo.register(Vector2.class, new Vector2Serializer());
       kryo.register(Color.class, new ColorSerializer());
-      kryo.register(DirectionalLight.class, new DirectionalLightSerializer());
+      kryo.register(SunLight.class, new DirectionalLightSerializer());
       kryo.register(Asset.class, new AssetSerializer());
       kryo.register(BoundingBox.class, new BoundingBoxSerializer());
       kryo.register(VoxelChunkRenderable.class, new VoxelFaceRenderableSerializer());

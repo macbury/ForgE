@@ -7,12 +7,13 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import macbury.forge.graphics.batch.renderable.SkyboxRenderable;
 import macbury.forge.shaders.uniforms.UniformWorldTransform;
+import macbury.forge.shaders.utils.ColorRenderableBaseShader;
 import macbury.forge.shaders.utils.RenderableBaseShader;
 
 /**
  * Created by macbury on 18.05.15.
  */
-public class SkyboxShader extends RenderableBaseShader<SkyboxRenderable> {
+public class SkyboxShader extends ColorRenderableBaseShader<SkyboxRenderable> {
   private static final String MODELVIEW_UNIFORM = "u_mvpMatrix";
   private static final String UNIFORM_CUBEMAP = "u_skyboxCubemap";
   private Matrix4 tempMat = new Matrix4();

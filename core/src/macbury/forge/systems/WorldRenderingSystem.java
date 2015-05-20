@@ -20,6 +20,7 @@ import macbury.forge.level.Level;
 import macbury.forge.level.LevelEnv;
 import macbury.forge.terrain.TerrainEngine;
 import macbury.forge.utils.ActionTimer;
+import macbury.forge.utils.OcculsionTimer;
 
 /**
  * Created by macbury on 19.10.14.
@@ -44,7 +45,7 @@ public class WorldRenderingSystem extends IteratingSystem implements ActionTimer
     this.env     = level.env;
     this.camera  = level.camera;
     this.skybox  = level.env.skybox;
-    this.timer   = new ActionTimer(LightRenderingSystem.OCCULSION_TIMER_DELAY, this);
+    this.timer   = new OcculsionTimer(this);
     timer.start();
   }
 

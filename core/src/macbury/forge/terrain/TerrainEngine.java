@@ -15,6 +15,7 @@ import macbury.forge.graphics.builders.Chunk;
 import macbury.forge.graphics.builders.TerrainBuilder;
 import macbury.forge.graphics.camera.GameCamera;
 import macbury.forge.level.Level;
+import macbury.forge.utils.OcculsionTimer;
 import macbury.forge.voxel.ChunkMap;
 import macbury.forge.octree.OctreeNode;
 import macbury.forge.octree.OctreeObject;
@@ -95,9 +96,10 @@ public class TerrainEngine implements Disposable {
         visibleChunks.add(visibleChunk);
         for (int i = 0; i < visibleChunk.renderables.size; i++) {
           VoxelChunkRenderable renderable = visibleChunk.renderables.get(i);
+
           //http://www.gamasutra.com/view/feature/131773/a_compact_method_for_backface_.php?print=1
           //tempA.set(renderable.boundingBox.getCenter());
-          if (camera.boundsInFrustum(renderable.boundingBox) /*&& tempA.sub(tempC).scl(camera.direction).nor().dot(renderable.direction) >= 0f*/) {
+          if (renderable.mesh != null && camera.boundsInFrustum(renderable.boundingBox) /*&& tempA.sub(tempC).scl(camera.direction).nor().dot(renderable.direction) >= 0f*/) {
             visibleFaces.add(renderable);
           }
         }
@@ -125,6 +127,8 @@ public class TerrainEngine implements Disposable {
         i--;
         if (i <= 0) break;
       }
+
+      OcculsionTimer.runAll();
     }
 
     if (buildNowMesh || notDone) {

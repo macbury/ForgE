@@ -8,12 +8,13 @@ import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
 import macbury.forge.graphics.batch.renderable.SpriteRenderable;
 import macbury.forge.level.LevelEnv;
+import macbury.forge.shaders.utils.ColorRenderableBaseShader;
 import macbury.forge.shaders.utils.RenderableBaseShader;
 
 /**
  * Created by macbury on 27.03.15.
  */
-public class SpriteShader extends RenderableBaseShader<SpriteRenderable> {
+public class SpriteShader extends ColorRenderableBaseShader<SpriteRenderable> {
   public final String UNIFORM_SPRITE_TEXTURE = "u_spriteTexture";
   @Override
   public boolean canRender(Renderable instance) {

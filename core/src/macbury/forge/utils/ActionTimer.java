@@ -25,11 +25,16 @@ public class ActionTimer {
     if (this.running) {
       currentTime += delta;
       if (currentTime > time) {
-        currentTime = 0;
-        listener.onTimerTick(this);
+        trigger();
       }
     }
   }
+
+  protected void trigger() {
+    currentTime = 0;
+    listener.onTimerTick(this);
+  }
+
   public interface TimerListener {
     public void onTimerTick(ActionTimer timer);
   }

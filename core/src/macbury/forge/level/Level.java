@@ -43,7 +43,7 @@ public class Level implements Disposable {
   public final LevelEnv                 env;
   public final VoxelBatch               depthBatch;
   public final Stage                    ui;
-  private final FPSLogger fpsLogger;
+  public final FPSLogger                fpsLogger;
 
   public Level(LevelState state) {
     this.fpsLogger           = new FPSLogger();

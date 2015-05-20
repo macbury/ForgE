@@ -7,12 +7,13 @@ import com.badlogic.gdx.math.Matrix3;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
 import macbury.forge.graphics.batch.renderable.TerrainChunkRenderable;
 import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
+import macbury.forge.shaders.utils.ColorRenderableBaseShader;
 import macbury.forge.shaders.utils.RenderableBaseShader;
 
 /**
  * Created by macbury on 18.10.14.
  */
-public class TerrainShader extends RenderableBaseShader<VoxelChunkRenderable> {
+public class TerrainShader extends ColorRenderableBaseShader<VoxelChunkRenderable> {
 
   @Override
   public void afterBegin() {
