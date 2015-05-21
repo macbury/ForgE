@@ -30,7 +30,7 @@ public class ForgE extends Game {
   public static EntityManager       entities;
   public static LevelManager        levels;
   public static ScriptManager       scripts;
-  public static FrameBufferManager fb;
+  public static FrameBufferManager  fb;
 
   private Array<ForgEBootListener>  bootListeners;
 

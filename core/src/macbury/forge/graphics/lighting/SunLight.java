@@ -14,8 +14,8 @@ public class SunLight extends GameCamera {
   public SunLight() {
     super(120, ForgE.config.depthMapSize, ForgE.config.depthMapSize);
     fieldOfView = 120;
-    far         = 20;
-    near        = 1f;
+    far         = 100;
+    near        = 0.1f;
   }
 
   public SunLight set (final SunLight copyFrom) {

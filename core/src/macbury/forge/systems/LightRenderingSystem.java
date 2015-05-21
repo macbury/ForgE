@@ -75,23 +75,20 @@ public class LightRenderingSystem extends IteratingSystem implements ActionTimer
         super.update(deltaTime);
 
         for (VoxelChunkRenderable renderable : visibleFaces) {
-          if (renderable.mesh != null && !renderable.haveTransparency())
+          if (renderable.mesh != null )
             batch.add(renderable);
         }
 
         batch.render(env);
       } batch.end();
 
-      if (Gdx.input.isKeyPressed(Input.Keys.G)) {
-        ScreenshotFactory.saveScreenshot(new FileHandle("/tmp/depth.png"), 1024, 1024);
-      }
     } ForgE.fb.end();
   }
 
   private void updateLightPosition() {
     //tempVec.set(mainCamera.position).add(0,10,0);
-    env.mainLight.position.set(0, 10, 0);
-    env.mainLight.lookAt(8,0,8);
+    env.mainLight.position.set(0, 20, 0);
+    env.mainLight.lookAt(10,0,10);
     env.mainLight.update();
   }
 
