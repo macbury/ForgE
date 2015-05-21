@@ -25,7 +25,12 @@ public class GameCamera extends PerspectiveCamera {
     this.far           = 100;
   }
 
-
+  public GameCamera(float fieldOfViewY, float viewportWidth, float viewportHeight) {
+    super(fieldOfViewY, viewportWidth, viewportHeight);
+    debugDirection = new Vector3();
+    this.debugPosition = new Vector3();
+    this.far           = 100;
+  }
 
   public void saveDebugFrustrum() {
     this.debugFrustrum = new DebugFrustrum(frustum, invProjectionView);

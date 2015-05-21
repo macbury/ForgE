@@ -3,7 +3,9 @@ package macbury.forge.shaders.utils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.Json;
+import macbury.forge.promises.GdxFutureTask;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -68,6 +70,7 @@ public class ShadersManager {
       } else {
         triggerOnShaderError(shader);
         Gdx.app.log(TAG, shader.getLog());
+        throw new GdxRuntimeException("Shader compilation error!");
       }
     }
 

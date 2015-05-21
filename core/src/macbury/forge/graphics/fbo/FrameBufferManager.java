@@ -1,6 +1,7 @@
 package macbury.forge.graphics.fbo;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
@@ -12,6 +13,7 @@ import macbury.forge.ForgE;
 import macbury.forge.level.LevelEnv;
 import macbury.forge.shaders.FrameBufferShader;
 import macbury.forge.shaders.utils.BaseShader;
+import macbury.forge.utils.ScreenshotFactory;
 
 /**
  * Created by macbury on 19.05.15.
@@ -142,7 +144,9 @@ public class FrameBufferManager implements Disposable {
   public void createDefaultFrameBuffers() {
     create(FRAMEBUFFER_MAIN_COLOR);
     create(FRAMEBUFFER_SUN_DEPTH, Pixmap.Format.Alpha, ForgE.config.depthMapSize, ForgE.config.depthMapSize, true);
-    create(FRAMEBUFFER_LIGHT_MAP, Pixmap.Format.RGBA8888, ForgE.config.depthMapSize, ForgE.config.depthMapSize, true);
+    //create(FRAMEBUFFER_LIGHT_MAP, Pixmap.Format.RGBA8888, ForgE.config.depthMapSize, ForgE.config.depthMapSize, true);
     //create(FRAMEBUFFER_SUN_DEPTH, Pixmap.Format.RGBA8888, ForgE.config.depthMapSize, ForgE.config.depthMapSize, true);
   }
+
+
 }

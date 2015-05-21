@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import macbury.forge.Config;
 import macbury.forge.ForgE;
 import macbury.forge.components.PlayerComponent;
 import macbury.forge.components.PositionComponent;
@@ -47,7 +48,8 @@ public class ScriptManager implements Disposable {
           FirstPersonCameraController.class,
           Input.class,
           PositionComponent.class,
-          PlayerComponent.class
+          PlayerComponent.class,
+          Config.class
       }
   );
   private final Context context;
@@ -102,6 +104,9 @@ public class ScriptManager implements Disposable {
     gameScript.registerObjectAsModule("$assets", ForgE.assets);
     gameScript.registerObjectAsModule("$input", Gdx.input);
     gameScript.registerObjectAsModule("$entities", ForgE.entities);
+    gameScript.registerObjectAsModule("$config", ForgE.config);
+    gameScript.registerObjectAsModule("$shaders", ForgE.shaders);
+    gameScript.registerObjectAsModule("$fb", ForgE.fb);
     //TODO: Find better solution!
     for (int i = 0; i < packagesToImport.size; i++) {
       String classToImport = packagesToImport.get(i).getName();

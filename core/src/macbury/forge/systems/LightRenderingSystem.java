@@ -3,7 +3,11 @@ package macbury.forge.systems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
@@ -20,6 +24,7 @@ import macbury.forge.level.LevelEnv;
 import macbury.forge.terrain.TerrainEngine;
 import macbury.forge.utils.ActionTimer;
 import macbury.forge.utils.OcculsionTimer;
+import macbury.forge.utils.ScreenshotFactory;
 
 /**
  * Created by macbury on 19.05.15.
@@ -64,7 +69,8 @@ public class LightRenderingSystem extends IteratingSystem implements ActionTimer
 
   private void renderDepthMap(float deltaTime) {
     ForgE.fb.begin(FrameBufferManager.FRAMEBUFFER_SUN_DEPTH); {
-      ForgE.graphics.clearAll(Color.BLACK);
+      Gdx.gl.glClearColor(0, 0, 0, 1);
+      Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
       batch.begin(env.getMainLight()); {
         super.update(deltaTime);
 
@@ -75,13 +81,18 @@ public class LightRenderingSystem extends IteratingSystem implements ActionTimer
 
         batch.render(env);
       } batch.end();
+
+      if (Gdx.input.isKeyPressed(Input.Keys.G)) {
+        ScreenshotFactory.saveScreenshot(new FileHandle("/tmp/depth.png"), 1024, 1024);
+      }
     } ForgE.fb.end();
   }
 
   private void updateLightPosition() {
-    tempVec.set(mainCamera.position).add(0,10,0);
-    env.mainLight.position.set(tempVec);
-    env.mainLight.lookAt(mainCamera.position);
+    //tempVec.set(mainCamera.position).add(0,10,0);
+    env.mainLight.position.set(0, 10, 0);
+    env.mainLight.lookAt(8,0,8);
+    env.mainLight.update();
   }
 
   @Override

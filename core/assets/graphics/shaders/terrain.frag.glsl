@@ -1,3 +1,13 @@
+#ifdef GL_ES
+#define LOWP lowp
+#define MED mediump
+#define HIGH highp
+precision mediump float;
+#else
+#define MED
+#define LOWP
+#define HIGH
+#endif
 uniform vec4      u_eyePosition;
 uniform vec4      u_skyColor;
 uniform sampler2D u_diffuseTexture;
@@ -14,19 +24,40 @@ varying vec4   v_positionLightTrans;
 
 
 void main() {
-  float len           = length(v_position.xyz-u_mainLight.position.xyz) / u_mainLight.far;
-  vec3 depth          = (v_positionLightTrans.xyz / u_mainLight.position.w) * 0.5f + 0.5f;
+  vec4 light          = vec4(v_lightDiffuse);
+  vec3 depth          = (v_positionLightTrans.xyz / v_positionLightTrans.w) * 0.5f + 0.5f;
+  if (v_positionLightTrans.z>=0.0 && (depth.x >= 0.0) && (depth.x <= 1.0) && (depth.y >= 0.0) && (depth.y <= 1.0) ) {
+    float lenToLight    = length(v_position.xyz-u_mainLight.position.xyz)/u_mainLight.far;
+    float lenDepthMap   = texture2D(u_sunDepthMap, depth.xy).a;
+
+    if (lenDepthMap<lenToLight-0.005f) {
+      light.rgb *= 0.4f;
+    } else {
+      light.rgb *= 0.4f + 0.6f*(1.0f-lenToLight);
+    }
+  } else {
+    light.rgb *= 0.4f;
+  }
+
   vec2 tilingTextCord = (fract(v_textCoord) * v_uvMul) + v_uvStart;
   vec4 texture        = texture2D(u_diffuseTexture, tilingTextCord);
 
-  vec4 diffuse        = v_lightDiffuse * texture;
+  vec4 diffuse        = light * texture;
+  /*float lenFB         = texture2D(u_sunDepthMap, depth.xy).a;
+  float lenLight      = length(v_position.xyz-u_mainLight.position.xyz) / u_mainLight.far;
+
+  float diff          = lenFB - lenLight;
+  if(!(diff < 0.01f && diff > -0.01f)) {
+    diffuse.rgb *= 0.4f;
+  }*/
 
   #ifdef normalsDebugFlag
     diffuse.rgb = v_normal;
   #endif
   #ifdef lightingDebugFlag
-    diffuse.rgb = v_lightDiffuse.rgb;
-    diffuse.rgb = vec3(1.0f- len) ;//* v_lightDiffuse.rgb;
+    diffuse.rgb = light.rgb;
+
+    //diffuse.rgb = vec3(1.0f- len) ;//* v_lightDiffuse.rgb;
   #endif
 
   if (v_transparent >= 0.5f && texture.a <= 0.0f) {

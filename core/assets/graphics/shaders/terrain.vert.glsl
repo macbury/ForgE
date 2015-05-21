@@ -1,3 +1,14 @@
+#ifdef GL_ES
+#define LOWP lowp
+#define MED mediump
+#define HIGH highp
+precision mediump float;
+#else
+#define MED
+#define LOWP
+#define HIGH
+#endif
+
 attribute vec3 a_normal;
 attribute vec4 a_position;
 attribute vec4 a_material;
@@ -38,9 +49,10 @@ void main() {
   v_lightDiffuse    = u_ambientLight + vec4(lightDiffuse, 1.0f);
   v_textCoord       = a_texCoord0;
   v_position        = u_worldTransform * a_position;
-  v_position        = applyWind(u_time, u_windDirection, waviness, v_position, u_mapSize, u_windDisplacementTexture);
 
-  v_positionLightTrans = u_mainLight.transMatrix * a_position;
+  v_position           = applyWind(u_time, u_windDirection, waviness, v_position, u_mapSize, u_windDisplacementTexture);
+  v_positionLightTrans = u_mainLight.transMatrix * v_position;
+
 
   gl_Position       = u_projectionMatrix * v_position;
 }

@@ -2,6 +2,7 @@ package macbury.forge.graphics.lighting;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
+import macbury.forge.ForgE;
 import macbury.forge.graphics.camera.GameCamera;
 
 /**
@@ -11,9 +12,9 @@ public class SunLight extends GameCamera {
   public final Color color = new Color(0, 0, 0, 1);
 
   public SunLight() {
-    super();
+    super(120, ForgE.config.depthMapSize, ForgE.config.depthMapSize);
     fieldOfView = 120;
-    far         = 100;
+    far         = 20;
     near        = 1f;
   }
 

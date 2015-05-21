@@ -134,7 +134,7 @@ public abstract class BaseShader implements Disposable {
   }
 
   public String getLog() {
-    return shader.getLog();
+    return shader != null ? shader.getLog() : "Shader not compiled!!!";
   }
 
   /**

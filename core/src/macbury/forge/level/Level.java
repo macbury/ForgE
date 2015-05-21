@@ -66,8 +66,8 @@ public class Level implements Disposable {
     ui.addActor(new FullScreenFrameBufferResult());
 
     DebugFrameBufferResult testColor = new DebugFrameBufferResult(FrameBufferManager.FRAMEBUFFER_SUN_DEPTH);
-    testColor.setWidth(512);
-    testColor.setHeight(512);
+    testColor.setWidth(256);
+    testColor.setHeight(256);
     ui.addActor(testColor);
   }
 

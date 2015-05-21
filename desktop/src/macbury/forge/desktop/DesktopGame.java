@@ -2,6 +2,7 @@ package macbury.forge.desktop;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.utils.GdxRuntimeException;
@@ -45,11 +46,13 @@ public class DesktopGame implements ForgEBootListener, Thread.UncaughtExceptionH
     forgeConfig.debug             = false;
     forgeConfig.renderBulletDebug = true;
     forgeConfig.renderBoundingBox = true;
+
     //forgeConfig.cacheGeometry = true; //TODO: check in terrain engine if there is geometry in file
 
     ForgE engine              = new ForgE(forgeConfig);
     engine.addBootListener(this);
     new LwjglApplication(engine, config);
+
   }
 
   @Override

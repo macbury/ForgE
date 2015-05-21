@@ -1,5 +1,6 @@
 package macbury.forge.shaders;
 
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
@@ -17,7 +18,8 @@ public class TerrainDepthShader extends DepthRenderableBaseShader<Renderable> {
 
   @Override
   public void beforeRender(Renderable renderable) {
-    context.setCullFace(GL30.GL_BACK);
+    context.setDepthTest(GL20.GL_LEQUAL);
+    context.setCullFace(GL20.GL_NONE);
   }
 
   @Override

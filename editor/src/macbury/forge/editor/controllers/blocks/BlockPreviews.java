@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Vector3;
 import macbury.forge.ForgE;
 import macbury.forge.blocks.Block;
-import macbury.forge.editor.utils.ScreenshotFactory;
+import macbury.forge.utils.ScreenshotFactory;
 import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
 import macbury.forge.graphics.builders.Chunk;
 import macbury.forge.graphics.builders.TerrainBuilder;

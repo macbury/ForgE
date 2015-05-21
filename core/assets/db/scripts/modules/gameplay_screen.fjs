@@ -1,4 +1,4 @@
-game.provider("$GameplayScreen", function($log, $input, $entities, $assets, $gdxApp) {
+game.provider("$GameplayScreen", function($log, $input, $entities, $assets, $gdxApp, $config, $shaders) {
   var TAG                    = "$GameplayScreen";
   var FAR_CAMERA             = 100;
   var NEAR_CAMERA            = 0.01;
@@ -33,6 +33,21 @@ game.provider("$GameplayScreen", function($log, $input, $entities, $assets, $gdx
 
     if ($input.isKeyPressed(Input.Keys.ESCAPE)) {
       $gdxApp.exit();
+    }
+
+    if ($input.isKeyPressed(Input.Keys.NUM_1)) {
+      $config.renderDebug = Config.RenderDebug.Textured;
+      $shaders.reload();
+    }
+
+    if ($input.isKeyPressed(Input.Keys.NUM_2)) {
+      $config.renderDebug = Config.RenderDebug.Lighting;
+      $shaders.reload();
+    }
+
+    if ($input.isKeyPressed(Input.Keys.NUM_3)) {
+      $config.renderDebug = Config.RenderDebug.Normals;
+      $shaders.reload();
     }
   }
 
