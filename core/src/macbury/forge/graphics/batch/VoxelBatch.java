@@ -64,6 +64,10 @@ public class VoxelBatch implements Disposable {
     sorted = false;
   }
 
+  public void begin(CameraProvider provider) {
+    begin(provider.getBatchCamera());
+  }
+
   /**
    * Add Sprite3D to queue
    * @param sprite3D
@@ -216,4 +220,7 @@ public class VoxelBatch implements Disposable {
     return found;
   }
 
+  public interface CameraProvider {
+    public Camera getBatchCamera();
+  }
 }

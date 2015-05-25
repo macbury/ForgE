@@ -4,12 +4,13 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Pool;
+import macbury.forge.graphics.camera.GameCamera;
 
 /**
  * Created by macbury on 17.03.15.
  */
 public class PlayerComponent extends BaseComponent {
-  public Camera camera;
+  public GameCamera camera;
   public float headWobbleSpeed;
   public float headWobbleMax;
 

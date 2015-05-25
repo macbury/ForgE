@@ -1,6 +1,7 @@
 package macbury.forge.terrain;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.RenderableProvider;
 import com.badlogic.gdx.math.Vector3;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Pool;
 import macbury.forge.ForgE;
+import macbury.forge.graphics.batch.VoxelBatch;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
 import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
 import macbury.forge.graphics.builders.Chunk;
@@ -106,6 +108,30 @@ public class TerrainEngine implements Disposable {
       }
     }
     camera.restoreFov();
+  }
+
+  /**
+   * Check which chunks with its renderables are visible!
+   */
+  public void occulsion(VoxelBatch.CameraProvider cameraProvider, Array<Chunk> visibleChunks, Array<VoxelChunkRenderable> visibleFaces) {
+    visibleFaces.clear();
+    visibleChunks.clear();
+    tempObjects.clear();
+
+    frustrumOctreeQuery.setFrustum(cameraProvider.getBatchCamera().frustum);
+    octree.retrieve(tempObjects, frustrumOctreeQuery);
+    while(tempObjects.size > 0) {
+      Chunk visibleChunk = (Chunk) tempObjects.pop();
+      if (visibleChunk.renderables.size > 0) {
+        visibleChunks.add(visibleChunk);
+        for (int i = 0; i < visibleChunk.renderables.size; i++) {
+          VoxelChunkRenderable renderable = visibleChunk.renderables.get(i);
+          if (renderable.mesh != null && cameraProvider.getBatchCamera().frustum.boundsInFrustum(renderable.boundingBox)) {
+            visibleFaces.add(renderable);
+          }
+        }
+      }
+    }
   }
 
   public boolean rebuild() {

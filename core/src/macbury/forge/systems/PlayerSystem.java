@@ -16,6 +16,7 @@ import macbury.forge.components.CharacterComponent;
 import macbury.forge.components.MovementComponent;
 import macbury.forge.components.PlayerComponent;
 import macbury.forge.components.PositionComponent;
+import macbury.forge.graphics.camera.GameCamera;
 
 /**
  * Created by macbury on 17.03.15.
@@ -51,7 +52,7 @@ public class PlayerSystem extends IteratingSystem {
     PlayerComponent playerComponent       = plm.get(entity);
     PositionComponent positionComponent   = pm.get(entity);
     CharacterComponent characterComponent = chm.get(entity);
-    Camera camera                         = playerComponent.camera;
+    GameCamera camera                     = playerComponent.camera;
 
     if (camera != null) {
       float deltaX = -Gdx.input.getDeltaX() * mouseSensitivityX * deltaTime;
@@ -87,9 +88,10 @@ public class PlayerSystem extends IteratingSystem {
       camera.position.set(positionComponent.vector).add(playerComponent.cameraOffset);
 
       characterComponent.characterController.setWalkDirection(tempA);
-
+      camera.origin.set(positionComponent.vector);
       if (!tempA.isZero()) {
         camera.position.y += MathUtils.sin(ForgE.graphics.getElapsedTime() * playerComponent.headWobbleSpeed) * playerComponent.headWobbleMax;
+
       }
     }
   }

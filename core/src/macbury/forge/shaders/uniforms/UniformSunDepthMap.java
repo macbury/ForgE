@@ -17,8 +17,7 @@ public class UniformSunDepthMap extends BaseUniform {
 
   @Override
   public void bind(ShaderProgram shader, LevelEnv env, RenderContext context, Camera camera) {
-    FrameBuffer fb = ForgE.fb.get(FrameBufferManager.FRAMEBUFFER_SUN_DEPTH);
-    shader.setUniformi(UNIFORM_SUN_DEPTH_MAP, context.textureBinder.bind(fb.getColorBufferTexture()));
+    shader.setUniformi(UNIFORM_SUN_DEPTH_MAP, context.textureBinder.bind(env.mainLight.getDepthTexture()));
   }
 
   @Override

@@ -21,9 +21,9 @@ public class UniformSun extends BaseUniform {
     shader.setUniformf(UNIFORM_AMBIENT_LIGHT, env.ambientLight);
     shader.setUniformf(UNIFORM_MAIN_LIGHT_COLOR, env.mainLight.color);
     shader.setUniformf(UNIFORM_MAIN_LIGHT_DIRECTION, env.mainLight.direction);
-    shader.setUniformf(UNIFORM_MAIN_LIGHT_POSITION, env.mainLight.position);
-    shader.setUniformf(UNIFORM_MAIN_LIGHT_FAR, env.mainLight.far);
-    shader.setUniformMatrix(UNIFORM_MAIN_LIGHT_TRANS_MAT, env.mainLight.combined);
+    shader.setUniformf(UNIFORM_MAIN_LIGHT_POSITION, env.mainLight.getCamera().position);
+    shader.setUniformf(UNIFORM_MAIN_LIGHT_FAR, env.mainLight.getCamera().far);
+    shader.setUniformMatrix(UNIFORM_MAIN_LIGHT_TRANS_MAT, env.mainLight.getCamera().combined);
   }
 
   @Override

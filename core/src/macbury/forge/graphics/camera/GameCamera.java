@@ -15,14 +15,16 @@ public class GameCamera extends PerspectiveCamera {
   protected static final float EXTEND_FOV_BY = 15;
   protected final Vector3 debugDirection;
   protected final Vector3 debugPosition;
+  public final Vector3 origin;
   protected DebugFrustrum debugFrustrum;
   protected float oldFieldOfView;
 
   public GameCamera() {
     super(BASE_FOV, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-    debugDirection = new Vector3();
+    debugDirection     = new Vector3();
     this.debugPosition = new Vector3();
     this.far           = 100;
+    this.origin        = new Vector3();
   }
 
   public GameCamera(float fieldOfViewY, float viewportWidth, float viewportHeight) {
@@ -30,6 +32,7 @@ public class GameCamera extends PerspectiveCamera {
     debugDirection = new Vector3();
     this.debugPosition = new Vector3();
     this.far           = 100;
+    this.origin        = new Vector3();
   }
 
   public void saveDebugFrustrum() {

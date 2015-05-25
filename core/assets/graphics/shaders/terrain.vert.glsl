@@ -32,22 +32,24 @@ varying vec4   v_position;
 varying vec2   v_textCoord;
 varying vec2   v_uvStart;
 varying vec2   v_uvMul;
-varying vec4   v_positionLightTrans;
 varying float  v_transparent;
+
+varying vec4   v_positionLightTrans;
 
 void main() {
   v_normal          = normalize(u_normalMatrix * a_normal);
-  float ao          = a_material.r;
-  float specular    = a_material.g;
+  //float ao          = a_material.r;
+  //float specular    = a_material.g;
   float waviness    = a_material.a;
   v_transparent     = a_material.b;
 
   v_uvStart         = a_textureFullCoords.xy;
   v_uvMul           = a_textureFullCoords.zw - v_uvStart;
+  v_textCoord       = a_texCoord0;
 
   vec3 lightDiffuse = directionalLightDiffuse(u_mainLight, v_normal);
   v_lightDiffuse    = u_ambientLight + vec4(lightDiffuse, 1.0f);
-  v_textCoord       = a_texCoord0;
+
   v_position        = u_worldTransform * a_position;
 
   v_position           = applyWind(u_time, u_windDirection, waviness, v_position, u_mapSize, u_windDisplacementTexture);

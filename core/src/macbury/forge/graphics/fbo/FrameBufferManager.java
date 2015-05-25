@@ -86,7 +86,7 @@ public class FrameBufferManager implements Disposable {
       }
       Gdx.app.log(TAG, "Creating framebuffer: " + fbIdn);
       fb = new FrameBuffer(format, fbWidth, fbHeight, hasDepth);
-
+      fb.getColorBufferTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
     }
     frameBuffers.put(fbIdn, fb);
     return fb;
@@ -143,7 +143,7 @@ public class FrameBufferManager implements Disposable {
 
   public void createDefaultFrameBuffers() {
     create(FRAMEBUFFER_MAIN_COLOR);
-    create(FRAMEBUFFER_SUN_DEPTH, Pixmap.Format.RGBA8888, ForgE.config.depthMapSize, ForgE.config.depthMapSize, true);
+    create(FRAMEBUFFER_SUN_DEPTH, Pixmap.Format.Alpha, ForgE.config.depthMapSize, ForgE.config.depthMapSize, true);
     //create(FRAMEBUFFER_LIGHT_MAP, Pixmap.Format.RGBA8888, ForgE.config.depthMapSize, ForgE.config.depthMapSize, true);
     //create(FRAMEBUFFER_SUN_DEPTH, Pixmap.Format.RGBA8888, ForgE.config.depthMapSize, ForgE.config.depthMapSize, true);
   }

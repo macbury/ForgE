@@ -4,6 +4,7 @@ package macbury.forge.graphics.camera;
  * Created by macbury on 20.10.14.
  */
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
@@ -24,7 +25,7 @@ public class RTSCameraController {
   private static final float LERP_SPEED = 15.0f;
   public static final int MAX_ZOOM = 200;
   private static int CAMERA_MOVE_PADDING = 16;
-  private PerspectiveCamera cam;
+  private GameCamera cam;
 
   private float currentZoom;
   private float maxZoom;
@@ -199,7 +200,7 @@ public class RTSCameraController {
     this.keyboardEnabled = keyboardEnabled;
   }
 
-  public void setCamera(PerspectiveCamera camera) {
+  public void setCamera(GameCamera camera) {
     this.cam = camera;
   }
 
@@ -292,6 +293,7 @@ public class RTSCameraController {
     tempVec.set(center).sub(position).nor();
 
     cam.direction.set(tempVec);
+    cam.origin.set(center);
     scrollAmount = 0;
 
   }

@@ -10,7 +10,7 @@ public class ActionTimer {
   private boolean running = false;
   public ActionTimer(float time, TimerListener listener) {
     this.listener = listener;
-    this.time = time;
+    setInterval(time);
   }
   public void start() {
     if (!running)
@@ -33,6 +33,10 @@ public class ActionTimer {
   protected void trigger() {
     currentTime = 0;
     listener.onTimerTick(this);
+  }
+
+  public void setInterval(float time) {
+    this.time = time;
   }
 
   public interface TimerListener {

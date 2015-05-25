@@ -4,11 +4,15 @@
   vertex:   "terrain_depth",
   uniforms: [
     "WorldTransform",
-    "Sun"
+    "Sun",
+    "DiffuseTerrainTexture",
+    "Wind",
+    "Time",
+    "MapSize",
   ],
   helpers: {
-    vertex: ["directional_light"],
-    fragment: ["directional_light"]
+    vertex: ["directional_light", "foliage"],
+    fragment: ["directional_light", "tiled"]
   },
 
 }

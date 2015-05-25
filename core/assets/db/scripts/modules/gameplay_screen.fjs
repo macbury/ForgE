@@ -26,7 +26,6 @@ game.provider("$GameplayScreen", function($log, $input, $entities, $assets, $gdx
   }
 
   GameplayController.prototype.render = function(delta) {
-    this.level.env.mainLight.direction.rotate(Vector3.Y, 90 * delta);
     $assets.update();
     this.cameraController.update(delta);
     this.level.render(delta);

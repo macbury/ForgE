@@ -12,6 +12,7 @@ import macbury.forge.assets.assets.CubemapAsset;
 import macbury.forge.assets.assets.TextureAsset;
 import macbury.forge.graphics.Skybox;
 import macbury.forge.graphics.camera.GameCamera;
+import macbury.forge.graphics.lighting.DirectionalShadowLight;
 import macbury.forge.graphics.lighting.SunLight;
 import macbury.forge.voxel.ChunkMap;
 
@@ -22,7 +23,7 @@ public class LevelEnv implements Disposable {
 
   public GameCamera camera;
   public Skybox skybox;
-  public SunLight mainLight;
+  public DirectionalShadowLight mainLight;
   public Color ambientLight;
   public Color skyColor;
   public ChunkMap terrainMap;
@@ -35,7 +36,7 @@ public class LevelEnv implements Disposable {
     this.camera  = new GameCamera();
     skybox       = new Skybox(null);
     skyColor     = Color.valueOf("3498db");
-    mainLight    = new SunLight();
+    mainLight    = new DirectionalShadowLight();
     mainLight.set(1f, 1f, 1f,-1, -1, 0.5f);
 
     ambientLight = Color.GRAY;
@@ -73,18 +74,20 @@ public class LevelEnv implements Disposable {
     this.ambientLight = ambientLight;
   }
 
-  public SunLight getMainLight() {
+  public DirectionalShadowLight getMainLight() {
     return mainLight;
   }
 
-  public void setMainLight(SunLight mainLight) {
+  public void setMainLight(DirectionalShadowLight mainLight) {
+    if (mainLight != null)
+      mainLight.dispose();
     this.mainLight = mainLight;
   }
 
   @Override
   public void dispose() {
     setWindDisplacementTextureAsset(null);
-
+    setMainLight(null);
     skybox.dispose();
   }
 

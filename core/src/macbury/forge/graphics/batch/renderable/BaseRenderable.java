@@ -20,4 +20,8 @@ public class BaseRenderable extends Renderable {
   private boolean haveMaterial() {
     return material != null;
   }
+
+  public static boolean haveTransparency(Renderable renderable) {
+    return renderable.material != null && renderable.material.has(BlendingAttribute.Type) && ((BlendingAttribute)renderable.material.get(BlendingAttribute.Type)).blended;
+  }
 }

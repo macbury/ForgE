@@ -51,7 +51,7 @@ public class Level implements Disposable {
     this.terrainMap          = state.terrainMap;
     this.renderContext       = new RenderContext(new DefaultTextureBinder(DefaultTextureBinder.WEIGHTED, 1));
     this.ui                  = new Stage(new ScreenViewport());
-
+    ui.addActor(new FullScreenFrameBufferResult());
     this.octree              = OctreeNode.root();
 
     this.colorBatch          = new VoxelBatch(renderContext, new ColorShaderProvider());
@@ -63,12 +63,6 @@ public class Level implements Disposable {
 
     octree.setBounds(terrainMap.getBounds(ChunkMap.TERRAIN_TILE_SIZE));
 
-    ui.addActor(new FullScreenFrameBufferResult());
-
-    DebugFrameBufferResult testColor = new DebugFrameBufferResult(FrameBufferManager.FRAMEBUFFER_SUN_DEPTH);
-    testColor.setWidth(256);
-    testColor.setHeight(256);
-    ui.addActor(testColor);
   }
 
   public void resize(int width, int height) {

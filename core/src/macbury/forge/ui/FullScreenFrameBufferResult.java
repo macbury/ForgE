@@ -19,6 +19,7 @@ public class FullScreenFrameBufferResult extends Actor {
     region = new TextureRegion();
     setWidth(Gdx.graphics.getWidth());
     setHeight(Gdx.graphics.getHeight());
+    setZIndex(0);
   }
 
   @Override

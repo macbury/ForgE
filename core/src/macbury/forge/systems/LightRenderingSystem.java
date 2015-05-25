@@ -19,9 +19,12 @@ import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
 import macbury.forge.graphics.builders.Chunk;
 import macbury.forge.graphics.camera.GameCamera;
 import macbury.forge.graphics.fbo.FrameBufferManager;
+import macbury.forge.graphics.lighting.DirectionalShadowLight;
 import macbury.forge.level.Level;
 import macbury.forge.level.LevelEnv;
 import macbury.forge.terrain.TerrainEngine;
+import macbury.forge.ui.DebugFrameBufferResult;
+import macbury.forge.ui.LightShadowMapDebug;
 import macbury.forge.utils.ActionTimer;
 import macbury.forge.utils.OcculsionTimer;
 import macbury.forge.utils.ScreenshotFactory;
@@ -52,6 +55,19 @@ public class LightRenderingSystem extends IteratingSystem implements ActionTimer
     this.mainCamera = level.env.camera;
     this.renderContext = level.renderContext;
     timer.start();
+
+
+    //this.sunLight  = new DirectionalShadowLight(1024, 1024,50f, 50f, 1f, 100f);
+    //sunLight.set(0.8f, 0.8f, 0.8f, -0.5f, -1f, 0.7f);
+   /* DebugFrameBufferResult colorResult = new DebugFrameBufferResult(FrameBufferManager.FRAMEBUFFER_MAIN_COLOR);
+    colorResult.setWidth(256);
+    colorResult.setHeight(256);
+    level.ui.addActor(colorResult);
+*/
+    LightShadowMapDebug testColor = new LightShadowMapDebug(env.mainLight);
+    testColor.setWidth(256);
+    testColor.setHeight(256);
+    level.ui.addActor(testColor);
   }
 
   @Override
@@ -62,16 +78,13 @@ public class LightRenderingSystem extends IteratingSystem implements ActionTimer
   @Override
   public void update(float deltaTime) {
     timer.update(deltaTime);
-    updateLightPosition();
     renderDepthMap(deltaTime);
   }
 
 
   private void renderDepthMap(float deltaTime) {
-    ForgE.fb.begin(FrameBufferManager.FRAMEBUFFER_SUN_DEPTH); {
-      Gdx.gl.glClearColor(0, 0, 0, 1);
-      Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-      batch.begin(env.getMainLight()); {
+    env.mainLight.begin(mainCamera.origin, mainCamera.direction); {
+      batch.begin(env.mainLight); {
         super.update(deltaTime);
 
         for (VoxelChunkRenderable renderable : visibleFaces) {
@@ -82,18 +95,15 @@ public class LightRenderingSystem extends IteratingSystem implements ActionTimer
         batch.render(env);
       } batch.end();
 
-    } ForgE.fb.end();
+      if (Gdx.input.isKeyPressed(Input.Keys.G)) {
+        ScreenshotFactory.saveScreenshot(Gdx.files.absolute("/tmp/depth.png"), 1024,1024);
+      }
+    } env.mainLight.end();
   }
 
-  private void updateLightPosition() {
-    //tempVec.set(mainCamera.position).add(0,10,0);
-    env.mainLight.position.set(0, 20, 0);
-    env.mainLight.lookAt(10,0,10);
-    env.mainLight.update();
-  }
 
   @Override
   public void onTimerTick(ActionTimer timer) {
-    terrain.occulsion(env.getMainLight(), visibleChunks, visibleFaces);
+    terrain.occulsion(env.mainLight, visibleChunks, visibleFaces);
   }
 }

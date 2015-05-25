@@ -16,7 +16,7 @@
   ],
   helpers: {
     vertex: ["directional_light", "fog", "foliage"],
-    fragment: ["fog", "directional_light"]
+    fragment: ["fog", "directional_light", "tiled"]
   },
 
 }
