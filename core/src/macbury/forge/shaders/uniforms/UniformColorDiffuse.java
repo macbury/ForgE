@@ -1,6 +1,7 @@
 package macbury.forge.shaders.uniforms;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g3d.Attribute;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
@@ -30,5 +31,10 @@ public class UniformColorDiffuse extends BaseRenderableMaterialUniform<ColorAttr
   @Override
   public long getAttributeType() {
     return ColorAttribute.Diffuse;
+  }
+
+  @Override
+  public void defineUniforms() {
+    define(UNIFORM_COLOR_DIFFUSE, Color.class);
   }
 }

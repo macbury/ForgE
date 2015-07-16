@@ -5,6 +5,8 @@
   uniforms: [
     "DiffuseTerrainTexture",
     "WorldTransform",
+    "ProjectionMatrix",
+    "Normals"
   ],
   helpers: {
     vertex: [],

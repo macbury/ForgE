@@ -2,7 +2,11 @@
   class: macbury.forge.shaders.Default,
   fragment: "default",
   vertex:   "default",
+  structs: [
+    "DirectionalLight",
+  ],
   uniforms: [
+    "ProjectionMatrix",
     "WorldTransform",
     "Normals",
     "Sky",

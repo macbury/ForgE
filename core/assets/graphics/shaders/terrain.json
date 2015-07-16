@@ -2,7 +2,11 @@
   class: macbury.forge.shaders.TerrainShader,
   fragment: "terrain",
   vertex:   "terrain",
+  structs: [
+    "DirectionalLight",
+  ],
   uniforms: [
+    "ProjectionMatrix",
     "WorldTransform",
     "Normals",
     "DiffuseTerrainTexture",

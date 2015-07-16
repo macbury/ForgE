@@ -3,7 +3,8 @@
   fragment: "sprite",
   vertex:   "sprite",
   uniforms: [
-    "WorldTransform"
+    "WorldTransform",
+    "ProjectionMatrix"
   ],
   helpers: {
     vertex: 	[],

@@ -16,6 +16,7 @@ import java.util.HashMap;
 public class ShadersManager {
   public static final String SHADERS_PATH =  "graphics/shaders/";
   public static final String SHADER_HELPERS_PATH = SHADERS_PATH + "helpers/";
+  public static final String SHADER_STRUCTS_PATH = SHADERS_PATH + "structs/";
   private static final String TAG = "ShadersManager";
   private Array<ShaderReloadListener> shaderReloadListeners;
   private HashMap<String, BaseShader> shaders;

@@ -17,7 +17,7 @@ import java.util.HashMap;
  * Created by macbury on 18.10.14.
  */
 public abstract class BaseShader implements Disposable {
-  public static final String UNIFORM_PROJECTION_MATRIX = "u_projectionMatrix";
+
   private static final String VERTEX_HELPER_KEY        = "vertex";
   private static final String FRAGMENT_HELPER_KEY      = "fragment";
   private static final String TAG = "BaseShader";
@@ -29,14 +29,14 @@ public abstract class BaseShader implements Disposable {
   private String vertex;
   private HashMap<String, Array<String>> helpers;
   private Array<String> uniforms;
+  private Array<String> structs;
   private Array<BaseUniform> globalUniforms;
   private Array<BaseRenderableUniform> localUniforms;
   protected LevelEnv env;
-
+  private String uniformsSrc = "";
   public boolean load(ShadersManager manager) {
     this.globalUniforms               = new Array<BaseUniform>();
     this.localUniforms                = new Array<BaseRenderableUniform>();
-
     ShaderProgram.pedantic = false;
 
     String fragmentSrc   = Gdx.files.internal(ShadersManager.SHADERS_PATH +fragment+".frag.glsl").readString();
@@ -49,8 +49,8 @@ public abstract class BaseShader implements Disposable {
       loadGlobalAndLocalUniforms();
     }
 
-    fragmentSrc = applyDebugPrefixes() + loadHelpers(FRAGMENT_HELPER_KEY) + fragmentSrc;
-    vertexSrc   = applyDebugPrefixes() + loadHelpers(VERTEX_HELPER_KEY) + vertexSrc;
+    fragmentSrc = applyDebugPrefixes() + applyStructs() + applyUniformsSrc() + loadHelpers(FRAGMENT_HELPER_KEY) + fragmentSrc;
+    vertexSrc   = applyDebugPrefixes() + applyStructs() + applyUniformsSrc() + loadHelpers(VERTEX_HELPER_KEY) + vertexSrc;
 
     ShaderProgram newShaderProgram = new ShaderProgram(vertexSrc, fragmentSrc);
     if (newShaderProgram.isCompiled()) {
@@ -75,7 +75,22 @@ public abstract class BaseShader implements Disposable {
     }
   }
 
+  private String applyStructs() {
+    String output = "";
+    if (structs != null) {
+      for(String structureName : structs) {
+        output += Gdx.files.internal(ShadersManager.SHADER_STRUCTS_PATH +structureName+".glsl").readString() + "\n";
+      }
+    }
+    return output;
+  }
+
+  private String applyUniformsSrc() {
+    return uniformsSrc;
+  }
+
   private void loadGlobalAndLocalUniforms() {
+    this.uniformsSrc = "";
     for (String uniformName : uniforms) {
       try {
         String uniformClassName = BaseUniform.CLASS_PREFIX+uniformName;
@@ -88,7 +103,7 @@ public abstract class BaseShader implements Disposable {
           Gdx.app.log(TAG, "Adding global uniform: "+uniformClassName);
           globalUniforms.add(uniform);
         }
-
+        uniformsSrc += "// Uniform: "+uniformClassName+'\n' + uniform.getSrc();
       } catch (InstantiationException e) {
         e.printStackTrace();
       } catch (IllegalAccessException e) {
@@ -147,7 +162,7 @@ public abstract class BaseShader implements Disposable {
     this.context = context;
     this.env     = env;
     shader.begin();
-    shader.setUniformMatrix(UNIFORM_PROJECTION_MATRIX, camera.combined);
+
     context.begin();
     bindGlobalUniforms(camera, context, env);
     afterBegin();

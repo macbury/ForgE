@@ -1,5 +1,3 @@
-uniform sampler2D u_diffuseTexture;
-
 varying vec3   v_normal;
 varying vec2   v_textCoord;
 varying vec2   v_uvStart;

@@ -4,10 +4,6 @@ attribute vec4 a_material;
 attribute vec2 a_texCoord0;
 attribute vec4 a_textureFullCoords;
 
-uniform mat3   u_normalMatrix;
-uniform mat4   u_projectionMatrix;
-uniform mat4   u_worldTransform;
-
 varying vec2   v_textCoord;
 varying vec3   v_normal;
 

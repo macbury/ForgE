@@ -1,6 +1,4 @@
-uniform vec4      u_eyePosition;
-uniform vec4      u_skyColor;
-uniform sampler2D u_diffuseTexture;
+
 varying vec4   v_lightDiffuse;
 varying vec3   v_normal;
 varying vec4   v_position;

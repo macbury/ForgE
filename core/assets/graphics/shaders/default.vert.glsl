@@ -1,12 +1,3 @@
-uniform mat4   u_worldTransform;
-uniform mat4   u_projectionMatrix;
-uniform mat3   u_normalMatrix;
-
-uniform DirectionalLight u_mainLight;
-uniform vec4   u_ambientLight;
-
-uniform vec4   u_colorDiffuse;
-uniform vec4   u_diffuseUVTransform;
 attribute vec4 a_position;
 attribute vec3 a_normal;
 attribute vec2 a_texCoord0;

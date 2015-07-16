@@ -3,24 +3,25 @@ package macbury.forge.shaders.uniforms;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import macbury.forge.ForgE;
+import com.badlogic.gdx.math.Matrix4;
 import macbury.forge.level.LevelEnv;
+import macbury.forge.shaders.utils.BaseShader;
 import macbury.forge.shaders.utils.BaseUniform;
 
 /**
- * Created by macbury on 13.03.15.
+ * Created by macbury on 16.07.15.
  */
-public class UniformTime extends BaseUniform {
-  public final String UNIFORM_TIME            = "u_time";
+public class UniformProjectionMatrix extends BaseUniform {
+  public static final String UNIFORM_PROJECTION_MATRIX = "u_projectionMatrix";
 
   @Override
   public void defineUniforms() {
-    define(UNIFORM_TIME, Float.class);
+    define(UNIFORM_PROJECTION_MATRIX, Matrix4.class);
   }
 
   @Override
   public void bind(ShaderProgram shader, LevelEnv env, RenderContext context, Camera camera) {
-    shader.setUniformf(UNIFORM_TIME, ForgE.graphics.getElapsedTime());
+    shader.setUniformMatrix(UNIFORM_PROJECTION_MATRIX, camera.combined);
   }
 
   @Override

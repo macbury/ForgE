@@ -1,18 +1,9 @@
+
 attribute vec3 a_normal;
 attribute vec4 a_position;
 attribute vec4 a_material;
 attribute vec2 a_texCoord0;
 attribute vec4 a_textureFullCoords;
-uniform vec2   u_mapSize;
-uniform mat3   u_normalMatrix;
-uniform mat4   u_projectionMatrix;
-uniform mat4   u_worldTransform;
-uniform float  u_time;
-uniform DirectionalLight u_mainLight;
-uniform vec4             u_ambientLight;
-
-uniform sampler2D u_windDisplacementTexture;
-uniform vec2      u_windDirection;
 
 varying vec4   v_lightDiffuse;
 varying vec3   v_normal;

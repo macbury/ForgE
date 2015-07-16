@@ -1,6 +1,5 @@
 uniform samplerCube u_skyboxCubemap;
 varying vec3        v_texCoord;
-uniform vec4        u_skyColor;
 const float lowerLimit = 0.0f;
 const float upperLimit = 30.0f;
 
