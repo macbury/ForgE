@@ -17,11 +17,9 @@ import java.util.HashMap;
  * Created by macbury on 18.10.14.
  */
 public abstract class BaseShader implements Disposable {
-
   private static final String VERTEX_HELPER_KEY        = "vertex";
   private static final String FRAGMENT_HELPER_KEY      = "fragment";
   private static final String TAG = "BaseShader";
-
   protected ShaderProgram shader;
   protected Camera camera;
   protected RenderContext context;
@@ -34,6 +32,7 @@ public abstract class BaseShader implements Disposable {
   private Array<BaseRenderableUniform> localUniforms;
   protected LevelEnv env;
   private String uniformsSrc = "";
+
   public boolean load(ShadersManager manager) {
     this.globalUniforms               = new Array<BaseUniform>();
     this.localUniforms                = new Array<BaseRenderableUniform>();

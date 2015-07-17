@@ -1,6 +1,5 @@
 package macbury.forge.graphics.builders;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
@@ -28,15 +27,15 @@ public class TerrainBuilder {
 
   private final ChunkMap map;
   public final TerrainCursor cursor;
-  private final GreedyMesh greedyMesh;
+  private final GreedyMesh greedySimpleMesh;
   private final GreedyCollider greedyCollider;
+  private final VoxelsAssembler liquidVoxelAssembler;
   private Vector3 tempA = new Vector3();
   private Vector3 tempB = new Vector3();
   private Array<Block.Side> facesToBuild = new Array<Block.Side>();
 
   private final VoxelDef voxelDef;
   private Array<AbstractGreedyAlgorithm.GreedyQuad> quadParts = new Array<AbstractGreedyAlgorithm.GreedyQuad>();
-
 
   public TerrainBuilder(ChunkMap voxelMap) {
     super();
@@ -46,11 +45,10 @@ public class TerrainBuilder {
     this.voxelDef                  = new VoxelDef(map);
     this.solidVoxelAssembler       = new VoxelsAssembler();
     this.transparentVoxelAssembler = new VoxelsAssembler();
-
-    this.greedyMesh                = new GreedyMesh(map);
+    this.liquidVoxelAssembler      = new VoxelsAssembler();
+    this.greedySimpleMesh          = new GreedyMesh(map);
     this.greedyCollider            = new GreedyCollider(map);
   }
-
 
   public void begin() {
     solidVoxelAssembler.begin();
@@ -80,10 +78,10 @@ public class TerrainBuilder {
     if (side == Block.Side.all || side == Block.Side.side) {
       throw new GdxRuntimeException("I cannot assemble chunk face for: " + side.toString());
     }
-    greedyMesh.begin(side, chunk.start); {
-      if (greedyMesh.haveResults()) {
-        greedyMesh.getResults(quadParts);
-        createTrianglesFor(side, quadParts, solidVoxelAssembler, transparentVoxelAssembler);
+    greedySimpleMesh.begin(side, chunk.start); {
+      if (greedySimpleMesh.haveResults()) {
+        greedySimpleMesh.getResults(quadParts);
+        createTrianglesFor(side, quadParts, solidVoxelAssembler, transparentVoxelAssembler, liquidVoxelAssembler);
         quadParts.clear();
         if (ForgE.config.buildColliders) {
           greedyCollider.begin(side, chunk.start); {
@@ -95,12 +93,13 @@ public class TerrainBuilder {
         }
 
       }
-    } greedyMesh.end();
+    } greedySimpleMesh.end();
   }
 
   public void assembleMesh(Chunk chunk) {
     buildFaceForChunkWithAssembler(chunk, solidVoxelAssembler, false);
     buildFaceForChunkWithAssembler(chunk, transparentVoxelAssembler, true);
+    buildFaceForChunkWithAssembler(chunk, liquidVoxelAssembler, true);
   }
 
   private void buildFaceForChunkWithAssembler(Chunk chunk, VoxelsAssembler assembler, boolean haveTransparency) {
@@ -140,7 +139,7 @@ public class TerrainBuilder {
     }
   }
 
-  private void createTrianglesFor(Block.Side side, Array<AbstractGreedyAlgorithm.GreedyQuad> terrainParts, VoxelsAssembler solidVoxelAssembler, VoxelsAssembler transparentVoxelAssembler) {
+  private void createTrianglesFor(Block.Side side, Array<AbstractGreedyAlgorithm.GreedyQuad> terrainParts, VoxelsAssembler solidVoxelAssembler, VoxelsAssembler transparentVoxelAssembler, VoxelsAssembler liquidVoxelAssembler) {
     for (AbstractGreedyAlgorithm.GreedyQuad part : terrainParts) {
       voxelDef.block = part.block;
       tempB.set(cursor.start.x, cursor.start.y, cursor.start.z).scl(map.voxelSize);
@@ -151,7 +150,9 @@ public class TerrainBuilder {
       voxelDef.size.set(map.voxelSize);
       voxelDef.voxel         = part.voxel;
       voxelDef.center.set(map.voxelSize.x / 2f, map.voxelSize.y / 2f, map.voxelSize.z / 2f);
-      if (part.block.transparent) {
+      if (part.block.isLiquid()) {
+        liquidVoxelAssembler.face(voxelDef, side, part);
+      } else if (part.block.transparent) {
         transparentVoxelAssembler.face(voxelDef, side, part);
       } else {
         solidVoxelAssembler.face(voxelDef, side, part);
@@ -159,12 +160,11 @@ public class TerrainBuilder {
     }
   }
 
-
   public void dispose() {
+    liquidVoxelAssembler.dispose();
     solidVoxelAssembler.dispose();
     transparentVoxelAssembler.dispose();
-    greedyMesh.dispose();
+    greedySimpleMesh.dispose();
     greedyCollider.dispose();
   }
-
 }

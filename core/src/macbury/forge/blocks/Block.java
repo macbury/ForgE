@@ -15,6 +15,7 @@ import java.util.HashMap;
 public class Block {
   private static final String DEV_TEXTURE_PLACEHOLDER_NAME = "dev";
 
+
   /*
         TODO: merge side with terrain builder.face :P
          */
@@ -97,6 +98,11 @@ public class Block {
   private HashMap<String, String> textures;
 
   private HashMap<Side, TextureAtlas.AtlasRegion> uvs;
+
+
+  public boolean isLiquid() {
+    return liquid;
+  }
 
   public void createUVMapping(TextureAtlas textureAtlas) {
     uvs = new HashMap<Side, TextureAtlas.AtlasRegion>();
