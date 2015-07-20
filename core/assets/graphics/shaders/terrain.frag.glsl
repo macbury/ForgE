@@ -24,5 +24,5 @@ void main() {
     discard;
   }
 
-  gl_FragColor = fog(diffuse, u_skyColor, u_eyePosition, v_position);
+  gl_FragColor = applyFog(diffuse, v_position);
 }

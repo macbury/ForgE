@@ -10,3 +10,7 @@ vec4 applyWind(float time, vec2 windDirection, float waviness, vec4 position, ve
     return position;
   }
 }
+
+vec4 applyWind(float waviness, vec4 position) {
+  return applyWind(u_time, u_windDirection, waviness, position, u_mapSize, u_windDisplacementTexture);
+}

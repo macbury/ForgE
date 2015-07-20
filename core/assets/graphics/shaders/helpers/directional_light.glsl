@@ -5,6 +5,10 @@ vec3 directionalLightDiffuse(DirectionalLight source, vec3 normal) {
     return value;
 }
 
+vec3 applySunLight(vec3 normal) {
+  return directionalLightDiffuse(u_mainLight, normal);
+}
+
 vec3 sunLight(DirectionalLight source, vec3 surfaceNormal, vec3 eyeNormal, float shiny, float spec, float diffuse){
     vec3 diffuseColor = max(dot(source.direction, surfaceNormal),0.0)*source.color.rgb*diffuse;
     vec3 reflection = normalize(reflect(-source.direction, surfaceNormal));

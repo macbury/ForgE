@@ -25,11 +25,11 @@ void main() {
   v_uvStart         = a_textureFullCoords.xy;
   v_uvMul           = a_textureFullCoords.zw - v_uvStart;
 
-  vec3 lightDiffuse = directionalLightDiffuse(u_mainLight, v_normal);
+  vec3 lightDiffuse = applySunLight(v_normal);
   v_lightDiffuse    = u_ambientLight + vec4(lightDiffuse, 1.0f);
   v_textCoord       = a_texCoord0;
   v_position        = u_worldTransform * a_position;
-  v_position        = applyWind(u_time, u_windDirection, waviness, v_position, u_mapSize, u_windDisplacementTexture);
+  v_position        = applyWind(waviness, v_position);
 
   gl_Position       = u_projectionMatrix * v_position;
 }

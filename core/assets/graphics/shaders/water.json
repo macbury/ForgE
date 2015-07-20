@@ -1,0 +1,20 @@
+{
+  class: macbury.forge.shaders.WaterShader,
+  fragment: "water",
+  vertex:   "water",
+  structs: [
+
+  ],
+  uniforms: [
+    "Sky",
+    "EyePosition",
+    "ProjectionMatrix",
+    "WorldTransform",
+    "Normals",
+  ],
+  helpers: {
+    vertex: ["fog"],
+    fragment: ["fog"]
+  },
+
+}
