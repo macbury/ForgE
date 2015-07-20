@@ -1,8 +1,12 @@
 package macbury.forge.level;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g3d.utils.DefaultTextureBinder;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import macbury.forge.ForgE;
 import macbury.forge.graphics.Skybox;
 import macbury.forge.graphics.batch.VoxelBatch;
 import macbury.forge.graphics.camera.GameCamera;
@@ -10,6 +14,7 @@ import macbury.forge.graphics.frustrum.FrustrumDebugAndRenderer;
 import macbury.forge.octree.OctreeNode;
 import macbury.forge.systems.engine.EntitySystemsManager;
 import macbury.forge.terrain.TerrainEngine;
+import macbury.forge.ui.FullScreenFrameBufferResult;
 import macbury.forge.voxel.ChunkMap;
 
 /**
@@ -32,8 +37,10 @@ public class Level implements Disposable {
   public final FrustrumDebugAndRenderer frustrumDebugger;
   public final TerrainEngine            terrainEngine;
   public final LevelEnv                 env;
+  public final Stage ui;
 
   public Level(LevelState state) {
+    this.ui                  = new Stage(new ScreenViewport());
     this.env                 = state.env;
     this.state               = state;
     this.terrainMap          = state.terrainMap;
@@ -48,12 +55,15 @@ public class Level implements Disposable {
     this.entities            = new EntitySystemsManager(this);
 
     octree.setBounds(terrainMap.getBounds(ChunkMap.TERRAIN_TILE_SIZE));
+
+    ui.addActor(new FullScreenFrameBufferResult());
   }
 
   public void resize(int width, int height) {
     camera.viewportWidth  = width;
     camera.viewportHeight = height;
     camera.update(true);
+    ui.getViewport().update(width, height, true);
   }
 
   public void render(float delta) {
@@ -62,8 +72,12 @@ public class Level implements Disposable {
     camera.update();
     terrainEngine.update();
     entities.update(delta);
-  }
 
+    ForgE.graphics.clearAll(Color.BLACK);
+
+    ui.act(delta);
+    ui.draw();
+  }
 
   @Override
   public void dispose() {

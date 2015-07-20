@@ -12,6 +12,8 @@ import macbury.forge.graphics.Skybox;
 import macbury.forge.graphics.batch.VoxelBatch;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
 import macbury.forge.graphics.camera.GameCamera;
+import macbury.forge.graphics.fbo.Fbo;
+import macbury.forge.graphics.fbo.FrameBufferManager;
 import macbury.forge.level.Level;
 import macbury.forge.level.LevelEnv;
 import macbury.forge.terrain.TerrainEngine;
@@ -40,17 +42,19 @@ public class WorldRenderingSystem extends IteratingSystem {
 
   @Override
   public void update(float deltaTime) {
-    ForgE.graphics.clearAll(env.skyColor);
+    ForgE.fb.begin(Fbo.FRAMEBUFFER_MAIN_COLOR); {
+      ForgE.graphics.clearAll(env.skyColor);
+      batch.begin(camera); {
+        batch.add(skybox);
+        batch.render(env);
 
-    batch.begin(camera); {
-      batch.add(skybox);
-      batch.render(env);
+        batch.add(terrain);
+        super.update(deltaTime);
 
-      batch.add(terrain);
-      super.update(deltaTime);
+        batch.render(env);
+      } batch.end();
+    } ForgE.fb.end();
 
-      batch.render(env);
-    } batch.end();
   }
 
   @Override

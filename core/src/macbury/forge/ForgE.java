@@ -2,13 +2,13 @@ package macbury.forge;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.utils.Array;
 import macbury.forge.assets.AssetsManager;
 import macbury.forge.blocks.BlocksProvider;
 import macbury.forge.db.GameDatabase;
 import macbury.forge.graphics.GraphicsUtils;
+import macbury.forge.graphics.fbo.FrameBufferManager;
 import macbury.forge.input.InputManager;
 import macbury.forge.level.LevelManager;
 import macbury.forge.screens.ScreenManager;
@@ -30,9 +30,9 @@ public class ForgE extends Game {
   public static EntityManager       entities;
   public static LevelManager        levels;
   public static ScriptManager       scripts;
+  public static FrameBufferManager fb;
 
   private Array<ForgEBootListener>  bootListeners;
-
 
   public ForgE(Config config) {
     super();
@@ -54,6 +54,7 @@ public class ForgE extends Game {
     levels        = new LevelManager(storage);
     entities      = new EntityManager();
     scripts       = new ScriptManager();
+    fb            = new FrameBufferManager();
     Gdx.input.setInputProcessor(input);
     for (ForgEBootListener listener : bootListeners) {
       listener.afterEngineCreate(this);
@@ -65,6 +66,12 @@ public class ForgE extends Game {
     graphics.updateTime();
     super.render();
 
+  }
+
+  @Override
+  public void resize(int width, int height) {
+    super.resize(width, height);
+    fb.resize(width, height, true);
   }
 
   public void addBootListener(ForgEBootListener bootListener) {
