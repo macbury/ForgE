@@ -11,6 +11,8 @@ import macbury.forge.blocks.Block;
 import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
 import macbury.forge.graphics.mesh.MeshVertexInfo;
 import macbury.forge.graphics.mesh.VoxelsAssembler;
+import macbury.forge.shaders.attributes.SolidTerrainAttribute;
+import macbury.forge.shaders.attributes.WaterAttribute;
 import macbury.forge.terrain.greedy.AbstractGreedyAlgorithm;
 import macbury.forge.terrain.greedy.GreedyCollider;
 import macbury.forge.terrain.greedy.GreedyMesh;
@@ -99,10 +101,18 @@ public class TerrainBuilder {
   public void assembleMesh(Chunk chunk) {
     buildFaceForChunkWithAssembler(chunk, solidVoxelAssembler, false);
     buildFaceForChunkWithAssembler(chunk, transparentVoxelAssembler, true);
-    buildFaceForChunkWithAssembler(chunk, liquidVoxelAssembler, true);
+    buildFaceForLiquidWithAssembler(chunk, liquidVoxelAssembler);
   }
 
-  private void buildFaceForChunkWithAssembler(Chunk chunk, VoxelsAssembler assembler, boolean haveTransparency) {
+  private void buildFaceForLiquidWithAssembler(Chunk chunk, VoxelsAssembler assembler) {
+    VoxelChunkRenderable renderable = buildFaceForChunkWithAssembler(chunk, assembler, false);
+
+    if (renderable != null) {
+      renderable.material = new Material(new WaterAttribute());
+    }
+  }
+
+  private VoxelChunkRenderable buildFaceForChunkWithAssembler(Chunk chunk, VoxelsAssembler assembler, boolean haveTransparency) {
     if (!assembler.isEmpty()) {
       VoxelChunkRenderable renderable   = new VoxelChunkRenderable();
       renderable.primitiveType          = GL30.GL_TRIANGLES;
@@ -114,7 +124,9 @@ public class TerrainBuilder {
 
       renderable.worldTransform.idt();
       if (haveTransparency) {
-        renderable.material = new Material(new BlendingAttribute(true,1f));
+        renderable.material = new Material(new BlendingAttribute(true,1f), new SolidTerrainAttribute());
+      } else {
+        renderable.material = new Material(new SolidTerrainAttribute());
       }
 
       //renderable.haveTransparency = haveTransparency;
@@ -124,6 +136,9 @@ public class TerrainBuilder {
       renderable.boundingBox.max.add(chunk.worldPosition);*/
       //Gdx.app.log(TAG, "Bounding box for renderable: " + cursor.size.toString());
       chunk.addFace(renderable);
+      return renderable;
+    } else {
+      return null;
     }
   }
 

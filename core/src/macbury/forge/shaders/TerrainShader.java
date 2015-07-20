@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Matrix3;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
 import macbury.forge.graphics.batch.renderable.TerrainChunkRenderable;
 import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
+import macbury.forge.shaders.utils.CheckMaterial;
 import macbury.forge.shaders.utils.RenderableBaseShader;
 
 /**
@@ -21,7 +22,7 @@ public class TerrainShader extends RenderableBaseShader<VoxelChunkRenderable> {
 
   @Override
   public boolean canRender(Renderable instance) {
-    return VoxelChunkRenderable.class.isInstance(instance);
+    return CheckMaterial.ifHaveSolidTerrainAttribute(instance.material) && VoxelChunkRenderable.class.isInstance(instance);
   }
 
   @Override
