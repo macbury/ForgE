@@ -17,6 +17,10 @@ import macbury.forge.voxel.ChunkMap;
  * Created by macbury on 28.10.14.
  */
 public class LevelEnv implements Disposable {
+  public enum ClipMode {
+    None, Reflection, Refraction
+  }
+  private static final float INV_BY = -1;
   public Skybox skybox;
   public DirectionalLight mainLight;
   public Color ambientLight;
@@ -26,13 +30,12 @@ public class LevelEnv implements Disposable {
   public Vector2 windDirection = new Vector2(0.1f,0);
   public Vector3 gravity = new Vector3(0, -6f, 0);
   private Texture windDisplacementTexture;
-
+  public ClipMode clipMode = ClipMode.None;
   public LevelEnv() {
     skybox       = new Skybox(null);
     skyColor     = Color.valueOf("3498db");
     mainLight    = new DirectionalLight();
     mainLight.set(1f, 1f, 1f,-1, -1, 0.5f);
-
     ambientLight = Color.GRAY;
   }
 
@@ -105,4 +108,5 @@ public class LevelEnv implements Disposable {
   public TextureAsset getWindDisplacementTextureAsset() {
     return windDisplacementTextureAsset;
   }
+
 }

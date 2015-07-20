@@ -8,4 +8,6 @@ public class Fbo {
   public final static String FRAMEBUFFER_SUN_DEPTH  = "FRAMEBUFFER_SUN_DEPTH";
 
   public static final String FRAMEBUFFER_LIGHT_MAP  = "FRAMEBUFFER_LIGHT_MAP";
+  public static final String FRAMEBUFFER_REFLECTIONS = "FRAMEBUFFER_REFLECTIONS";
+  public static final String FRAMEBUFFER_REFRACTIONS = "FRAMEBUFFER_REFRACTIONS";
 }

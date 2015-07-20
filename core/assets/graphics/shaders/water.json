@@ -11,6 +11,8 @@
     "ProjectionMatrix",
     "WorldTransform",
     "Normals",
+    "RefractionTexture",
+    "ReflectionTexture"
   ],
   helpers: {
     vertex: ["fog"],

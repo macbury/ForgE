@@ -2,19 +2,18 @@ package macbury.forge.terrain;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g3d.Renderable;
-import com.badlogic.gdx.graphics.g3d.RenderableProvider;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Pool;
 import macbury.forge.ForgE;
-import macbury.forge.graphics.batch.renderable.BaseRenderable;
 import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
 import macbury.forge.graphics.builders.Chunk;
 import macbury.forge.graphics.builders.TerrainBuilder;
 import macbury.forge.graphics.camera.GameCamera;
 import macbury.forge.level.Level;
+import macbury.forge.shaders.utils.CheckMaterial;
 import macbury.forge.voxel.ChunkMap;
 import macbury.forge.octree.OctreeNode;
 import macbury.forge.octree.OctreeObject;
@@ -27,7 +26,7 @@ import java.util.Comparator;
 /**
  * Created by macbury on 23.10.14.
  */
-public class TerrainEngine implements Disposable, ActionTimer.TimerListener, RenderableProvider {
+public class TerrainEngine implements Disposable, ActionTimer.TimerListener {
   private static final float UPDATE_EVERY    = 0.02f;
   private static final String TAG = "TerrainEngine";
   private static final int CHUNK_TO_REBUILD_PER_TICK = 10;
@@ -37,7 +36,8 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Ren
   private final GameCamera        camera;
   private final TerrainBuilder    builder;
   public  final Array<Chunk>      chunks;
-  public  final Array<VoxelChunkRenderable> visibleFaces;
+  public  final Array<VoxelChunkRenderable> visibleTerrainFaces;
+  public  final Array<VoxelChunkRenderable> visibleWaterFaces;
   public  final Array<OctreeObject> tempObjects;
   public  final Vector3 tempA  = new Vector3();
   public  final Vector3 tempC  = new Vector3();
@@ -55,7 +55,8 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Ren
     this.frustrumOctreeQuery  = new FrustrumClassFilterOctreeQuery();
     this.tempObjects          = new Array<OctreeObject>();
     this.visibleChunks        = new Array<Chunk>();
-    this.visibleFaces         = new Array<VoxelChunkRenderable>();
+    this.visibleTerrainFaces = new Array<VoxelChunkRenderable>();
+    this.visibleWaterFaces    = new Array<VoxelChunkRenderable>();
     this.chunks               = new Array<Chunk>();
     this.map                  = level.terrainMap;
     this.octree               = level.octree;
@@ -95,7 +96,8 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Ren
    * Check which chunks with its renderables are visible!
    */
   private void occulsion() {
-    visibleFaces.clear();
+    visibleTerrainFaces.clear();
+    visibleWaterFaces.clear();
     visibleChunks.clear();
     tempObjects.clear();
 
@@ -111,10 +113,13 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Ren
         visibleChunks.add(visibleChunk);
         for (int i = 0; i < visibleChunk.renderables.size; i++) {
           VoxelChunkRenderable renderable = visibleChunk.renderables.get(i);
-          //http://www.gamasutra.com/view/feature/131773/a_compact_method_for_backface_.php?print=1
-          //tempA.set(renderable.boundingBox.getCenter());
-          if (camera.boundsInFrustum(renderable.boundingBox) /*&& tempA.sub(tempC).scl(camera.direction).nor().dot(renderable.direction) >= 0f*/) {
-            visibleFaces.add(renderable);
+
+          if (camera.boundsInFrustum(renderable.boundingBox)) {
+            if (CheckMaterial.ifHaveWaterAttribute(renderable.material)) {
+              visibleWaterFaces.add(renderable);
+            } else {
+              visibleTerrainFaces.add(renderable);
+            }
           }
         }
       }
@@ -226,11 +231,6 @@ public class TerrainEngine implements Disposable, ActionTimer.TimerListener, Ren
 
   public void removeListener(TerrainEngineListener listener) {
     listeners.removeValue(listener, true);
-  }
-
-  @Override
-  public void getRenderables(Array<Renderable> renderables, Pool<Renderable> pool) {
-    renderables.addAll(visibleFaces);
   }
 
   public interface TerrainEngineListener {

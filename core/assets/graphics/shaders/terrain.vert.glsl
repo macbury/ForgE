@@ -1,4 +1,3 @@
-
 attribute vec3 a_normal;
 attribute vec4 a_position;
 attribute vec4 a_material;

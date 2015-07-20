@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import macbury.forge.ForgE;
+import macbury.forge.graphics.fbo.Fbo;
 import macbury.forge.graphics.fbo.FrameBufferManager;
 /**
  * Created by macbury on 20.07.15.
@@ -33,5 +34,14 @@ public class DebugFrameBufferResult extends Actor {
     region.flip(false, true);
 
     batch.draw(region, getX(), getY(), getWidth(), getHeight());
+  }
+
+  public static DebugFrameBufferResult build(String name, int size, float x, float y) {
+    DebugFrameBufferResult colorResult = new DebugFrameBufferResult(name);
+    colorResult.setWidth(size);
+    colorResult.setHeight(size);
+    colorResult.setX(x);
+    colorResult.setY(y);
+    return colorResult;
   }
 }

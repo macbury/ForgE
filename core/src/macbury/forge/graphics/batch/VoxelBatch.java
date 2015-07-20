@@ -3,6 +3,7 @@ package macbury.forge.graphics.batch;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.RenderableProvider;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
@@ -15,6 +16,7 @@ import macbury.forge.ForgE;
 import macbury.forge.assets.assets.TextureAsset;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
 import macbury.forge.graphics.batch.renderable.SpriteRenderable;
+import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
 import macbury.forge.graphics.batch.sprites.Sprite3D;
 import macbury.forge.graphics.batch.sprites.Sprite3DCache;
 import macbury.forge.level.LevelEnv;
@@ -207,5 +209,18 @@ public class VoxelBatch implements Disposable {
       spriteCache.add(found);
     }
     return found;
+  }
+
+
+  public void addAll(Array<RenderableProvider> bucket) {
+    for (int i = 0; i < bucket.size; i++) {
+      add(bucket.get(i));
+    }
+  }
+
+  public void pushAll(Array<VoxelChunkRenderable> bucket) {
+    for (int i = 0; i < bucket.size; i++) {
+      add(bucket.get(i));
+    }
   }
 }

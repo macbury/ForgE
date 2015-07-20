@@ -4,6 +4,7 @@
   vertex:   "terrain",
   structs: [
     "DirectionalLight",
+    "ClipPlane"
   ],
   uniforms: [
     "ProjectionMatrix",
@@ -12,6 +13,7 @@
     "DiffuseTerrainTexture",
     "EyePosition",
     "MapSize",
+    "ClipWaterPlane",
     "Sky",
     "Sun",
     "Time",
@@ -19,7 +21,7 @@
   ],
   helpers: {
     vertex: ["directional_light", "fog", "foliage"],
-    fragment: ["fog"]
+    fragment: ["fog", "clip_water_plane"]
   },
-  
+
 }

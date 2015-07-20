@@ -99,16 +99,17 @@ public class TerrainBuilder {
   }
 
   public void assembleMesh(Chunk chunk) {
+    buildFaceForLiquidWithAssembler(chunk, liquidVoxelAssembler);
     buildFaceForChunkWithAssembler(chunk, solidVoxelAssembler, false);
     buildFaceForChunkWithAssembler(chunk, transparentVoxelAssembler, true);
-    buildFaceForLiquidWithAssembler(chunk, liquidVoxelAssembler);
+
   }
 
   private void buildFaceForLiquidWithAssembler(Chunk chunk, VoxelsAssembler assembler) {
     VoxelChunkRenderable renderable = buildFaceForChunkWithAssembler(chunk, assembler, false);
 
     if (renderable != null) {
-      renderable.material = new Material(new WaterAttribute());
+      renderable.material = new Material(new WaterAttribute(2));
     }
   }
 
