@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.RenderableProvider;
+import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import macbury.forge.ForgE;
@@ -25,6 +26,7 @@ import macbury.forge.level.Level;
 import macbury.forge.level.LevelEnv;
 import macbury.forge.shaders.uniforms.UniformClipWaterPlane;
 import macbury.forge.terrain.TerrainEngine;
+import macbury.forge.utils.CameraUtils;
 
 import java.util.BitSet;
 
@@ -76,13 +78,11 @@ public class WorldRenderingSystem extends IteratingSystem {
     env.clipMode        = LevelEnv.ClipMode.Reflection;
     float distance      = 2 * (camera.position.y - UniformClipWaterPlane.WATER_HEIGHT);
     camera.position.y   -= distance;
-    camera.direction.y  *= -1;
-    camera.update();
+    CameraUtils.invertPitch(camera);
 
     renderBucketWith(finalBucket, true, false, Fbo.FRAMEBUFFER_REFLECTIONS);
-    camera.direction.y  *= -1;
     camera.position.y   += distance;
-    camera.update();
+    CameraUtils.invertPitch(camera);
   }
 
   private void renderRefractions() {
@@ -98,9 +98,13 @@ public class WorldRenderingSystem extends IteratingSystem {
   private void renderBucketWith(Array<RenderableProvider> bucket, boolean withSkybox, boolean withWater, String fbo) {
     ForgE.fb.begin(fbo); {
       batch.begin(camera); {
-        ForgE.graphics.clearAll(env.skyColor);
-        batch.add(skybox);
-        batch.render(env);
+        if (withSkybox){
+          ForgE.graphics.clearAll(env.skyColor);
+          batch.add(skybox);
+          batch.render(env);
+        } else {
+          ForgE.graphics.clearAll(Color.CLEAR);
+        }
 
         batch.pushAll(terrain.visibleTerrainFaces);
         if (withWater)
