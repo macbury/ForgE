@@ -3,19 +3,23 @@ varying vec4   v_position;
 varying vec4   v_clipSpace;
 varying vec3   v_cameraPosition;
 varying vec2   v_texCoords;
-
+varying vec2   v_moveOffset;
 
 void main() {
-  float waveStrength       = 0.02f;
-  vec2 disortionA          = (texture2D(u_waterRefractionDUDVMap, v_texCoords).rg * 2.0f - 1.0f) * waveStrength;
+  float waveStrength       = 0.005f;
+  vec2 disortionA          = (texture2D(u_waterRefractionDUDVMap, v_texCoords + v_moveOffset).rg * 2.0f - 1.0f) * waveStrength;
+  vec2 disortionB          = (texture2D(u_waterRefractionDUDVMap, vec2(-v_texCoords.x, v_texCoords.y) + v_moveOffset).rg * 2.0f - 1.0f) * waveStrength;
+
+  vec2 totalDisortion      = disortionA + disortionB;
+
   vec2 ndc                 = (v_clipSpace.xy/v_clipSpace.w)/2.0f + 0.5f;
   vec2 refreactTexCords    = vec2(ndc.x, ndc.y);
   vec2 reflectionTexCords  = vec2(ndc.x, -ndc.y);
 
-  refreactTexCords         += disortionA;
+  refreactTexCords         += totalDisortion;
   refreactTexCords         = clamp(refreactTexCords, 0.001f, 0.999f);
 
-  reflectionTexCords       += disortionA;
+  reflectionTexCords       += totalDisortion;
   reflectionTexCords.x     = clamp(reflectionTexCords.x, 0.001f, 0.999f);
   reflectionTexCords.y     = clamp(reflectionTexCords.y, -0.999f, -0.001f);
 

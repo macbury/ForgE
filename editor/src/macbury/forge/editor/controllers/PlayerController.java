@@ -76,6 +76,7 @@ public class PlayerController implements RunGameJob.Listener {
   @Override
   public void onLog(String line) {
     //Gdx.app.log("Gradle log", line);
-    currentFrame.putToLog(line);
+    if (currentFrame != null)
+      currentFrame.putToLog(line);
   }
 }

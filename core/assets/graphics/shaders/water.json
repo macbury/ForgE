@@ -6,6 +6,7 @@
 
   ],
   uniforms: [
+    "Time",
     "Sky",
     "EyePosition",
     "ProjectionMatrix",
