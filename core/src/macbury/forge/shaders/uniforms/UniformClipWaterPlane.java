@@ -19,6 +19,7 @@ public class UniformClipWaterPlane extends BaseUniform {
   private final static String UNIFORM_CLIP_ELEVATION    = "u_clipWaterPlane.elevation";
   private final static String UNIFORM_CLIP_DEF          = "ClipPane";
   private static final float DISABLED_ELEVATION         = -100;
+  private static final float WATER_BLOCK_HEIGHT         = 0.73f;
 
   @Override
   public void dispose() {
@@ -33,7 +34,7 @@ public class UniformClipWaterPlane extends BaseUniform {
 
   @Override
   public void bind(ShaderProgram shader, LevelEnv env, RenderContext context, Camera camera) {
-    shader.setUniformf(UNIFORM_CLIP_ELEVATION, WATER_HEIGHT);
+    shader.setUniformf(UNIFORM_CLIP_ELEVATION, env.waterElevation + WATER_BLOCK_HEIGHT);
     switch (env.clipMode) {
       case Reflection:
         shader.setUniformf(UNIFORM_CLIP_NORMAL, reflectionNormal);

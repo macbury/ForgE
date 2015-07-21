@@ -18,11 +18,9 @@ import macbury.forge.voxel.ChunkMap;
  */
 public class LevelEnv implements Disposable {
 
-
   public enum ClipMode {
     None, Reflection, Refraction
   }
-  private static final float INV_BY = -1;
   public Skybox skybox;
   public DirectionalLight mainLight;
   public Color ambientLight;
@@ -36,6 +34,8 @@ public class LevelEnv implements Disposable {
   private Texture windDisplacementTexture;
   public ClipMode clipMode = ClipMode.None;
   private Texture waterDisplacementTexture;
+  public float waterElevation = 1f;
+
   public LevelEnv() {
     skybox       = new Skybox(null);
     skyColor     = Color.valueOf("3498db");

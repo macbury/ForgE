@@ -24,13 +24,8 @@ public class WaterShader extends RenderableBaseShader<VoxelChunkRenderable> {
 
   @Override
   public void beforeRender(VoxelChunkRenderable renderable) {
-    if (renderable.haveTransparency()) {
-      context.setBlending(true, GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-      context.setCullFace(GL30.GL_NONE);
-    } else {
-      context.setBlending(false, GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-      context.setCullFace(GL30.GL_BACK);
-    }
+    context.setBlending(true, GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+    context.setCullFace(GL30.GL_NONE);
   }
 
 }
