@@ -7,16 +7,13 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import macbury.forge.ForgE;
-import macbury.forge.graphics.Skybox;
 import macbury.forge.graphics.batch.VoxelBatch;
 import macbury.forge.graphics.camera.GameCamera;
-import macbury.forge.graphics.fbo.Fbo;
-import macbury.forge.graphics.fbo.FrameBufferManager;
 import macbury.forge.graphics.frustrum.FrustrumDebugAndRenderer;
+import macbury.forge.level.env.LevelEnv;
 import macbury.forge.octree.OctreeNode;
 import macbury.forge.systems.engine.EntitySystemsManager;
 import macbury.forge.terrain.TerrainEngine;
-import macbury.forge.ui.DebugFrameBufferResult;
 import macbury.forge.ui.FullScreenFrameBufferResult;
 import macbury.forge.voxel.ChunkMap;
 
@@ -39,7 +36,7 @@ public class Level implements Disposable {
   public final RenderContext            renderContext;
   public final FrustrumDebugAndRenderer frustrumDebugger;
   public final TerrainEngine            terrainEngine;
-  public final LevelEnv                 env;
+  public final LevelEnv env;
   public final Stage                    ui;
 
   public Level(LevelState state) {
@@ -61,8 +58,8 @@ public class Level implements Disposable {
 
     ui.addActor(new FullScreenFrameBufferResult());
 
-    ui.addActor(DebugFrameBufferResult.build(Fbo.FRAMEBUFFER_REFLECTIONS, 256, 0, 0));
-    ui.addActor(DebugFrameBufferResult.build(Fbo.FRAMEBUFFER_REFRACTIONS, 256, 256, 0));
+    //ui.addActor(DebugFrameBufferResult.build(Fbo.FRAMEBUFFER_REFLECTIONS, 256, 0, 0));
+    //ui.addActor(DebugFrameBufferResult.build(Fbo.FRAMEBUFFER_REFRACTIONS, 256, 256, 0));
   }
 
   public void resize(int width, int height) {

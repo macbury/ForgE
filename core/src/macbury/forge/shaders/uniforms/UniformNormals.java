@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix3;
-import macbury.forge.level.LevelEnv;
+import macbury.forge.level.env.LevelEnv;
 import macbury.forge.shaders.utils.BaseRenderableUniform;
 
 /**

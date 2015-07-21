@@ -1,12 +1,11 @@
 package macbury.forge.shaders.uniforms;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.GLTexture;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import macbury.forge.ForgE;
-import macbury.forge.graphics.fbo.Fbo;
-import macbury.forge.level.LevelEnv;
+import macbury.forge.level.env.LevelEnv;
 import macbury.forge.shaders.utils.BaseUniform;
 
 /**
@@ -22,7 +21,11 @@ public class UniformWaterRefractionDUDVTexture  extends BaseUniform {
 
   @Override
   public void bind(ShaderProgram shader, LevelEnv env, RenderContext context, Camera camera) {
-    shader.setUniformi(UNIFORM_DUDV_TEXTURE, context.textureBinder.bind(env.getWaterDisplacementTexture()));
+    GLTexture texture = env.water.getWaterDisplacementTexture();
+    if (texture != null) {
+      shader.setUniformi(UNIFORM_DUDV_TEXTURE, context.textureBinder.bind(texture));
+    }
+
   }
 
   @Override

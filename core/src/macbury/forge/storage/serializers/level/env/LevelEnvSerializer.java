@@ -1,4 +1,4 @@
-package macbury.forge.storage.serializers.level;
+package macbury.forge.storage.serializers.level.env;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
@@ -7,10 +7,10 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import macbury.forge.assets.assets.CubemapAsset;
 import macbury.forge.assets.assets.TextureAsset;
 import macbury.forge.graphics.Skybox;
-import macbury.forge.level.LevelEnv;
+import macbury.forge.level.env.LevelEnv;
+import macbury.forge.level.env.WaterEnv;
 
 /**
  * Created by macbury on 16.03.15.
@@ -25,7 +25,7 @@ public class LevelEnvSerializer extends Serializer<LevelEnv> {
 
     kryo.writeObjectOrNull(output, object.getWindDisplacementTextureAsset(), TextureAsset.class);
     kryo.writeObjectOrNull(output, object.skybox, Skybox.class);
-    kryo.writeObjectOrNull(output, object.getWaterDisplacementTextureAsset(), TextureAsset.class);
+    kryo.writeObjectOrNull(output, object.water, WaterEnv.class);
   }
 
   @Override
@@ -38,7 +38,7 @@ public class LevelEnvSerializer extends Serializer<LevelEnv> {
 
     env.setWindDisplacementTextureAsset(kryo.readObjectOrNull(input, TextureAsset.class));
     env.skybox                  = kryo.readObjectOrNull(input, Skybox.class);
-    env.setWaterDisplacementTextureAsset(kryo.readObjectOrNull(input, TextureAsset.class));
+    env.water                   = kryo.readObjectOrNull(input, WaterEnv.class);
     return env;
   }
 }

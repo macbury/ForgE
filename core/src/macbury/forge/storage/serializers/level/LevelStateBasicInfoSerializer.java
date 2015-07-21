@@ -4,8 +4,6 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import macbury.forge.ForgE;
-import macbury.forge.level.LevelEnv;
 import macbury.forge.level.LevelState;
 
 /**

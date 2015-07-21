@@ -1,14 +1,12 @@
-package macbury.forge.level;
+package macbury.forge.level.env;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Cubemap;
 import com.badlogic.gdx.graphics.GLTexture;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
-import macbury.forge.assets.assets.CubemapAsset;
 import macbury.forge.assets.assets.TextureAsset;
 import macbury.forge.graphics.Skybox;
 import macbury.forge.voxel.ChunkMap;
@@ -27,16 +25,15 @@ public class LevelEnv implements Disposable {
   public Color skyColor;
   public ChunkMap terrainMap;
   private TextureAsset windDisplacementTextureAsset;
-  private TextureAsset waterDisplacementTextureAsset;
-  private TextureAsset waterNormalMapTextureAsset;
+
   public Vector2 windDirection = new Vector2(0.1f,0);
   public Vector3 gravity = new Vector3(0, -6f, 0);
   private Texture windDisplacementTexture;
-  public ClipMode clipMode = ClipMode.None;
-  private Texture waterDisplacementTexture;
-  public float waterElevation = 1f;
+
+  public WaterEnv water;
 
   public LevelEnv() {
+    water        = new WaterEnv();
     skybox       = new Skybox(null);
     skyColor     = Color.valueOf("3498db");
     mainLight    = new DirectionalLight();
@@ -87,8 +84,7 @@ public class LevelEnv implements Disposable {
   @Override
   public void dispose() {
     setWindDisplacementTextureAsset(null);
-    setWaterDisplacementTextureAsset(null);
-    setWaterNormalMapTextureAsset(null);
+
     skybox.dispose();
   }
 
@@ -116,34 +112,4 @@ public class LevelEnv implements Disposable {
     return windDisplacementTextureAsset;
   }
 
-  public TextureAsset getWaterNormalMapTextureAsset() {
-    return waterNormalMapTextureAsset;
-  }
-
-  public void setWaterNormalMapTextureAsset(TextureAsset waterNormalMapTextureAsset) {
-    this.waterNormalMapTextureAsset = waterNormalMapTextureAsset;
-  }
-
-  public TextureAsset getWaterDisplacementTextureAsset() {
-    return waterDisplacementTextureAsset;
-  }
-
-  public void setWaterDisplacementTextureAsset(TextureAsset newWaterDisplacementTextureAsset) {
-    waterDisplacementTexture = null;
-    if (waterDisplacementTextureAsset != null) {
-      waterDisplacementTextureAsset.release();
-      waterDisplacementTextureAsset = null;
-      waterDisplacementTextureAsset = null;
-    }
-    this.waterDisplacementTextureAsset = newWaterDisplacementTextureAsset;
-    if(waterDisplacementTextureAsset != null)
-      waterDisplacementTextureAsset.retain();
-  }
-
-  public GLTexture getWaterDisplacementTexture() {
-    if (waterDisplacementTexture == null) {
-      waterDisplacementTexture = getWaterDisplacementTextureAsset().get();
-    }
-    return waterDisplacementTexture;
-  }
 }

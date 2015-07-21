@@ -1,13 +1,12 @@
 package macbury.forge.shaders.uniforms;
 
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.GLTexture;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import macbury.forge.ForgE;
 import macbury.forge.graphics.fbo.Fbo;
-import macbury.forge.level.LevelEnv;
+import macbury.forge.level.env.LevelEnv;
 import macbury.forge.shaders.utils.BaseUniform;
 
 /**

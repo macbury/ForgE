@@ -6,9 +6,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
-import macbury.forge.graphics.batch.renderable.BaseRenderable;
-import macbury.forge.level.LevelEnv;
-import macbury.forge.shaders.utils.RenderableBaseShader;
+import macbury.forge.level.env.LevelEnv;
 
 /**
  * Created by macbury on 13.03.15.

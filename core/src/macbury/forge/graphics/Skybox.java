@@ -3,15 +3,12 @@ package macbury.forge.graphics;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.RenderableProvider;
-import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Pool;
 import macbury.forge.assets.assets.CubemapAsset;
 import macbury.forge.graphics.batch.renderable.SkyboxRenderable;
-import macbury.forge.level.LevelEnv;
 
 /**
  * Created by macbury on 18.05.15.

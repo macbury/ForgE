@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import macbury.forge.ForgE;
-import macbury.forge.level.LevelEnv;
+import macbury.forge.level.env.LevelEnv;
 
 import java.util.HashMap;
 

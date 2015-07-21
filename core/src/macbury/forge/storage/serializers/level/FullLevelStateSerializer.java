@@ -3,8 +3,7 @@ package macbury.forge.storage.serializers.level;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import macbury.forge.ForgE;
-import macbury.forge.level.LevelEnv;
+import macbury.forge.level.env.LevelEnv;
 import macbury.forge.level.LevelState;
 import macbury.forge.voxel.ChunkMap;
 

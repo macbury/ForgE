@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector3;
-import macbury.forge.level.LevelEnv;
+import macbury.forge.level.env.LevelEnv;
 import macbury.forge.shaders.utils.BaseUniform;
 
 /**
@@ -34,8 +34,8 @@ public class UniformClipWaterPlane extends BaseUniform {
 
   @Override
   public void bind(ShaderProgram shader, LevelEnv env, RenderContext context, Camera camera) {
-    shader.setUniformf(UNIFORM_CLIP_ELEVATION, env.waterElevation + WATER_BLOCK_HEIGHT);
-    switch (env.clipMode) {
+    shader.setUniformf(UNIFORM_CLIP_ELEVATION, env.water.elevation + WATER_BLOCK_HEIGHT);
+    switch (env.water.clipMode) {
       case Reflection:
         shader.setUniformf(UNIFORM_CLIP_NORMAL, reflectionNormal);
         break;

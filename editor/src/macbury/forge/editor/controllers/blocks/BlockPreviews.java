@@ -14,7 +14,7 @@ import macbury.forge.editor.utils.ScreenshotFactory;
 import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
 import macbury.forge.graphics.builders.Chunk;
 import macbury.forge.graphics.builders.TerrainBuilder;
-import macbury.forge.level.LevelEnv;
+import macbury.forge.level.env.LevelEnv;
 import macbury.forge.screens.AbstractScreen;
 import macbury.forge.shaders.TerrainShader;
 import macbury.forge.voxel.ChunkMap;

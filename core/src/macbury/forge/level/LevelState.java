@@ -2,6 +2,7 @@ package macbury.forge.level;
 
 import macbury.forge.ForgE;
 import macbury.forge.db.GameDatabase;
+import macbury.forge.level.env.LevelEnv;
 import macbury.forge.voxel.ChunkMap;
 
 /**
@@ -45,7 +46,7 @@ public class LevelState {
     terrainMap.rebuildAll();
     env.terrainMap              = terrainMap;
     env.setWindDisplacementTextureAsset(ForgE.assets.getTexture("graphics/textures/wind_bump.jpg"));
-    env.setWaterDisplacementTextureAsset(ForgE.assets.getTexture("graphics/textures/waterDUDV.png"));
+    env.water.setWaterDisplacementTextureAsset(ForgE.assets.getTexture("graphics/textures/waterDUDV.png"));
     env.skybox.setSkyboxAsset(ForgE.assets.getCubemap("graphics/textures/skybox/day.png"));
   }
 

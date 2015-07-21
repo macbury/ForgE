@@ -4,13 +4,8 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.RenderableProvider;
-import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import macbury.forge.ForgE;
@@ -18,17 +13,13 @@ import macbury.forge.components.PositionComponent;
 import macbury.forge.components.RenderableComponent;
 import macbury.forge.graphics.Skybox;
 import macbury.forge.graphics.batch.VoxelBatch;
-import macbury.forge.graphics.batch.renderable.BaseRenderable;
 import macbury.forge.graphics.camera.GameCamera;
 import macbury.forge.graphics.fbo.Fbo;
-import macbury.forge.graphics.fbo.FrameBufferManager;
 import macbury.forge.level.Level;
-import macbury.forge.level.LevelEnv;
+import macbury.forge.level.env.LevelEnv;
 import macbury.forge.shaders.uniforms.UniformClipWaterPlane;
 import macbury.forge.terrain.TerrainEngine;
 import macbury.forge.utils.CameraUtils;
-
-import java.util.BitSet;
 
 /**
  * Created by macbury on 19.10.14.
@@ -75,7 +66,7 @@ public class WorldRenderingSystem extends IteratingSystem {
   }
 
   private void renderReflections() {
-    env.clipMode        = LevelEnv.ClipMode.Reflection;
+    env.water.clipMode  = LevelEnv.ClipMode.Reflection;
     float distance      = 2 * (camera.position.y - UniformClipWaterPlane.WATER_HEIGHT);
     camera.position.y   -= distance;
     CameraUtils.invertPitch(camera);
@@ -86,12 +77,12 @@ public class WorldRenderingSystem extends IteratingSystem {
   }
 
   private void renderRefractions() {
-    env.clipMode = LevelEnv.ClipMode.Refraction;
+    env.water.clipMode = LevelEnv.ClipMode.Refraction;
     renderBucketWith(finalBucket, false, false, Fbo.FRAMEBUFFER_REFRACTIONS);
   }
 
   private void renderFinal() {
-    env.clipMode = LevelEnv.ClipMode.None;
+    env.water.clipMode = LevelEnv.ClipMode.None;
     renderBucketWith(finalBucket, true, true, Fbo.FRAMEBUFFER_MAIN_COLOR);
   }
 
