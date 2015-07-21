@@ -4,6 +4,7 @@
   vertex:   "default",
   structs: [
     "DirectionalLight",
+    "ClipPlane"
   ],
   uniforms: [
     "ProjectionMatrix",
@@ -13,10 +14,11 @@
     "EyePosition",
     "Sun",
     "ColorDiffuse",
-    "DiffuseTexture"
+    "DiffuseTexture",
+    "ClipWaterPlane"
   ],
   helpers: {
     vertex: ["directional_light", "fog"],
-    fragment: ["fog"]
+    fragment: ["fog", "clip_water_plane"]
   }
 }

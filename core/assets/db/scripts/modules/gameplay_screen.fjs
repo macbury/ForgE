@@ -25,11 +25,27 @@ game.provider("$GameplayScreen", function($log, $input, $entities, $assets, $gdx
     this.level.entities.addEntity(playerEntity);
   }
 
+  GameplayController.prototype.spawnEntity = function(entityName) {
+    var playerEntity            = $entities.get(entityName).build(this.level.entities);
+    var playerPositionComponent = playerEntity.getComponent(PositionComponent);
+    var temp                    = new Vector3(this.level.camera.direction).scl(2);
+    temp.add(this.level.camera.position);
+
+    playerEntity.getComponent(PositionComponent).vector.set(temp);
+    temp.set(this.level.camera.direction).scl(15);
+    playerEntity.getComponent(RigidBodyComoponent).initialImpulse.set(temp);
+    this.level.entities.addEntity(playerEntity);
+  }
+
   GameplayController.prototype.render = function(delta) {
     //this.level.env.mainLight.direction.rotate(Vector3.Y, 90 * delta);
     $assets.update();
     this.cameraController.update(delta);
     this.level.render(delta);
+
+    if ($input.isKeyJustPressed(Input.Keys.E)) {
+      this.spawnEntity("crate");
+    }
 
     if ($input.isKeyPressed(Input.Keys.ESCAPE)) {
       $gdxApp.exit();

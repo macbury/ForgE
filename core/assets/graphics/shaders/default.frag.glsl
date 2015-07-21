@@ -4,6 +4,7 @@ varying vec4   v_color;
 varying vec4   v_position;
 varying vec2   v_textCord;
 void main() {
+  discardIfClipped(v_position);
   vec4 texture        = texture2D(u_diffuseTexture, v_textCord);
   vec4 diffuse        = v_lightDiffuse * v_color * texture;
   #ifdef normalsDebugFlag

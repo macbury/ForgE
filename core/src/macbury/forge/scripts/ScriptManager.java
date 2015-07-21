@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.ForgE;
 import macbury.forge.components.PlayerComponent;
 import macbury.forge.components.PositionComponent;
+import macbury.forge.components.RigidBodyComoponent;
 import macbury.forge.level.Level;
 import macbury.forge.screens.AbstractScreen;
 import macbury.forge.screens.GameplayScreen;
@@ -47,7 +48,8 @@ public class ScriptManager implements Disposable {
           FirstPersonCameraController.class,
           Input.class,
           PositionComponent.class,
-          PlayerComponent.class
+          PlayerComponent.class,
+          RigidBodyComoponent.class
       }
   );
   private final Context context;

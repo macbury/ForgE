@@ -139,8 +139,9 @@ public class FrameBufferManager implements Disposable {
 
   public void createDefaultFrameBuffers() {
     create(Fbo.FRAMEBUFFER_MAIN_COLOR);
-    create(Fbo.FRAMEBUFFER_REFLECTIONS, Pixmap.Format.RGBA8888, 512, 512, true);
-    create(Fbo.FRAMEBUFFER_REFRACTIONS, Pixmap.Format.RGBA8888, 512, 512, true);
+    int waterTextureSize = 1024;
+    create(Fbo.FRAMEBUFFER_REFLECTIONS, Pixmap.Format.RGBA8888, waterTextureSize, waterTextureSize, true);
+    create(Fbo.FRAMEBUFFER_REFRACTIONS, Pixmap.Format.RGBA8888, waterTextureSize, waterTextureSize, true);
     //create(FRAMEBUFFER_SUN_DEPTH, Pixmap.Format.Alpha, ForgE.config.depthMapSize, ForgE.config.depthMapSize, true);
     //create(FRAMEBUFFER_LIGHT_MAP, Pixmap.Format.RGBA8888, ForgE.config.depthMapSize, ForgE.config.depthMapSize, true);
     //create(FRAMEBUFFER_SUN_DEPTH, Pixmap.Format.RGBA8888, ForgE.config.depthMapSize, ForgE.config.depthMapSize, true);
