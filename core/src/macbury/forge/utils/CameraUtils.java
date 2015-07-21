@@ -14,11 +14,9 @@ public class CameraUtils {
   private static Matrix4 tempMat  = new Matrix4();
   private static Vector3 invertVector = new Vector3(0, -1, 0);
   public static void invertPitch(Camera camera) {
-    float deltaX = -90;
-    //camera.direction.rotate(Vector3.X, 180);
-    //tempVec.set(camera.direction).crs(camera.up).nor();
-    //camera.direction.rotate(tempVec, 180);
+    camera.direction.y *= -1f;
     camera.update();
+    //camera.view.getRotation(tempRotation);
+    //camera.view.setFromEulerAngles(tempRotation.getYaw(), -tempRotation.getPitch(), tempRotation.getRoll());
   }
-
 }

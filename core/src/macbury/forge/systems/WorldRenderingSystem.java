@@ -98,12 +98,10 @@ public class WorldRenderingSystem extends IteratingSystem {
   private void renderBucketWith(Array<RenderableProvider> bucket, boolean withSkybox, boolean withWater, String fbo) {
     ForgE.fb.begin(fbo); {
       batch.begin(camera); {
+        ForgE.graphics.clearAll(env.skyColor);
         if (withSkybox){
-          ForgE.graphics.clearAll(env.skyColor);
           batch.add(skybox);
           batch.render(env);
-        } else {
-          ForgE.graphics.clearAll(Color.CLEAR);
         }
 
         batch.pushAll(terrain.visibleTerrainFaces);

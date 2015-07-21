@@ -45,6 +45,7 @@ public class LevelState {
     terrainMap.rebuildAll();
     env.terrainMap              = terrainMap;
     env.setWindDisplacementTextureAsset(ForgE.assets.getTexture("graphics/textures/wind_bump.jpg"));
+    env.setWaterDisplacementTextureAsset(ForgE.assets.getTexture("graphics/textures/waterDUDV.png"));
     env.skybox.setSkyboxAsset(ForgE.assets.getCubemap("graphics/textures/skybox/day.png"));
   }
 

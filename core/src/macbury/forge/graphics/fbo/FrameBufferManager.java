@@ -82,6 +82,7 @@ public class FrameBufferManager implements Disposable {
       Gdx.app.log(TAG, "Creating framebuffer: " + fbIdn);
       fb = new FrameBuffer(format, fbWidth, fbHeight, hasDepth);
       fb.getColorBufferTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+      fb.getColorBufferTexture().setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
     }
     frameBuffers.put(fbIdn, fb);
     return fb;

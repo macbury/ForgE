@@ -12,11 +12,12 @@
     "WorldTransform",
     "Normals",
     "RefractionTexture",
-    "ReflectionTexture"
+    "ReflectionTexture",
+    "WaterRefractionDUDVTexture"
   ],
   helpers: {
     vertex: ["fog"],
-    fragment: ["fog"]
+    fragment: ["fog", "water_helper"]
   },
 
 }

@@ -25,6 +25,7 @@ public class LevelEnvSerializer extends Serializer<LevelEnv> {
 
     kryo.writeObjectOrNull(output, object.getWindDisplacementTextureAsset(), TextureAsset.class);
     kryo.writeObjectOrNull(output, object.skybox, Skybox.class);
+    kryo.writeObjectOrNull(output, object.getWaterDisplacementTextureAsset(), TextureAsset.class);
   }
 
   @Override
@@ -37,6 +38,7 @@ public class LevelEnvSerializer extends Serializer<LevelEnv> {
 
     env.setWindDisplacementTextureAsset(kryo.readObjectOrNull(input, TextureAsset.class));
     env.skybox                  = kryo.readObjectOrNull(input, Skybox.class);
+    env.setWaterDisplacementTextureAsset(kryo.readObjectOrNull(input, TextureAsset.class));
     return env;
   }
 }
