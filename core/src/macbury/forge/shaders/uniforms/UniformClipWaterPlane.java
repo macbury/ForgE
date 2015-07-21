@@ -11,7 +11,7 @@ import macbury.forge.shaders.utils.BaseUniform;
  * Created by macbury on 20.07.15.
  */
 public class UniformClipWaterPlane extends BaseUniform {
-  public static final float  WATER_HEIGHT             = 1.8f;
+  public static final float  WATER_HEIGHT             = 1.75f;
   private final static Vector3 reflectionNormal = new Vector3(0,-1,0);
   private final static Vector3 refractionNormal = new Vector3(0,1,0);
   private final static String UNIFORM_CLIP_PANE         = "u_clipWaterPlane";

@@ -25,6 +25,7 @@ void main() {
 
   vec4 refractionColor     = texture2D(u_refractionTexture, refreactTexCords);
   vec4 reflectionColor     = texture2D(u_reflectionTexture, reflectionTexCords);
-  vec4 diffuse             = mix(reflectionColor, refractionColor, refractiveFactor(v_cameraPosition));
-  gl_FragColor             = mix(applyFog(diffuse, v_position), vec4(0.0f, 0.3f, 0.5f, 1.0f), 0.2f);
+  vec4 waterDiffuse        = mix(reflectionColor, refractionColor, refractiveFactor(v_cameraPosition));
+  vec4 waterColor          = mix(waterDiffuse, vec4(0.0f, 0.3f, 0.5f, 1.0f), 0.2f);
+  gl_FragColor             = applyFog(waterColor, v_position);
 }

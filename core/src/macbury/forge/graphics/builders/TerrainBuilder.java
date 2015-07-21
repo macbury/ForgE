@@ -13,6 +13,7 @@ import macbury.forge.graphics.mesh.MeshVertexInfo;
 import macbury.forge.graphics.mesh.VoxelsAssembler;
 import macbury.forge.shaders.attributes.SolidTerrainAttribute;
 import macbury.forge.shaders.attributes.WaterAttribute;
+import macbury.forge.shaders.attributes.WaterElevationAttribute;
 import macbury.forge.terrain.greedy.AbstractGreedyAlgorithm;
 import macbury.forge.terrain.greedy.GreedyCollider;
 import macbury.forge.terrain.greedy.GreedyMesh;
@@ -124,10 +125,9 @@ public class TerrainBuilder {
       renderable.meshFactory           = assembler.meshFactory(MeshVertexInfo.AttributeType.Position, MeshVertexInfo.AttributeType.Normal, MeshVertexInfo.AttributeType.TextureCord, MeshVertexInfo.AttributeType.Material, MeshVertexInfo.AttributeType.TextureFullCords);
 
       renderable.worldTransform.idt();
+      renderable.material = new Material(new SolidTerrainAttribute(), new WaterElevationAttribute(chunk.waterElevation));
       if (haveTransparency) {
-        renderable.material = new Material(new BlendingAttribute(true,1f), new SolidTerrainAttribute());
-      } else {
-        renderable.material = new Material(new SolidTerrainAttribute());
+        renderable.material.set(new BlendingAttribute(true,1f));
       }
 
       //renderable.haveTransparency = haveTransparency;
