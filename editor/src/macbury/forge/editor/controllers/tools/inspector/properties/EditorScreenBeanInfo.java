@@ -3,7 +3,10 @@ package macbury.forge.editor.controllers.tools.inspector.properties;
 import com.badlogic.gdx.graphics.Color;
 import com.l2fprod.common.beans.BaseBeanInfo;
 import com.l2fprod.common.beans.ExtendedPropertyDescriptor;
+import macbury.forge.editor.controllers.tools.inspector.editors.SpinnerPropertyEditor;
 import macbury.forge.editor.screens.LevelEditorScreen;
+
+import javax.swing.*;
 
 /**
  * Created by macbury on 15.03.15.
