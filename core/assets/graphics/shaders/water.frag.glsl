@@ -29,4 +29,5 @@ void main() {
   vec4 waterColor          = mix(waterDiffuse, u_waterColor, u_waterColorTint);
 
   gl_FragColor             = applyFog(waterColor, v_position);
+  //gl_FragColor             = texture2D(u_waterNormalTexture, v_texCoords);
 }

@@ -3,10 +3,11 @@
   fragment: "water",
   vertex:   "water",
   structs: [
-
+    "DirectionalLight",
   ],
   uniforms: [
     "Time",
+    "Sun",
     "WaterSettings",
     "Sky",
     "EyePosition",
@@ -15,11 +16,12 @@
     "Normals",
     "RefractionTexture",
     "ReflectionTexture",
-    "WaterRefractionDUDVTexture"
+    "WaterRefractionDUDVTexture",
+    "WaterNormalTexture"
   ],
   helpers: {
     vertex: ["fog"],
-    fragment: ["fog", "water_helper"]
+    fragment: ["fog", "water_helper", "directional_light"]
   },
 
 }
