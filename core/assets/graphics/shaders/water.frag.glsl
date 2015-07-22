@@ -2,13 +2,14 @@ varying vec3   v_normal;
 varying vec4   v_position;
 varying vec4   v_clipSpace;
 varying vec3   v_cameraPosition;
-varying vec2   v_texCoords;
+varying vec2   v_texDisplacementCoords;
+varying vec2   v_texNormalCoords;
 varying vec2   v_moveOffset;
 
 
 void main() {
-  vec2 disortionA          = (texture2D(u_waterRefractionDUDVMap, v_texCoords + v_moveOffset).rg * 2.0f - 1.0f) * u_waterWaveStrength;
-  vec2 disortionB          = (texture2D(u_waterRefractionDUDVMap, vec2(-v_texCoords.x, v_texCoords.y) + v_moveOffset).rg * 2.0f - 1.0f) * u_waterWaveStrength;
+  vec2 disortionA          = (texture2D(u_waterRefractionDUDVMap, v_texDisplacementCoords + v_moveOffset).rg * 2.0f - 1.0f) * u_waterWaveStrength;
+  vec2 disortionB          = (texture2D(u_waterRefractionDUDVMap, vec2(-v_texDisplacementCoords.x, v_texDisplacementCoords.y) + v_moveOffset).rg * 2.0f - 1.0f) * u_waterWaveStrength;
 
   vec2 totalDisortion      = disortionA + disortionB;
 
@@ -28,6 +29,17 @@ void main() {
   vec4 waterDiffuse        = mix(reflectionColor, refractionColor, refractiveFactor(v_cameraPosition, u_waterRefractionFactor));
   vec4 waterColor          = mix(waterDiffuse, u_waterColor, u_waterColorTint);
 
-  gl_FragColor             = applyFog(waterColor, v_position);
-  //gl_FragColor             = texture2D(u_waterNormalTexture, v_texCoords);
+  vec3 normal              = u_normalMatrix * extractNormal(u_waterNormalTexture, v_texNormalCoords + v_moveOffset);
+  vec3 lightColor          = applySunLight(normal);
+
+  vec4 finalColor          = vec4(waterColor.rgb + applySunLight(normal), 1.0f);
+
+  #ifdef normalsDebugFlag
+    finalColor.rgb = normal;
+  #endif
+  #ifdef lightingDebugFlag
+    finalColor.rgb = lightColor.rgb;
+  #endif
+
+  gl_FragColor             = applyFog(finalColor, v_position);
 }

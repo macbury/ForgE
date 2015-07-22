@@ -21,7 +21,7 @@
   ],
   helpers: {
     vertex: ["fog"],
-    fragment: ["fog", "water_helper", "directional_light"]
+    fragment: ["fog", "water_helper", "directional_light", "normals"]
   },
 
 }
