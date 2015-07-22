@@ -10,15 +10,19 @@ import macbury.forge.assets.assets.TextureAsset;
  * Created by macbury on 21.07.15.
  */
 public class WaterEnv implements Disposable {
+
+  private static final float WATER_BLOCK_HEIGHT         = 0.75f;
   private TextureAsset waterDisplacementTextureAsset;
   private TextureAsset waterNormalMapTextureAsset;
   public LevelEnv.ClipMode clipMode = LevelEnv.ClipMode.None;
   private Texture waterDisplacementTexture;
-  public float elevation = 1f;
-  public Color color;
-  public float waterSpeed   = 0.05f;
-  public float waveStrength = 0.005f;
+  public float elevation          = 1f;
+  public Color color              = new Color(0.0f, 0.3f, 0.5f, 1.0f);
+  public float waterSpeed         = 0.05f;
+  public float waveStrength       = 0.005f;
   public float displacementTiling = 0.1f;
+  public float colorTint          = 0.2f;
+  public float refractiveFactor   = 0.5f;
 
   public TextureAsset getWaterNormalMapTextureAsset() {
     return waterNormalMapTextureAsset;
@@ -55,5 +59,9 @@ public class WaterEnv implements Disposable {
   public void dispose() {
     setWaterDisplacementTextureAsset(null);
     setWaterNormalMapTextureAsset(null);
+  }
+
+  public float getElevationWithWaterBlockHeight() {
+    return elevation + WATER_BLOCK_HEIGHT;
   }
 }

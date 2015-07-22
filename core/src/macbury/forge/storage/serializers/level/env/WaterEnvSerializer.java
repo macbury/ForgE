@@ -22,11 +22,13 @@ public class WaterEnvSerializer extends Serializer<WaterEnv> {
     output.writeFloat(object.displacementTiling);
     output.writeFloat(object.waterSpeed);
     output.writeFloat(object.waveStrength);
+    output.writeFloat(object.colorTint);
+    output.writeFloat(object.refractiveFactor);
   }
 
   @Override
   public WaterEnv read(Kryo kryo, Input input, Class<WaterEnv> type) {
-    WaterEnv env   = new WaterEnv();
+    WaterEnv env            = new WaterEnv();
     env.setWaterDisplacementTextureAsset(kryo.readObjectOrNull(input, TextureAsset.class));
     env.setWaterNormalMapTextureAsset(kryo.readObjectOrNull(input, TextureAsset.class));
     env.color               = kryo.readObjectOrNull(input, Color.class);
@@ -34,6 +36,8 @@ public class WaterEnvSerializer extends Serializer<WaterEnv> {
     env.displacementTiling  = input.readFloat();
     env.waterSpeed          = input.readFloat();
     env.waveStrength        = input.readFloat();
+    env.colorTint           = input.readFloat();
+    env.refractiveFactor    = input.readFloat();
     return env;
   }
 }

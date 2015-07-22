@@ -8,6 +8,7 @@ import com.l2fprod.common.propertysheet.PropertyEditorRegistry;
 import com.l2fprod.common.propertysheet.PropertySheet;
 import com.l2fprod.common.propertysheet.PropertySheetPanel;
 import com.l2fprod.common.swing.renderer.DefaultCellRenderer;
+import com.sun.beans.editors.FloatEditor;
 import macbury.forge.editor.controllers.tools.inspector.editors.AdvComboBoxPropertyEditor;
 import macbury.forge.editor.controllers.tools.inspector.editors.ColorEditor;
 
@@ -30,7 +31,7 @@ public class MapPropertySheet extends PropertySheetPanel {
     this.setToolBarVisible(true);
     PropertyEditorRegistry editor = this.getTable().getEditorRegistry();
     editor.registerEditor(com.badlogic.gdx.graphics.Color.class, ColorEditor.class);
-
+    editor.registerEditor(Float.class, FloatEditor.class);
   }
 
   public Property find(String name) {

@@ -27,7 +27,6 @@ public class Chunk implements OctreeObject, Disposable {
   /**
    * Start and end are offsets in array
    */
-  public float waterElevation     = -1f;
   public Vector3i start         = new Vector3i();
   public Vector3i end           = new Vector3i();
   public BoundingBox boundingBox  = new BoundingBox();

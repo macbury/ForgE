@@ -9,11 +9,13 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import macbury.forge.ForgE;
 import macbury.forge.graphics.batch.VoxelBatch;
 import macbury.forge.graphics.camera.GameCamera;
+import macbury.forge.graphics.fbo.Fbo;
 import macbury.forge.graphics.frustrum.FrustrumDebugAndRenderer;
 import macbury.forge.level.env.LevelEnv;
 import macbury.forge.octree.OctreeNode;
 import macbury.forge.systems.engine.EntitySystemsManager;
 import macbury.forge.terrain.TerrainEngine;
+import macbury.forge.ui.DebugFrameBufferResult;
 import macbury.forge.ui.FullScreenFrameBufferResult;
 import macbury.forge.voxel.ChunkMap;
 

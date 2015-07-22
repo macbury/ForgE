@@ -16,7 +16,6 @@ public class CameraUtils {
   public static void invertPitch(Camera camera) {
     camera.direction.y *= -1f;
     camera.update();
-    //camera.view.getRotation(tempRotation);
-    //camera.view.setFromEulerAngles(tempRotation.getYaw(), -tempRotation.getPitch(), tempRotation.getRoll());
+
   }
 }

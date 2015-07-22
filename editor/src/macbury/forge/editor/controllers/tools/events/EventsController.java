@@ -143,6 +143,7 @@ public class EventsController implements SelectionInterface, ActionListener, OnM
       currentSelectionSystem.addListener(this);
       currentSelectionSystem.setSelection(eventSelection);
       binder = new DefaultBeanBinder(new EditorScreenBeanInfo.EditorScreenBean(screen), inspectorSheetPanel, new EditorScreenBeanInfo());
+
       if (binder != null) {
         inspectorSheetPanel.updateUI();
         startListeningForPropertyChanges();

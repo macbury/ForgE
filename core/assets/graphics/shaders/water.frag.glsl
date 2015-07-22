@@ -5,10 +5,10 @@ varying vec3   v_cameraPosition;
 varying vec2   v_texCoords;
 varying vec2   v_moveOffset;
 
+
 void main() {
-  float waveStrength       = 0.005f;
-  vec2 disortionA          = (texture2D(u_waterRefractionDUDVMap, v_texCoords + v_moveOffset).rg * 2.0f - 1.0f) * waveStrength;
-  vec2 disortionB          = (texture2D(u_waterRefractionDUDVMap, vec2(-v_texCoords.x, v_texCoords.y) + v_moveOffset).rg * 2.0f - 1.0f) * waveStrength;
+  vec2 disortionA          = (texture2D(u_waterRefractionDUDVMap, v_texCoords + v_moveOffset).rg * 2.0f - 1.0f) * u_waterWaveStrength;
+  vec2 disortionB          = (texture2D(u_waterRefractionDUDVMap, vec2(-v_texCoords.x, v_texCoords.y) + v_moveOffset).rg * 2.0f - 1.0f) * u_waterWaveStrength;
 
   vec2 totalDisortion      = disortionA + disortionB;
 
@@ -25,7 +25,8 @@ void main() {
 
   vec4 refractionColor     = texture2D(u_refractionTexture, refreactTexCords);
   vec4 reflectionColor     = texture2D(u_reflectionTexture, reflectionTexCords);
-  vec4 waterDiffuse        = mix(reflectionColor, refractionColor, refractiveFactor(v_cameraPosition));
-  vec4 waterColor          = mix(waterDiffuse, vec4(0.0f, 0.3f, 0.5f, 1.0f), 0.2f);
+  vec4 waterDiffuse        = mix(reflectionColor, refractionColor, refractiveFactor(v_cameraPosition, u_waterRefractionFactor));
+  vec4 waterColor          = mix(waterDiffuse, u_waterColor, u_waterColorTint);
+
   gl_FragColor             = applyFog(waterColor, v_position);
 }

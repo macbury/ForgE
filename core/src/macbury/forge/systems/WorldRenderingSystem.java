@@ -67,7 +67,7 @@ public class WorldRenderingSystem extends IteratingSystem {
 
   private void renderReflections() {
     env.water.clipMode  = LevelEnv.ClipMode.Reflection;
-    float distance      = 2 * (camera.position.y - UniformClipWaterPlane.WATER_HEIGHT);
+    float distance      = 2 * (camera.position.y - env.water.getElevationWithWaterBlockHeight());
     camera.position.y   -= distance;
     CameraUtils.invertPitch(camera);
 

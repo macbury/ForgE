@@ -11,7 +11,6 @@ import macbury.forge.shaders.utils.BaseUniform;
  * Created by macbury on 20.07.15.
  */
 public class UniformClipWaterPlane extends BaseUniform {
-  public static final float  WATER_HEIGHT             = 1.75f;
   private final static Vector3 reflectionNormal = new Vector3(0,-1,0);
   private final static Vector3 refractionNormal = new Vector3(0,1,0);
   private final static String UNIFORM_CLIP_PANE         = "u_clipWaterPlane";
@@ -19,7 +18,6 @@ public class UniformClipWaterPlane extends BaseUniform {
   private final static String UNIFORM_CLIP_ELEVATION    = "u_clipWaterPlane.elevation";
   private final static String UNIFORM_CLIP_DEF          = "ClipPane";
   private static final float DISABLED_ELEVATION         = -100;
-  private static final float WATER_BLOCK_HEIGHT         = 0.73f;
 
   @Override
   public void dispose() {
@@ -34,7 +32,7 @@ public class UniformClipWaterPlane extends BaseUniform {
 
   @Override
   public void bind(ShaderProgram shader, LevelEnv env, RenderContext context, Camera camera) {
-    shader.setUniformf(UNIFORM_CLIP_ELEVATION, env.water.elevation + WATER_BLOCK_HEIGHT);
+    shader.setUniformf(UNIFORM_CLIP_ELEVATION, env.water.getElevationWithWaterBlockHeight());
     switch (env.water.clipMode) {
       case Reflection:
         shader.setUniformf(UNIFORM_CLIP_NORMAL, reflectionNormal);

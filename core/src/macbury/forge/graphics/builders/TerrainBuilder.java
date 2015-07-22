@@ -125,7 +125,7 @@ public class TerrainBuilder {
       renderable.meshFactory           = assembler.meshFactory(MeshVertexInfo.AttributeType.Position, MeshVertexInfo.AttributeType.Normal, MeshVertexInfo.AttributeType.TextureCord, MeshVertexInfo.AttributeType.Material, MeshVertexInfo.AttributeType.TextureFullCords);
 
       renderable.worldTransform.idt();
-      renderable.material = new Material(new SolidTerrainAttribute(), new WaterElevationAttribute(chunk.waterElevation));
+      renderable.material = new Material(new SolidTerrainAttribute());
       if (haveTransparency) {
         renderable.material.set(new BlendingAttribute(true,1f));
       }

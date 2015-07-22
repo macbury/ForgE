@@ -12,17 +12,24 @@ public class EditorScreenBeanInfo extends BaseBeanInfo {
   private static final String CATEGORY_LEVEL = "Map";
   private static final String CATEGORY_LIGHTING = "Lighting";
   private static final String CATEGORY_WIND = "Wind";
+  private static final String CATEGORY_WATER = "Water";
+
   public EditorScreenBeanInfo() {
     super(EditorScreenBean.class);
 
-    ExtendedPropertyDescriptor tilesetProperty = addProperty("title").setCategory(CATEGORY_LEVEL);
-    tilesetProperty.setDisplayName("Title");
-    tilesetProperty.setShortDescription("Map title for editor");
+    createLevelOptions();
+    createLightingOptions();
+    createWindOptions();
+    createWaterOptions();
+  }
 
-    ExtendedPropertyDescriptor fogProperty = addProperty("fogColor").setCategory(CATEGORY_LEVEL);
-    fogProperty.setDisplayName("Fog & sky color");
-    fogProperty.setShortDescription("Color of the fog and sky");
+  private void createWindOptions() {
+    ExtendedPropertyDescriptor foliageSpeed = addProperty("windSpeed").setCategory(CATEGORY_WIND);
+    foliageSpeed.setDisplayName("Speed");
+    foliageSpeed.setShortDescription("Wind speed and direction");
+  }
 
+  private void createLightingOptions() {
     ExtendedPropertyDescriptor ambientLightColorProperty = addProperty("ambientLight").setCategory(CATEGORY_LIGHTING);
     ambientLightColorProperty.setDisplayName("Ambient Light Color");
     ambientLightColorProperty.setShortDescription("color for ambient light");
@@ -30,10 +37,42 @@ public class EditorScreenBeanInfo extends BaseBeanInfo {
     ExtendedPropertyDescriptor sunLightColor = addProperty("sunLightColor").setCategory(CATEGORY_LIGHTING);
     sunLightColor.setDisplayName("Sun Light Color");
     sunLightColor.setShortDescription("color for sun light");
+  }
 
-    ExtendedPropertyDescriptor foliageSpeed = addProperty("windSpeed").setCategory(CATEGORY_WIND);
-    foliageSpeed.setDisplayName("Speed");
-    foliageSpeed.setShortDescription("Wind speed and direction");
+  private void createLevelOptions() {
+    ExtendedPropertyDescriptor tilesetProperty = addProperty("title").setCategory(CATEGORY_LEVEL);
+    tilesetProperty.setDisplayName("Title");
+    tilesetProperty.setShortDescription("Map title for editor");
+
+    ExtendedPropertyDescriptor fogProperty = addProperty("fogColor").setCategory(CATEGORY_LEVEL);
+    fogProperty.setDisplayName("Fog & sky color");
+    fogProperty.setShortDescription("Color of the fog and sky");
+  }
+
+  private void createWaterOptions() {
+    ExtendedPropertyDescriptor waterColorProperty = addProperty("waterColor").setCategory(CATEGORY_WATER);
+    waterColorProperty.setDisplayName("Color");
+    waterColorProperty.setShortDescription("color for water");
+
+    ExtendedPropertyDescriptor waterTintProperty = addProperty("waterTint").setCategory(CATEGORY_WATER);
+    waterTintProperty.setDisplayName("Tint");
+
+    ExtendedPropertyDescriptor waterWaveStrengthProperty = addProperty("waterWaveStrength").setCategory(CATEGORY_WATER);
+    waterWaveStrengthProperty.setDisplayName("Wave strength");
+    waterWaveStrengthProperty.setShortDescription("Water wave strength");
+
+    ExtendedPropertyDescriptor waterElevationProperty = addProperty("waterElevation").setCategory(CATEGORY_WATER);
+    waterElevationProperty.setDisplayName("Elevation");
+    waterElevationProperty.setShortDescription("Elevation for reflection and refraction, only one for whole level");
+
+    ExtendedPropertyDescriptor waterDisplacementTilingProperty = addProperty("waterDisplacementTiling").setCategory(CATEGORY_WATER);
+    waterDisplacementTilingProperty.setDisplayName("Displacement tiling");
+
+    ExtendedPropertyDescriptor waterSpeedProperty = addProperty("waterSpeed").setCategory(CATEGORY_WATER);
+    waterSpeedProperty.setDisplayName("Speed");
+
+    ExtendedPropertyDescriptor waterRefractiveFactorProperty = addProperty("waterRefractiveFactor").setCategory(CATEGORY_WATER);
+    waterRefractiveFactorProperty.setDisplayName("Refraction factor");
   }
 
   public static class EditorScreenBean {
@@ -81,6 +120,62 @@ public class EditorScreenBeanInfo extends BaseBeanInfo {
 
     public void setWindSpeed() {
 
+    }
+
+    public void setWaterColor(Color newColor) {
+      screen.level.env.water.color = newColor;
+    }
+
+    public Color getWaterColor() {
+      return screen.level.env.water.color;
+    }
+
+    public void setWaterWaveStrength(int waveStrenght) {
+      screen.level.env.water.waveStrength = (float)waveStrenght / 1000f;
+    }
+
+    public int getWaterWaveStrength() {
+      return (int)(1000f * screen.level.env.water.waveStrength);
+    }
+
+    public void setWaterElevation(float waterElevation) {
+      screen.level.env.water.elevation = waterElevation;
+    }
+
+    public float getWaterElevation() {
+      return screen.level.env.water.elevation;
+    }
+
+    public void setWaterDisplacementTiling(int tiling) {
+      screen.level.env.water.displacementTiling = (float)tiling / 100f;
+    }
+
+    public int getWaterDisplacementTiling() {
+      return (int)(screen.level.env.water.displacementTiling * 100);
+    }
+
+    public void setWaterTint(int colorTint) {
+      screen.level.env.water.colorTint = (float)colorTint / 100f;
+    }
+
+    public int getWaterTint() {
+      return (int)(screen.level.env.water.colorTint * 100);
+    }
+
+    public void setWaterSpeed(int speed) {
+      screen.level.env.water.waterSpeed = (float)speed / 100f;
+    }
+
+    public int getWaterSpeed() {
+      return (int)(screen.level.env.water.waterSpeed * 100);
+    }
+
+    public void setWaterRefractiveFactor(int refractiveFactor) {
+      screen.level.env.water.refractiveFactor = (float)refractiveFactor / 100f;
+    }
+
+    public int getWaterRefractiveFactor() {
+      return (int)(screen.level.env.water.refractiveFactor * 100);
     }
   }
 }
