@@ -7,3 +7,7 @@ vec3 colorToNormal(vec4 color, bool yInvert) {
 vec3 extractNormal(sampler2D normal_texture, vec2 pos) {
   return normalize(texture2D(normal_texture, pos).rgb * 2.0 - 1.0);
 }
+
+vec3 extractNormalFromColor(vec4 color) {
+  return normalize(color.rgb * 2.0 - 1.0);
+}

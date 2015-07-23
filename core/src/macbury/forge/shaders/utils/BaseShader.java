@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import macbury.forge.ForgE;
 import macbury.forge.level.env.LevelEnv;
+import macbury.forge.shaders.ShaderError;
 
 import java.io.File;
 import java.sql.SQLInput;
@@ -37,9 +38,12 @@ public abstract class BaseShader implements Disposable {
   private String uniformsSrc = "";
   private String name;
 
+  private ShaderError currentError;
+
   public boolean load(ShadersManager manager) {
     this.globalUniforms               = new Array<BaseUniform>();
     this.localUniforms                = new Array<BaseRenderableUniform>();
+    this.currentError                 = null;
     ShaderProgram.pedantic = false;
 
     String fragmentSrc   = getFragmentFile().readString();
@@ -60,20 +64,8 @@ public abstract class BaseShader implements Disposable {
       shader = newShaderProgram;
       return true;
     } else {
-      Gdx.app.error(TAG, "Error while compiling shader:");
-      Gdx.app.error(TAG, newShaderProgram.getLog());
-      Gdx.app.error(TAG, "Fragment SRC === ");
-      int i = 0;
-      for (String line : fragmentSrc.split("\n")) {
-        Gdx.app.error(TAG, (++i) + " | " + line);
-      }
-      i = 0;
-      Gdx.app.error(TAG, "Vertex SRC ===");
-
-      for (String line : vertexSrc.split("\n")) {
-        Gdx.app.error(TAG, (++i) + " | " + line);
-      }
-
+      currentError = new ShaderError(newShaderProgram, fragmentSrc, vertexSrc);
+      currentError.print();
       return false;
     }
   }
@@ -218,5 +210,9 @@ public abstract class BaseShader implements Disposable {
 
   public File getJsonFile() {
     return Gdx.files.internal(ShadersManager.SHADERS_PATH + name + ".json").file();
+  }
+
+  public ShaderError getCurrentError() {
+    return currentError;
   }
 }

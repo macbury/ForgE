@@ -13,31 +13,33 @@ public class WaterEnv implements Disposable {
 
   private static final float WATER_BLOCK_HEIGHT         = 0.75f;
   private TextureAsset waterDisplacementTextureAsset;
-  private TextureAsset waterNormalMapTextureAsset;
+  private TextureAsset waterNormalMapATextureAsset;
+  private TextureAsset waterNormalMapBTextureAsset;
   public LevelEnv.ClipMode clipMode = LevelEnv.ClipMode.None;
   private Texture waterDisplacementTexture;
-  private Texture waterNormalTexture;
+  private Texture waterNormalATexture;
   public float elevation          = 1f;
   public Color color              = new Color(0.0f, 0.3f, 0.5f, 1.0f);
   public float waterSpeed         = 0.05f;
   public float waveStrength       = 0.005f;
-  public float displacementTiling = 0.2f;
+  public float displacementTiling = 2f;
   public float colorTint          = 0.2f;
   public float refractiveFactor   = 0.5f;
+  private Texture waterNormalBTexture;
 
-  public TextureAsset getWaterNormalMapTextureAsset() {
-    return waterNormalMapTextureAsset;
+  public TextureAsset getWaterNormalMapATextureAsset() {
+    return waterNormalMapATextureAsset;
   }
 
-  public void setWaterNormalMapTextureAsset(TextureAsset newWaterNormalMapTextureAsset) {
-    waterNormalTexture = null;
-    if (waterNormalMapTextureAsset != null) {
-      waterNormalMapTextureAsset.release();
-      waterNormalMapTextureAsset = null;
+  public void setWaterNormalMapATextureAsset(TextureAsset newWaterNormalMapTextureAsset) {
+    waterNormalATexture = null;
+    if (waterNormalMapATextureAsset != null) {
+      waterNormalMapATextureAsset.release();
+      waterNormalMapATextureAsset = null;
     }
-    this.waterNormalMapTextureAsset = newWaterNormalMapTextureAsset;
-    if(waterNormalMapTextureAsset != null)
-      waterNormalMapTextureAsset.retain();
+    this.waterNormalMapATextureAsset = newWaterNormalMapTextureAsset;
+    if(waterNormalMapATextureAsset != null)
+      waterNormalMapATextureAsset.retain();
   }
 
   public TextureAsset getWaterDisplacementTextureAsset() {
@@ -58,6 +60,7 @@ public class WaterEnv implements Disposable {
   public GLTexture getWaterDisplacementTexture() {
     if (waterDisplacementTexture == null && getWaterDisplacementTextureAsset() != null) {
       waterDisplacementTexture = getWaterDisplacementTextureAsset().get();
+      waterDisplacementTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
     }
     return waterDisplacementTexture;
   }
@@ -65,17 +68,42 @@ public class WaterEnv implements Disposable {
   @Override
   public void dispose() {
     setWaterDisplacementTextureAsset(null);
-    setWaterNormalMapTextureAsset(null);
+    setWaterNormalMapATextureAsset(null);
+    setWaterNormalMapBTextureAsset(null);
   }
 
   public float getElevationWithWaterBlockHeight() {
     return elevation + WATER_BLOCK_HEIGHT;
   }
 
-  public GLTexture getWaterNormalMapTexture() {
-    if (waterNormalTexture == null && getWaterNormalMapTextureAsset() != null) {
-      waterNormalTexture = getWaterNormalMapTextureAsset().get();
+  public GLTexture getWaterNormalMapATexture() {
+    if (waterNormalATexture == null && getWaterNormalMapATextureAsset() != null) {
+      waterNormalATexture = getWaterNormalMapATextureAsset().get();
+      waterNormalATexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
     }
-    return waterNormalTexture;
+    return waterNormalATexture;
+  }
+
+  public GLTexture getWaterNormalMapBTexture() {
+    if (waterNormalBTexture == null && getWaterNormalMapBTextureAsset() != null) {
+      waterNormalBTexture = getWaterNormalMapBTextureAsset().get();
+      waterNormalBTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+    }
+    return waterNormalBTexture;
+  }
+
+  public TextureAsset getWaterNormalMapBTextureAsset() {
+    return waterNormalMapBTextureAsset;
+  }
+
+  public void setWaterNormalMapBTextureAsset(TextureAsset newWaterNormalMapBTextureAsset) {
+    waterNormalBTexture = null;
+    if (waterNormalMapBTextureAsset != null) {
+      waterNormalMapBTextureAsset.release();
+      waterNormalMapBTextureAsset = null;
+    }
+    this.waterNormalMapBTextureAsset = newWaterNormalMapBTextureAsset;
+    if(waterNormalMapBTextureAsset != null)
+      waterNormalMapBTextureAsset.retain();
   }
 }

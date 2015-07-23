@@ -33,7 +33,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
   private static final String WINDOW_MAIN_NAME = "ForgE";
   private final BlocksController blocksController;
   private final DirectoryWatcher directoryWatcher;
-  private final ShadersController shadersController;
+  public final ShadersController shadersController;
   private final GdxSwingInputProcessor inputProcessor;
   private final LwjglAWTInput input;
   private final MapTreeController mapTreeController;
@@ -90,7 +90,8 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     Thread.setDefaultUncaughtExceptionHandler(this);
     setContentPane(mainContentPane);
     mainContentPane.remove(mainSplitPane);
-
+    this.directoryWatcher     = new DirectoryWatcher();
+    shadersController         = new ShadersController(directoryWatcher);
     terrainInspectorPanel     = new MapPropertySheet();
     this.codeEditorWindow     = new CodeEditorWindow();
     this.resourcesController  = new ResourcesController();
@@ -106,7 +107,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     setVisible(true);
 
     this.inputProcessor = new GdxSwingInputProcessor();
-    this.directoryWatcher = new DirectoryWatcher();
+
     this.jobs = new JobManager();
     Config config = new Config();
     config.generateWireframe = true;
@@ -124,7 +125,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     terrainToolsController = new TerrainToolsController(terrainToolsToolbar, blocksController, inputProcessor, terrainInspectorPanel);
     playerController = new PlayerController(projectController, jobs);
     mainToolbarController = new MainToolbarController(projectController, mainToolbar, mainMenu, inputProcessor, playerController, codeEditorController);
-    shadersController = new ShadersController(directoryWatcher);
+
     mapTreeController = new MapTreeController(mapTree, projectController);
 
     engine.addBootListener(this);
@@ -170,7 +171,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     directoryWatcher.start();
     mainContentPane.setVisible(true);
     projectController.tryOpenLastMap();
-
+    ForgE.shaders.addOnShaderReloadListener(shadersController);
   }
 
   @Override

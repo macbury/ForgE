@@ -10,6 +10,7 @@
     "Sun",
     "WaterSettings",
     "Sky",
+    "MapSize",
     "EyePosition",
     "ProjectionMatrix",
     "WorldTransform",

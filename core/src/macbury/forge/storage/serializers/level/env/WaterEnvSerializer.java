@@ -6,7 +6,6 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import macbury.forge.assets.assets.TextureAsset;
-import macbury.forge.level.env.LevelEnv;
 import macbury.forge.level.env.WaterEnv;
 
 /**
@@ -23,7 +22,8 @@ public class WaterEnvSerializer extends Serializer<WaterEnv> {
     output.writeFloat(object.waveStrength);
     output.writeFloat(object.colorTint);
     output.writeFloat(object.refractiveFactor);
-    kryo.writeObjectOrNull(output, object.getWaterNormalMapTextureAsset(), TextureAsset.class);
+    kryo.writeObjectOrNull(output, object.getWaterNormalMapATextureAsset(), TextureAsset.class);
+    kryo.writeObjectOrNull(output, object.getWaterNormalMapBTextureAsset(), TextureAsset.class);
   }
 
   @Override
@@ -37,7 +37,8 @@ public class WaterEnvSerializer extends Serializer<WaterEnv> {
     env.waveStrength        = input.readFloat();
     env.colorTint           = input.readFloat();
     env.refractiveFactor    = input.readFloat();
-    env.setWaterNormalMapTextureAsset(kryo.readObjectOrNull(input, TextureAsset.class));
+    env.setWaterNormalMapATextureAsset(kryo.readObjectOrNull(input, TextureAsset.class));
+    env.setWaterNormalMapBTextureAsset(kryo.readObjectOrNull(input, TextureAsset.class));
     return env;
   }
 }

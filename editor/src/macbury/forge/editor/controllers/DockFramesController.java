@@ -8,15 +8,9 @@ import bibliothek.gui.dock.common.theme.ThemeMap;
 import bibliothek.gui.dock.facile.menu.RootMenuPiece;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import macbury.forge.editor.windows.MainWindow;
-import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
-import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
-import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
-import org.fife.ui.rsyntaxtextarea.Theme;
-import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 
 /**
  * Created by macbury on 07.05.15.
@@ -32,6 +26,7 @@ public class DockFramesController implements MainToolbarController.EditorModeLis
   private final DefaultSingleCDockable mapTreeDockable;
   private final CBaseLocation base;
   private final DefaultSingleCDockable terrainInspectorDockable;
+  public final DefaultSingleCDockable shaderErrorDockable;
 
   public DockFramesController(MainWindow mainWindow) {
     control = new CControl( mainWindow );
@@ -51,17 +46,18 @@ public class DockFramesController implements MainToolbarController.EditorModeLis
     mapEditorDockable.setMinimizable(false);
     mapEditorDockable.setExternalizable(false);
 
-    this.terrainToolsDockable   = createDockablePanel("Terrain", mainWindow.terrainPanel, true);
-    this.resourcesDockable      = createDockablePanel("Resources", mainWindow.resourcesController.buildTree(), true);
-    this.objectsDockable        = createDockablePanel("Objects", new JScrollPane(new JTree()), true);
-    this.objectInspectorDockable = createDockablePanel("Object Properties", mainWindow.objectInspectorContainerPanel, true);
+    this.terrainToolsDockable     = createDockablePanel("Terrain", mainWindow.terrainPanel, true);
+    this.resourcesDockable        = createDockablePanel("Resources", mainWindow.resourcesController.buildTree(), true);
+    this.objectsDockable          = createDockablePanel("Objects", new JScrollPane(new JTree()), true);
+    this.objectInspectorDockable  = createDockablePanel("Object Properties", mainWindow.objectInspectorContainerPanel, true);
     this.terrainInspectorDockable = createDockablePanel("Terrain Properties", mainWindow.terrainInspectorPanel, true);
-    this.mapTreeDockable        = createDockablePanel("Maps", mainWindow.mapTreeScroll, true);
-
-
+    this.mapTreeDockable          = createDockablePanel("Maps", mainWindow.mapTreeScroll, true);
+    this.shaderErrorDockable      = createDockablePanel("Shader Error", mainWindow.shadersController.buildLogs(), true);
+    mainWindow.shadersController.setDockable(shaderErrorDockable);
     CGrid grid = new CGrid( control );
 
     grid.add( 2, 1, 1, 2, mapTreeDockable);
+    grid.add( 2, 1, 1, 2, shaderErrorDockable);
     grid.add( 0, 0, 1, 2, terrainToolsDockable );
 
     grid.add( 0, 0, 2, 1, resourcesDockable );
@@ -74,11 +70,13 @@ public class DockFramesController implements MainToolbarController.EditorModeLis
 
     grid.add( 2, 0, 9, 3, createDockablePanel("Code", sp, true));
 */
-    grid.add( 2, 0, 9, 3, mapEditorDockable);
+    grid.add(2, 0, 9, 3, mapEditorDockable);
 
-    control.getContentArea().deploy( grid );
+    control.getContentArea().deploy(grid);
 
     mapTreeDockable.setLocation(base.minimalWest());
+    shaderErrorDockable.setLocation(base.minimalWest());
+
     this.menu = new RootMenuPiece( "Panels", false );
     menu.add( new SingleCDockableListMenuPiece( control ));
   }

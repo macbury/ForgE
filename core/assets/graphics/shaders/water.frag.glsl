@@ -29,7 +29,12 @@ void main() {
   vec4 waterDiffuse        = mix(reflectionColor, refractionColor, refractiveFactor(v_cameraPosition, u_waterRefractionFactor));
   vec4 waterColor          = mix(waterDiffuse, u_waterColor, u_waterColorTint);
 
-  vec3 normal              = u_normalMatrix * extractNormal(u_waterNormalTexture, v_texNormalCoords + v_moveOffset);
+  vec4 multiSampledNormalTextureValue = max(
+    texture2D(u_waterNormalATexture, v_texNormalCoords + v_moveOffset),
+    texture2D(u_waterNormalBTexture, v_texNormalCoords + vec2(v_moveOffset.y, v_moveOffset.x))
+  );
+
+  vec3 normal              = u_normalMatrix * extractNormalFromColor(multiSampledNormalTextureValue);
   vec3 lightColor          = applySunLight(normal);
 
   vec4 finalColor          = vec4(waterColor.rgb + applySunLight(normal), 1.0f);
