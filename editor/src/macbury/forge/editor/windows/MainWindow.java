@@ -12,6 +12,7 @@ import macbury.forge.ForgE;
 import macbury.forge.ForgEBootListener;
 import macbury.forge.editor.controllers.*;
 import macbury.forge.editor.controllers.maps.MapTreeController;
+import macbury.forge.editor.controllers.resources.ResourcesController;
 import macbury.forge.editor.controllers.tools.events.EventsController;
 import macbury.forge.editor.controllers.tools.terrain.TerrainToolsController;
 import macbury.forge.editor.input.GdxSwingInputProcessor;
@@ -42,6 +43,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
   private final DockFramesController dockFrameController;
   public final CodeEditorWindow codeEditorWindow;
   private final CodeEditorController codeEditorController;
+  public final ResourcesController resourcesController;
   private LwjglAWTCanvas openGLCanvas;
   private ForgE engine;
   private ProjectController projectController;
@@ -89,8 +91,9 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     setContentPane(mainContentPane);
     mainContentPane.remove(mainSplitPane);
 
-    terrainInspectorPanel =     new MapPropertySheet();
+    terrainInspectorPanel     = new MapPropertySheet();
     this.codeEditorWindow     = new CodeEditorWindow();
+    this.resourcesController  = new ResourcesController();
     this.dockFrameController  = new DockFramesController(this);
     this.codeEditorController = new CodeEditorController(codeEditorWindow);
     setResizable(true);
@@ -159,6 +162,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
 
   @Override
   public void afterEngineCreate(ForgE engine) {
+    resourcesController.refresh();
     Gdx.graphics.setVSync(true);
     mainSplitPane.setVisible(false);
     ForgE.input.addProcessor(inputProcessor);
@@ -166,6 +170,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     directoryWatcher.start();
     mainContentPane.setVisible(true);
     projectController.tryOpenLastMap();
+
   }
 
   @Override

@@ -58,6 +58,8 @@ public class ShadersManager {
         shader   = json.fromJson(BaseShader.class, file);
       }
 
+      shader.setName(shaderName);
+
       if (shader.load(this)) {
         shaders.put(file.nameWithoutExtension(), shader);
         if (!file.nameWithoutExtension().contains("-preview") && !file.nameWithoutExtension().contains("-debug")) {

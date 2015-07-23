@@ -5,7 +5,7 @@ varying vec3   v_cameraPosition;
 varying vec2   v_texDisplacementCoords;
 varying vec2   v_texNormalCoords;
 varying vec2   v_moveOffset;
-
+varying vec3   v_tangent;
 
 void main() {
   vec2 disortionA          = (texture2D(u_waterRefractionDUDVMap, v_texDisplacementCoords + v_moveOffset).rg * 2.0f - 1.0f) * u_waterWaveStrength;
@@ -42,4 +42,5 @@ void main() {
   #endif
 
   gl_FragColor             = applyFog(finalColor, v_position);
+  //gl_FragColor = vec4(v_tangent, 1.0f);
 }

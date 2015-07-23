@@ -20,6 +20,7 @@ public class Config {
   public boolean cacheGeometry      = false;
   public boolean renderBulletDebug = false;
   public boolean buildColliders    = true;
+  public String editor             = "atom";
   public void setRenderDebugTo(RenderDebug debug) {
     renderDebug = debug;
     Gdx.app.postRunnable(new Runnable() {

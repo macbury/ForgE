@@ -8,6 +8,7 @@ varying vec3   v_cameraPosition;
 varying vec2   v_texDisplacementCoords;
 varying vec2   v_texNormalCoords;
 varying vec2   v_moveOffset;
+varying vec3   v_tangent;
 
 void main() {
   v_moveOffset            = vec2(fract(u_waterSpeed * u_time),0.0f);
@@ -20,5 +21,9 @@ void main() {
 
   v_texDisplacementCoords = texCoords * u_waterDisplacementTiling;
   v_texNormalCoords       = texCoords;
+  
+
+  v_tangent               = cross( v_normal, vec3(0.0f, 0.0f, 1.0f) );
+
   gl_Position             = v_clipSpace;
 }

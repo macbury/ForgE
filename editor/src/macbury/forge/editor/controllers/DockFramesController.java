@@ -52,7 +52,7 @@ public class DockFramesController implements MainToolbarController.EditorModeLis
     mapEditorDockable.setExternalizable(false);
 
     this.terrainToolsDockable   = createDockablePanel("Terrain", mainWindow.terrainPanel, true);
-    this.resourcesDockable      = createDockablePanel("Resources", new JScrollPane(new JTree()), true);
+    this.resourcesDockable      = createDockablePanel("Resources", mainWindow.resourcesController.buildTree(), true);
     this.objectsDockable        = createDockablePanel("Objects", new JScrollPane(new JTree()), true);
     this.objectInspectorDockable = createDockablePanel("Object Properties", mainWindow.objectInspectorContainerPanel, true);
     this.terrainInspectorDockable = createDockablePanel("Terrain Properties", mainWindow.terrainInspectorPanel, true);

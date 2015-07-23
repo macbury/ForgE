@@ -78,7 +78,7 @@ public class WorldRenderingSystem extends IteratingSystem {
 
   private void renderRefractions() {
     env.water.clipMode = LevelEnv.ClipMode.Refraction;
-    renderBucketWith(finalBucket, false, false, Fbo.FRAMEBUFFER_REFRACTIONS);
+    renderBucketWith(finalBucket, true, false, Fbo.FRAMEBUFFER_REFRACTIONS);
   }
 
   private void renderFinal() {

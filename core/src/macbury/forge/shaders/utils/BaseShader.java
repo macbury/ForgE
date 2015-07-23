@@ -1,6 +1,7 @@
 package macbury.forge.shaders.utils;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
@@ -11,6 +12,8 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import macbury.forge.ForgE;
 import macbury.forge.level.env.LevelEnv;
 
+import java.io.File;
+import java.sql.SQLInput;
 import java.util.HashMap;
 
 /**
@@ -32,14 +35,15 @@ public abstract class BaseShader implements Disposable {
   private Array<BaseRenderableUniform> localUniforms;
   protected LevelEnv env;
   private String uniformsSrc = "";
+  private String name;
 
   public boolean load(ShadersManager manager) {
     this.globalUniforms               = new Array<BaseUniform>();
     this.localUniforms                = new Array<BaseRenderableUniform>();
     ShaderProgram.pedantic = false;
 
-    String fragmentSrc   = Gdx.files.internal(ShadersManager.SHADERS_PATH +fragment+".frag.glsl").readString();
-    String   vertexSrc   = Gdx.files.internal(ShadersManager.SHADERS_PATH +vertex+".vert.glsl").readString();
+    String fragmentSrc   = getFragmentFile().readString();
+    String   vertexSrc   = getVertexFile().readString();
     if (shader != null) {
       shader.dispose();
     }
@@ -72,6 +76,14 @@ public abstract class BaseShader implements Disposable {
 
       return false;
     }
+  }
+
+  public FileHandle getVertexFile() {
+    return Gdx.files.internal(ShadersManager.SHADERS_PATH +vertex+".vert.glsl");
+  }
+
+  public FileHandle getFragmentFile() {
+    return Gdx.files.internal(ShadersManager.SHADERS_PATH +fragment+".frag.glsl");
   }
 
   private String applyStructs() {
@@ -194,5 +206,17 @@ public abstract class BaseShader implements Disposable {
   @Override
   public void dispose() {
     shader.dispose();
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public File getJsonFile() {
+    return Gdx.files.internal(ShadersManager.SHADERS_PATH + name + ".json").file();
   }
 }
