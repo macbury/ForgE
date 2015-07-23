@@ -1,21 +1,18 @@
 package macbury.forge.graphics.builders;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.collision.btConvexHullShape;
-import com.badlogic.gdx.physics.bullet.collision.btShapeHull;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 import macbury.forge.blocks.Block;
 import macbury.forge.blocks.BlockShape;
 import macbury.forge.blocks.BlockShapePart;
 import macbury.forge.blocks.BlockShapeTriangle;
 import macbury.forge.graphics.mesh.VoxelsAssembler;
-import macbury.forge.systems.PsychicsSystem;
+import macbury.forge.systems.PhysicsSystem;
 import macbury.forge.terrain.greedy.AbstractGreedyAlgorithm;
 import macbury.forge.utils.Vector3i;
 import macbury.forge.voxel.Voxel;
@@ -67,7 +64,7 @@ public class ChunkPartCollider implements Disposable {
 
   public void initializeAndAddToWorld(btDiscreteDynamicsWorld bulletWorld) {
     //Gdx.app.log(TAG, "adding collider to bullet world at " + position.toString() + " size: " + size.toString());
-    bulletWorld.addRigidBody(body, PsychicsSystem.Flags.Ground.mask, PsychicsSystem.Flags.All.mask);
+    bulletWorld.addRigidBody(body, PhysicsSystem.Flags.Ground.mask, PhysicsSystem.Flags.All.mask);
     this.bulletWorld = bulletWorld;
   }
 

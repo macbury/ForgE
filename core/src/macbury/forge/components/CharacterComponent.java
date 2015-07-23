@@ -1,14 +1,11 @@
 package macbury.forge.components;
 
-import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.utils.ImmutableArray;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.*;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btKinematicCharacterController;
-import macbury.forge.systems.PsychicsSystem;
+import macbury.forge.systems.PhysicsSystem;
 
 /**
  * Created by macbury on 24.04.15.
@@ -42,8 +39,8 @@ public class CharacterComponent extends BulletPsychicsComponent {
     characterController.setMaxSlope(maxSlope);
     world.addCollisionObject(
         ghostObject,
-        PsychicsSystem.Flags.Object.mask,
-        PsychicsSystem.Flags.All.mask
+        PhysicsSystem.Flags.Object.mask,
+        PhysicsSystem.Flags.All.mask
     );
     world.addAction(characterController);
   }

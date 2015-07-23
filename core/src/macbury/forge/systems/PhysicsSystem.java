@@ -14,17 +14,15 @@ import com.badlogic.gdx.physics.bullet.linearmath.btIDebugDraw;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.components.*;
-import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
 import macbury.forge.graphics.builders.Chunk;
 import macbury.forge.graphics.builders.ChunkPartCollider;
 import macbury.forge.terrain.TerrainEngine;
-import macbury.forge.utils.BulletUtils;
 
 /**
  * Created by macbury on 09.04.15.
  */
-public class PsychicsSystem extends EntitySystem implements EntityListener, Disposable, TerrainEngine.TerrainEngineListener {
-  private static final String TAG            = "PsychicsSystem";
+public class PhysicsSystem extends EntitySystem implements EntityListener, Disposable, TerrainEngine.TerrainEngineListener {
+  private static final String TAG            = "PhysicsSystem";
   private static final float MIN_TIME_STEPS  = 1f / 30f;
   private static final int MAX_SUB_STEPS     = 5;
   private static final float FIXED_TIME_STEP = 1f / 60f;
@@ -54,7 +52,7 @@ public class PsychicsSystem extends EntitySystem implements EntityListener, Disp
   private btGhostPairCallback ghostCallback;
   private Array<Entity> entitiesWithBullet = new Array<Entity>();
 
-  public PsychicsSystem() {
+  public PhysicsSystem() {
     super();
     familyCharacterAndPosition = Family.getFor(PositionComponent.class);
     createWorld();
@@ -138,7 +136,7 @@ public class PsychicsSystem extends EntitySystem implements EntityListener, Disp
 
       if (BulletPsychicsComponent.class.isInstance(component)) {
         BulletPsychicsComponent bulletPsychicsComponent = (BulletPsychicsComponent)component;
-        tempA.set(positionComponent.size).scl(PsychicsSystem.BULLET_SIZE);
+        tempA.set(positionComponent.size).scl(PhysicsSystem.BULLET_SIZE);
         bulletPsychicsComponent.initBullet(positionComponent, bulletWorld,tempA, entity);
       }
     }

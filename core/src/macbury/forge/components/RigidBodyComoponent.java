@@ -7,7 +7,7 @@ import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.physics.bullet.linearmath.btMotionState;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import macbury.forge.systems.PsychicsSystem;
+import macbury.forge.systems.PhysicsSystem;
 
 /**
  * Created by macbury on 30.04.15.
@@ -50,8 +50,8 @@ public class RigidBodyComoponent extends BulletPsychicsComponent {
 
     world.addRigidBody(
         rigidBody,
-        PsychicsSystem.Flags.Object.mask,
-        PsychicsSystem.Flags.All.mask
+        PhysicsSystem.Flags.Object.mask,
+        PhysicsSystem.Flags.All.mask
     );
     constructionInfo.dispose();
   }

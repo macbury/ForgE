@@ -15,11 +15,11 @@ public class EntitySystemsManager extends PooledEngine implements Disposable {
   public final CullingSystem culling;
   private final PlayerSystem player;
   //private final CollisionSystem collision;
-  public final PsychicsSystem psychics;
+  public final PhysicsSystem psychics;
   public final CharacterSystem character;
 
   public EntitySystemsManager(Level level) {
-    psychics  = new PsychicsSystem();
+    psychics  = new PhysicsSystem();
     rendering = new WorldRenderingSystem(level);
     octree    = new OctreeSystem(level);
     debug     = new DebugSystem(level);
