@@ -1,8 +1,15 @@
 vec3 directionalLightDiffuse(DirectionalLight source, vec3 normal) {
     vec3 lightDir = -source.direction;
-    float NdotL = clamp(dot(normal, lightDir), 0.0f, 1.0f);
-    vec3 value = source.color.rgb * NdotL;
-    return value;
+    float NdotL   = clamp(dot(normal, lightDir), 0.0f, 1.0f);
+    return source.color.rgb * NdotL;
+}
+
+vec3 directionalLightSpecular(DirectionalLight source, vec3 normal, float shineDamper, float reflectivity, vec3 eyePosition) {
+  vec3 lightDir          = -source.direction;
+  vec3 reflectDir        = reflect(lightDir, normal);
+  float specularFactor   = clamp(dot(reflectDir, eyePosition), 0.0f, 1.0f);
+  float dampedFactor     = pow(specularFactor, shineDamper);
+  return source.color.rgb  * dampedFactor * reflectivity;
 }
 
 vec3 applySunLight(vec3 normal) {

@@ -70,21 +70,6 @@ public class PhysicsSystem extends EntitySystem implements EntityListener, Dispo
 
     bulletWorld.setGravity(new Vector3(0, -9f, 0));
     debugDrawer.setDebugMode(btIDebugDraw.DebugDrawModes.DBG_MAX_DEBUG_DRAW_MODE);
-
-    //createGround();
-    //createPlayer(new Vector3(50, 8f, 30.3f));
-  }
-
-
-  public void createGround() {
-    btBoxShape groundBoxShape = new btBoxShape(new Vector3(80* 0.5f, 0.5f, 80 * 0.5f));
-    btRigidBody.btRigidBodyConstructionInfo constructionInfo = new btRigidBody.btRigidBodyConstructionInfo(0, null, groundBoxShape, Vector3.Zero);
-    btRigidBody groundBody  = new btRigidBody(constructionInfo);
-    Matrix4 worldTransform  = new Matrix4();
-    worldTransform.translate(40, 0.5f, 40);
-    groundBody.setWorldTransform(worldTransform);
-    groundBody.setCollisionFlags(groundBody.getCollisionFlags() | btCollisionObject.CollisionFlags.CF_CUSTOM_MATERIAL_CALLBACK);
-    bulletWorld.addRigidBody(groundBody);
   }
 
   @Override

@@ -39,8 +39,8 @@ public class ChunkMapDataSerializer extends Serializer<ChunkMap> {
         kryo.writeObject(output, chunk.start);
         kryo.writeObject(output, chunk.end);
         for (int x = chunk.start.x; x < chunk.end.x; x++) {
-          for (int y = chunk.start.y; y < chunk.end.y; y++) {
-            for (int z = chunk.start.z; z < chunk.end.z; z++) {
+          for (int z = chunk.start.z; z < chunk.end.z; z++) {
+            for (int y = chunk.start.y; y < chunk.end.y; y++) {
               tempA.set(x,y,z);
               Voxel voxel = object.getVoxelForPosition(x,y,z);
               kryo.writeObjectOrNull(output, voxel, Voxel.class);
@@ -77,8 +77,8 @@ public class ChunkMapDataSerializer extends Serializer<ChunkMap> {
       map.rebuildChunkForChunkPositionIfExists(chunkPosition);
 
       for (int x = start.x; x < end.x; x++) {
-        for (int y = start.y; y < end.y; y++) {
-          for (int z = start.z; z < end.z; z++) {
+        for (int z = start.z; z < end.z; z++) {
+          for (int y = start.y; y < end.y; y++) {
             tempA.set(x,y,z);
             Voxel voxel = kryo.readObjectOrNull(input, Voxel.class);
             map.setQuietVoxelForPosition(voxel, tempA);
