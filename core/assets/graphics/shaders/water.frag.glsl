@@ -7,10 +7,9 @@ varying vec2   v_texNormalCoords;
 varying vec2   v_moveOffset;
 
 void main() {
-  vec2 disortionA          = (texture2D(u_waterRefractionDUDVMap, v_texDisplacementCoords + v_moveOffset).rg * 2.0f - 1.0f) * u_waterWaveStrength;
-  vec2 disortionB          = (texture2D(u_waterRefractionDUDVMap, vec2(-v_texDisplacementCoords.x, v_texDisplacementCoords.y) + v_moveOffset).rg * 2.0f - 1.0f) * u_waterWaveStrength;
-
-  vec2 totalDisortion      = disortionA + disortionB;
+  vec2 distortedTexCoords = texture2D(u_waterRefractionDUDVMap, v_texDisplacementCoords + v_moveOffset).rg*0.1f;
+  distortedTexCoords      = v_texDisplacementCoords + vec2(distortedTexCoords.x, distortedTexCoords.y+v_moveOffset.x);
+  vec2 totalDisortion     = (texture2D(u_waterRefractionDUDVMap, distortedTexCoords).rg * 2.0f - 1.0f) * u_waterWaveStrength;
 
   vec2 ndc                 = (v_clipSpace.xy/v_clipSpace.w)/2.0f + 0.5f;
   vec2 refreactTexCords    = vec2(ndc.x, ndc.y);
@@ -29,23 +28,27 @@ void main() {
   vec4 waterColor          = mix(waterDiffuse, u_waterColor, u_waterColorTint);
 
   vec4 multiSampledNormalTextureValue = max(
-    texture2D(u_waterNormalATexture, v_texNormalCoords + v_moveOffset),
-    texture2D(u_waterNormalBTexture, v_texNormalCoords + vec2(v_moveOffset.y, v_moveOffset.x))
+    texture2D(u_waterNormalATexture, distortedTexCoords),
+    texture2D(u_waterNormalBTexture, distortedTexCoords)
   );
 
-  vec3 normal              = v_normal;//u_normalMatrix * extractNormalFromColor(multiSampledNormalTextureValue);
+  vec3 normal              = normalize(vec3(
+    multiSampledNormalTextureValue.r * 2.0f - 1.0f,
+    multiSampledNormalTextureValue.b,
+    multiSampledNormalTextureValue.g * 2.0f - 1.0f
+  ));
 
-  vec4 lightColor          = vec4( u_ambientLight.rgb +
-    directionalLightSpecular(u_mainLight, normal, 1.5f, 0.7f, normalize(v_cameraPosition)) + applySunLight(normal),
-    1.0f);
+  vec4 specularComponent   = vec4(directionalLightSpecular(u_mainLight, normal, 1.5f, 0.7f, normalize(v_cameraPosition)), 0.0f);
 
-  vec4 finalColor          = lightColor * waterColor;
+  vec4 lightColor          = vec4(u_ambientLight.rgb + applySunLight(normal), 1.0f);
+
+  vec4 finalColor          = waterColor + specularComponent;
 
   #ifdef normalsDebugFlag
-    finalColor.rgb = v_normal;
+    finalColor.rgb = normal;
   #endif
   #ifdef lightingDebugFlag
-    finalColor.rgb = lightColor.rgb;
+    finalColor.rgb = lightColor.rgb + specularComponent.rgb;
   #endif
 
   gl_FragColor             = applyFog(finalColor, v_position);

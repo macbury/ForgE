@@ -9,7 +9,7 @@ vec3 directionalLightSpecular(DirectionalLight source, vec3 normal, float shineD
   vec3 reflectDir        = reflect(lightDir, normal);
   float specularFactor   = clamp(dot(reflectDir, eyePosition), 0.0f, 1.0f);
   float dampedFactor     = pow(specularFactor, shineDamper);
-  return source.color.rgb  * dampedFactor * reflectivity;
+  return source.color.rgb * dampedFactor * reflectivity;
 }
 
 vec3 applySunLight(vec3 normal) {
