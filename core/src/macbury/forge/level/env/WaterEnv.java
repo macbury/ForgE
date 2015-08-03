@@ -25,6 +25,9 @@ public class WaterEnv implements Disposable {
   public float displacementTiling = 2f;
   public float colorTint          = 0.2f;
   public float refractiveFactor   = 0.5f;
+  public float shineDamper        = 12.0f;
+  public float reflectivity       = 0.9f;
+
   private Texture waterNormalBTexture;
 
   public TextureAsset getWaterNormalMapATextureAsset() {

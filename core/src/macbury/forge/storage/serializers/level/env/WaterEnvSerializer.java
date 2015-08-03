@@ -22,6 +22,8 @@ public class WaterEnvSerializer extends Serializer<WaterEnv> {
     output.writeFloat(object.waveStrength);
     output.writeFloat(object.colorTint);
     output.writeFloat(object.refractiveFactor);
+    output.writeFloat(object.reflectivity);
+    output.writeFloat(object.shineDamper);
     kryo.writeObjectOrNull(output, object.getWaterNormalMapATextureAsset(), TextureAsset.class);
     kryo.writeObjectOrNull(output, object.getWaterNormalMapBTextureAsset(), TextureAsset.class);
   }
@@ -37,6 +39,8 @@ public class WaterEnvSerializer extends Serializer<WaterEnv> {
     env.waveStrength        = input.readFloat();
     env.colorTint           = input.readFloat();
     env.refractiveFactor    = input.readFloat();
+    env.reflectivity        = input.readFloat();
+    env.shineDamper         = input.readFloat();
     env.setWaterNormalMapATextureAsset(kryo.readObjectOrNull(input, TextureAsset.class));
     env.setWaterNormalMapBTextureAsset(kryo.readObjectOrNull(input, TextureAsset.class));
     return env;

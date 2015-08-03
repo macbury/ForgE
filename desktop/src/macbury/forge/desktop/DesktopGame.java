@@ -40,7 +40,6 @@ public class DesktopGame implements ForgEBootListener, Thread.UncaughtExceptionH
       config.fullscreen     = false;
     }
 
-
     Config forgeConfig            = new Config();
     forgeConfig.debug             = false;
     forgeConfig.renderBulletDebug = true;

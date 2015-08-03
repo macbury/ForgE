@@ -17,6 +17,8 @@ public class UniformWaterSettings extends BaseUniform {
   public final String UNIFORM_WATER_DISPLACEMENT_TILING = "u_waterDisplacementTiling";
   public final String UNIFORM_WATER_SPEED               = "u_waterSpeed";
   public final String UNIFORM_WATER_REFRACTION_FACTOR   = "u_waterRefractionFactor";
+  public final String UNIFORM_WATER_REFLECTIVITY        = "u_waterReflectivity";
+  public final String UNIFORM_WATER_SHINE_DAMPER        = "u_waterShineDamper";
   @Override
   public void defineUniforms() {
     define(UNIFORM_WATER_COLOR, Color.class);
@@ -25,6 +27,8 @@ public class UniformWaterSettings extends BaseUniform {
     define(UNIFORM_WATER_SPEED, Float.class);
     define(UNIFORM_WATER_COLOR_TINT, Float.class);
     define(UNIFORM_WATER_REFRACTION_FACTOR, Float.class);
+    define(UNIFORM_WATER_REFLECTIVITY, Float.class);
+    define(UNIFORM_WATER_SHINE_DAMPER, Float.class);
   }
 
   @Override
@@ -35,6 +39,8 @@ public class UniformWaterSettings extends BaseUniform {
     shader.setUniformf(UNIFORM_WATER_SPEED, env.water.waterSpeed);
     shader.setUniformf(UNIFORM_WATER_COLOR_TINT, env.water.colorTint);
     shader.setUniformf(UNIFORM_WATER_REFRACTION_FACTOR, env.water.refractiveFactor);
+    shader.setUniformf(UNIFORM_WATER_REFLECTIVITY, env.water.reflectivity);
+    shader.setUniformf(UNIFORM_WATER_SHINE_DAMPER, env.water.shineDamper);
   }
 
   @Override

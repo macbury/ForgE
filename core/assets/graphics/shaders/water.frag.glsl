@@ -38,7 +38,7 @@ void main() {
     multiSampledNormalTextureValue.g * 2.0f - 1.0f
   ));
 
-  vec4 specularComponent   = vec4(directionalLightSpecular(u_mainLight, normal, 1.5f, 0.7f, normalize(v_cameraPosition)), 0.0f);
+  vec4 specularComponent   = vec4(directionalLightSpecular(u_mainLight, normal, u_waterShineDamper, u_waterReflectivity, normalize(v_cameraPosition)), 0.0f);
 
   vec4 lightColor          = vec4(u_ambientLight.rgb + applySunLight(normal), 1.0f);
 
