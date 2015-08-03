@@ -1,5 +1,6 @@
 package macbury.forge.components;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
@@ -18,9 +19,9 @@ public class PositionComponent extends BaseComponent implements OctreeObject {
   public final Vector3     scale;
   public OctreeNode        parent;
   public final Matrix4     worldTransform;
-  public boolean visible = true;
   public boolean dirty   = true;
   private final static Vector3 temp = new Vector3();
+  public Entity entity;
 
   public PositionComponent() {
     super();
@@ -45,19 +46,19 @@ public class PositionComponent extends BaseComponent implements OctreeObject {
     worldTransform.set(otherPosition.worldTransform);
     size.set(otherPosition.size);
     scale.set(otherPosition.scale);
-    visible = otherPosition.visible;
+
     dirty = true;
   }
 
   @Override
   public void reset() {
+    entity = null;
     vector.setZero();
     worldTransform.idt();
     rotation.set(Vector3.Z, 90);
     size.set(ChunkMap.TERRAIN_TILE_SIZE);
     scale.set(1,1,1);
     parent = null;
-    visible = false;
     dirty = true;
   }
 

@@ -46,7 +46,7 @@ public class CullingSystem extends IteratingSystem {
 
       for (int i = 0; i < octreeVisibleObjects.size; i++) {
         PositionComponent position = (PositionComponent) octreeVisibleObjects.get(i);
-        position.visible  = true;
+        //position.visible  = true;
       }
 
     } camera.restoreFov();
@@ -57,6 +57,6 @@ public class CullingSystem extends IteratingSystem {
   @Override
   protected void processEntity(Entity entity, float deltaTime) {
     PositionComponent position = pm.get(entity);
-    position.visible  = false;
+    //position.visible  = false;
   }
 }

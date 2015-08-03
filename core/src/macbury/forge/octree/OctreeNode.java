@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Pool;
+import macbury.forge.octree.query.OctreeEach;
 import macbury.forge.octree.query.OctreeQuery;
 
 /**

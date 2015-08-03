@@ -78,7 +78,7 @@ public class DebugSystem extends IteratingSystem implements Disposable {
     PositionComponent positionComponent = pm.get(entity);
     CursorComponent cursorComponent   = cm.get(entity);
 
-    if (positionComponent.visible && ForgE.config.renderBoundingBox) {
+    if (ForgE.config.renderBoundingBox) {
       //positionComponent.getBoundingBox(tempBox);
       tempVec.set(positionComponent.size).scl(0.5f);
       tempVec2.set(positionComponent.vector).sub(tempVec);

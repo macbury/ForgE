@@ -50,6 +50,7 @@ public class OctreeSystem extends IntervalIteratingSystem {
   @Override
   protected void processEntity(Entity entity) {
     PositionComponent position = pm.get(entity);
+    position.entity            = entity;
     tree.insert(position);
   }
 }
