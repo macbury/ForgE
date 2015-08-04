@@ -10,7 +10,8 @@ import macbury.forge.editor.parell.JobListener;
 import macbury.forge.editor.parell.JobManager;
 import macbury.forge.editor.parell.jobs.LoadLevelJob;
 import macbury.forge.editor.parell.jobs.NewLevelJob;
-import macbury.forge.editor.parell.jobs.SaveLevelJob;
+import macbury.forge.editor.parell.jobs.SaveLevelGeometryJob;
+import macbury.forge.editor.parell.jobs.SaveLevelStateJob;
 import macbury.forge.editor.runnables.UpdateStatusBar;
 import macbury.forge.editor.screens.LevelEditorScreen;
 import macbury.forge.editor.windows.MainWindow;
@@ -145,12 +146,12 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
 
   public void saveMap() {
     if (levelEditorScreen.changeManager.haveChanges()) {
-      SaveLevelJob job = new SaveLevelJob(levelEditorScreen.level.state);
+      SaveLevelStateJob job = new SaveLevelStateJob(levelEditorScreen.level.state);
       job.setCallback(this, LEVEL_STATE_SAVE_CALLBACK);
       jobs.enqueue(job);
+      jobs.enqueue(new SaveLevelGeometryJob(levelEditorScreen.level));
       levelEditorScreen.changeManager.clear();
     }
-
   }
 
   public boolean closeAndSaveChangesMap() {
@@ -285,7 +286,7 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
     updateUI();
   }
 
-  public void onLevelStateSaved(LevelState state, SaveLevelJob job) {
+  public void onLevelStateSaved(LevelState state, SaveLevelStateJob job) {
     mainWindow.setTitle(state.name);
     Gdx.app.postRunnable(new Runnable() {
       @Override

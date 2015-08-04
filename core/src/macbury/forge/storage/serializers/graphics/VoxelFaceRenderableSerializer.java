@@ -15,6 +15,7 @@ import java.nio.ShortBuffer;
 public class VoxelFaceRenderableSerializer extends Serializer<VoxelChunkRenderable> {
   @Override
   public void write(Kryo kryo, Output output, VoxelChunkRenderable face) {
+    face.buildMeshFromFactory();
     kryo.writeObject(output, face.direction);
     kryo.writeObject(output, face.boundingBox);
     output.writeInt(face.primitiveType);

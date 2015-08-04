@@ -10,6 +10,8 @@ import com.esotericsoftware.kryo.io.Output;
 import macbury.forge.storage.StorageManager;
 import macbury.forge.storage.serializers.level.FullLevelStateSerializer;
 import macbury.forge.storage.serializers.level.LevelStateBasicInfoSerializer;
+import macbury.forge.storage.serializers.level.TerrainGeometryProviderSerializer;
+import macbury.forge.terrain.geometry.DynamicGeometryProvider;
 
 import java.io.*;
 import java.util.HashMap;
@@ -74,6 +76,22 @@ public class LevelManager {
       e.printStackTrace();
     }
     storageManager.pool.release(kryo);
+  }
+
+  public void save(DynamicGeometryProvider provider) {
+    Kryo kryo          = storageManager.pool.borrow(); {
+      File file        = new File("/tmp/test.geometry");
+      try {
+        synchronized (provider) {
+          DeflaterOutputStream outputStream = new DeflaterOutputStream(new FileOutputStream(file, false));
+          Output output                     = new Output(outputStream);
+          kryo.writeObject(output, provider, new TerrainGeometryProviderSerializer());
+          output.close();
+        }
+      } catch (FileNotFoundException e) {
+        e.printStackTrace();
+      }
+    } storageManager.pool.release(kryo);
   }
 
   public void save(LevelState state) {

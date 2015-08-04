@@ -14,6 +14,7 @@ import macbury.forge.graphics.builders.TerrainBuilder;
 import macbury.forge.graphics.camera.GameCamera;
 import macbury.forge.level.Level;
 import macbury.forge.shaders.utils.CheckMaterial;
+import macbury.forge.terrain.geometry.DynamicGeometryProvider;
 import macbury.forge.voxel.ChunkMap;
 import macbury.forge.octree.OctreeNode;
 import macbury.forge.octree.OctreeObject;
@@ -31,7 +32,6 @@ public class TerrainEngine implements Disposable {
   private static final int CHUNK_TO_REBUILD_PER_TICK = 10;
   private final ChunkMap          map;
   private final OctreeNode        octree;
-  private final TerrainBuilder    builder;
   public  final Array<Chunk>      chunks;
   public  final Array<VoxelChunkRenderable> visibleTerrainFaces;
   public  final Array<VoxelChunkRenderable> visibleWaterFaces;
@@ -44,26 +44,25 @@ public class TerrainEngine implements Disposable {
   private final FrustrumClassFilterOctreeQuery frustrumOctreeQuery;
 
   private final Array<TerrainEngineListener> listeners = new Array<TerrainEngineListener>();
+  private DynamicGeometryProvider geometryProvider;
 
   public TerrainEngine(Level level) {
     this.frustrumOctreeQuery  = new FrustrumClassFilterOctreeQuery();
     this.tempObjects          = new Array<OctreeObject>();
     this.visibleChunks        = new Array<Chunk>();
-    this.visibleTerrainFaces = new Array<VoxelChunkRenderable>();
+    this.visibleTerrainFaces  = new Array<VoxelChunkRenderable>();
     this.visibleWaterFaces    = new Array<VoxelChunkRenderable>();
     this.chunks               = new Array<Chunk>();
     this.map                  = level.terrainMap;
     this.octree               = level.octree;
-    this.builder              = new TerrainBuilder(map);
+    this.geometryProvider     = level.terrainGeometryProvider;
     this.tempBox              = new BoundingBox();
     frustrumOctreeQuery.setKlass(Chunk.class);
-
   }
 
   public void update() {
     rebuild();
   }
-
 
   /**
    * Check which chunks with its renderables are visible!
@@ -153,18 +152,9 @@ public class TerrainEngine implements Disposable {
   }
 
   private void buildChunkGeometry(Chunk chunk) {
-    remove(chunk);
-    builder.begin(); {
-      builder.cursor.set(chunk);
-
-      while(builder.next()) {
-        builder.buildFaceForChunk(chunk);
-      }
-
-      builder.assembleMesh(chunk);
-    } builder.end();
-
-    add(chunk);
+    remove(chunk); {
+      geometryProvider.build(chunk);
+    } add(chunk);
   }
 
   private void add(Chunk chunk) {
@@ -191,8 +181,9 @@ public class TerrainEngine implements Disposable {
     while(chunks.size > 0) {
       remove(chunks.pop());
     }
-    builder.dispose();
+    geometryProvider.dispose();
     listeners.clear();
+    geometryProvider = null;
   }
 
   public void addListener(TerrainEngineListener listener) {

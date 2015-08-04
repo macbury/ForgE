@@ -27,6 +27,7 @@ import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
 import macbury.forge.level.env.LevelEnv;
 import macbury.forge.level.LevelState;
 import macbury.forge.level.env.WaterEnv;
+import macbury.forge.storage.serializers.level.TerrainGeometryProviderSerializer;
 import macbury.forge.storage.serializers.assets.AssetSerializer;
 import macbury.forge.storage.serializers.db.GameDatabaseSerializer;
 import macbury.forge.storage.serializers.db.models.PlayerStartPositionSerializer;
@@ -37,6 +38,7 @@ import macbury.forge.storage.serializers.level.FullLevelStateSerializer;
 import macbury.forge.storage.serializers.level.env.LevelEnvSerializer;
 import macbury.forge.storage.serializers.level.VoxelSerializer;
 import macbury.forge.storage.serializers.level.env.WaterEnvSerializer;
+import macbury.forge.terrain.geometry.DynamicGeometryProvider;
 import macbury.forge.utils.Vector3i;
 import macbury.forge.voxel.ChunkMap;
 import macbury.forge.voxel.Voxel;
@@ -77,6 +79,7 @@ public class StorageManager {
       kryo.register(CubemapSkybox.class, new SkyboxSerializer());
       kryo.register(DayNightSkybox.class, new SkyboxSerializer());
       kryo.register(WaterEnv.class, new WaterEnvSerializer());
+      kryo.register(DynamicGeometryProvider.class, new TerrainGeometryProviderSerializer());
       return kryo;
     }
   };

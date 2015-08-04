@@ -15,6 +15,8 @@ import macbury.forge.level.env.LevelEnv;
 import macbury.forge.octree.OctreeNode;
 import macbury.forge.systems.engine.EntitySystemsManager;
 import macbury.forge.terrain.TerrainEngine;
+import macbury.forge.terrain.geometry.DynamicGeometryProvider;
+import macbury.forge.terrain.geometry.TerrainGeometryProvider;
 import macbury.forge.ui.DebugFrameBufferResult;
 import macbury.forge.ui.FullScreenFrameBufferResult;
 import macbury.forge.voxel.ChunkMap;
@@ -40,21 +42,23 @@ public class Level implements Disposable {
   public final TerrainEngine            terrainEngine;
   public final LevelEnv env;
   public final Stage                    ui;
+  public final DynamicGeometryProvider terrainGeometryProvider;
 
   public Level(LevelState state) {
-    this.ui                  = new Stage(new ScreenViewport());
-    this.env                 = state.env;
-    this.state               = state;
-    this.terrainMap          = state.terrainMap;
-    this.renderContext       = new RenderContext(new DefaultTextureBinder(DefaultTextureBinder.WEIGHTED, 1));
+    this.ui                       = new Stage(new ScreenViewport());
+    this.env                      = state.env;
+    this.state                    = state;
+    this.terrainMap               = state.terrainMap;
+    this.terrainGeometryProvider  = new DynamicGeometryProvider(terrainMap);
+    this.renderContext            = new RenderContext(new DefaultTextureBinder(DefaultTextureBinder.WEIGHTED, 1));
 
-    this.octree              = OctreeNode.root();
+    this.octree                   = OctreeNode.root();
 
-    this.batch               = new VoxelBatch(renderContext);
-    this.camera              = new GameCamera();
-    this.frustrumDebugger    = new FrustrumDebugAndRenderer(camera);
-    this.terrainEngine       = new TerrainEngine(this);
-    this.entities            = new EntitySystemsManager(this);
+    this.batch                    = new VoxelBatch(renderContext);
+    this.camera                   = new GameCamera();
+    this.frustrumDebugger         = new FrustrumDebugAndRenderer(camera);
+    this.terrainEngine            = new TerrainEngine(this);
+    this.entities                 = new EntitySystemsManager(this);
 
     octree.setBounds(terrainMap.getBounds(ChunkMap.TERRAIN_TILE_SIZE));
 

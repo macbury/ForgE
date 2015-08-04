@@ -7,11 +7,11 @@ import macbury.forge.level.LevelState;
 /**
  * Created by macbury on 10.03.15.
  */
-public class SaveLevelJob extends Job<LevelState> {
+public class SaveLevelStateJob extends Job<LevelState> {
 
   private final LevelState state;
 
-  public SaveLevelJob(LevelState state) {
+  public SaveLevelStateJob(LevelState state) {
     super(LevelState.class);
     this.state = state;
   }
