@@ -28,7 +28,7 @@ public class SaveLevelGeometryJob extends Job<Level> {
 
   @Override
   public Level perform() {
-    ForgE.levels.save(level.terrainGeometryProvider);
+    ForgE.levels.save(level.terrainGeometryProvider, level.state);
     return null;
   }
 }

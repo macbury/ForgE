@@ -242,7 +242,6 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
   public void deleteMap(int levelStateId) {
     if (closeAndSaveChangesMap()) {
       jobs.waitForAllToComplete();
-      FileHandle levelHandle = ForgE.levels.getFileHandle(levelStateId);
       int response = JOptionPane.showOptionDialog(mainWindow,
           "Are you sure?",
           "Delete map",
@@ -253,8 +252,13 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
           null);
 
       if (response == 0) {
+        FileHandle levelHandle = ForgE.levels.getFileHandle(levelStateId);
+        File  geoHandle        = ForgE.levels.getGeoFile(levelStateId);
         Gdx.app.log(TAG, "Removing map: " + levelHandle.file().getAbsolutePath());
+
         levelHandle.file().delete();
+        if (geoHandle.exists())
+          geoHandle.delete();
         triggerMapStructureChange();
       }
     }

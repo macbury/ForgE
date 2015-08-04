@@ -12,7 +12,8 @@ import macbury.forge.voxel.ChunkMap;
  */
 public class LevelState {
   public static final String MAP_NAME_PREFIX = "MAP_";
-  public static final String FILE_EXT = ".level";
+  public static final String LEVEL_FILE_EXT = ".level";
+  public static final String GEO_FILE_EXT = ".geometry";
   public static final String MAP_STORAGE_DIR = "db/maps/";
   private int width;
   private int depth;

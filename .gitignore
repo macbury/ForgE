@@ -67,3 +67,4 @@ build/
 .DS_Store
 *.level
 core/assets/ed/previews/
+*.geometry

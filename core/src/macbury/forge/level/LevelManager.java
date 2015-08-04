@@ -11,12 +11,10 @@ import macbury.forge.storage.StorageManager;
 import macbury.forge.storage.serializers.level.FullLevelStateSerializer;
 import macbury.forge.storage.serializers.level.LevelStateBasicInfoSerializer;
 import macbury.forge.storage.serializers.level.TerrainGeometryProviderSerializer;
-import macbury.forge.terrain.geometry.DynamicGeometryProvider;
 import macbury.forge.terrain.geometry.TerrainGeometryProvider;
 
 import java.io.*;
 import java.util.HashMap;
-import java.util.zip.DeflaterInputStream;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.InflaterInputStream;
 
@@ -32,7 +30,7 @@ public class LevelManager {
   public FileFilter mapAndDirFileFilter = new FileFilter() {
     @Override
     public boolean accept(File pathname) {
-      return pathname.getName().endsWith(LevelState.FILE_EXT) || pathname.isDirectory();
+      return pathname.getName().endsWith(LevelState.LEVEL_FILE_EXT) || pathname.isDirectory();
     }
   };
 
@@ -61,7 +59,7 @@ public class LevelManager {
 
   public void save(LevelState state, String storeDir) {
     Kryo kryo          = storageManager.pool.borrow();
-    File file          = new File(storeDir + File.separator + LevelState.MAP_NAME_PREFIX+state.getId()+LevelState.FILE_EXT);
+    File file          = new File(storeDir + File.separator + LevelState.MAP_NAME_PREFIX+state.getId()+LevelState.LEVEL_FILE_EXT);
     if (file.exists()) {
       file.delete();
     }
@@ -79,9 +77,17 @@ public class LevelManager {
     storageManager.pool.release(kryo);
   }
 
-  public void save(TerrainGeometryProvider provider) {
+  public File getGeoFile(int levelStateId) {
+    return new File(Gdx.files.internal(LevelState.MAP_STORAGE_DIR).file().getAbsolutePath() + File.separator + LevelState.MAP_NAME_PREFIX+levelStateId+LevelState.GEO_FILE_EXT);
+  }
+
+  public void save(TerrainGeometryProvider provider, LevelState state) {
     Kryo kryo          = storageManager.pool.borrow(); {
-      File file        = new File("/tmp/test.geometry");
+      File file        = getGeoFile(state.id);
+      if (file.exists()) {
+        file.delete();
+      }
+      Gdx.app.log(TAG, "Saving geometry: " + file.getAbsolutePath());
       try {
         synchronized (provider) {
           DeflaterOutputStream outputStream = new DeflaterOutputStream(new FileOutputStream(file, false));
@@ -117,7 +123,7 @@ public class LevelManager {
   public void reload() {
     Kryo kryo                                = storageManager.pool.borrow();
     Array<FileHandle> tempFiles              = new Array<FileHandle>();
-    getHandles(Gdx.files.internal(LevelState.MAP_STORAGE_DIR) ,tempFiles);
+    getHandles(Gdx.files.internal(LevelState.MAP_STORAGE_DIR), tempFiles);
     for (FileHandle file : tempFiles) {
       if (!file.isDirectory()) {
         int levelId = getLevelId(file);
@@ -168,4 +174,6 @@ public class LevelManager {
     FileHandle handle = getFileHandle(levelId);
     return handle != null && handle.exists();
   }
+
+
 }
