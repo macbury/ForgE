@@ -6,8 +6,10 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
 import macbury.forge.terrain.geometry.DynamicGeometryProvider;
+import macbury.forge.terrain.geometry.FileGeometryProvider;
 import macbury.forge.terrain.geometry.GeometryCache;
 import macbury.forge.terrain.geometry.TerrainGeometryProvider;
+import macbury.forge.utils.Vector3i;
 
 /**
  * Created by macbury on 04.08.15.
@@ -15,10 +17,9 @@ import macbury.forge.terrain.geometry.TerrainGeometryProvider;
 public class TerrainGeometryProviderSerializer extends Serializer<TerrainGeometryProvider> {
   @Override
   public void write(Kryo kryo, Output output, TerrainGeometryProvider object) {
-    kryo.writeClass(output, object.getClass());
     output.writeInt(object.caches.size);
     for (GeometryCache geometryCache : object.caches) {
-      kryo.writeObject(output, geometryCache.position);
+      kryo.writeObjectOrNull(output, geometryCache.position, Vector3i.class);
       output.writeInt(geometryCache.renderables.size);
 
       for (VoxelChunkRenderable renderable : geometryCache.renderables) {
@@ -29,6 +30,18 @@ public class TerrainGeometryProviderSerializer extends Serializer<TerrainGeometr
 
   @Override
   public TerrainGeometryProvider read(Kryo kryo, Input input, Class<TerrainGeometryProvider> type) {
-    return null;
+    FileGeometryProvider provider = new FileGeometryProvider();
+    int cacheCount = input.readInt();
+    for (int i = 0; i < cacheCount; i++) {
+      GeometryCache geometryCache = new GeometryCache();
+      Vector3i position           = kryo.readObjectOrNull(input, Vector3i.class);
+      int renderableCount         = input.readInt();
+      for (int j = 0; j < renderableCount; j++) {
+        VoxelChunkRenderable renderable = kryo.readObject(input, VoxelChunkRenderable.class);
+      }
+      geometryCache.position.set(position);
+      provider.caches.add(geometryCache);
+    }
+    return provider;
   }
 }

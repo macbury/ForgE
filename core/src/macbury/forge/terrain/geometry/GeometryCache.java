@@ -18,6 +18,10 @@ public class GeometryCache implements Disposable {
     this.position.set(chunk.position);
   }
 
+  public GeometryCache() {
+
+  }
+
   @Override
   public void dispose() {
     renderables.clear();

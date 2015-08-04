@@ -11,6 +11,7 @@ import macbury.forge.storage.StorageManager;
 import macbury.forge.storage.serializers.level.FullLevelStateSerializer;
 import macbury.forge.storage.serializers.level.LevelStateBasicInfoSerializer;
 import macbury.forge.storage.serializers.level.TerrainGeometryProviderSerializer;
+import macbury.forge.terrain.geometry.FileGeometryProvider;
 import macbury.forge.terrain.geometry.TerrainGeometryProvider;
 
 import java.io.*;
@@ -55,6 +56,23 @@ public class LevelManager {
     }
     storageManager.pool.release(kryo);
     return levelState;
+  }
+
+  public FileGeometryProvider loadGeometry(LevelState state) {
+    Kryo kryo             = storageManager.pool.borrow();
+    File file             = getGeoFile(state.id);
+    FileGeometryProvider geometryProvider = null;
+    Gdx.app.log(TAG, "Loading geometry: " + file.toString());
+    try {
+      InflaterInputStream inflaterInputStream = new InflaterInputStream(new FileInputStream(file));
+      Input input                             = new Input(inflaterInputStream);
+      geometryProvider                        = kryo.readObject(input, FileGeometryProvider.class, new TerrainGeometryProviderSerializer());
+      input.close();
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    }
+    storageManager.pool.release(kryo);
+    return geometryProvider;
   }
 
   public void save(LevelState state, String storeDir) {
