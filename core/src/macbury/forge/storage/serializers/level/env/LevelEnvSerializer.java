@@ -8,7 +8,7 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import macbury.forge.assets.assets.TextureAsset;
-import macbury.forge.graphics.Skybox;
+import macbury.forge.graphics.skybox.Skybox;
 import macbury.forge.level.env.LevelEnv;
 import macbury.forge.level.env.WaterEnv;
 

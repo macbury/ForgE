@@ -20,7 +20,9 @@ import macbury.forge.assets.assets.ModelAsset;
 import macbury.forge.assets.assets.TextureAsset;
 import macbury.forge.db.GameDatabase;
 import macbury.forge.db.models.Teleport;
-import macbury.forge.graphics.Skybox;
+import macbury.forge.graphics.skybox.CubemapSkybox;
+import macbury.forge.graphics.skybox.DayNightSkybox;
+import macbury.forge.graphics.skybox.Skybox;
 import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
 import macbury.forge.level.env.LevelEnv;
 import macbury.forge.level.LevelState;
@@ -72,6 +74,8 @@ public class StorageManager {
       kryo.register(CubemapAsset.class, new AssetSerializer());
       kryo.setDefaultSerializer(TaggedFieldSerializer.class);
       kryo.register(Skybox.class, new SkyboxSerializer());
+      kryo.register(CubemapSkybox.class, new SkyboxSerializer());
+      kryo.register(DayNightSkybox.class, new SkyboxSerializer());
       kryo.register(WaterEnv.class, new WaterEnvSerializer());
       return kryo;
     }

@@ -8,7 +8,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.assets.assets.TextureAsset;
-import macbury.forge.graphics.Skybox;
+import macbury.forge.graphics.skybox.CubemapSkybox;
+import macbury.forge.graphics.skybox.Skybox;
 import macbury.forge.voxel.ChunkMap;
 
 /**
@@ -34,7 +35,7 @@ public class LevelEnv implements Disposable {
 
   public LevelEnv() {
     water        = new WaterEnv();
-    skybox       = new Skybox(null);
+    skybox       = new CubemapSkybox(null);
     skyColor     = Color.valueOf("3498db");
     mainLight    = new DirectionalLight();
     mainLight.set(1f, 1f, 1f,-1, -1, 0.5f);

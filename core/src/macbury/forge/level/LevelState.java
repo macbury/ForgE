@@ -2,6 +2,7 @@ package macbury.forge.level;
 
 import macbury.forge.ForgE;
 import macbury.forge.db.GameDatabase;
+import macbury.forge.graphics.skybox.CubemapSkybox;
 import macbury.forge.level.env.LevelEnv;
 import macbury.forge.voxel.ChunkMap;
 
@@ -49,7 +50,10 @@ public class LevelState {
     env.water.setWaterDisplacementTextureAsset(ForgE.assets.getTexture("graphics/textures/waterDUDV.png"));
     env.water.setWaterNormalMapATextureAsset(ForgE.assets.getTexture("graphics/textures/waterNormal.png"));
     env.water.setWaterNormalMapBTextureAsset(ForgE.assets.getTexture("graphics/textures/waterNormalAlt.png"));
-    env.skybox.setSkyboxAsset(ForgE.assets.getCubemap("graphics/textures/skybox/day.png"));
+    if (CubemapSkybox.class.isInstance(env.skybox)) {
+      CubemapSkybox cubemapSkybox = (CubemapSkybox) env.skybox;
+      cubemapSkybox.setSkyboxAsset(ForgE.assets.getCubemap("graphics/textures/skybox/day.png"));
+    }
   }
 
   public void setTerrainMap(ChunkMap chunkMap) {

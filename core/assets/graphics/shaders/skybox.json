@@ -1,5 +1,5 @@
 {
-  class: macbury.forge.shaders.SkyboxShader,
+  class: macbury.forge.shaders.CubemapSkyboxShader,
   fragment: "skybox",
   vertex:   "skybox",
   uniforms: [
