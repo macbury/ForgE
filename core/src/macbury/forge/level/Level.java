@@ -42,14 +42,14 @@ public class Level implements Disposable {
   public final TerrainEngine            terrainEngine;
   public final LevelEnv env;
   public final Stage                    ui;
-  public final DynamicGeometryProvider terrainGeometryProvider;
+  public final TerrainGeometryProvider terrainGeometryProvider;
 
-  public Level(LevelState state) {
+  public Level(LevelState state, TerrainGeometryProvider geometryProvider) {
     this.ui                       = new Stage(new ScreenViewport());
     this.env                      = state.env;
     this.state                    = state;
     this.terrainMap               = state.terrainMap;
-    this.terrainGeometryProvider  = new DynamicGeometryProvider(terrainMap);
+    this.terrainGeometryProvider  = geometryProvider;
     this.renderContext            = new RenderContext(new DefaultTextureBinder(DefaultTextureBinder.WEIGHTED, 1));
 
     this.octree                   = OctreeNode.root();

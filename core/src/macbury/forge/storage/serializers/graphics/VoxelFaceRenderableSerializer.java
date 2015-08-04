@@ -1,5 +1,6 @@
 package macbury.forge.storage.serializers.graphics;
 
+import com.badlogic.gdx.graphics.g3d.Material;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
@@ -16,6 +17,7 @@ public class VoxelFaceRenderableSerializer extends Serializer<VoxelChunkRenderab
   @Override
   public void write(Kryo kryo, Output output, VoxelChunkRenderable face) {
     face.buildMeshFromFactory();
+    kryo.writeObjectOrNull(output, face.material, Material.class);
     kryo.writeObject(output, face.direction);
     kryo.writeObject(output, face.boundingBox);
     output.writeInt(face.primitiveType);

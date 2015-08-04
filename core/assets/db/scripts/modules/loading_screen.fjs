@@ -16,7 +16,7 @@ game.provider("$LoadingScreen", function($log, $screens, $graphics, $gl, $thread
     this.indicatorRotation = 0.0;
 
     $log.info(TAG, "Preparing to load: " + this.teleport.mapId);
-    
+
     $thread.run(this.loadLevelState.bind(this)).then(this.onLoadLevelStateFinished.bind(this));
   }
 
@@ -27,7 +27,7 @@ game.provider("$LoadingScreen", function($log, $screens, $graphics, $gl, $thread
 
   LoadingScreenAction.prototype.onLoadLevelStateFinished = function (justLoadedLevelState) {
     this.levelState = justLoadedLevelState;
-    this.level      = new Level(this.levelState);
+    this.level      = new Level(this.levelState, new FileGeometryProvider());
     $log.info(TAG, "Loaded level state: " + this.levelState);
     $thread.run(this.buildGeometry.bind(this)).then(this.onGeometryDone.bind(this));
   }

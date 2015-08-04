@@ -110,7 +110,7 @@ public class TerrainBuilder {
     VoxelChunkRenderable renderable = buildFaceForChunkWithAssembler(chunk, assembler, false);
 
     if (renderable != null) {
-      renderable.material = new Material(new WaterAttribute(2));
+      renderable.material = new Material(new WaterAttribute());
     }
   }
 

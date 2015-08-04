@@ -13,6 +13,7 @@ import macbury.forge.graphics.camera.RTSCameraController;
 import macbury.forge.level.Level;
 import macbury.forge.level.LevelState;
 import macbury.forge.screens.AbstractScreen;
+import macbury.forge.terrain.geometry.DynamicGeometryProvider;
 import macbury.forge.ui.Overlay;
 
 /**
@@ -42,7 +43,7 @@ public class LevelEditorScreen extends AbstractScreen {
     this.overlay              = new Overlay();
     this.stage                = new Stage();
     this.changeManager        = new ChangeManager();
-    this.level                = new Level(state);
+    this.level                = new Level(state, new DynamicGeometryProvider(state.terrainMap));
     this.selectionSystem      = new SelectionSystem(level);
     this.cameraController     = new RTSCameraController();
     this.decalBatch           = new DecalBatch(new CameraGroupStrategy(level.camera));

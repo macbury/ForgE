@@ -26,6 +26,7 @@ public class ResourcesModel extends DefaultTreeModel {
   private void initialize() {
     this.rootNode = new GameFolderNode(ForgE.db.title);
     rootNode.add(new GameShadersFolderNode());
+    rootNode.add(new GameScriptsFolderNode());
   }
 
   public class GameFolderNode extends BaseGameFolderNode {
@@ -40,6 +41,13 @@ public class ResourcesModel extends DefaultTreeModel {
       for (BaseShader shader : ForgE.shaders.all()) {
         add(new GameShaderNode(shader.getName()));
       }
+    }
+  }
+
+  public class GameScriptsFolderNode extends BaseGameFolderNode {
+    public GameScriptsFolderNode() {
+      super("Scripts");
+
     }
   }
 

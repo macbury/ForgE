@@ -20,7 +20,7 @@ public class ResourceTreeCellRenderer extends DefaultTreeCellRenderer {
     Component c = super.getTreeCellRendererComponent(tree, value, selected, expanded, isLeaf, row, focused);
     if (ResourcesModel.GameFolderNode.class.isInstance(value)) {
       setIcon(projectIcon);
-    } else if (ResourcesModel.GameShadersFolderNode.class.isInstance(value)) {
+    } else if (ResourcesModel.GameShadersFolderNode.class.isInstance(value) || ResourcesModel.GameScriptsFolderNode.class.isInstance(value)) {
       setIcon(folderIcon);
     } else if (ResourcesModel.GameShaderNode.class.isInstance(value)) {
       setIcon(shaderIcon);

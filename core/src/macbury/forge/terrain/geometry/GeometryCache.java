@@ -26,7 +26,15 @@ public class GeometryCache implements Disposable {
 
   @Override
   public boolean equals(Object obj) {
-    GeometryCache otherObject = (GeometryCache) obj;
-    return otherObject.position.equals(position);
+    if (GeometryCache.class.isInstance(obj)) {
+      GeometryCache otherObject = (GeometryCache) obj;
+      return otherObject.position.equals(position);
+    } else if (Chunk.class.isInstance(obj)) {
+      Chunk otherObject = (Chunk) obj;
+      return otherObject.position.equals(position);
+    } else  {
+      return false;
+    }
+
   }
 }

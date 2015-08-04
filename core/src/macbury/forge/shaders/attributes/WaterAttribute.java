@@ -9,18 +9,12 @@ import com.badlogic.gdx.math.Vector3;
 public class WaterAttribute extends Attribute {
   public final static String Alias = "water";
   public final static long Type = register(Alias);
-  private final float height;
-  public WaterAttribute(float height) {
+  public WaterAttribute() {
     super(Type);
-    this.height = height;
-  }
-
-  public float getHeight() {
-    return height;
   }
 
   @Override
   public Attribute copy() {
-    return new WaterAttribute(height);
+    return new WaterAttribute();
   }
 }

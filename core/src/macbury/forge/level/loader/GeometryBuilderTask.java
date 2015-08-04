@@ -25,7 +25,7 @@ public class GeometryBuilderTask extends GdxFutureTask<LevelState, Level> {
   public void execute(LevelState object) {
     super.execute(object);
     this.levelState = object;
-    this.level      = new Level(levelState);
+    //this.level      = new Level(levelState);
     Gdx.app.log(TAG, "Initializing level!");
   }
 

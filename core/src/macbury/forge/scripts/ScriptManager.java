@@ -20,6 +20,7 @@ import macbury.forge.screens.AbstractScreen;
 import macbury.forge.screens.GameplayScreen;
 import macbury.forge.scripts.modules.BaseGameScriptModule;
 import macbury.forge.scripts.modules.LoggingGameScriptModule;
+import macbury.forge.terrain.geometry.FileGeometryProvider;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.NativeJavaPackage;
 import org.mozilla.javascript.ScriptableObject;
@@ -49,7 +50,8 @@ public class ScriptManager implements Disposable {
           Input.class,
           PositionComponent.class,
           PlayerComponent.class,
-          RigidBodyComoponent.class
+          RigidBodyComoponent.class,
+          FileGeometryProvider.class,
       }
   );
   private final Context context;

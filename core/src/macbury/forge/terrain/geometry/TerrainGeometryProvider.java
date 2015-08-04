@@ -14,6 +14,16 @@ public abstract class TerrainGeometryProvider implements Disposable {
    */
   public abstract void build(Chunk chunk);
 
+  protected GeometryCache findForChunk(Chunk chunk) {
+    for (int i = 0; i < caches.size; i++) {
+      GeometryCache cache = caches.get(i);
+      if (cache.equals(chunk)) {
+        return cache;
+      }
+    }
+    return null;
+  }
+
   @Override
   public void dispose() {
     for (GeometryCache cache : caches) {

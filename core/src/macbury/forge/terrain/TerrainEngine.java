@@ -15,6 +15,7 @@ import macbury.forge.graphics.camera.GameCamera;
 import macbury.forge.level.Level;
 import macbury.forge.shaders.utils.CheckMaterial;
 import macbury.forge.terrain.geometry.DynamicGeometryProvider;
+import macbury.forge.terrain.geometry.TerrainGeometryProvider;
 import macbury.forge.voxel.ChunkMap;
 import macbury.forge.octree.OctreeNode;
 import macbury.forge.octree.OctreeObject;
@@ -44,7 +45,7 @@ public class TerrainEngine implements Disposable {
   private final FrustrumClassFilterOctreeQuery frustrumOctreeQuery;
 
   private final Array<TerrainEngineListener> listeners = new Array<TerrainEngineListener>();
-  private DynamicGeometryProvider geometryProvider;
+  private TerrainGeometryProvider geometryProvider;
 
   public TerrainEngine(Level level) {
     this.frustrumOctreeQuery  = new FrustrumClassFilterOctreeQuery();

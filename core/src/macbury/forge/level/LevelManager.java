@@ -12,6 +12,7 @@ import macbury.forge.storage.serializers.level.FullLevelStateSerializer;
 import macbury.forge.storage.serializers.level.LevelStateBasicInfoSerializer;
 import macbury.forge.storage.serializers.level.TerrainGeometryProviderSerializer;
 import macbury.forge.terrain.geometry.DynamicGeometryProvider;
+import macbury.forge.terrain.geometry.TerrainGeometryProvider;
 
 import java.io.*;
 import java.util.HashMap;
@@ -78,7 +79,7 @@ public class LevelManager {
     storageManager.pool.release(kryo);
   }
 
-  public void save(DynamicGeometryProvider provider) {
+  public void save(TerrainGeometryProvider provider) {
     Kryo kryo          = storageManager.pool.borrow(); {
       File file        = new File("/tmp/test.geometry");
       try {
