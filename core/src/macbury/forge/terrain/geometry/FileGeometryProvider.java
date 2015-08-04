@@ -1,6 +1,7 @@
 package macbury.forge.terrain.geometry;
 
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
 import macbury.forge.graphics.builders.Chunk;
 import macbury.forge.voxel.ChunkMap;
 
@@ -16,7 +17,10 @@ public class FileGeometryProvider extends TerrainGeometryProvider {
       throw new GdxRuntimeException("Could not find cache for chunk: " + chunk.position.toString());
     }
 
-    chunk.renderables.addAll(cache.renderables);
+    for (VoxelChunkRenderable renderable : cache.renderables) {
+      chunk.renderables.add(renderable);
+      renderable.setParent(chunk);
+    }
   }
 
   @Override

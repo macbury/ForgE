@@ -39,7 +39,7 @@ game.provider("$LoadingScreen", function($log, $screens, $graphics, $gl, $thread
   LoadingScreenAction.prototype.buildGeometry = function(result) {
     $log.info(TAG, "Building geometry...");
     while(true){
-      if (this.level.terrainEngine.rebuildInBackground(10)) {
+      if (this.level.terrainEngine.rebuildInBackground(50)) {
         break;
       }
     }

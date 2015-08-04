@@ -8,6 +8,9 @@ import com.badlogic.gdx.Gdx;
 public class Config {
 
 
+  public int reflectionBufferSize = 512;
+  public int refractionBufferSize = 512;
+
   public enum RenderDebug {
     Textured, Wireframe, Normals, Lighting
   }

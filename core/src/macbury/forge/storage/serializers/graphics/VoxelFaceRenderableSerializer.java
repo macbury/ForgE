@@ -1,11 +1,17 @@
 package macbury.forge.storage.serializers.graphics;
 
+import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g3d.Material;
+import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.BoundingBox;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
+import macbury.forge.graphics.mesh.MeshFactory;
+import macbury.forge.graphics.mesh.MeshVertexInfo;
 
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
@@ -48,6 +54,29 @@ public class VoxelFaceRenderableSerializer extends Serializer<VoxelChunkRenderab
 
   @Override
   public VoxelChunkRenderable read(Kryo kryo, Input input, Class<VoxelChunkRenderable> type) {
-    return null;
+    VoxelChunkRenderable renderable = new VoxelChunkRenderable();
+    renderable.material             = kryo.readObjectOrNull(input, Material.class);
+    renderable.direction            = kryo.readObject(input, Vector3.class);
+    renderable.boundingBox          = kryo.readObject(input, BoundingBox.class);
+    renderable.primitiveType        = input.readInt();
+    renderable.triangleCount        = input.readInt();
+    renderable.worldTransform.set(kryo.readObject(input, Matrix4.class));
+
+    int maxVerticies                = input.readInt();
+    float[] vertBuff                = new float[maxVerticies];
+
+    for (int pos = 0; pos < maxVerticies; pos++) {
+      vertBuff[pos] = input.readFloat();
+    }
+
+    int numIndicies         = input.readInt();
+    short[] indiBuff        = new short[numIndicies];
+
+    for (int pos = 0; pos < numIndicies; pos++) {
+      indiBuff[pos] = input.readShort();
+    }
+
+    renderable.meshFactory = new MeshFactory(vertBuff, indiBuff, MeshVertexInfo.voxelAttributes());
+    return renderable;
   }
 }

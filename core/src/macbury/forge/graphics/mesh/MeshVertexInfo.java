@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Pool;
+import org.w3c.dom.Attr;
 
 /**
  * Created by macbury on 30.08.14.
@@ -24,6 +25,25 @@ public class MeshVertexInfo implements Pool.Poolable {
   public Material material;
   public short index;
   public float[] textureFullCords = new float[4];
+
+  public static AttributeType[] voxelTypes() {
+    return new AttributeType[] {
+        AttributeType.Position,
+        MeshVertexInfo.AttributeType.Normal,
+        MeshVertexInfo.AttributeType.TextureCord,
+        MeshVertexInfo.AttributeType.Material,
+        MeshVertexInfo.AttributeType.TextureFullCords
+    };
+  }
+
+  public static VertexAttribute[] voxelAttributes() {
+    AttributeType[] types              = voxelTypes();
+    VertexAttribute[] vertexAttributes = new VertexAttribute[types.length];
+    for (int i = 0; i < types.length; i++) {
+      vertexAttributes[i] = types[i].attribute;
+    }
+    return vertexAttributes;
+  }
 
   public static enum AttributeType {
     Position(VertexAttributes.Usage.Position, 3,ShaderProgram.POSITION_ATTRIBUTE),

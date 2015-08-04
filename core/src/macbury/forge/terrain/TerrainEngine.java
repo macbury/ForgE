@@ -142,7 +142,6 @@ public class TerrainEngine implements Disposable {
       }
     }
 
-
     return map.chunkToRebuild.size == 0;
   }
 

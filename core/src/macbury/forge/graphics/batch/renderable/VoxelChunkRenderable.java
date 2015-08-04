@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.graphics.builders.Chunk;
-import macbury.forge.graphics.mesh.MeshAssembler;
+import macbury.forge.graphics.mesh.MeshFactory;
 
 /**
  * Created by macbury on 23.10.14.
@@ -13,7 +13,7 @@ public class VoxelChunkRenderable extends BaseRenderable implements Disposable {
   public Vector3 direction = new Vector3();
   private Chunk parent;
   public BoundingBox boundingBox = new BoundingBox();
-  public MeshAssembler.MeshFactory meshFactory;
+  public MeshFactory meshFactory;
 
   @Override
   public void dispose() {

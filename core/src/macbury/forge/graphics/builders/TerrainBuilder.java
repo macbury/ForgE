@@ -122,7 +122,7 @@ public class TerrainBuilder {
       if (ForgE.config.generateWireframe)
         renderable.wireframe           = assembler.wireframe();
       renderable.triangleCount         = assembler.getTriangleCount();
-      renderable.meshFactory           = assembler.meshFactory(MeshVertexInfo.AttributeType.Position, MeshVertexInfo.AttributeType.Normal, MeshVertexInfo.AttributeType.TextureCord, MeshVertexInfo.AttributeType.Material, MeshVertexInfo.AttributeType.TextureFullCords);
+      renderable.meshFactory           = assembler.meshFactory(MeshVertexInfo.voxelTypes());
 
       renderable.worldTransform.idt();
       renderable.material = new Material(new SolidTerrainAttribute());

@@ -20,6 +20,7 @@ import macbury.forge.screens.AbstractScreen;
 import macbury.forge.screens.GameplayScreen;
 import macbury.forge.scripts.modules.BaseGameScriptModule;
 import macbury.forge.scripts.modules.LoggingGameScriptModule;
+import macbury.forge.terrain.geometry.DynamicGeometryProvider;
 import macbury.forge.terrain.geometry.FileGeometryProvider;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.NativeJavaPackage;
@@ -52,6 +53,7 @@ public class ScriptManager implements Disposable {
           PlayerComponent.class,
           RigidBodyComoponent.class,
           FileGeometryProvider.class,
+          DynamicGeometryProvider.class
       }
   );
   private final Context context;

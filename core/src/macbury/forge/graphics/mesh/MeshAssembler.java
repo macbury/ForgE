@@ -193,29 +193,4 @@ public class MeshAssembler implements Disposable {
     return this.triangleArrayList.size();
   }
 
-  public class MeshFactory implements Disposable {
-    private final VertexAttribute[] attributes;
-    private float verties[];
-    private short indices[];
-
-    public MeshFactory(float[] verties, short[] indices, VertexAttribute[] meshAttributtes) {
-      this.verties    = verties;
-      this.indices    = indices;
-      this.attributes = meshAttributtes;
-    }
-
-    public Mesh get() {
-      Mesh mesh = new Mesh(true, verties.length, indices.length, attributes);
-      mesh.setVertices(verties);
-      mesh.setIndices(indices);
-      mesh.setAutoBind(false);
-      return mesh;
-    }
-
-    @Override
-    public void dispose() {
-      verties = null;
-      indices = null;
-    }
-  }
 }
