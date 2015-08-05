@@ -22,7 +22,6 @@ public class Config {
   public boolean renderBoundingBox = false;
   public boolean cacheGeometry      = false;
   public boolean renderBulletDebug = false;
-  public boolean buildColliders    = true;
   public String editor             = "atom";
   public void setRenderDebugTo(RenderDebug debug) {
     renderDebug = debug;

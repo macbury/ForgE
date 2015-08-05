@@ -45,7 +45,6 @@ public class VoxelChunkRenderable extends BaseRenderable implements Disposable {
       this.mesh.calculateBoundingBox(this.boundingBox);
       boundingBox.min.add(parent.worldPosition);
       boundingBox.max.add(parent.worldPosition);
-      meshFactory.dispose();
       meshFactory = null;
     }
   }

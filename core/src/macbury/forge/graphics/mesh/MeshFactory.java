@@ -10,13 +10,23 @@ import com.badlogic.gdx.utils.Disposable;
  */
 public class MeshFactory implements Disposable {
   private final VertexAttribute[] attributes;
-  private float verties[];
-  private short indices[];
+  public float verties[];
+  public short indices[];
 
   public MeshFactory(float[] verties, short[] indices, VertexAttribute[] meshAttributtes) {
     this.verties = verties;
     this.indices = indices;
     this.attributes = meshAttributtes;
+  }
+
+  public MeshFactory(float[] verties, short[] indices, MeshVertexInfo.AttributeType[] attributes) {
+    this.verties = verties;
+    this.indices = indices;
+
+    this.attributes = new VertexAttribute[attributes.length];
+    for (int i = 0; i < attributes.length; i++) {
+      this.attributes[i] = attributes[i].attribute();
+    }
   }
 
   public Mesh get() {

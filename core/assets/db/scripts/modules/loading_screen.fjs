@@ -31,6 +31,7 @@ game.provider("$LoadingScreen", function($log, $screens, $graphics, $gl, $thread
     if (geometryProvider == null) {
       throw("Could not load geometry for map: " + this.levelState.id);
     }
+    //geometryProvider     = new DynamicGeometryProvider(this.levelState.terrainMap);
     this.level           = new Level(this.levelState, geometryProvider);
     $log.info(TAG, "Loaded level state: " + this.levelState);
     $thread.run(this.buildGeometry.bind(this)).then(this.onGeometryDone.bind(this));

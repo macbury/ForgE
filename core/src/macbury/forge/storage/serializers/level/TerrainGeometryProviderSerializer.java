@@ -5,6 +5,7 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
+import macbury.forge.graphics.renderable.VoxelChunkRenderableFactory;
 import macbury.forge.terrain.geometry.DynamicGeometryProvider;
 import macbury.forge.terrain.geometry.FileGeometryProvider;
 import macbury.forge.terrain.geometry.GeometryCache;
@@ -20,10 +21,10 @@ public class TerrainGeometryProviderSerializer extends Serializer<TerrainGeometr
     output.writeInt(object.caches.size);
     for (GeometryCache geometryCache : object.caches) {
       kryo.writeObjectOrNull(output, geometryCache.position, Vector3i.class);
-      output.writeInt(geometryCache.renderables.size);
+      output.writeInt(geometryCache.factories.size);
 
-      for (VoxelChunkRenderable renderable : geometryCache.renderables) {
-        kryo.writeObject(output, renderable);
+      for (VoxelChunkRenderableFactory voxelChunkRenderableFactory : geometryCache.factories) {
+        kryo.writeObject(output, voxelChunkRenderableFactory);
       }
     }
   }
@@ -31,13 +32,15 @@ public class TerrainGeometryProviderSerializer extends Serializer<TerrainGeometr
   @Override
   public TerrainGeometryProvider read(Kryo kryo, Input input, Class<TerrainGeometryProvider> type) {
     FileGeometryProvider provider = new FileGeometryProvider();
-    int cacheCount = input.readInt();
+    int cacheCount                = input.readInt();
+
     for (int i = 0; i < cacheCount; i++) {
       GeometryCache geometryCache = new GeometryCache();
       Vector3i position           = kryo.readObjectOrNull(input, Vector3i.class);
-      int renderableCount         = input.readInt();
-      for (int j = 0; j < renderableCount; j++) {
-        VoxelChunkRenderable renderable = kryo.readObject(input, VoxelChunkRenderable.class);
+      int factoryCount            = input.readInt();
+      for (int j = 0; j < factoryCount; j++) {
+        VoxelChunkRenderableFactory factory = kryo.readObject(input, VoxelChunkRenderableFactory.class);
+        geometryCache.factories.add(factory);
       }
       geometryCache.position.set(position);
       provider.caches.add(geometryCache);

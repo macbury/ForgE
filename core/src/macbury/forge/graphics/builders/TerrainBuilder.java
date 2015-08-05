@@ -11,6 +11,7 @@ import macbury.forge.blocks.Block;
 import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
 import macbury.forge.graphics.mesh.MeshVertexInfo;
 import macbury.forge.graphics.mesh.VoxelsAssembler;
+import macbury.forge.graphics.renderable.VoxelChunkRenderableFactory;
 import macbury.forge.shaders.attributes.SolidTerrainAttribute;
 import macbury.forge.shaders.attributes.WaterAttribute;
 import macbury.forge.shaders.attributes.WaterElevationAttribute;
@@ -86,15 +87,12 @@ public class TerrainBuilder {
         greedySimpleMesh.getResults(quadParts);
         createTrianglesFor(side, quadParts, solidVoxelAssembler, transparentVoxelAssembler, liquidVoxelAssembler);
         quadParts.clear();
-        if (ForgE.config.buildColliders) {
-          greedyCollider.begin(side, chunk.start); {
-            if (greedyCollider.haveResults()) {
-              greedyCollider.getResults(quadParts);
-              createCollidersFor(side, quadParts, chunk);
-            }
-          } greedyCollider.end();
-        }
-
+        greedyCollider.begin(side, chunk.start); {
+          if (greedyCollider.haveResults()) {
+            greedyCollider.getResults(quadParts);
+            createCollidersFor(side, quadParts, chunk);
+          }
+        } greedyCollider.end();
       }
     } greedySimpleMesh.end();
   }
@@ -103,7 +101,35 @@ public class TerrainBuilder {
     buildFaceForLiquidWithAssembler(chunk, liquidVoxelAssembler);
     buildFaceForChunkWithAssembler(chunk, solidVoxelAssembler, false);
     buildFaceForChunkWithAssembler(chunk, transparentVoxelAssembler, true);
+  }
 
+  public void assembleFactories(Chunk chunk, Array<VoxelChunkRenderableFactory> out) {
+    buildFactoryAndInsertFor(chunk, liquidVoxelAssembler, new Material(new WaterAttribute()), out);
+    buildFactoryAndInsertFor(chunk, solidVoxelAssembler, new Material(new SolidTerrainAttribute()), out);
+    buildFactoryAndInsertFor(chunk, transparentVoxelAssembler, new Material(new SolidTerrainAttribute(), new BlendingAttribute(true,1f)), out);
+  }
+
+  private VoxelChunkRenderableFactory buildFactoryFor(Chunk chunk, VoxelsAssembler assembler, Material material) {
+    if (assembler.isEmpty()) {
+      return null;
+    } else {
+      VoxelChunkRenderableFactory voxelChunkRenderableFactory = new VoxelChunkRenderableFactory();
+      voxelChunkRenderableFactory.material                    = material;
+      voxelChunkRenderableFactory.primitiveType               = GL30.GL_TRIANGLES;
+
+      if (ForgE.config.generateWireframe)
+        voxelChunkRenderableFactory.wireframe           = assembler.wireframe();
+      voxelChunkRenderableFactory.triangleCount         = assembler.getTriangleCount();
+      voxelChunkRenderableFactory.attributes            = MeshVertexInfo.voxelTypes();
+      voxelChunkRenderableFactory.meshFactory           = assembler.meshFactory(voxelChunkRenderableFactory.attributes);
+      return voxelChunkRenderableFactory;
+    }
+  }
+
+  private void buildFactoryAndInsertFor(Chunk chunk, VoxelsAssembler assembler, Material material, Array<VoxelChunkRenderableFactory> out) {
+    VoxelChunkRenderableFactory voxelChunkRenderableFactory = buildFactoryFor(chunk, assembler, material);
+    if (voxelChunkRenderableFactory != null)
+      out.add(voxelChunkRenderableFactory);
   }
 
   private void buildFaceForLiquidWithAssembler(Chunk chunk, VoxelsAssembler assembler) {
