@@ -46,7 +46,7 @@ public class DynamicGeometryProvider extends TerrainGeometryProvider {
       geometryCache.factories.add(tempOut.get(i));
       chunk.addFace(renderable);
     }
-
+    geometryCache.colliders.addAll(chunk.colliders);
   }
 
   @Override

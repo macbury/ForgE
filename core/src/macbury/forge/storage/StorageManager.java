@@ -20,6 +20,7 @@ import macbury.forge.assets.assets.ModelAsset;
 import macbury.forge.assets.assets.TextureAsset;
 import macbury.forge.db.GameDatabase;
 import macbury.forge.db.models.Teleport;
+import macbury.forge.graphics.builders.ChunkPartCollider;
 import macbury.forge.graphics.renderable.VoxelChunkRenderableFactory;
 import macbury.forge.graphics.skybox.CubemapSkybox;
 import macbury.forge.graphics.skybox.DayNightSkybox;
@@ -79,6 +80,7 @@ public class StorageManager {
       kryo.register(WaterEnv.class, new WaterEnvSerializer());
       kryo.register(DynamicGeometryProvider.class, new TerrainGeometryProviderSerializer());
       kryo.register(VoxelChunkRenderableFactory.class, new VoxelChunkRenderableFactorySerializer());
+      kryo.register(ChunkPartCollider.class, new ChunkPartColliderSerializer());
       return kryo;
     }
   };

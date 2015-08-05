@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
 import macbury.forge.graphics.builders.Chunk;
+import macbury.forge.graphics.builders.ChunkPartCollider;
 import macbury.forge.graphics.renderable.VoxelChunkRenderableFactory;
 import macbury.forge.utils.Vector3i;
 
@@ -14,6 +15,7 @@ import macbury.forge.utils.Vector3i;
 public class GeometryCache implements Disposable {
   public final Vector3i position  = new Vector3i();
   public final Array<VoxelChunkRenderableFactory> factories = new Array<VoxelChunkRenderableFactory>();
+  public final Array<ChunkPartCollider> colliders           = new Array<ChunkPartCollider>();
 
   public GeometryCache(Chunk chunk) {
     this.position.set(chunk.position);
@@ -30,6 +32,7 @@ public class GeometryCache implements Disposable {
     }
     factories.clear();
     position.setZero();
+    colliders.clear();
   }
 
   @Override

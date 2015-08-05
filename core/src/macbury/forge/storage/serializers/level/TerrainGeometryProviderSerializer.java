@@ -5,6 +5,7 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
+import macbury.forge.graphics.builders.ChunkPartCollider;
 import macbury.forge.graphics.renderable.VoxelChunkRenderableFactory;
 import macbury.forge.terrain.geometry.DynamicGeometryProvider;
 import macbury.forge.terrain.geometry.FileGeometryProvider;
@@ -26,7 +27,15 @@ public class TerrainGeometryProviderSerializer extends Serializer<TerrainGeometr
       for (VoxelChunkRenderableFactory voxelChunkRenderableFactory : geometryCache.factories) {
         kryo.writeObject(output, voxelChunkRenderableFactory);
       }
+
+      output.writeInt(geometryCache.colliders.size);
+
+      for (ChunkPartCollider collider : geometryCache.colliders) {
+        kryo.writeObject(output, collider);
+      }
     }
+
+
   }
 
   @Override
@@ -37,13 +46,21 @@ public class TerrainGeometryProviderSerializer extends Serializer<TerrainGeometr
     for (int i = 0; i < cacheCount; i++) {
       GeometryCache geometryCache = new GeometryCache();
       Vector3i position           = kryo.readObjectOrNull(input, Vector3i.class);
+      geometryCache.position.set(position);
+      provider.caches.add(geometryCache);
+
+
       int factoryCount            = input.readInt();
       for (int j = 0; j < factoryCount; j++) {
         VoxelChunkRenderableFactory factory = kryo.readObject(input, VoxelChunkRenderableFactory.class);
         geometryCache.factories.add(factory);
       }
-      geometryCache.position.set(position);
-      provider.caches.add(geometryCache);
+
+      int colliderCount           = input.readInt();
+      for (int j = 0; j < colliderCount; j++) {
+        ChunkPartCollider collider = kryo.readObject(input, ChunkPartCollider.class);
+        geometryCache.colliders.add(collider);
+      }
     }
     return provider;
   }

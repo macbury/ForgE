@@ -156,12 +156,6 @@ public class TerrainBuilder {
         renderable.material.set(new BlendingAttribute(true,1f));
       }
 
-      //renderable.haveTransparency = haveTransparency;
-      /*renderable.worldTransform.translate(chunk.worldPosition);
-      renderable.mesh.calculateBoundingBox(renderable.boundingBox);
-      renderable.boundingBox.min.add(chunk.worldPosition);
-      renderable.boundingBox.max.add(chunk.worldPosition);*/
-      //Gdx.app.log(TAG, "Bounding box for renderable: " + cursor.size.toString());
       chunk.addFace(renderable);
       return renderable;
     } else {
@@ -171,9 +165,9 @@ public class TerrainBuilder {
 
   private void createCollidersFor(Block.Side side, Array<AbstractGreedyAlgorithm.GreedyQuad> quadParts, Chunk chunk) {
     for(AbstractGreedyAlgorithm.GreedyQuad quad : quadParts) {
-      ChunkPartCollider chunkPartCollider = new ChunkPartCollider(quad);
-      if (chunkPartCollider.canAssemble(side)) {
-        chunkPartCollider.assemble(map.voxelSize, side);
+      ChunkPartCollider chunkPartCollider = new ChunkPartCollider(quad, side);
+      if (chunkPartCollider.canAssemble()) {
+        chunkPartCollider.assemble(map.voxelSize);
         chunk.colliders.add(chunkPartCollider);
       } else {
         chunkPartCollider.dispose();

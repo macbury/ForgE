@@ -23,29 +23,37 @@ import macbury.forge.voxel.Voxel;
 public class ChunkPartCollider implements Disposable {
   private static final String TAG = "ChunkPartCollider";
   private static final float CHUNK_FRICTION = 0.85f;
-  public final Vector3i position = new Vector3i();
-  public final Vector3i size     = new Vector3i();
   public final static Matrix4 transformMat = new Matrix4();
   public final static Vector3 tempSize = new Vector3();
   public final static Vector3 tempPos = new Vector3();
-  private Block block;
-  private Voxel voxel;
+  public final Vector3i position = new Vector3i();
+  public final Vector3i size     = new Vector3i();
+  public final Block.Side side;
+  public Block block;
+  public Voxel voxel;
   private BlockShape blockShape;
   private btConvexHullShape shape;
   private btRigidBody body;
   private btDiscreteDynamicsWorld bulletWorld;
 
-  public ChunkPartCollider(AbstractGreedyAlgorithm.GreedyQuad quad) {
+  public ChunkPartCollider(AbstractGreedyAlgorithm.GreedyQuad quad, Block.Side side) {
     size.set(quad.voxelSize);
     position.set(quad.voxelPosition);
     this.blockShape = quad.block.blockShape;
     this.voxel      = quad.voxel;
     this.block      = quad.block;
+    this.side       = side;
+  }
+
+  public ChunkPartCollider(Voxel voxel, Block.Side side) {
+    this.side       = side;
+    this.block      = voxel.getBlock();
+    this.blockShape = block.blockShape;
+    this.voxel      = voxel;
   }
 
   @Override
   public void dispose() {
-
     if (body != null) {
       if (bulletWorld != null)
         bulletWorld.removeRigidBody(body);
@@ -68,7 +76,7 @@ public class ChunkPartCollider implements Disposable {
     this.bulletWorld = bulletWorld;
   }
 
-  public boolean canAssemble(Block.Side side) {
+  public boolean canAssemble() {
     return blockShape.get(side) != null;
   }
 
@@ -86,7 +94,7 @@ public class ChunkPartCollider implements Disposable {
     convexHullShape.addPoint(tempPos, false);
   }
 
-  public void assemble(Vector3 voxelSize, Block.Side side) {
+  public void assemble(Vector3 voxelSize) {
     BlockShapePart part = blockShape.get(side);
 
     btConvexHullShape convexHullShape = new btConvexHullShape();

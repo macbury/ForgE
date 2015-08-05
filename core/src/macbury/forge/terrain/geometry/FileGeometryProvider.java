@@ -3,8 +3,10 @@ package macbury.forge.terrain.geometry;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
 import macbury.forge.graphics.builders.Chunk;
+import macbury.forge.graphics.builders.ChunkPartCollider;
 import macbury.forge.graphics.renderable.VoxelChunkRenderableFactory;
 import macbury.forge.voxel.ChunkMap;
+import macbury.forge.voxel.Voxel;
 
 /**
  * Created by macbury on 04.08.15.
@@ -23,6 +25,11 @@ public class FileGeometryProvider extends TerrainGeometryProvider {
       chunk.renderables.add(renderable);
       renderable.setParent(chunk);
       //factory.dispose();
+    }
+
+    for (ChunkPartCollider collider : cache.colliders) {
+      collider.assemble(ChunkMap.TERRAIN_TILE_SIZE);
+      chunk.colliders.add(collider);
     }
   }
 

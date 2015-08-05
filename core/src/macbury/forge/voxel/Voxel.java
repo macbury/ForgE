@@ -1,5 +1,6 @@
 package macbury.forge.voxel;
 
+import com.badlogic.gdx.math.Vector3;
 import macbury.forge.ForgE;
 import macbury.forge.blocks.Block;
 
