@@ -1,5 +1,6 @@
 package macbury.forge.level;
 
+import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.ForgE;
 import macbury.forge.db.GameDatabase;
 import macbury.forge.graphics.skybox.CubemapSkybox;
@@ -10,7 +11,7 @@ import macbury.forge.voxel.ChunkMap;
  * Created by macbury on 19.10.14.
  * For loading level from disk
  */
-public class LevelState {
+public class LevelState implements Disposable {
   public static final String MAP_NAME_PREFIX = "MAP_";
   public static final String LEVEL_FILE_EXT = ".level";
   public static final String GEO_FILE_EXT = ".geometry";
@@ -102,4 +103,9 @@ public class LevelState {
     this.name = name;
   }
 
+  @Override
+  public void dispose() {
+    terrainMap.dispose();
+    env.dispose();
+  }
 }

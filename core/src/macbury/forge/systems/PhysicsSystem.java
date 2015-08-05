@@ -156,7 +156,6 @@ public class PhysicsSystem extends EntitySystem implements EntityListener, Dispo
     collisionConfig.dispose();
 
     bulletWorld.dispose();
-
     debugDrawer.dispose();
     constraintSolver.dispose();
     sweep.dispose();

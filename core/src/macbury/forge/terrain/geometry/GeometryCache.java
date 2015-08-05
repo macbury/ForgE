@@ -14,8 +14,8 @@ import macbury.forge.utils.Vector3i;
  */
 public class GeometryCache implements Disposable {
   public final Vector3i position  = new Vector3i();
-  public final Array<VoxelChunkRenderableFactory> factories = new Array<VoxelChunkRenderableFactory>();
-  public final Array<ChunkPartCollider> colliders           = new Array<ChunkPartCollider>();
+  public Array<VoxelChunkRenderableFactory> factories = new Array<VoxelChunkRenderableFactory>();
+  public Array<ChunkPartCollider> colliders           = new Array<ChunkPartCollider>();
 
   public GeometryCache(Chunk chunk) {
     this.position.set(chunk.position);
@@ -30,9 +30,16 @@ public class GeometryCache implements Disposable {
     for (int i = 0; i < factories.size; i++) {
       factories.get(i).dispose();
     }
+
+    for (int i = 0; i < colliders.size; i++) {
+      colliders.get(i).dispose();
+    }
     factories.clear();
     position.setZero();
     colliders.clear();
+
+    factories = null;
+    colliders = null;
   }
 
   @Override

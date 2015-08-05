@@ -1,5 +1,6 @@
 package macbury.forge.graphics.builders;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
@@ -55,8 +56,11 @@ public class ChunkPartCollider implements Disposable {
   @Override
   public void dispose() {
     if (body != null) {
-      if (bulletWorld != null)
+      if (bulletWorld != null) {
         bulletWorld.removeRigidBody(body);
+        //Gdx.app.log(TAG, "Removing rigid body!");
+      }
+
       body.dispose();
       shape.dispose();
     }
@@ -102,7 +106,6 @@ public class ChunkPartCollider implements Disposable {
       helpAddPointToShape(voxelSize, part.verticies.get(triangle.index1), convexHullShape);
       helpAddPointToShape(voxelSize, part.verticies.get(triangle.index2), convexHullShape);
       helpAddPointToShape(voxelSize, part.verticies.get(triangle.index3), convexHullShape);
-
     }
 
     convexHullShape.recalcLocalAabb();

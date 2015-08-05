@@ -1,5 +1,6 @@
 package macbury.forge.level;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g3d.utils.DefaultTextureBinder;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
@@ -25,11 +26,12 @@ import macbury.forge.voxel.ChunkMap;
  * Created by macbury on 18.10.14.
  */
 public class Level implements Disposable {
+  private static final String TAG = "Level";
   public final EntitySystemsManager entities;
   public final GameCamera               camera;
   public final VoxelBatch               batch;
-  public final ChunkMap                 terrainMap;
-  public final LevelState               state;
+  public ChunkMap                 terrainMap;
+  public LevelState               state;
   /**
    * Dynamic octree refreshed every 100 ms
    */
@@ -40,7 +42,7 @@ public class Level implements Disposable {
   public final RenderContext            renderContext;
   public final FrustrumDebugAndRenderer frustrumDebugger;
   public final TerrainEngine            terrainEngine;
-  public final LevelEnv env;
+  public final LevelEnv                 env;
   public final Stage                    ui;
   public final TerrainGeometryProvider terrainGeometryProvider;
 
@@ -90,6 +92,7 @@ public class Level implements Disposable {
 
   @Override
   public void dispose() {
+    Gdx.app.log(TAG, "Dispose...");
     env.dispose();
     batch.dispose();
     terrainMap.dispose();
@@ -97,6 +100,10 @@ public class Level implements Disposable {
     octree.dispose();
     frustrumDebugger.dispose();
     terrainEngine.dispose();
+    terrainGeometryProvider.dispose();
+    state.dispose();
+    state = null;
+    terrainMap = null;
   }
 
 }

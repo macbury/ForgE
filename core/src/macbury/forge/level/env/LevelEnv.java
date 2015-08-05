@@ -85,8 +85,9 @@ public class LevelEnv implements Disposable {
   @Override
   public void dispose() {
     setWindDisplacementTextureAsset(null);
-
-    skybox.dispose();
+    if (skybox != null)
+      skybox.dispose();
+    skybox = null;
   }
 
   public GLTexture getWindDisplacementTexture() {

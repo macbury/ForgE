@@ -9,7 +9,7 @@ import macbury.forge.level.LevelState;
  * Created by macbury on 04.08.15.
  */
 public class SaveLevelGeometryJob extends Job<Level> {
-  private final Level level;
+  private Level level;
 
   public SaveLevelGeometryJob(Level level) {
     super(Level.class);
@@ -29,6 +29,7 @@ public class SaveLevelGeometryJob extends Job<Level> {
   @Override
   public Level perform() {
     ForgE.levels.save(level.terrainGeometryProvider, level.state);
+    this.level = null;
     return null;
   }
 }

@@ -41,6 +41,9 @@ public class VoxelChunkRenderableFactory implements Disposable {
   @Override
   public void dispose() {
     meshFactory.dispose();
-    wireframe = null;
+    attributes  = null;
+    material    = null;
+    wireframe   = null;
+    meshFactory = null;
   }
 }

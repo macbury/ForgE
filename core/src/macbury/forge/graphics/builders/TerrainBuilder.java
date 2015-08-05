@@ -29,7 +29,7 @@ public class TerrainBuilder {
 
   private static final String TAG = "TerrainBuilder";
 
-  private final ChunkMap map;
+  private ChunkMap map;
   public final TerrainCursor cursor;
   private final GreedyMesh greedySimpleMesh;
   private final GreedyCollider greedyCollider;
@@ -93,6 +93,7 @@ public class TerrainBuilder {
             createCollidersFor(side, quadParts, chunk);
           }
         } greedyCollider.end();
+        quadParts.clear();
       }
     } greedySimpleMesh.end();
   }
@@ -202,5 +203,6 @@ public class TerrainBuilder {
     transparentVoxelAssembler.dispose();
     greedySimpleMesh.dispose();
     greedyCollider.dispose();
+    map = null;
   }
 }

@@ -66,4 +66,9 @@ public class PropertyChangeable extends Changeable {
     }
     inspector.startListeningForPropertyChanges();
   }
+
+  @Override
+  public void dispose() {
+
+  }
 }

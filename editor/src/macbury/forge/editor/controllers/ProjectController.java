@@ -282,6 +282,7 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
         @Override
         public void run() {
           ForgE.screens.disposeCurrentScreen();
+          System.gc();
         }
       });
     }

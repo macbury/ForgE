@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.Disposable;
  * Created by macbury on 04.08.15.
  */
 public class MeshFactory implements Disposable {
-  private final VertexAttribute[] attributes;
+  private VertexAttribute[] attributes;
   public float verties[];
   public short indices[];
 
@@ -39,7 +39,8 @@ public class MeshFactory implements Disposable {
 
   @Override
   public void dispose() {
-    verties = null;
-    indices = null;
+    verties    = null;
+    indices    = null;
+    attributes = null;
   }
 }

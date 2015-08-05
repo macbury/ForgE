@@ -1,5 +1,6 @@
 package macbury.forge.terrain.geometry;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.graphics.builders.Chunk;
@@ -8,6 +9,7 @@ import macbury.forge.graphics.builders.Chunk;
  * Created by macbury on 04.08.15.
  */
 public abstract class TerrainGeometryProvider implements Disposable {
+  private static final String TAG = "TerrainGeometryProvider";
   public final Array<GeometryCache> caches = new Array<GeometryCache>();
   /*
   Applies geometry to chunk
@@ -26,6 +28,7 @@ public abstract class TerrainGeometryProvider implements Disposable {
 
   @Override
   public void dispose() {
+    Gdx.app.log(TAG, "Disposing: " + caches.size);
     for (GeometryCache cache : caches) {
       cache.dispose();
     }

@@ -25,7 +25,7 @@ public class VoxelMap implements Disposable {
   protected int depth;
 
   public VoxelMap(Vector3 voxelSize, BlocksProvider blocksProvider) {
-    this.voxelSize  = voxelSize;
+    this.voxelSize  = new Vector3(voxelSize);
     boundingBox     = new BoundingBox();
     this.blocks     = blocksProvider;
   }
@@ -109,7 +109,8 @@ public class VoxelMap implements Disposable {
 
   @Override
   public void dispose() {
-
+    voxelMap = null;
+    blocks   = null;
   }
 
   public int getWidth() {
