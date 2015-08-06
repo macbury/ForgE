@@ -1,83 +1,104 @@
 package macbury.forge.editor.undo_redo.actions;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Array;
 import macbury.forge.utils.Vector3i;
 import macbury.forge.voxel.Voxel;
 import macbury.forge.voxel.VoxelMap;
+import org.lwjgl.Sys;
 
 /**
  * Created by macbury on 05.08.15.
  */
 public class FloodFillChangeable extends TerrainCursorChangeable {
   private static final String TAG = "FloodFillChangeable";
-  private Voxel oldVoxels[][][];
-  private Vector3i tempA = new Vector3i();
   private boolean[][][] mark;
   private final boolean floodToLevel;
   private Voxel voxelToReplace;
-
+  private int targetLevel;
+  private Array<BlockSave> oldBlocks;
   public FloodFillChangeable(VoxelMap map, boolean floodToLevel) {
     super(map);
     this.floodToLevel = floodToLevel;
-    mark = new boolean[map.getWidth()][map.getHeight()][map.getDepth()];
+    this.oldBlocks   = new Array<BlockSave>();
   }
-
 
   @Override
   public void revert() {
-
+    for(BlockSave save : oldBlocks) {
+      save.applyTo(map);
+    }
   }
 
   @Override
   public void apply() {
     this.voxelToReplace = map.getVoxelForPosition(from);
 
-    flood(from);
+    mark = new boolean[map.getWidth()][map.getHeight()][map.getDepth()];
+    this.targetLevel = from.y;
+    floodFill(new Vector3i(from), getBlockIdForPosition(from), getBlockBySelectionMouse().id);
   }
 
-  private void flood(Vector3i cursor) {
-    //Gdx.app.log(TAG, "Cursor: " + cursor.toString());
-    if (floodToLevel && from.y > cursor.y) {
-      return;
+  private int getBlockIdForPosition(Vector3i pos) {
+    Voxel seedVoxel = map.getVoxelForPosition(pos);
+    if (seedVoxel == null || seedVoxel.isAir()) {
+      return -1;
+    } else {
+      return seedVoxel.blockId;
     }
+  }
 
-    if (cursor.x < 0 || cursor.y < 0 || cursor.z < 0) {
-      return;
+  private void floodFill(Vector3i start, int seedBlockId, byte targetBlockId) {
+    Array<Vector3i> stack = new Array<Vector3i>();
+    stack.add(start);
+
+    while (stack.size > 0) {
+      Vector3i cursor = stack.pop();
+      if (isInsideMap(cursor) && getBlockIdForPosition(cursor) == seedBlockId) {
+        saveBlock(cursor);
+        putBlock(cursor, targetBlockId);
+
+        stack.add(new Vector3i(cursor).add(Vector3i.LEFT));
+        stack.add(new Vector3i(cursor).add(Vector3i.RIGHT));
+        stack.add(new Vector3i(cursor).add(Vector3i.TOP));
+        stack.add(new Vector3i(cursor).add(Vector3i.BOTTOM));
+        stack.add(new Vector3i(cursor).add(Vector3i.FRONT));
+        stack.add(new Vector3i(cursor).add(Vector3i.BACK));
+      }
     }
+    System.gc();
+  }
 
-    if (cursor.x >= map.getWidth() || cursor.y >= map.getHeight() || cursor.z >= map.getDepth()) {
-      return;
+  private void saveBlock(Vector3i cursor) {
+    BlockSave save = new BlockSave(cursor, map.getVoxelForPosition(cursor));
+    if (!oldBlocks.contains(save, false)) {
+      oldBlocks.add(save);
     }
+  }
 
-    if (mark[cursor.x][cursor.y][cursor.z]) {
-      return;
-    }
-
-    Voxel currentVoxel = map.getVoxelForPosition(cursor);
-
-    if (voxelToReplace == null) {
-      if (currentVoxel != null)
-        return;
-    } else if (!voxelToReplace.equals(currentVoxel)) {
-      return;
-    }
-
+  private void putBlock(Vector3i cursor, byte targetBlockId) {
     Voxel newVoxel   = map.findOrInitializeVoxelForPosition(cursor);
     if (newVoxel != null) {
-      newVoxel.blockId = getBlockBySelectionMouse().id;
+      newVoxel.blockId = targetBlockId;
       newVoxel.alginTo = alignToSide;
       map.setVoxelForPosition(newVoxel, cursor);
     }
-
-    mark[cursor.x][cursor.y][cursor.z] = true;
-
-    flood(new Vector3i(cursor).add(Vector3i.LEFT));
-    flood(new Vector3i(cursor).add(Vector3i.RIGHT));
-    flood(new Vector3i(cursor).add(Vector3i.TOP));
-    flood(new Vector3i(cursor).add(Vector3i.BOTTOM));
-    flood(new Vector3i(cursor).add(Vector3i.FRONT));
-    flood(new Vector3i(cursor).add(Vector3i.BACK));
-
-
   }
+
+  private boolean isInsideMap(Vector3i cursor) {
+    if (cursor.x < 0 || cursor.y < 0 || cursor.z < 0) {
+      return false;
+    }
+
+    if (cursor.x >= map.getWidth() || cursor.y >= map.getHeight() || cursor.z >= map.getDepth()) {
+      return false;
+    }
+
+    if (cursor.y > targetLevel && floodToLevel) {
+      return false;
+    }
+
+    return true;
+  }
+
 }

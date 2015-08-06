@@ -72,8 +72,8 @@ public class TerrainToolsController implements OnMapChangeListener, SelectionInt
     drawPencilButton          = buildToogleButton("draw_pencil", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.D, pencilChangeableProvider);
     drawRectButton            = buildToogleButton("draw_rect", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.R, new RectChangeableProvider());
     drawBrushButton           = buildToogleButton("draw_brush", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.B, new CustomBrushChangeableProvider());
-    buildToogleButton("level_flood", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.L, new LevelFloodBrushChangealeProvider());
-    buildToogleButton("draw_bucket", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.F, null);
+    buildToogleButton("level_flood", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.L, new LevelFloodBrushChangeableProvider());
+    buildToogleButton("draw_bucket", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.F, new FloodFillBrushChangeableProvider());
 
     //buildToogleButton("draw_airbrush", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.A);
     drawTreePencil            = buildToogleButton("draw_tree", toolsGroup, Input.Keys.SHIFT_LEFT, Input.Keys.T, new TreeChangeableProvider());

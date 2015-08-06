@@ -7,11 +7,11 @@ import macbury.forge.editor.views.MapPropertySheet;
 import macbury.forge.voxel.ChunkMap;
 
 /**
- * Created by macbury on 05.08.15.
+ * Created by macbury on 06.08.15.
  */
-public class LevelFloodBrushChangealeProvider extends TerrainChangeableProvider<FloodFillChangeable> {
-  public LevelFloodBrushChangealeProvider() {
-    super(LevelFloodBrushChangealeProvider.class);
+public class FloodFillBrushChangeableProvider extends TerrainChangeableProvider<FloodFillChangeable> {
+  public FloodFillBrushChangeableProvider() {
+    super(LevelFloodBrushChangeableProvider.class);
   }
 
   @Override
@@ -26,7 +26,7 @@ public class LevelFloodBrushChangealeProvider extends TerrainChangeableProvider<
 
   @Override
   public FloodFillChangeable provide(ChunkMap map) {
-    FloodFillChangeable changeable = new FloodFillChangeable(map, true);
+    FloodFillChangeable changeable = new FloodFillChangeable(map, false);
     changeable.setSelection(getSelection());
     return changeable;
   }
