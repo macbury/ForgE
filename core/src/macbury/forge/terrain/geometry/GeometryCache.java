@@ -1,12 +1,10 @@
 package macbury.forge.terrain.geometry;
 
-import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
-import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
 import macbury.forge.graphics.builders.Chunk;
 import macbury.forge.graphics.builders.ChunkPartCollider;
-import macbury.forge.graphics.renderable.VoxelChunkRenderableFactory;
+import macbury.forge.graphics.batch.renderable.VoxelChunkRenderableFactory;
 import macbury.forge.utils.Vector3i;
 
 /**

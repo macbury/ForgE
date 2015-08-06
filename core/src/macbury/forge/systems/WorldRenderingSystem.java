@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Array;
 import macbury.forge.ForgE;
 import macbury.forge.components.PositionComponent;
 import macbury.forge.components.RenderableComponent;
+import macbury.forge.graphics.skybox.DayNightSkybox;
 import macbury.forge.graphics.skybox.Skybox;
 import macbury.forge.graphics.batch.VoxelBatch;
 import macbury.forge.graphics.camera.GameCamera;
@@ -106,8 +107,7 @@ public class WorldRenderingSystem extends EntitySystem {
       batch.begin(camera); {
         ForgE.graphics.clearAll(env.skyColor);
         if (withSkybox){
-          batch.add(skybox);
-          batch.render(env);
+          skybox.render(batch, env);
         }
 
         batch.pushAll(terrain.visibleTerrainFaces);

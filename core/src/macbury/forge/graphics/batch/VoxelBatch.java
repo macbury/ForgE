@@ -15,9 +15,11 @@ import macbury.forge.ForgE;
 import macbury.forge.assets.assets.TextureAsset;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
 import macbury.forge.graphics.batch.renderable.SpriteRenderable;
+import macbury.forge.graphics.batch.renderable.SunMonRenderable;
 import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
 import macbury.forge.graphics.batch.sprites.Sprite3D;
 import macbury.forge.graphics.batch.sprites.Sprite3DCache;
+import macbury.forge.graphics.batch.sprites.TextureSprite3D;
 import macbury.forge.level.env.LevelEnv;
 import macbury.forge.shaders.ShaderProvider;
 import macbury.forge.shaders.utils.RenderableBaseShader;
@@ -68,7 +70,7 @@ public class VoxelBatch implements Disposable {
    * Add Sprite3D to queue
    * @param sprite3D
    */
-  public void add(Sprite3D sprite3D) {
+  public void add(TextureSprite3D sprite3D) {
     if (sprite3D.getMesh() != null) {
       SpriteRenderable renderable = spriteRenderablePool.obtain();
       renderable.build(sprite3D);
@@ -222,4 +224,5 @@ public class VoxelBatch implements Disposable {
       add(bucket.get(i));
     }
   }
+
 }

@@ -20,9 +20,9 @@ public class WaterEnv implements Disposable {
   private Texture waterNormalATexture;
   public float elevation          = 1f;
   public Color color              = new Color(0.0f, 0.3f, 0.5f, 1.0f);
-  public float waterSpeed         = 0.05f;
+  public float waterSpeed         = 0.02f;
   public float waveStrength       = 0.005f;
-  public float displacementTiling = 2f;
+  public float displacementTiling = 20f;
   public float colorTint          = 0.2f;
   public float refractiveFactor   = 0.5f;
   public float shineDamper        = 12.0f;

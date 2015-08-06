@@ -1,0 +1,13 @@
+{
+  class: macbury.forge.shaders.DayNightSkyShader,
+  fragment: "day-night-skybox",
+  vertex:   "day-night-skybox",
+  uniforms: [
+    "Sky"
+  ],
+  helpers: {
+    vertex: 	[],
+    fragment: 	[]
+  },
+
+}

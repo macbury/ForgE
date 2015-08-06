@@ -75,7 +75,8 @@ public class CubemapSkybox extends Skybox {
 
   @Override
   public void dispose() {
-    renderable.mesh.dispose();
+    if (renderable != null)
+      renderable.mesh.dispose();
     renderable = null;
     setSkyboxAsset(null);
   }

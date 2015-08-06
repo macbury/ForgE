@@ -56,7 +56,7 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
     this.playMapButton           = buildButton("play");
 
     this.codeEditorButton        = buildButton("code");
-
+    codeEditorButton.setVisible(false);
     this.terrainEditButton       = buildToogleButton("terrain");
     this.entitiesEditButton      = buildToogleButton("entities");
     undoMapping = inputProcessor.registerMapping(Input.Keys.CONTROL_LEFT, Input.Keys.Z, this);

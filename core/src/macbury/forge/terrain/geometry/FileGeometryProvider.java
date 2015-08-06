@@ -4,9 +4,8 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
 import macbury.forge.graphics.builders.Chunk;
 import macbury.forge.graphics.builders.ChunkPartCollider;
-import macbury.forge.graphics.renderable.VoxelChunkRenderableFactory;
+import macbury.forge.graphics.batch.renderable.VoxelChunkRenderableFactory;
 import macbury.forge.voxel.ChunkMap;
-import macbury.forge.voxel.Voxel;
 
 /**
  * Created by macbury on 04.08.15.

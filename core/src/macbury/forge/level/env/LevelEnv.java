@@ -35,7 +35,6 @@ public class LevelEnv implements Disposable {
 
   public LevelEnv() {
     water        = new WaterEnv();
-    skybox       = new CubemapSkybox(null);
     skyColor     = Color.valueOf("3498db");
     mainLight    = new DirectionalLight();
     mainLight.set(1f, 1f, 1f,-1, -1, 0.5f);

@@ -1,4 +1,4 @@
-package macbury.forge.graphics.renderable;
+package macbury.forge.graphics.batch.renderable;
 
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.g3d.Material;

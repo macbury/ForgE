@@ -1,15 +1,11 @@
 package macbury.forge.terrain.geometry;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
 import macbury.forge.graphics.builders.Chunk;
 import macbury.forge.graphics.builders.TerrainBuilder;
-import macbury.forge.graphics.renderable.VoxelChunkRenderableFactory;
+import macbury.forge.graphics.batch.renderable.VoxelChunkRenderableFactory;
 import macbury.forge.voxel.ChunkMap;
-
-import java.util.HashMap;
 
 /**
  * Created by macbury on 04.08.15.

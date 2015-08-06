@@ -21,7 +21,7 @@ import macbury.forge.assets.assets.TextureAsset;
 import macbury.forge.db.GameDatabase;
 import macbury.forge.db.models.Teleport;
 import macbury.forge.graphics.builders.ChunkPartCollider;
-import macbury.forge.graphics.renderable.VoxelChunkRenderableFactory;
+import macbury.forge.graphics.batch.renderable.VoxelChunkRenderableFactory;
 import macbury.forge.graphics.skybox.CubemapSkybox;
 import macbury.forge.graphics.skybox.DayNightSkybox;
 import macbury.forge.graphics.skybox.Skybox;

@@ -8,7 +8,7 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import macbury.forge.graphics.mesh.MeshFactory;
 import macbury.forge.graphics.mesh.MeshVertexInfo;
-import macbury.forge.graphics.renderable.VoxelChunkRenderableFactory;
+import macbury.forge.graphics.batch.renderable.VoxelChunkRenderableFactory;
 import macbury.forge.shaders.attributes.SolidTerrainAttribute;
 import macbury.forge.shaders.attributes.WaterAttribute;
 

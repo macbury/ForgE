@@ -3,6 +3,8 @@ package macbury.forge.graphics.skybox;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g3d.RenderableProvider;
 import com.badlogic.gdx.utils.Disposable;
+import macbury.forge.graphics.batch.VoxelBatch;
+import macbury.forge.level.env.LevelEnv;
 
 /**
  * Created by macbury on 18.05.15.
@@ -11,6 +13,7 @@ import com.badlogic.gdx.utils.Disposable;
 public abstract class Skybox implements Disposable, RenderableProvider {
   private final static float SIZE = 50f;
   public abstract void update(float delta);
+
   protected Mesh buildMesh() {
     Mesh mesh = new Mesh(true, 8, 14, new VertexAttribute(VertexAttributes.Usage.Position, 3, "a_position"));
 
@@ -25,6 +28,8 @@ public abstract class Skybox implements Disposable, RenderableProvider {
     return mesh;
   }
 
-
-
+  public void render(VoxelBatch batch, LevelEnv env) {
+    batch.add(this);
+    batch.render(env);
+  }
 }

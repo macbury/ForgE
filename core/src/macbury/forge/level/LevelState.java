@@ -4,6 +4,7 @@ import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.ForgE;
 import macbury.forge.db.GameDatabase;
 import macbury.forge.graphics.skybox.CubemapSkybox;
+import macbury.forge.graphics.skybox.DayNightSkybox;
 import macbury.forge.level.env.LevelEnv;
 import macbury.forge.voxel.ChunkMap;
 
@@ -48,13 +49,18 @@ public class LevelState implements Disposable {
     terrainMap.buildFloor();
     terrainMap.rebuildAll();
     env.terrainMap              = terrainMap;
-    env.setWindDisplacementTextureAsset(ForgE.assets.getTexture("graphics/textures/wind_bump.jpg"));
-    env.water.setWaterDisplacementTextureAsset(ForgE.assets.getTexture("graphics/textures/waterDUDV.png"));
-    env.water.setWaterNormalMapATextureAsset(ForgE.assets.getTexture("graphics/textures/waterNormal.png"));
-    env.water.setWaterNormalMapBTextureAsset(ForgE.assets.getTexture("graphics/textures/waterNormalAlt.png"));
+    env.setWindDisplacementTextureAsset(ForgE.assets.getTexture("textures:wind_bump.jpg"));
+    env.water.setWaterDisplacementTextureAsset(ForgE.assets.getTexture("textures:waterDUDV.png"));
+    env.water.setWaterNormalMapATextureAsset(ForgE.assets.getTexture("textures:waterNormal.png"));
+    env.water.setWaterNormalMapBTextureAsset(ForgE.assets.getTexture("textures:waterNormalAlt.png"));
+
+    DayNightSkybox dayNightSkybox = new DayNightSkybox();
+    dayNightSkybox.setSunAsset(ForgE.assets.getTexture("textures:sun.png"));
+    dayNightSkybox.setMoonAsset(ForgE.assets.getTexture("textures:moon.png"));
+    env.skybox = dayNightSkybox; //new CubemapSkybox(null);
     if (CubemapSkybox.class.isInstance(env.skybox)) {
       CubemapSkybox cubemapSkybox = (CubemapSkybox) env.skybox;
-      cubemapSkybox.setSkyboxAsset(ForgE.assets.getCubemap("graphics/textures/skybox/day.png"));
+      cubemapSkybox.setSkyboxAsset(ForgE.assets.getCubemap("skybox:day.png"));
     }
   }
 

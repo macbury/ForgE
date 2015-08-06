@@ -8,7 +8,9 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import macbury.forge.assets.assets.CubemapAsset;
+import macbury.forge.assets.assets.TextureAsset;
 import macbury.forge.graphics.skybox.CubemapSkybox;
+import macbury.forge.graphics.skybox.DayNightSkybox;
 import macbury.forge.graphics.skybox.Skybox;
 
 /**
@@ -24,7 +26,10 @@ public class SkyboxSerializer extends Serializer<Skybox> {
       output.writeFloat(cubemapSkybox.rotationSpeed);
       kryo.writeObjectOrNull(output, cubemapSkybox.getSkyboxAsset(), CubemapAsset.class);
     } else {
-      throw new GdxRuntimeException("Implement!");
+      DayNightSkybox dayNightSkybox = (DayNightSkybox) object;
+      kryo.writeObject(output, dayNightSkybox.getMoonAsset());
+      kryo.writeObject(output, dayNightSkybox.getSunAsset());
+      //throw new GdxRuntimeException("Implement!");
     }
   }
 
@@ -38,7 +43,11 @@ public class SkyboxSerializer extends Serializer<Skybox> {
       skybox.setSkyboxAsset(kryo.readObjectOrNull(input, CubemapAsset.class));
       return skybox;
     } else {
-      throw new GdxRuntimeException("Implement!");
+      DayNightSkybox dayNightSkybox = new DayNightSkybox();
+      dayNightSkybox.setMoonAsset(kryo.readObjectOrNull(input, TextureAsset.class));
+      dayNightSkybox.setSunAsset(kryo.readObjectOrNull(input, TextureAsset.class));
+     // throw new GdxRuntimeException("Implement!");
+      return dayNightSkybox;
     }
   }
 }

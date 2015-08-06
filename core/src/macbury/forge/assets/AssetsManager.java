@@ -23,6 +23,7 @@ public class AssetsManager implements Disposable {
   private static final String TAG = "AssetsManager";
   private static final int MAX_TO_LOAD_PER_TICK = 10;
   private HashMap<String, Asset> loadedAssets;
+  private HashMap<String, String> pathMappings;
   private Array<Asset> pendingAssets;
 
   public AssetsManager() {
@@ -30,9 +31,18 @@ public class AssetsManager implements Disposable {
     Gdx.app.log(TAG, "Initialized...");
     loadedAssets  = new HashMap<String, Asset>();
     pendingAssets = new Array<Asset>();
+    pathMappings  = new HashMap<String, String>();
+
+    putMapping("textures", "graphics/textures/");
+    putMapping("skybox", "graphics/textures/skybox/");
+  }
+
+  private void putMapping(String key, String path) {
+    pathMappings.put(key + ":", path);
   }
 
   public Asset getAsset(Class<? extends Asset> assetClass, String path) {
+    path = applyMapping(path);
     if (!loadedAssets.containsKey(path)) {
       Asset tempAsset = null;
       try {
@@ -53,6 +63,15 @@ public class AssetsManager implements Disposable {
     Asset asset = loadedAssets.get(path);
     asset.retain();
     return asset;
+  }
+
+  private String applyMapping(String path) {
+    for(String mapping : pathMappings.keySet()) {
+      if (path.startsWith(mapping)) {
+        return path.replace(mapping, pathMappings.get(mapping));
+      }
+    }
+    return path;
   }
 
   public TextureAsset getTexture(String path) {
