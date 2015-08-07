@@ -3,6 +3,7 @@ package macbury.forge.graphics;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Mesh;
 
 /**
  * Created by macbury on 15.10.14.
@@ -41,4 +42,5 @@ public class GraphicsUtils {
   public float getElapsedTime() {
     return elapsedTime;
   }
+
 }

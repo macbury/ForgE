@@ -1,6 +1,7 @@
 package macbury.forge.graphics.skybox;
 
 import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.utils.MeshBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
@@ -13,6 +14,7 @@ import macbury.forge.graphics.batch.renderable.DayNightSkyRenderable;
 import macbury.forge.graphics.batch.renderable.SunMonRenderable;
 import macbury.forge.graphics.batch.sprites.Sprite3D;
 import macbury.forge.level.env.LevelEnv;
+import macbury.forge.utils.QuadBuilder;
 
 /**
  * Created by macbury on 04.08.15.
@@ -41,21 +43,15 @@ public class DayNightSkybox extends Skybox {
     }
 
     if (sunMonRenderable != null) {
-      sunMonRenderable.dispose();
+      sunMonRenderable.mesh.dispose();
       sunMonRenderable = null;
     }
   }
 
   @Override
-  public void render(VoxelBatch batch, LevelEnv env) {
-    super.render(batch, env);
-    batch.add(buildSunMoon(batch));
-    batch.render(env);
-  }
-
-  @Override
   public void getRenderables(Array<Renderable> renderables, Pool<Renderable> pool) {
-    renderables.add(getCubeRenderable());
+    //renderables.add(getCubeRenderable());
+    renderables.add(buildSunMoon());
   }
 
   private Renderable getCubeRenderable() {
@@ -70,11 +66,13 @@ public class DayNightSkybox extends Skybox {
     return dayNightRenderable;
   }
 
-  private SunMonRenderable buildSunMoon(VoxelBatch batch) {
+  private SunMonRenderable buildSunMoon() {
     if (sunMonRenderable == null) {
-      this.sunMonRenderable           = new SunMonRenderable(batch);
-      this.sunMonRenderable.init(true, false);
-      sunMonRenderable.set(0, 10, 0);
+
+      this.sunMonRenderable           = new SunMonRenderable();
+      TextureRegion  region           = new TextureRegion(getSunTexture());
+      sunMonRenderable.mesh           = QuadBuilder.build(0.5f, region);
+      sunMonRenderable.primitiveType  = GL30.GL_TRIANGLES;
     }
 
     return sunMonRenderable;
@@ -115,4 +113,18 @@ public class DayNightSkybox extends Skybox {
   }
 
 
+  public Texture getSunTexture() {
+    if (sunTexture == null) {
+      sunTexture = sunAsset.get();
+    }
+    return sunTexture;
+  }
+
+  public Texture getMoonTexture() {
+    if (moonTexture == null) {
+      moonTexture = moonAsset.get();
+    }
+
+    return moonTexture;
+  }
 }

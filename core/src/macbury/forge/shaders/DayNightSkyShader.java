@@ -31,8 +31,8 @@ public class DayNightSkyShader extends RenderableBaseShader<DayNightSkyRenderabl
 
     mvp.set(camera.projection).mul(tempMat);
 
-    context.setCullFace(GL20.GL_FRONT);
-    context.setDepthMask(false);
+  //  context.setCullFace(GL20.GL_FRONT);
+    ///context.setDepthMask(false);
 
     shader.setUniformMatrix(MODELVIEW_UNIFORM, mvp);
   }

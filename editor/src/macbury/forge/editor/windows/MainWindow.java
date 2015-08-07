@@ -224,10 +224,10 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
   @Override
   public void uncaughtException(Thread t, Throwable e) {
     final Throwable err = e;
+    e.printStackTrace();
     SwingUtilities.invokeLater(new Runnable() {
       public void run() {
         TaskDialogs.showException(err);
-        err.printStackTrace();
         MainWindow.this.dispose();
         System.exit(0);
       }

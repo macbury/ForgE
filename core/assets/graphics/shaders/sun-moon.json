@@ -1,0 +1,13 @@
+{
+  class: macbury.forge.shaders.SunMonShader,
+  fragment: "sun-mon",
+  vertex:   "sun-mon",
+  uniforms: [
+    "ProjectionMatrix"
+  ],
+  helpers: {
+    vertex: 	[],
+    fragment: 	[]
+  },
+
+}
