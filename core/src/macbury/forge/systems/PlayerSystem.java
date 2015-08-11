@@ -22,7 +22,7 @@ import macbury.forge.components.PositionComponent;
  */
 public class PlayerSystem extends IteratingSystem {
   private static final String TAG = "PlayerSystem";
-  private static final float MAX_HEAD_UP_ROTATION = 0.8f;
+  private static final float MAX_HEAD_UP_ROTATION = 0.9f;
   private static final float MIN_HEAD_DOWN_ROTATION = -0.8f;
   private ComponentMapper<PositionComponent> pm   = ComponentMapper.getFor(PositionComponent.class);
   private ComponentMapper<PlayerComponent> plm    = ComponentMapper.getFor(PlayerComponent.class);

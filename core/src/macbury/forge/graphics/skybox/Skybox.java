@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g3d.RenderableProvider;
 import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.graphics.batch.VoxelBatch;
+import macbury.forge.graphics.camera.GameCamera;
 import macbury.forge.level.env.LevelEnv;
 
 /**
@@ -28,7 +29,7 @@ public abstract class Skybox implements Disposable, RenderableProvider {
     return mesh;
   }
 
-  public void render(VoxelBatch batch, LevelEnv env) {
+  public void render(VoxelBatch batch, LevelEnv env, GameCamera camera) {
     batch.add(this);
     batch.render(env);
   }

@@ -6,8 +6,6 @@ import com.badlogic.gdx.Gdx;
  * Created by macbury on 18.10.14.
  */
 public class Config {
-
-
   public int reflectionBufferSize = 512;
   public int refractionBufferSize = 512;
 

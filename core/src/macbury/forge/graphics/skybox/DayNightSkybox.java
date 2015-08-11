@@ -1,10 +1,11 @@
 package macbury.forge.graphics.skybox;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.Renderable;
-import com.badlogic.gdx.graphics.g3d.utils.MeshBuilder;
-import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
+import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
@@ -12,25 +13,62 @@ import macbury.forge.assets.assets.TextureAsset;
 import macbury.forge.graphics.batch.VoxelBatch;
 import macbury.forge.graphics.batch.renderable.DayNightSkyRenderable;
 import macbury.forge.graphics.batch.renderable.SunMonRenderable;
-import macbury.forge.graphics.batch.sprites.Sprite3D;
+import macbury.forge.graphics.camera.GameCamera;
 import macbury.forge.level.env.LevelEnv;
+import macbury.forge.utils.CameraUtils;
 import macbury.forge.utils.QuadBuilder;
 
 /**
  * Created by macbury on 04.08.15.
  */
 public class DayNightSkybox extends Skybox {
+  private final static float SATELITE_MESH_SIZE = 0.5f;
+  private final static int DISTANCE_TO_SUN = 40;
+  private final static int SUN_SIZE = 10;
+  private static final String TAG = "DayNightSkybox";
   private TextureAsset sunAsset;
   private TextureAsset moonAsset;
   private Texture sunTexture;
   private Texture moonTexture;
   private DayNightSkyRenderable dayNightRenderable;
   private SunMonRenderable sunMonRenderable;
-  private final static float SATELITE_MESH_SIZE = 0.5f;
+  private float rotation = 0.0f;
+  private Matrix4 tempMat       = new Matrix4();
+  private Vector3 tempPosition  = new Vector3();
+  private Vector3 tempCamPosition  = new Vector3();
+  private Quaternion sateliteRotation = new Quaternion();
 
   @Override
   public void update(float delta) {
+    //rotation -= delta * 0.3f;
+    rotation = -90f;
+    Gdx.app.log(TAG, "Rotation: " + rotation);
+  }
 
+  @Override
+  public void render(VoxelBatch batch, LevelEnv env, GameCamera camera) {
+    super.render(batch, env, camera);
+
+    renderSatelites(camera, env, batch);
+  }
+  private void renderSatelites(GameCamera camera, LevelEnv env, VoxelBatch batch) {
+    buildSunMoon();
+    tempCamPosition.set(camera.position);
+    tempMat.idt();
+    tempMat.translate(tempCamPosition);
+    tempMat.rotate(Vector3.X, rotation);
+    tempMat.translate(0, 0, DISTANCE_TO_SUN);
+    tempMat.getTranslation(tempPosition);
+
+    CameraUtils.lookAt(tempCamPosition, tempPosition, camera.up, sateliteRotation);
+
+    sunMonRenderable.worldTransform.setToTranslation(tempPosition);
+    sunMonRenderable.worldTransform.scl(SUN_SIZE);
+    sunMonRenderable.worldTransform.rotate(sateliteRotation);
+
+    env.mainLight.direction.set(tempCamPosition).sub(tempPosition).nor();
+    batch.add(sunMonRenderable);
+    batch.render(env);
   }
 
   @Override
@@ -50,8 +88,9 @@ public class DayNightSkybox extends Skybox {
 
   @Override
   public void getRenderables(Array<Renderable> renderables, Pool<Renderable> pool) {
-    //renderables.add(getCubeRenderable());
-    renderables.add(buildSunMoon());
+    //renderables.add(buildSunMoon());
+    renderables.add(getCubeRenderable());
+
   }
 
   private Renderable getCubeRenderable() {
@@ -71,7 +110,7 @@ public class DayNightSkybox extends Skybox {
 
       this.sunMonRenderable           = new SunMonRenderable();
       TextureRegion  region           = new TextureRegion(getSunTexture());
-      sunMonRenderable.mesh           = QuadBuilder.build(0.5f, region);
+      sunMonRenderable.mesh           = QuadBuilder.build(SATELITE_MESH_SIZE, region);
       sunMonRenderable.primitiveType  = GL30.GL_TRIANGLES;
     }
 

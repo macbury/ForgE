@@ -107,7 +107,7 @@ public class WorldRenderingSystem extends EntitySystem {
       batch.begin(camera); {
         ForgE.graphics.clearAll(env.skyColor);
         if (withSkybox){
-          skybox.render(batch, env);
+          skybox.render(batch, env, camera);
         }
 
         batch.pushAll(terrain.visibleTerrainFaces);

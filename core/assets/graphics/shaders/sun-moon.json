@@ -3,7 +3,8 @@
   fragment: "sun-mon",
   vertex:   "sun-mon",
   uniforms: [
-    "ProjectionMatrix"
+    "ProjectionMatrix",
+    "WorldTransform"
   ],
   helpers: {
     vertex: 	[],
