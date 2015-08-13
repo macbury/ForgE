@@ -13,7 +13,7 @@ import macbury.forge.level.env.LevelEnv;
  */
 public abstract class Skybox implements Disposable, RenderableProvider {
   private final static float SIZE = 50f;
-  public abstract void update(float delta);
+  public abstract void update(float delta, GameCamera camera);
 
   protected Mesh buildMesh() {
     Mesh mesh = new Mesh(true, 8, 14, new VertexAttribute(VertexAttributes.Usage.Position, 3, "a_position"));

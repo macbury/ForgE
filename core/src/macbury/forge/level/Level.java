@@ -78,9 +78,10 @@ public class Level implements Disposable {
   }
 
   public void render(float delta) {
-    env.skybox.update(delta);
     batch.resetStats();
     camera.update();
+    env.skybox.update(delta, camera);
+
     terrainEngine.update();
     entities.update(delta);
 

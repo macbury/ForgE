@@ -10,7 +10,7 @@
     "ProjectionMatrix",
     "WorldTransform",
     "Normals",
-    "Sky",
+    "Fog",
     "EyePosition",
     "Sun",
     "ColorDiffuse",

@@ -21,7 +21,7 @@ public class EditorScreenBeanInfo extends BaseBeanInfo {
     super(EditorScreenBean.class);
 
     createLevelOptions();
-    createLightingOptions();
+    //createLightingOptions();
     createWindOptions();
     createWaterOptions();
   }

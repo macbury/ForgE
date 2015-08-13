@@ -26,7 +26,7 @@ public class SunMonShader extends RenderableBaseShader<SunMonRenderable> {
     context.setDepthMask(false);
     context.setBlending(true, GL20.GL_SRC_ALPHA, GL20.GL_ONE);
     DayNightSkybox skybox = (DayNightSkybox)env.skybox;
-    shader.setUniformi(UNIFORM_TEXTURE, context.textureBinder.bind(skybox.getSunTexture()));
+    shader.setUniformi(UNIFORM_TEXTURE, context.textureBinder.bind(skybox.getSateliteTextureByHour()));
   }
 
   @Override

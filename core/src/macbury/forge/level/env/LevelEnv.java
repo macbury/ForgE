@@ -24,6 +24,7 @@ public class LevelEnv implements Disposable {
   public DirectionalLight mainLight;
   public Color ambientLight;
   public Color skyColor;
+  public Color fogColor;
   public ChunkMap terrainMap;
   private TextureAsset windDisplacementTextureAsset;
 
@@ -36,6 +37,7 @@ public class LevelEnv implements Disposable {
   public LevelEnv() {
     water        = new WaterEnv();
     skyColor     = Color.valueOf("3498db");
+    fogColor     = new Color(skyColor);
     mainLight    = new DirectionalLight();
     mainLight.set(1f, 1f, 1f,-1, -1, 0.5f);
     ambientLight = Color.GRAY;

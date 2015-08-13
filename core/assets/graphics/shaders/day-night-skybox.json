@@ -3,7 +3,8 @@
   fragment: "day-night-skybox",
   vertex:   "day-night-skybox",
   uniforms: [
-    "Sky"
+    "Sky",
+    "SkyMap"
   ],
   helpers: {
     vertex: 	[],

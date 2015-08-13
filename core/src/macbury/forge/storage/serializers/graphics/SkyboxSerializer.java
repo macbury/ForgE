@@ -29,6 +29,8 @@ public class SkyboxSerializer extends Serializer<Skybox> {
       DayNightSkybox dayNightSkybox = (DayNightSkybox) object;
       kryo.writeObject(output, dayNightSkybox.getMoonAsset());
       kryo.writeObject(output, dayNightSkybox.getSunAsset());
+      kryo.writeObject(output, dayNightSkybox.getSkyMapAsset());
+      kryo.writeObject(output, dayNightSkybox.getStarsAlphaAsset());
       //throw new GdxRuntimeException("Implement!");
     }
   }
@@ -46,6 +48,8 @@ public class SkyboxSerializer extends Serializer<Skybox> {
       DayNightSkybox dayNightSkybox = new DayNightSkybox();
       dayNightSkybox.setMoonAsset(kryo.readObjectOrNull(input, TextureAsset.class));
       dayNightSkybox.setSunAsset(kryo.readObjectOrNull(input, TextureAsset.class));
+      dayNightSkybox.setSkyMapAsset(kryo.readObjectOrNull(input, TextureAsset.class));
+      dayNightSkybox.setStarsAlphaAsset(kryo.readObjectOrNull(input, TextureAsset.class));
      // throw new GdxRuntimeException("Implement!");
       return dayNightSkybox;
     }

@@ -108,6 +108,7 @@ public class ScriptManager implements Disposable {
     gameScript.registerObjectAsModule("$assets", ForgE.assets);
     gameScript.registerObjectAsModule("$input", Gdx.input);
     gameScript.registerObjectAsModule("$entities", ForgE.entities);
+    gameScript.registerObjectAsModule("$time", ForgE.time);
     //TODO: Find better solution!
     for (int i = 0; i < packagesToImport.size; i++) {
       String classToImport = packagesToImport.get(i).getName();

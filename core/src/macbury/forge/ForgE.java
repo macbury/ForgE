@@ -16,6 +16,7 @@ import macbury.forge.scripts.ScriptManager;
 import macbury.forge.shaders.utils.ShadersManager;
 import macbury.forge.storage.StorageManager;
 import macbury.forge.entities.EntityManager;
+import macbury.forge.time.TimeManager;
 
 public class ForgE extends Game {
   public static GraphicsUtils       graphics;
@@ -30,9 +31,10 @@ public class ForgE extends Game {
   public static EntityManager       entities;
   public static LevelManager        levels;
   public static ScriptManager       scripts;
-  public static FrameBufferManager fb;
-
+  public static FrameBufferManager  fb;
+  public static TimeManager         time;
   private Array<ForgEBootListener>  bootListeners;
+
 
   public ForgE(Config config) {
     super();
@@ -55,6 +57,7 @@ public class ForgE extends Game {
     entities      = new EntityManager();
     scripts       = new ScriptManager();
     fb            = new FrameBufferManager();
+    time          = new TimeManager();
     Gdx.input.setInputProcessor(input);
     for (ForgEBootListener listener : bootListeners) {
       listener.afterEngineCreate(this);

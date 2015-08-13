@@ -14,7 +14,7 @@
     "EyePosition",
     "MapSize",
     "ClipWaterPlane",
-    "Sky",
+    "Fog",
     "Sun",
     "Time",
     "Wind"

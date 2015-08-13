@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import icons.Utils;
+import macbury.forge.ForgE;
 import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
 import macbury.forge.editor.input.GdxSwingInputProcessor;
 import macbury.forge.editor.input.KeyShortcutMapping;
@@ -13,15 +14,22 @@ import macbury.forge.editor.undo_redo.ChangeManagerListener;
 import macbury.forge.editor.utils.InterfaceTrigger;
 import macbury.forge.editor.views.MainMenu;
 import macbury.forge.editor.views.MoreToolbarButton;
+import macbury.forge.time.TimeManager;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
+import java.util.Date;
 
 /**
  * Created by macbury on 25.10.14.
  */
-public class MainToolbarController implements OnMapChangeListener, ChangeManagerListener, ActionListener, KeyShortcutMapping.KeyShortcutListener {
+public class MainToolbarController implements OnMapChangeListener, ChangeManagerListener, ActionListener, KeyShortcutMapping.KeyShortcutListener, ChangeListener, AdjustmentListener {
   private static final String TAG = "MainToolbarController";
   private final ButtonGroup editorModeButtonGroup;
   private final JToolBar mainToolbar;
@@ -38,6 +46,8 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
   private final JToggleButton entitiesEditButton;
   private final JButton codeEditorButton;
   private final CodeEditorController codeEditorController;
+  private final JLabel currentTimeLabel;
+  private final JScrollBar timeScroll;
   private LevelEditorScreen screen;
   public final InterfaceTrigger<EditorModeListener> editorModeListeners = new InterfaceTrigger<EditorModeListener>();
 
@@ -62,6 +72,17 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
     undoMapping = inputProcessor.registerMapping(Input.Keys.CONTROL_LEFT, Input.Keys.Z, this);
     redoMapping = inputProcessor.registerMapping(Input.Keys.CONTROL_LEFT, Input.Keys.Y, this);
 
+    JPanel timeScrollContainer = new JPanel(new BorderLayout());
+    timeScrollContainer.setPreferredSize(new Dimension(240, 32));
+
+    this.currentTimeLabel    = new JLabel("8:00", SwingConstants.CENTER);
+    timeScrollContainer.add(currentTimeLabel, BorderLayout.NORTH);
+
+    this.timeScroll = new JScrollBar(Adjustable.HORIZONTAL);
+    timeScrollContainer.add(timeScroll, BorderLayout.SOUTH);
+
+    timeScroll.addAdjustmentListener(this);
+
     undoMapping.addListener(this);
     redoMapping.addListener(this);
 
@@ -79,9 +100,11 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
     mainToolbar.add(terrainEditButton);
     mainToolbar.add(entitiesEditButton);
     mainToolbar.addSeparator();
-    mainToolbar.add(codeEditorButton);
-    mainToolbar.add(Box.createHorizontalGlue());
     mainToolbar.add(playMapButton);
+    mainToolbar.addSeparator();
+
+    mainToolbar.add(timeScrollContainer);
+    mainToolbar.add(Box.createHorizontalGlue());
 
 
     updateRedoUndoButtons();
@@ -119,7 +142,7 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
     setScreen(null);
     terrainEditButton.setEnabled(false);
     entitiesEditButton.setEnabled(false);
-
+    timeScroll.setEnabled(false);
     editorModeListeners.trigger(new InterfaceTrigger.Trigger<EditorModeListener>() {
       @Override
       public void onListenerTrigger(EditorModeListener listener) {
@@ -134,6 +157,10 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
     terrainEditButton.setEnabled(true);
     entitiesEditButton.setEnabled(true);
     selectEditorMode(EditorMode.Terrain);
+    timeScroll.setEnabled(true);
+    timeScroll.setMaximum((int) TimeManager.DAY_IN_SECONDS);
+    timeScroll.setValue(ForgE.time.getSeconds());
+    updateTimeInfo();
   }
 
   private void selectEditorMode(final EditorMode mode) {
@@ -248,6 +275,23 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
     } else if (redoMapping == shortcutMapping) {
       redo();
     }
+  }
+
+  @Override
+  public void stateChanged(ChangeEvent e) {
+
+  }
+
+  @Override
+  public void adjustmentValueChanged(AdjustmentEvent e) {
+    if (e.getSource() == timeScroll) {
+      ForgE.time.setDuration(timeScroll.getModel().getValue());
+      updateTimeInfo();
+    }
+  }
+
+  private void updateTimeInfo() {
+    currentTimeLabel.setText(ForgE.time.getFormattedDuration());
   }
 
   public enum EditorMode {

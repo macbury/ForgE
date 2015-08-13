@@ -21,6 +21,7 @@ public class LevelEnvSerializer extends Serializer<LevelEnv> {
     kryo.writeObject(output, object.windDirection);
     kryo.writeObject(output, object.mainLight);
     kryo.writeObject(output, object.skyColor);
+    kryo.writeObject(output, object.fogColor);
     kryo.writeObject(output, object.ambientLight);
 
     kryo.writeObjectOrNull(output, object.getWindDisplacementTextureAsset(), TextureAsset.class);
@@ -34,6 +35,7 @@ public class LevelEnvSerializer extends Serializer<LevelEnv> {
     env.windDirection           = kryo.readObject(input, Vector2.class);
     env.mainLight               = kryo.readObject(input, DirectionalLight.class);
     env.skyColor                = kryo.readObject(input, Color.class);
+    env.fogColor                = kryo.readObject(input, Color.class);
     env.ambientLight            = kryo.readObject(input, Color.class);
 
     env.setWindDisplacementTextureAsset(kryo.readObjectOrNull(input, TextureAsset.class));

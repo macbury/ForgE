@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import macbury.forge.assets.assets.CubemapAsset;
 import macbury.forge.graphics.batch.renderable.CubemapSkyboxRenderable;
+import macbury.forge.graphics.camera.GameCamera;
 
 /**
  * Created by macbury on 04.08.15.
@@ -35,7 +36,7 @@ public class CubemapSkybox extends Skybox {
     return skyboxCubemap;
   }
   @Override
-  public void update(float delta) {
+  public void update(float delta, GameCamera camera) {
     rotation += delta * rotationSpeed;
   }
 

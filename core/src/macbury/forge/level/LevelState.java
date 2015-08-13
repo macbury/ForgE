@@ -57,11 +57,13 @@ public class LevelState implements Disposable {
     DayNightSkybox dayNightSkybox = new DayNightSkybox();
     dayNightSkybox.setSunAsset(ForgE.assets.getTexture("textures:sun.png"));
     dayNightSkybox.setMoonAsset(ForgE.assets.getTexture("textures:moon.png"));
+    dayNightSkybox.setSkyMapAsset(ForgE.assets.getTexture("textures:skymap.png"));
+    dayNightSkybox.setStarsAlphaAsset(ForgE.assets.getTexture("textures:starsAlpha.png"));
     env.skybox = dayNightSkybox; //new CubemapSkybox(null);
-    if (CubemapSkybox.class.isInstance(env.skybox)) {
+    /*if (CubemapSkybox.class.isInstance(env.skybox)) {
       CubemapSkybox cubemapSkybox = (CubemapSkybox) env.skybox;
       cubemapSkybox.setSkyboxAsset(ForgE.assets.getCubemap("skybox:day.png"));
-    }
+    }*/
   }
 
   public void setTerrainMap(ChunkMap chunkMap) {
