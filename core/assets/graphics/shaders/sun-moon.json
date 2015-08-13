@@ -2,13 +2,18 @@
   class: macbury.forge.shaders.SunMonShader,
   fragment: "sun-mon",
   vertex:   "sun-mon",
+  structs: [
+    "ClipPlane"
+  ],
   uniforms: [
     "ProjectionMatrix",
-    "WorldTransform"
+    "WorldTransform",
+    "Fog",
+    "ClipWaterPlane",
   ],
   helpers: {
     vertex: 	[],
-    fragment: 	[]
+    fragment: 	["clip_water_plane"]
   },
 
 }

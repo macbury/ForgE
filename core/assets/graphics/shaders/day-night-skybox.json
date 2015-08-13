@@ -4,7 +4,8 @@
   vertex:   "day-night-skybox",
   uniforms: [
     "Sky",
-    "SkyMap"
+    "SkyMap",
+    "Time"
   ],
   helpers: {
     vertex: 	[],

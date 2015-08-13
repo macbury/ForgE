@@ -1,5 +1,6 @@
 package macbury.forge.graphics.skybox;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.Renderable;
@@ -31,6 +32,7 @@ public class DayNightSkybox extends Skybox {
   private TextureAsset sunAsset;
   private TextureAsset moonAsset;
   private TextureAsset skyMapAsset;
+  private TextureAsset sateliteLightingAsset;
   private TextureAsset starsAlphaAsset;
   private Texture skyMapTexture;
   private Texture starsAlphaTexture;
@@ -38,36 +40,38 @@ public class DayNightSkybox extends Skybox {
   private Texture moonTexture;
   private DayNightSkyRenderable dayNightRenderable;
   private SunMonRenderable sunMonRenderable;
-  private Matrix4 tempMat       = new Matrix4();
-  private Vector3 tempPosition  = new Vector3();
-  private Vector3 tempCamPosition  = new Vector3();
+  private Matrix4 tempMat             = new Matrix4();
+  private Vector3 tempPosition        = new Vector3();
+  private Vector3 tempDirection       = new Vector3();
+  private Vector3 tempCamPosition     = new Vector3();
   private Quaternion sateliteRotation = new Quaternion();
-  private Pixmap skyMapPixmap;
-  private Color fogA = new Color();
-  private Color fogB = new Color();
-  private Color fogColor = new Color();
+  private Color fogColor              = new Color();
+  private Color ambientColor          = new Color();
+  private Color sunColor              = new Color();
   @Override
   public void update(float delta, GameCamera camera) {
-    //rotation -= delta * 0.3f;
-    updateSatelites(camera);
     updateFogColor();
+    updateLighting();
+  }
+
+  private void updateLighting() {
+    Pixmap lightingPixmap = sateliteLightingAsset.getPixmap();
+    int maxW            = lightingPixmap.getWidth() - 1;
+    int maxH            = lightingPixmap.getHeight() - 1;
+    int mapPosA         = MathUtils.clamp(Math.round(maxW * ForgE.time.getProgress()), 0, maxW);
+    sunColor.set(lightingPixmap.getPixel(mapPosA, maxH));
+    //sunColor.set(Color.WHITE);
   }
 
   private void updateFogColor() {
-    int maxW    = getSkyMapPixmap().getWidth() - 1;
-    int maxH    = getSkyMapPixmap().getHeight() - 1;
-    int mapPosA = MathUtils.clamp((int) Math.floor(maxW * ForgE.time.getProgress()), 0, maxW);
-    int mapPosB = MathUtils.clamp((int) Math.ceil(maxW * ForgE.time.getProgress()), 0, maxW);
-    float alpha = ForgE.time.getProgressAlpha();
-    fogA.set(getSkyMapPixmap().getPixel(mapPosA, maxH));
-    fogB.set(getSkyMapPixmap().getPixel(mapPosB, maxH));
+    Pixmap skyMapPixmap = skyMapAsset.getPixmap();
+    int maxW            = skyMapPixmap.getWidth() - 1;
+    int maxH            = skyMapPixmap.getHeight() - 1;
+    int mapPosA         = MathUtils.clamp(Math.round(maxW * ForgE.time.getProgress()), 0, maxW);
 
-    fogColor.set(
-        MathUtils.lerp(fogA.r, fogB.r, alpha),
-        MathUtils.lerp(fogA.g, fogB.g, alpha),
-        MathUtils.lerp(fogA.b, fogB.b, alpha),
-        1.0f
-    );
+    fogColor.set(skyMapPixmap.getPixel(mapPosA, maxH));
+    ambientColor.set(skyMapPixmap.getPixel(mapPosA, maxH - 2));
+
   }
 
   private void updateSatelites(GameCamera camera) {
@@ -78,7 +82,7 @@ public class DayNightSkybox extends Skybox {
     tempMat.translate(0, 0, DISTANCE_TO_SUN);
     tempMat.getTranslation(tempPosition);
 
-    CameraUtils.lookAt(tempCamPosition, tempPosition, camera.up, sateliteRotation);
+    CameraUtils.lookAt(tempCamPosition, tempPosition, Vector3.Y, sateliteRotation);
 
     if (sunMonRenderable != null) {
       sunMonRenderable.worldTransform.setToTranslation(tempPosition);
@@ -90,14 +94,18 @@ public class DayNightSkybox extends Skybox {
   @Override
   public void render(VoxelBatch batch, LevelEnv env, GameCamera camera) {
     super.render(batch, env, camera);
-
+    updateSatelites(camera);
     renderSatelites(camera, env, batch);
   }
 
   private void renderSatelites(GameCamera camera, LevelEnv env, VoxelBatch batch) {
-    //env.mainLight.direction.set(tempCamPosition).sub(tempPosition).nor();
-    env.fogColor.set(fogColor);
+    //tempDirection.set(tempCamPosition).sub(tempPosition).nor();
+    env.mainLight.direction.set(0,0,-1).rotate(Vector3.X, MathUtils.clamp(ForgE.time.getSateliteRotation(), -170, -10));
 
+    env.mainLight.color.set(sunColor);
+    env.ambientLight.set(ambientColor);
+    env.fogColor.set(fogColor);
+    env.skyColor.set(fogColor);
     batch.add(buildSunMoon());
     batch.render(env);
   }
@@ -107,6 +115,7 @@ public class DayNightSkybox extends Skybox {
     setSunAsset(null);
     setMoonAsset(null);
     setSkyMapAsset(null);
+    setSateliteLightingAsset(null);
     if (dayNightRenderable != null) {
       dayNightRenderable.mesh.dispose();
       dayNightRenderable = null;
@@ -116,7 +125,6 @@ public class DayNightSkybox extends Skybox {
       sunMonRenderable.mesh.dispose();
       sunMonRenderable = null;
     }
-    skyMapPixmap = null;
   }
 
   @Override
@@ -172,7 +180,6 @@ public class DayNightSkybox extends Skybox {
 
   public void setSkyMapAsset(TextureAsset newSkyMapAsset) {
     if (skyMapAsset != null) {
-      skyMapPixmap = null;
       skyMapTexture = null;
       skyMapAsset.release();
       skyMapAsset = null;
@@ -191,6 +198,22 @@ public class DayNightSkybox extends Skybox {
     this.starsAlphaAsset = newStarsAlphaAsset;
     if (starsAlphaAsset != null)
       starsAlphaAsset.retain();
+  }
+
+
+  public TextureAsset getSateliteLightingAsset() {
+    return sateliteLightingAsset;
+  }
+
+  public void setSateliteLightingAsset(TextureAsset newSateliteLighting) {
+    if (sateliteLightingAsset != null) {
+      sateliteLightingAsset.release();
+      sateliteLightingAsset = null;
+    }
+    this.sateliteLightingAsset = newSateliteLighting;
+    if (sateliteLightingAsset != null) {
+      sateliteLightingAsset.retain();
+    }
   }
 
   public void setMoonAsset(TextureAsset newMoonAsset) {
@@ -251,13 +274,4 @@ public class DayNightSkybox extends Skybox {
     return skyMapTexture;
   }
 
-  public Pixmap getSkyMapPixmap() {
-    if (skyMapPixmap == null) {
-      if (!getSkyMapTexture().getTextureData().isPrepared()) {
-        skyMapTexture.getTextureData().prepare();
-      }
-      skyMapPixmap = skyMapTexture.getTextureData().consumePixmap();
-    }
-    return skyMapPixmap;
-  }
 }

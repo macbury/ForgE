@@ -59,6 +59,7 @@ public class LevelState implements Disposable {
     dayNightSkybox.setMoonAsset(ForgE.assets.getTexture("textures:moon.png"));
     dayNightSkybox.setSkyMapAsset(ForgE.assets.getTexture("textures:skymap.png"));
     dayNightSkybox.setStarsAlphaAsset(ForgE.assets.getTexture("textures:starsAlpha.png"));
+    dayNightSkybox.setSateliteLightingAsset(ForgE.assets.getTexture("textures:sateliteLighting.png"));
     env.skybox = dayNightSkybox; //new CubemapSkybox(null);
     /*if (CubemapSkybox.class.isInstance(env.skybox)) {
       CubemapSkybox cubemapSkybox = (CubemapSkybox) env.skybox;

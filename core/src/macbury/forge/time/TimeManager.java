@@ -1,5 +1,6 @@
 package macbury.forge.time;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Disposable;
 
@@ -14,11 +15,13 @@ public class TimeManager implements Disposable {
   private static final float SATELITE_END_ROTATION = -190;
   private float duration;
   private long days;
-  public static final float HOUR_IN_SECONDS = 60 * 60;
+  public static final float HOUR_IN_SECONDS   = 60 * 60;
   public static final float MINUTE_IN_SECONDS = 60;
-  public static final float DAY_IN_SECONDS  = 24 * HOUR_IN_SECONDS;
-  public static final float DAY_START_HOUR  = 5 * HOUR_IN_SECONDS + 30 * MINUTE_IN_SECONDS;
-  public static final float DAY_END_HOUR    = 20 * HOUR_IN_SECONDS + 35 * MINUTE_IN_SECONDS;
+  public static final float DAY_IN_SECONDS    = 24 * HOUR_IN_SECONDS;
+  public static final float DAY_START_HOUR    = 6 * HOUR_IN_SECONDS + 30 * MINUTE_IN_SECONDS;
+  public static final float DAY_END_HOUR      = 20 * HOUR_IN_SECONDS + 35 * MINUTE_IN_SECONDS;
+  public static final float DAY_LENGTH        = DAY_END_HOUR - DAY_START_HOUR;
+  public static final float NIGHT_LENGTH      = DAY_IN_SECONDS - DAY_END_HOUR + DAY_START_HOUR;
   private float sateliteRotation;
   private float sateliteProgress;
 
@@ -28,7 +31,7 @@ public class TimeManager implements Disposable {
   }
 
   public void update() {
-    this.duration += 100;
+    this.duration += 3000 * Gdx.graphics.getDeltaTime();
     if (duration >= DAY_IN_SECONDS) {
       duration = 0;
       days += 1;
@@ -38,9 +41,15 @@ public class TimeManager implements Disposable {
 
   private void updateRotation() {
     if (isDay()) {
-      sateliteProgress = (duration - DAY_START_HOUR) / (DAY_END_HOUR - DAY_START_HOUR);
+      sateliteProgress = (duration - DAY_START_HOUR) / DAY_LENGTH;
     } else {
-      sateliteProgress = (duration - DAY_END_HOUR) / (DAY_END_HOUR + DAY_START_HOUR);
+      float nightSeconds = 0.0f;
+      if (duration > DAY_END_HOUR) {
+        nightSeconds = duration - DAY_END_HOUR;
+      } else {
+        nightSeconds = duration + DAY_IN_SECONDS - DAY_END_HOUR;
+      }
+      sateliteProgress = nightSeconds / NIGHT_LENGTH;
     }
     sateliteRotation = MathUtils.lerp(SATELITE_START_ROTATION, SATELITE_END_ROTATION, sateliteProgress);
   }

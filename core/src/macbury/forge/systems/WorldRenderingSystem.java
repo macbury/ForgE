@@ -75,7 +75,7 @@ public class WorldRenderingSystem extends EntitySystem {
 
   private void renderRefractions() {
     env.water.clipMode = LevelEnv.ClipMode.Refraction;
-    renderBucketWith(true, false, Fbo.FRAMEBUFFER_REFRACTIONS);
+    renderBucketWith(false, false, Fbo.FRAMEBUFFER_REFRACTIONS);
   }
 
   private void renderFinal() {
