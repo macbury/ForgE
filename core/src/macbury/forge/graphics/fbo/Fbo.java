@@ -4,9 +4,9 @@ package macbury.forge.graphics.fbo;
  * Created by macbury on 20.07.15.
  */
 public class Fbo {
-  public final static String FRAMEBUFFER_MAIN_COLOR = "FRAMEBUFFER_MAIN_COLOR";
-  public final static String FRAMEBUFFER_SUN_DEPTH  = "FRAMEBUFFER_SUN_DEPTH";
+  public final static String FRAMEBUFFER_MAIN_COLOR = "Final Color";
+  public final static String FRAMEBUFFER_SUN_DEPTH  = "Sun Depth";
 
-  public static final String FRAMEBUFFER_REFLECTIONS = "FRAMEBUFFER_REFLECTIONS";
-  public static final String FRAMEBUFFER_REFRACTIONS = "FRAMEBUFFER_REFRACTIONS";
+  public static final String FRAMEBUFFER_REFLECTIONS = "Reflections";
+  public static final String FRAMEBUFFER_REFRACTIONS = "Refractions";
 }

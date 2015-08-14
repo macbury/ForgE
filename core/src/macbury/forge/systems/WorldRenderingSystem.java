@@ -67,7 +67,7 @@ public class WorldRenderingSystem extends EntitySystem {
   private void renderSunDepth() {
     env.water.clipMode = LevelEnv.ClipMode.None;
     env.mainLight.update(mainCamera);
-    renderBucketWith(false, false, Fbo.FRAMEBUFFER_SUN_DEPTH, env.mainLight.getCamera());
+    renderBucketWith(false, false, Fbo.FRAMEBUFFER_SUN_DEPTH, env.mainLight.getShadowCamera());
   }
 
   private void renderReflections() {

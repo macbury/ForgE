@@ -171,6 +171,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     directoryWatcher.start();
     mainContentPane.setVisible(true);
     projectController.tryOpenLastMap();
+    mainMenu.createAllMenus();
     ForgE.shaders.addOnShaderReloadListener(shadersController);
   }
 

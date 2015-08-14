@@ -9,8 +9,11 @@ import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
 import macbury.forge.editor.screens.LevelEditorScreen;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by macbury on 19.10.14.
@@ -18,6 +21,7 @@ import java.awt.event.ActionListener;
 public class MainMenu extends JPopupMenu implements OnMapChangeListener {
   private final ProjectController controller;
   private final BlocksController blocksController;
+  private final DockFramesController dockFrameController;
   public JCheckBoxMenuItem debugRenderDynamicOctree;
   public JCheckBoxMenuItem debugBoundingBox;
   public JRadioButtonMenuItem debugWireframeItem;
@@ -33,17 +37,41 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
 
     this.controller = projectController;
     this.blocksController = blocksController;
+    this.dockFrameController = dockFrameController;
+    //add(Box.createRigidArea(new Dimension(320,28)));
+  }
+
+  public void createAllMenus() {
     createMapMenu();
     addSeparator();
     createDebugWindow();
     addSeparator();
     createPiplineMenu();
     addSeparator();
+    createExportFboMenu();
+    addSeparator();
     add(dockFrameController.menu.getMenu());
-    //add(Box.createRigidArea(new Dimension(320,28)));
   }
 
-
+  private void createExportFboMenu() {
+    JMenu fboMenu          = new JMenu("Export FBO");
+    for (String frameBufferName : ForgE.fb.all().keys()) {
+      JMenuItem item = new JMenuItem(frameBufferName);
+      item.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+          File screenshotFile = ForgE.fb.saveAsPng(frameBufferName).file();
+          try {
+            Desktop.getDesktop().open(screenshotFile);
+          } catch (IOException e1) {
+            e1.printStackTrace();
+          }
+        }
+      });
+      fboMenu.add(item);
+    }
+    add(fboMenu);
+  }
 
   /**
    * Set Editor screen and refresh menu

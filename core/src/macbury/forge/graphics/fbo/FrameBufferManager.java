@@ -1,10 +1,12 @@
 package macbury.forge.graphics.fbo;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -25,6 +27,7 @@ public class FrameBufferManager implements Disposable {
 
   public FrameBufferManager() {
     frameBuffers = new ObjectMap<String, FrameBuffer>();
+    createDefaultFrameBuffers();
   }
 
   public FrameBuffer create(String fbIdn) {
@@ -142,5 +145,22 @@ public class FrameBufferManager implements Disposable {
     create(Fbo.FRAMEBUFFER_REFLECTIONS, Pixmap.Format.RGBA8888, ForgE.config.reflectionBufferSize, ForgE.config.reflectionBufferSize, true);
     create(Fbo.FRAMEBUFFER_REFRACTIONS, Pixmap.Format.RGBA8888, ForgE.config.refractionBufferSize, ForgE.config.refractionBufferSize, true);
     create(Fbo.FRAMEBUFFER_SUN_DEPTH, Pixmap.Format.RGBA8888, ForgE.config.depthMapSize, ForgE.config.depthMapSize, true);
+  }
+
+  public ObjectMap<String, FrameBuffer> all() {
+    return frameBuffers;
+  }
+
+  public FileHandle saveAsPng(String frameBufferName) {
+    FrameBuffer frameBuffer = get(frameBufferName);
+    if (frameBuffer == null) {
+      throw new GdxRuntimeException("Cannot save: " + frameBufferName);
+    }
+    FileHandle saveFile = Gdx.files.absolute("/tmp/fb_out.png");
+    TextureData data    = frameBuffer.getColorBufferTexture().getTextureData();
+    if (!data.isPrepared())
+      data.prepare();
+    PixmapIO.writePNG(saveFile, data.consumePixmap());
+    return saveFile;
   }
 }

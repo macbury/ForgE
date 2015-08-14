@@ -58,7 +58,9 @@ public class Level implements Disposable {
 
     this.batch                    = new VoxelBatch(renderContext);
     this.camera                   = new GameCamera();
-    this.frustrumDebugger         = new FrustrumDebugAndRenderer(camera);
+    this.frustrumDebugger         = new FrustrumDebugAndRenderer();
+    frustrumDebugger.add(camera);
+    frustrumDebugger.add(env.mainLight.getShadowCamera());
     this.terrainEngine            = new TerrainEngine(this);
     this.entities                 = new EntitySystemsManager(this);
 

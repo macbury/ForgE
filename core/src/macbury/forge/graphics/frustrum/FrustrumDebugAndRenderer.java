@@ -5,9 +5,11 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.ForgE;
 import macbury.forge.graphics.camera.GameCamera;
+import macbury.forge.graphics.camera.ICamera;
 import macbury.forge.input.InputManager;
 
 public class FrustrumDebugAndRenderer  extends InputAdapter implements Disposable {
@@ -17,15 +19,19 @@ public class FrustrumDebugAndRenderer  extends InputAdapter implements Disposabl
     {0,4,1,5,2,6,3,7}
   };
   private static final String TAG = "FrustrumRenderer";
-  private final GameCamera frustrumCamera;
   private ShapeRenderer renderer;
-
+  private Array<ICamera> cameras;
   private boolean enabled;
 
-  public FrustrumDebugAndRenderer(GameCamera camera) {
-    this.frustrumCamera = camera;
+  public FrustrumDebugAndRenderer() {
+    this.cameras        = new Array<ICamera>();
+
     this.renderer       = new ShapeRenderer();
     ForgE.input.addProcessor(this);
+  }
+
+  public void add(ICamera camera) {
+    cameras.add(camera);
   }
 
 
@@ -37,15 +43,18 @@ public class FrustrumDebugAndRenderer  extends InputAdapter implements Disposabl
     renderer.begin(ShapeRenderer.ShapeType.Line);
     renderer.setColor(Color.WHITE);
 
+    for (ICamera frustrumCamera : cameras) {
+      for(int sequence = 0; sequence < RENDER_SEQUENCE.length; sequence++) {
+        for(int index = 1; index < RENDER_SEQUENCE[sequence].length; index+=2) {
+          short a = RENDER_SEQUENCE[sequence][index];
+          short b = RENDER_SEQUENCE[sequence][index-1];
 
-    for(int sequence = 0; sequence < RENDER_SEQUENCE.length; sequence++) {
-      for(int index = 1; index < RENDER_SEQUENCE[sequence].length; index+=2) {
-        short a = RENDER_SEQUENCE[sequence][index];
-        short b = RENDER_SEQUENCE[sequence][index-1];
-
-        renderer.line(frustrumCamera.getDebugFrustrum().planePoints[a], frustrumCamera.getDebugFrustrum().planePoints[b]);
+          renderer.line(frustrumCamera.getDebugFrustrum().planePoints[a], frustrumCamera.getDebugFrustrum().planePoints[b]);
+        }
       }
     }
+
+
 
     renderer.end();
   }
@@ -55,10 +64,14 @@ public class FrustrumDebugAndRenderer  extends InputAdapter implements Disposabl
     if ( ForgE.input.isEqual(InputManager.Action.TestFrustrum, keycode)) {
       this.enabled = !this.enabled;
       if (enabled) {
-        frustrumCamera.saveDebugFrustrum();
+        for (ICamera frustrumCamera : cameras) {
+          frustrumCamera.saveDebugFrustrum();
+        }
         Gdx.app.log(TAG, "Enabled frustrum debugger");
       } else {
-        frustrumCamera.clearDebugFrustrum();
+        for (ICamera frustrumCamera : cameras) {
+          frustrumCamera.clearDebugFrustrum();
+        }
         Gdx.app.log(TAG, "Disabled frustrum debugger");
       }
       return true;
@@ -67,16 +80,13 @@ public class FrustrumDebugAndRenderer  extends InputAdapter implements Disposabl
     }
   }
 
-  public DebugFrustrum getFrustrum() {
-    return frustrumCamera.getDebugFrustrum();
-  }
-
   public boolean isEnabled() {
-    return frustrumCamera.haveDebugFrustrum();
+    return enabled;
   }
 
   @Override
   public void dispose() {
     ForgE.input.removeProcessor(this);
+    cameras.clear();
   }
 }
