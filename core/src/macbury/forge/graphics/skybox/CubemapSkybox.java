@@ -1,5 +1,6 @@
 package macbury.forge.graphics.skybox;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Cubemap;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.g3d.Renderable;
@@ -36,7 +37,7 @@ public class CubemapSkybox extends Skybox {
     return skyboxCubemap;
   }
   @Override
-  public void update(float delta, GameCamera camera) {
+  public void update(float delta, Camera camera) {
     rotation += delta * rotationSpeed;
   }
 

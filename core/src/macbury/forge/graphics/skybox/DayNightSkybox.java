@@ -49,7 +49,7 @@ public class DayNightSkybox extends Skybox {
   private Color ambientColor          = new Color();
   private Color sunColor              = new Color();
   @Override
-  public void update(float delta, GameCamera camera) {
+  public void update(float delta, Camera camera) {
     updateFogColor();
     updateLighting();
   }
@@ -74,7 +74,7 @@ public class DayNightSkybox extends Skybox {
 
   }
 
-  private void updateSatelites(GameCamera camera) {
+  private void updateSatelites(Camera camera) {
     tempCamPosition.set(camera.position);
     tempMat.idt();
     tempMat.translate(tempCamPosition);
@@ -92,13 +92,13 @@ public class DayNightSkybox extends Skybox {
   }
 
   @Override
-  public void render(VoxelBatch batch, LevelEnv env, GameCamera camera) {
+  public void render(VoxelBatch batch, LevelEnv env, Camera camera) {
     super.render(batch, env, camera);
     updateSatelites(camera);
     renderSatelites(camera, env, batch);
   }
 
-  private void renderSatelites(GameCamera camera, LevelEnv env, VoxelBatch batch) {
+  private void renderSatelites(Camera camera, LevelEnv env, VoxelBatch batch) {
     //tempDirection.set(tempCamPosition).sub(tempPosition).nor();
     env.mainLight.direction.set(0,0,-1).rotate(Vector3.X, MathUtils.clamp(ForgE.time.getSateliteRotation(), -170, -10));
 

@@ -11,10 +11,12 @@ import macbury.forge.editor.parell.JobManager;
 import macbury.forge.editor.systems.SelectionSystem;
 import macbury.forge.editor.undo_redo.ChangeManager;
 import macbury.forge.graphics.camera.RTSCameraController;
+import macbury.forge.graphics.fbo.Fbo;
 import macbury.forge.level.Level;
 import macbury.forge.level.LevelState;
 import macbury.forge.screens.AbstractScreen;
 import macbury.forge.terrain.geometry.DynamicGeometryProvider;
+import macbury.forge.ui.DebugFrameBufferResult;
 import macbury.forge.ui.Overlay;
 
 /**
@@ -60,6 +62,10 @@ public class LevelEditorScreen extends AbstractScreen {
     level.entities.addSystem(selectionSystem);
     level.entities.psychics.disable();
     stage.addActor(overlay);
+
+
+    //stage.addActor(DebugFrameBufferResult.build(Fbo.FRAMEBUFFER_REFLECTIONS, 256, 0, 0));
+    //stage.addActor(DebugFrameBufferResult.build(Fbo.FRAMEBUFFER_REFRACTIONS, 256, 256, 0));
   }
 
   public void addAfterRenderListener(ForgeAfterRenderListener listener) {

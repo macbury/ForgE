@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.assets.assets.TextureAsset;
+import macbury.forge.graphics.light.OrthographicDirectionalLight;
 import macbury.forge.graphics.skybox.CubemapSkybox;
 import macbury.forge.graphics.skybox.Skybox;
 import macbury.forge.voxel.ChunkMap;
@@ -21,7 +22,7 @@ public class LevelEnv implements Disposable {
     None, Reflection, Refraction
   }
   public Skybox skybox;
-  public DirectionalLight mainLight;
+  public OrthographicDirectionalLight mainLight;
   public Color ambientLight;
   public Color skyColor;
   public Color fogColor;
@@ -38,7 +39,7 @@ public class LevelEnv implements Disposable {
     water        = new WaterEnv();
     skyColor     = Color.valueOf("3498db");
     fogColor     = new Color(skyColor);
-    mainLight    = new DirectionalLight();
+    mainLight    = new OrthographicDirectionalLight();
     mainLight.set(1f, 1f, 1f,-1, -1, 0.5f);
     ambientLight = Color.GRAY;
   }
@@ -75,11 +76,11 @@ public class LevelEnv implements Disposable {
     this.ambientLight = ambientLight;
   }
 
-  public DirectionalLight getMainLight() {
+  public OrthographicDirectionalLight getMainLight() {
     return mainLight;
   }
 
-  public void setMainLight(DirectionalLight mainLight) {
+  public void setMainLight(OrthographicDirectionalLight mainLight) {
     this.mainLight = mainLight;
   }
 

@@ -10,7 +10,7 @@ import macbury.forge.graphics.frustrum.DebugFrustrum;
 /**
  * Created by macbury on 23.10.14.
  */
-public class GameCamera extends PerspectiveCamera {
+public class GameCamera extends PerspectiveCamera implements ICamera {
   private static final float BASE_FOV = 67;
   private static final float EXTEND_FOV_BY = 19;
   private final Vector3 debugDirection;
@@ -24,33 +24,33 @@ public class GameCamera extends PerspectiveCamera {
     this.debugPosition = new Vector3();
     this.far           = 100;
   }
-
+  @Override
   public void saveDebugFrustrum() {
     this.debugFrustrum = new DebugFrustrum(frustum, invProjectionView);
     this.debugDirection.set(direction);
     debugPosition.set(position);
     restoreFov();
   }
-
+  @Override
   public void extendFov() {
     this.oldFieldOfView = this.fieldOfView;
     this.fieldOfView    += EXTEND_FOV_BY;
     this.update();
   }
-
+  @Override
   public void restoreFov() {
     this.fieldOfView = this.oldFieldOfView;
     this.update();
   }
-
+  @Override
   public boolean haveDebugFrustrum() {
     return debugFrustrum != null;
   }
-
+  @Override
   public DebugFrustrum getDebugFrustrum() {
     return debugFrustrum;
   }
-
+  @Override
   public void clearDebugFrustrum() {
     this.debugFrustrum = null;
   }
@@ -59,6 +59,7 @@ public class GameCamera extends PerspectiveCamera {
    * Return debug frustum if have or return normal frustrum
    * @return
    */
+  @Override
   public Frustum normalOrDebugFrustrum() {
     if (haveDebugFrustrum()) {
       return debugFrustrum;
@@ -74,7 +75,7 @@ public class GameCamera extends PerspectiveCamera {
   public Vector3 normalOrDebugPosition() {
     return haveDebugFrustrum() ? debugPosition : position;
   }
-
+  @Override
   public boolean boundsInFrustum(BoundingBox testBounds) {
     return normalOrDebugFrustrum().boundsInFrustum(testBounds);
   }

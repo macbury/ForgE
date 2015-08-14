@@ -12,6 +12,7 @@ import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
 import macbury.forge.graphics.builders.Chunk;
 import macbury.forge.graphics.builders.TerrainBuilder;
 import macbury.forge.graphics.camera.GameCamera;
+import macbury.forge.graphics.camera.ICamera;
 import macbury.forge.level.Level;
 import macbury.forge.shaders.utils.CheckMaterial;
 import macbury.forge.terrain.geometry.DynamicGeometryProvider;
@@ -68,7 +69,7 @@ public class TerrainEngine implements Disposable {
   /**
    * Check which chunks with its renderables are visible!
    */
-  public void occulsion(GameCamera camera) {
+  public void occulsion(ICamera camera) {
     visibleTerrainFaces.clear();
     visibleWaterFaces.clear();
     visibleChunks.clear();

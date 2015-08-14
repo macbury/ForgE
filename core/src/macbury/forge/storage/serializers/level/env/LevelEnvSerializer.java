@@ -8,6 +8,7 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import macbury.forge.assets.assets.TextureAsset;
+import macbury.forge.graphics.light.OrthographicDirectionalLight;
 import macbury.forge.graphics.skybox.Skybox;
 import macbury.forge.level.env.LevelEnv;
 import macbury.forge.level.env.WaterEnv;
@@ -34,7 +35,7 @@ public class LevelEnvSerializer extends Serializer<LevelEnv> {
   public LevelEnv read(Kryo kryo, Input input, Class<LevelEnv> type) {
     LevelEnv env                = new LevelEnv();
     env.windDirection           = kryo.readObject(input, Vector2.class);
-    env.mainLight               = kryo.readObject(input, DirectionalLight.class);
+    env.mainLight               = kryo.readObject(input, OrthographicDirectionalLight.class);
     env.skyColor                = kryo.readObject(input, Color.class);
     env.fogColor                = kryo.readObject(input, Color.class);
     env.ambientLight            = kryo.readObject(input, Color.class);

@@ -3,6 +3,7 @@ package macbury.forge.systems;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.RenderableProvider;
 import com.badlogic.gdx.math.Vector3;
@@ -10,7 +11,7 @@ import com.badlogic.gdx.utils.Array;
 import macbury.forge.ForgE;
 import macbury.forge.components.PositionComponent;
 import macbury.forge.components.RenderableComponent;
-import macbury.forge.graphics.skybox.DayNightSkybox;
+import macbury.forge.graphics.camera.ICamera;
 import macbury.forge.graphics.skybox.Skybox;
 import macbury.forge.graphics.batch.VoxelBatch;
 import macbury.forge.graphics.camera.GameCamera;
@@ -27,7 +28,7 @@ import macbury.forge.utils.CameraUtils;
  * Created by macbury on 19.10.14.
  */
 public class WorldRenderingSystem extends EntitySystem {
-  private final GameCamera camera;
+  private final GameCamera mainCamera;
   private final LevelEnv env;
   private final TerrainEngine terrain;
   private final Skybox skybox;
@@ -47,7 +48,7 @@ public class WorldRenderingSystem extends EntitySystem {
     this.terrain                = level.terrainEngine;
     this.batch                  = level.batch;
     this.env                    = level.env;
-    this.camera                 = level.camera;
+    this.mainCamera             = level.camera;
     this.skybox                 = level.env.skybox;
     this.octree                 = level.octree;
     this.finalBucket            = new Array<RenderableProvider>();
@@ -56,40 +57,47 @@ public class WorldRenderingSystem extends EntitySystem {
 
   @Override
   public void update(float deltaTime) {
+    renderSunDepth();
     renderReflections();
     renderRefractions();
 
     renderFinal();
   }
 
+  private void renderSunDepth() {
+    env.water.clipMode = LevelEnv.ClipMode.None;
+    env.mainLight.update(mainCamera);
+    renderBucketWith(false, false, Fbo.FRAMEBUFFER_SUN_DEPTH, env.mainLight.getCamera());
+  }
+
   private void renderReflections() {
     env.water.clipMode  = LevelEnv.ClipMode.Reflection;
-    float distance      = 2 * (camera.position.y - env.water.getElevationWithWaterBlockHeight());
-    camera.position.y   -= distance;
-    CameraUtils.invertPitch(camera);
+    float distance      = 2 * (mainCamera.position.y - env.water.getElevationWithWaterBlockHeight());
+    mainCamera.position.y   -= distance;
+    CameraUtils.invertPitch(mainCamera);
 
-    renderBucketWith(true, false, Fbo.FRAMEBUFFER_REFLECTIONS);
-    camera.position.y   += distance;
-    CameraUtils.invertPitch(camera);
+    renderBucketWith(true, false, Fbo.FRAMEBUFFER_REFLECTIONS, mainCamera);
+    mainCamera.position.y   += distance;
+    CameraUtils.invertPitch(mainCamera);
   }
 
   private void renderRefractions() {
     env.water.clipMode = LevelEnv.ClipMode.Refraction;
-    renderBucketWith(false, false, Fbo.FRAMEBUFFER_REFRACTIONS);
+    renderBucketWith(false, false, Fbo.FRAMEBUFFER_REFRACTIONS, mainCamera);
   }
 
   private void renderFinal() {
     env.water.clipMode = LevelEnv.ClipMode.None;
-    renderBucketWith(true, true, Fbo.FRAMEBUFFER_MAIN_COLOR);
+    renderBucketWith(true, true, Fbo.FRAMEBUFFER_MAIN_COLOR, mainCamera);
   }
 
-  private void renderBucketWith(boolean withSkybox, boolean withWater, String fbo) {
+  private void renderBucketWith(boolean withSkybox, boolean withWater, String fbo, ICamera camera) {
     ForgE.fb.begin(fbo); {
       finalBucket.clear();
       octreeVisibleObjects.clear();
       camera.extendFov(); {
-        terrain.occulsion(camera);
-        frustrumOctreeQuery.setFrustum(camera.normalOrDebugFrustrum());
+        terrain.occulsion(camera);//TODO: change!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        frustrumOctreeQuery.setFrustum(camera.normalOrDebugFrustrum());//TODO: change!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         octree.retrieve(octreeVisibleObjects, frustrumOctreeQuery);
       } camera.restoreFov();
 
@@ -104,10 +112,10 @@ public class WorldRenderingSystem extends EntitySystem {
         }
       }
 
-      batch.begin(camera); {
+      batch.begin((Camera)camera); {
         ForgE.graphics.clearAll(env.skyColor);
         if (withSkybox){
-          skybox.render(batch, env, camera);
+          skybox.render(batch, env, (Camera)camera);
         }
 
         batch.pushAll(terrain.visibleTerrainFaces);

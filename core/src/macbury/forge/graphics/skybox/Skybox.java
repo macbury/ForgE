@@ -13,7 +13,7 @@ import macbury.forge.level.env.LevelEnv;
  */
 public abstract class Skybox implements Disposable, RenderableProvider {
   private final static float SIZE = 50f;
-  public abstract void update(float delta, GameCamera camera);
+  public abstract void update(float delta, Camera camera);
 
   protected Mesh buildMesh() {
     Mesh mesh = new Mesh(true, 8, 14, new VertexAttribute(VertexAttributes.Usage.Position, 3, "a_position"));
@@ -29,7 +29,7 @@ public abstract class Skybox implements Disposable, RenderableProvider {
     return mesh;
   }
 
-  public void render(VoxelBatch batch, LevelEnv env, GameCamera camera) {
+  public void render(VoxelBatch batch, LevelEnv env, Camera camera) {
     batch.add(this);
     batch.render(env);
   }
