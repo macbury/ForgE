@@ -10,7 +10,7 @@ import macbury.forge.level.LevelState;
  * Created by macbury on 10.03.15.
  */
 public class LoadLevelJob extends Job<LevelState> {
-  private final FileHandle levelToLoad;
+  private FileHandle levelToLoad;
 
   public LoadLevelJob(FileHandle levelToLoad) {
     super(LevelState.class);
@@ -37,5 +37,10 @@ public class LoadLevelJob extends Job<LevelState> {
       }
     });
     return state;
+  }
+
+  @Override
+  public void dispose() {
+    levelToLoad = null;
   }
 }

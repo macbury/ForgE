@@ -41,4 +41,9 @@ public class BuildBlocksTexture extends Job<Boolean> {
     ForgE.blocks.reload();
     return true;
   }
+
+  @Override
+  public void dispose() {
+
+  }
 }

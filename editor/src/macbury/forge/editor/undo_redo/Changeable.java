@@ -8,4 +8,7 @@ import com.badlogic.gdx.utils.Disposable;
 public abstract class Changeable implements Disposable {
   public abstract void revert();
   public abstract void apply();
+  public boolean runInThread() {
+    return false;
+  }
 }

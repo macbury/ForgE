@@ -177,7 +177,7 @@ public class TerrainToolsController implements OnMapChangeListener, SelectionInt
     CursorChangeable currentTask = currentProvider.provide(map);
     currentTask.setBlockPrimary(blocksController.getCurrentPrimaryBlock());
     currentTask.setBlockSecondary(blocksController.getCurrentSecondaryBlock());
-    changeManager.addChangeable(currentTask).apply();
+    changeManager.pushAndExecute(currentTask);
 
   }
 

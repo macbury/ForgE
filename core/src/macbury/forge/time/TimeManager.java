@@ -26,12 +26,12 @@ public class TimeManager implements Disposable {
   private float sateliteProgress;
 
   public TimeManager() {
-    this.duration = 7 * HOUR_IN_SECONDS;
+    this.duration = 8 * HOUR_IN_SECONDS;
     days += 1;
   }
 
   public void update() {
-    this.duration += 3000 * Gdx.graphics.getDeltaTime();
+    this.duration += 100 * Gdx.graphics.getDeltaTime();
     if (duration >= DAY_IN_SECONDS) {
       duration = 0;
       days += 1;

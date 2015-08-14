@@ -273,7 +273,6 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
   public void closeMap() {
     mainWindow.setTitle("");
     if (levelEditorScreen != null) {
-
       for (OnMapChangeListener listener : onMapChangeListenerArray) {
         listener.onCloseMap(ProjectController.this, ProjectController.this.levelEditorScreen);
       }
@@ -315,6 +314,7 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
 
   private void setState(LevelState state) {
     currentLevelState = state;
+
     ForgE.db.lastOpenedMapId = state.id;
     mainWindow.setTitle(state.name);
     ForgE.db.save();
@@ -323,7 +323,7 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
       levelEditorScreen.removeAfterRenderListener(this);
     }
 
-    this.levelEditorScreen = new LevelEditorScreen(state);
+    this.levelEditorScreen = new LevelEditorScreen(state, jobs);
     levelEditorScreen.addAfterRenderListener(this);
     Gdx.app.postRunnable(new Runnable() {
       @Override
@@ -359,6 +359,8 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
 
   @Override
   public void onJobStart(final Job job) {
+    if (levelEditorScreen != null)
+      levelEditorScreen.pause();
     SwingUtilities.invokeLater(new Runnable() {
       @Override
       public void run() {
@@ -383,6 +385,8 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
 
   @Override
   public void onJobFinish(Job job) {
+    if (levelEditorScreen != null)
+      levelEditorScreen.resume();
     SwingUtilities.invokeLater(new Runnable() {
       @Override
       public void run() {

@@ -32,4 +32,9 @@ public class SaveLevelGeometryJob extends Job<Level> {
     this.level = null;
     return null;
   }
+
+  @Override
+  public void dispose() {
+    level = null;
+  }
 }

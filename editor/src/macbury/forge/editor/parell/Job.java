@@ -5,6 +5,7 @@ package macbury.forge.editor.parell;
  */
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.utils.MethodInvoker;
 
 import javax.swing.*;
@@ -12,7 +13,7 @@ import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
 
 
-public abstract class Job<T> {
+public abstract class Job<T> implements Disposable {
   private Class<T>          type;
   private Reference<Object> whandler;
   private String            callback;

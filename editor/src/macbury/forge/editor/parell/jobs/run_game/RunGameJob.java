@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class RunGameJob extends Job<Void> {
   private static final String TAG = "RunGameJob";
-  private final Listener listener;
+  private Listener listener;
   private Process currentGradleProcess;
   private BufferedReader bufferReader;
 
@@ -102,6 +102,13 @@ public class RunGameJob extends Job<Void> {
       e.printStackTrace();
     }
     return null;
+  }
+
+  @Override
+  public void dispose() {
+    listener = null;
+    currentGradleProcess = null;
+
   }
 
   public interface Listener {

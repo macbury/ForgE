@@ -101,4 +101,9 @@ public class FloodFillChangeable extends TerrainCursorChangeable {
     return true;
   }
 
+
+  @Override
+  public boolean runInThread() {
+    return true;
+  }
 }

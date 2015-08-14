@@ -162,7 +162,7 @@ public class EventsController implements SelectionInterface, ActionListener, OnM
     Gdx.app.log(TAG, "On property change event");
     stopListeningForPropertyChanges();
     PropertyChangeable propertyChangeable = new PropertyChangeable(object, event, this);
-    changeManager.addChangeable(propertyChangeable).apply();
+    changeManager.pushAndExecute(propertyChangeable);
     startListeningForPropertyChanges();
   }
 

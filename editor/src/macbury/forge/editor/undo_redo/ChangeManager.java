@@ -2,21 +2,27 @@ package macbury.forge.editor.undo_redo;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import macbury.forge.editor.parell.JobManager;
+import macbury.forge.editor.parell.jobs.changeable.ApplyChangableJob;
+import macbury.forge.editor.parell.jobs.changeable.RevertChangeableJob;
 
 /**
  * Created by macbury on 31.10.14.
  */
 
 public class ChangeManager implements Disposable {
+  private JobManager jobsManager;
   private Node currentIndex = null;
   private Node parentNode = new Node();
   private Array<ChangeManagerListener> listeners;
   /**
    * Creates a new ChangeManager object which is initially empty.
+   * @param jobs
    */
-  public ChangeManager(){
+  public ChangeManager(JobManager jobs){
     currentIndex = parentNode;
     this.listeners = new Array<ChangeManagerListener>();
+    this.jobsManager = jobs;
   }
 
   public void addListener(ChangeManagerListener listener) {
@@ -48,7 +54,7 @@ public class ChangeManager implements Disposable {
    * Adds a Changeable to manage.
    * @param changeable
    */
-  public Changeable addChangeable(Changeable changeable){
+  private Changeable addChangeable(Changeable changeable){
     Node node          = new Node(changeable);
     currentIndex.right = node;
     node.left          = currentIndex;
@@ -58,6 +64,16 @@ public class ChangeManager implements Disposable {
     }
 
     return changeable;
+  }
+
+  public void pushAndExecute(Changeable changeable) {
+    addChangeable(changeable);
+    if (changeable.runInThread()) {
+      ApplyChangableJob job = new ApplyChangableJob(changeable);
+      jobsManager.enqueue(job);
+    } else {
+      changeable.apply();
+    }
   }
 
   /**
@@ -85,9 +101,14 @@ public class ChangeManager implements Disposable {
     if ( !canUndo() ){
       throw new IllegalStateException("Cannot revert. Index is out of range.");
     }
-    //revert
-    currentIndex.changeable.revert();
-    //set index
+
+    if (currentIndex.changeable.runInThread()) {
+      RevertChangeableJob job = new RevertChangeableJob(currentIndex.changeable);
+      jobsManager.enqueue(job);
+    } else {
+      currentIndex.changeable.revert();
+    }
+
     moveLeft();
   }
 
@@ -133,8 +154,13 @@ public class ChangeManager implements Disposable {
     }
     //reset index
     moveRight();
-    //apply
-    currentIndex.changeable.apply();
+
+    if (currentIndex.changeable.runInThread()) {
+      ApplyChangableJob job = new ApplyChangableJob(currentIndex.changeable);
+      jobsManager.enqueue(job);
+    } else {
+      currentIndex.changeable.apply();
+    }
   }
 
   public Changeable getCurrent() {
@@ -149,6 +175,7 @@ public class ChangeManager implements Disposable {
   public void dispose() {
     listeners.clear();
     clear();
+    jobsManager = null;
   }
 
   public boolean haveChanges() {

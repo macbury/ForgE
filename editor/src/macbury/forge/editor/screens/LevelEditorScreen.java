@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import macbury.forge.ForgE;
+import macbury.forge.editor.parell.JobManager;
 import macbury.forge.editor.systems.SelectionSystem;
 import macbury.forge.editor.undo_redo.ChangeManager;
 import macbury.forge.graphics.camera.RTSCameraController;
@@ -31,9 +32,12 @@ public class LevelEditorScreen extends AbstractScreen {
   public ChangeManager changeManager;
   private DecalBatch decalBatch;
   private Array<ForgeAfterRenderListener> afterRenderListenerArray = new Array<ForgeAfterRenderListener>();
-  public LevelEditorScreen(LevelState state) {
+  private boolean pause = false;
+
+  public LevelEditorScreen(LevelState state, JobManager jobs) {
     super();
     this.state = state;
+    this.changeManager        = new ChangeManager(jobs);
   }
 
   @Override
@@ -41,7 +45,7 @@ public class LevelEditorScreen extends AbstractScreen {
     GLProfiler.enable();
     this.overlay              = new Overlay();
     this.stage                = new Stage();
-    this.changeManager        = new ChangeManager();
+
     this.level                = new Level(state, new DynamicGeometryProvider(state.terrainMap));
     this.selectionSystem      = new SelectionSystem(level);
     this.cameraController     = new RTSCameraController();
@@ -55,11 +59,7 @@ public class LevelEditorScreen extends AbstractScreen {
     selectionSystem.setOverlay(overlay);
     level.entities.addSystem(selectionSystem);
     level.entities.psychics.disable();
-
-
     stage.addActor(overlay);
-
-
   }
 
   public void addAfterRenderListener(ForgeAfterRenderListener listener) {
@@ -72,16 +72,17 @@ public class LevelEditorScreen extends AbstractScreen {
 
   @Override
   public void render(float delta) {
-    ForgE.assets.loadPendingInChunks();
-    stage.act(delta);
-    cameraController.update(delta);
-    level.render(delta);
-    stage.draw();
+    if (!pause) {
+      ForgE.assets.loadPendingInChunks();
+      stage.act(delta);
+      cameraController.update(delta);
+      level.render(delta);
+      stage.draw();
 
-    for (int i = 0; i < afterRenderListenerArray.size; i++) {
-      afterRenderListenerArray.get(i).forgeAfterRenderCallback(this);
+      for (int i = 0; i < afterRenderListenerArray.size; i++) {
+        afterRenderListenerArray.get(i).forgeAfterRenderCallback(this);
+      }
     }
-
     GLProfiler.reset();
   }
 
@@ -106,12 +107,12 @@ public class LevelEditorScreen extends AbstractScreen {
 
   @Override
   public void pause() {
-
+    this.pause = true;
   }
 
   @Override
   public void resume() {
-
+    this.pause = false;
   }
 
   @Override

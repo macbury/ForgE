@@ -9,8 +9,8 @@ import macbury.forge.level.LevelState;
  */
 public class NewLevelJob extends Job<LevelState> {
 
-  private final LevelState state;
-  private final String storeDir;
+  private LevelState state;
+  private  String storeDir;
 
   public NewLevelJob(LevelState state, String storeDir) {
     super(LevelState.class);
@@ -34,5 +34,11 @@ public class NewLevelJob extends Job<LevelState> {
     state.bootstrap();
     ForgE.levels.save(state, storeDir);
     return state;
+  }
+
+  @Override
+  public void dispose() {
+    state = null;
+    storeDir = null;
   }
 }

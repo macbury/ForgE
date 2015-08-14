@@ -9,7 +9,7 @@ import macbury.forge.level.LevelState;
  */
 public class SaveLevelStateJob extends Job<LevelState> {
 
-  private final LevelState state;
+  private LevelState state;
 
   public SaveLevelStateJob(LevelState state) {
     super(LevelState.class);
@@ -30,5 +30,10 @@ public class SaveLevelStateJob extends Job<LevelState> {
   public LevelState perform() {
     ForgE.levels.save(state);
     return state;
+  }
+
+  @Override
+  public void dispose() {
+    state = null;
   }
 }

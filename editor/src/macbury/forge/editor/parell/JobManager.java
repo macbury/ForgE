@@ -66,6 +66,7 @@ public class JobManager extends Thread {
         onJobError(currentJob, jobError);
       }
       onJobFinish(currentJob);
+      currentJob.dispose();
       currentJob = null;
     }
     return pushedJobs;
