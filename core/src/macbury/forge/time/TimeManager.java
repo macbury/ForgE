@@ -13,6 +13,7 @@ import java.util.Date;
 public class TimeManager implements Disposable {
   private static final float SATELITE_START_ROTATION = 10;
   private static final float SATELITE_END_ROTATION = -190;
+
   private float duration;
   private long days;
   public static final float HOUR_IN_SECONDS   = 60 * 60;
@@ -22,12 +23,13 @@ public class TimeManager implements Disposable {
   public static final float DAY_END_HOUR      = 20 * HOUR_IN_SECONDS + 35 * MINUTE_IN_SECONDS;
   public static final float DAY_LENGTH        = DAY_END_HOUR - DAY_START_HOUR;
   public static final float NIGHT_LENGTH      = DAY_IN_SECONDS - DAY_END_HOUR + DAY_START_HOUR;
+  public static final float DEFAULT_TIME      = 8 * HOUR_IN_SECONDS;
   private float sateliteRotation;
   private float sateliteProgress;
 
   public TimeManager() {
-    this.duration = 8 * HOUR_IN_SECONDS;
-    days += 1;
+    this.duration = DEFAULT_TIME;
+    days          = 1;
   }
 
   public void update() {

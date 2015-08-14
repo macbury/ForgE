@@ -79,6 +79,8 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
     timeScrollContainer.add(currentTimeLabel, BorderLayout.NORTH);
 
     this.timeScroll = new JScrollBar(Adjustable.HORIZONTAL);
+    timeScroll.setMaximum((int) TimeManager.DAY_IN_SECONDS);
+    timeScroll.setValue((int)TimeManager.DEFAULT_TIME);
     timeScrollContainer.add(timeScroll, BorderLayout.SOUTH);
 
     timeScroll.addAdjustmentListener(this);
@@ -105,7 +107,6 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
 
     mainToolbar.add(timeScrollContainer);
     mainToolbar.add(Box.createHorizontalGlue());
-
 
     updateRedoUndoButtons();
 
