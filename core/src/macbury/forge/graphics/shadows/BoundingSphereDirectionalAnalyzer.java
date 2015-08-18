@@ -18,13 +18,16 @@ public class BoundingSphereDirectionalAnalyzer implements DirectionalAnalyzer {
   private Vector3 tmpV = new Vector3();
   private Vector3 tmpV2 = new Vector3();
 
+
   @Override
   public DirectionalResult analyze (Frustum frustum, Vector3 direction) {
     bb.inf();
     for(int i = 0; i < frustum.planePoints.length; i++) {
       bb.ext(frustum.planePoints[i]);
     }
-    //bb.getBoundingSphere(sphere);
+
+    bb.getCenter(sphere.center);
+    sphere.radius = bb.getDimensions(tmpV).len() * 0.5f;
 
     // Position at sphere center
     tmpV.set(sphere.center);
