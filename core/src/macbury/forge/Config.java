@@ -21,7 +21,7 @@ public class Config {
 
   public int reflectionBufferSize    = 512;
   public int refractionBufferSize    = 512;
-  public int shadowMapSize           = 1024;
+  public int shadowMapSize           = 512;
 
   public boolean generateWireframe   = false;
   public boolean debug               = false;
