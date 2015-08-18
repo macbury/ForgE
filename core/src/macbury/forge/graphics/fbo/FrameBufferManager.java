@@ -97,7 +97,7 @@ public class FrameBufferManager implements Disposable {
     if (screenQuad != null)
       return;
     screenQuad = new Mesh(true, 4, 6, new VertexAttribute(VertexAttributes.Usage.Position, 3,
-      "a_position"), new VertexAttribute(VertexAttributes.Usage.Color, 4, "a_color"),
+      "a_position"), new VertexAttribute(VertexAttributes.Usage.ColorUnpacked, 4, "a_color"),
       new VertexAttribute(VertexAttributes.Usage.TextureCoordinates, 2, "a_texCoords"));
 
     Vector3 vec0 = new Vector3(0, 0, 0);

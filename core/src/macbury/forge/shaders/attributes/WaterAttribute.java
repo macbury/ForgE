@@ -17,4 +17,10 @@ public class WaterAttribute extends Attribute {
   public Attribute copy() {
     return new WaterAttribute();
   }
+
+  @Override
+  public int compareTo(Attribute o) {
+    if (type != o.type) return type < o.type ? -1 : 1;
+    return 0;
+  }
 }

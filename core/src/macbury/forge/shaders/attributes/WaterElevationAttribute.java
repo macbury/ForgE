@@ -22,5 +22,11 @@ public class WaterElevationAttribute  extends Attribute {
   public Attribute copy() {
     return new WaterElevationAttribute(height);
   }
+
+  @Override
+  public int compareTo(Attribute o) {
+    if (type != o.type) return type < o.type ? -1 : 1;
+    return 0;
+  }
 }
 
