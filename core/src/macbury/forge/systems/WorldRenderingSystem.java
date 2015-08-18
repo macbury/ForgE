@@ -75,10 +75,10 @@ public class WorldRenderingSystem extends EntitySystem {
   }
 
   private void renderReflections() {
-    env.water.clipMode  = LevelEnv.ClipMode.Reflection;
-    float cacheFar      = mainCamera.far;
-    mainCamera.far      = cacheFar / 2;
-    float distance      = 2 * (mainCamera.position.y - env.water.getElevationWithWaterBlockHeight());
+    env.water.clipMode      = LevelEnv.ClipMode.Reflection;
+    float cacheFar          = mainCamera.far;
+    mainCamera.far          = cacheFar / 2;
+    float distance          = 2 * (mainCamera.position.y - env.water.getElevationWithWaterBlockHeight());
     mainCamera.position.y   -= distance;
     CameraUtils.invertPitch(mainCamera);
     mainCamera.update(true);
