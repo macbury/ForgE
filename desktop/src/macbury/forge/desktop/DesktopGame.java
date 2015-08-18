@@ -19,32 +19,18 @@ import javax.swing.*;
  * Created by macbury on 24.03.15.
  */
 public class DesktopGame implements ForgEBootListener, Thread.UncaughtExceptionHandler {
-  private final ArgsParser args;
-
   public DesktopGame(String[] arg) {
     SwingThemeHelper.useGTK();
 
-    this.args = new ArgsParser(arg);
     Thread.setDefaultUncaughtExceptionHandler(this);
+    Config forgeConfig                   = Config.load("game");
     LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
     config.resizable      = false;
     config.foregroundFPS  = 30;
 
-    if (args.fullscreen) {
-      config.width          = 1920;
-      config.height         = 1080;
-      config.fullscreen     = true;
-    } else {
-      config.width          = 1360;
-      config.height         = 768;
-      config.fullscreen     = false;
-    }
-
-    Config forgeConfig            = new Config();
-    forgeConfig.debug             = false;
-    forgeConfig.renderBulletDebug = true;
-    forgeConfig.renderBoundingBox = true;
-    //forgeConfig.cacheGeometry = true; //TODO: check in terrain engine if there is geometry in file
+    config.width          = forgeConfig.resolutionWidth;
+    config.height         = forgeConfig.resolutionHeight;
+    config.fullscreen     = forgeConfig.fullscreen;
 
     ForgE engine              = new ForgE(forgeConfig);
     engine.addBootListener(this);

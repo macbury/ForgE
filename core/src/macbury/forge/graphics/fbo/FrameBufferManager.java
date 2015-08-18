@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -144,7 +143,7 @@ public class FrameBufferManager implements Disposable {
     create(Fbo.FRAMEBUFFER_MAIN_COLOR);
     create(Fbo.FRAMEBUFFER_REFLECTIONS, Pixmap.Format.RGBA8888, ForgE.config.reflectionBufferSize, ForgE.config.reflectionBufferSize, true);
     create(Fbo.FRAMEBUFFER_REFRACTIONS, Pixmap.Format.RGBA8888, ForgE.config.refractionBufferSize, ForgE.config.refractionBufferSize, true);
-    create(Fbo.FRAMEBUFFER_SUN_DEPTH, Pixmap.Format.RGBA8888, ForgE.config.depthMapSize, ForgE.config.depthMapSize, true);
+    create(Fbo.FRAMEBUFFER_SUN_DEPTH, Pixmap.Format.RGBA8888, ForgE.config.shadowMapSize, ForgE.config.shadowMapSize, true);
   }
 
   public ObjectMap<String, FrameBuffer> all() {

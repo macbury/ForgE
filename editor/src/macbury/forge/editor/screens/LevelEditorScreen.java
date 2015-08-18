@@ -64,8 +64,7 @@ public class LevelEditorScreen extends AbstractScreen {
     stage.addActor(overlay);
 
 
-    //stage.addActor(DebugFrameBufferResult.build(Fbo.FRAMEBUFFER_REFLECTIONS, 256, 0, 0));
-    //stage.addActor(DebugFrameBufferResult.build(Fbo.FRAMEBUFFER_REFRACTIONS, 256, 256, 0));
+
   }
 
   public void addAfterRenderListener(ForgeAfterRenderListener listener) {

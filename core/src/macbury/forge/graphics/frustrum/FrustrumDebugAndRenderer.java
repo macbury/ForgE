@@ -5,6 +5,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.ForgE;
@@ -40,23 +41,22 @@ public class FrustrumDebugAndRenderer  extends InputAdapter implements Disposabl
       return;
     }
     renderer.setProjectionMatrix(camera.combined);
-    renderer.begin(ShapeRenderer.ShapeType.Line);
-    renderer.setColor(Color.WHITE);
+    renderer.begin(ShapeRenderer.ShapeType.Line); {
+      renderer.setColor(Color.WHITE);
 
-    for (ICamera frustrumCamera : cameras) {
-      for(int sequence = 0; sequence < RENDER_SEQUENCE.length; sequence++) {
-        for(int index = 1; index < RENDER_SEQUENCE[sequence].length; index+=2) {
-          short a = RENDER_SEQUENCE[sequence][index];
-          short b = RENDER_SEQUENCE[sequence][index-1];
-
-          renderer.line(frustrumCamera.getDebugFrustrum().planePoints[a], frustrumCamera.getDebugFrustrum().planePoints[b]);
+      for (ICamera frustrumCamera : cameras) {
+        for (int sequence = 0; sequence < RENDER_SEQUENCE.length; sequence++) {
+          for (int index = 1; index < RENDER_SEQUENCE[sequence].length; index += 2) {
+            short a = RENDER_SEQUENCE[sequence][index];
+            short b = RENDER_SEQUENCE[sequence][index - 1];
+            Vector3 aPoint = frustrumCamera.getDebugFrustrum().planePoints[a];
+            Vector3 bPoint = frustrumCamera.getDebugFrustrum().planePoints[b];
+            renderer.line(bPoint, aPoint);
+          }
         }
       }
-    }
 
-
-
-    renderer.end();
+    } renderer.end();
   }
 
   @Override

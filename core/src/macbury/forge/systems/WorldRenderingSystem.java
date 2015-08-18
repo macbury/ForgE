@@ -12,6 +12,7 @@ import macbury.forge.ForgE;
 import macbury.forge.components.PositionComponent;
 import macbury.forge.components.RenderableComponent;
 import macbury.forge.graphics.camera.ICamera;
+import macbury.forge.graphics.light.OrthographicDirectionalLight;
 import macbury.forge.graphics.skybox.Skybox;
 import macbury.forge.graphics.batch.VoxelBatch;
 import macbury.forge.graphics.camera.GameCamera;
@@ -65,66 +66,77 @@ public class WorldRenderingSystem extends EntitySystem {
   }
 
   private void renderSunDepth() {
-    env.water.clipMode = LevelEnv.ClipMode.None;
-    env.mainLight.update(mainCamera);
-    renderBucketWith(false, false, Fbo.FRAMEBUFFER_SUN_DEPTH, env.mainLight.getShadowCamera());
+    env.water.clipMode                    = LevelEnv.ClipMode.None;
+    OrthographicDirectionalLight sunLight = env.mainLight;
+    sunLight.update(mainCamera);
+    ForgE.fb.begin(Fbo.FRAMEBUFFER_SUN_DEPTH); {
+      renderBucketWith(false, false, sunLight.getShadowCamera());
+    } ForgE.fb.end();
   }
 
   private void renderReflections() {
     env.water.clipMode  = LevelEnv.ClipMode.Reflection;
+    float cacheFar      = mainCamera.far;
+    mainCamera.far      = cacheFar / 2;
     float distance      = 2 * (mainCamera.position.y - env.water.getElevationWithWaterBlockHeight());
     mainCamera.position.y   -= distance;
     CameraUtils.invertPitch(mainCamera);
+    mainCamera.update(true);
+    ForgE.fb.begin(Fbo.FRAMEBUFFER_REFLECTIONS); {
+      renderBucketWith(true, false, mainCamera);
+    } ForgE.fb.end();
 
-    renderBucketWith(true, false, Fbo.FRAMEBUFFER_REFLECTIONS, mainCamera);
     mainCamera.position.y   += distance;
     CameraUtils.invertPitch(mainCamera);
+    mainCamera.far = cacheFar;
   }
 
   private void renderRefractions() {
     env.water.clipMode = LevelEnv.ClipMode.Refraction;
-    renderBucketWith(false, false, Fbo.FRAMEBUFFER_REFRACTIONS, mainCamera);
+    ForgE.fb.begin(Fbo.FRAMEBUFFER_REFRACTIONS); {
+      renderBucketWith(false, false, mainCamera);
+    } ForgE.fb.end();
   }
 
   private void renderFinal() {
     env.water.clipMode = LevelEnv.ClipMode.None;
-    renderBucketWith(true, true, Fbo.FRAMEBUFFER_MAIN_COLOR, mainCamera);
+    ForgE.fb.begin(Fbo.FRAMEBUFFER_MAIN_COLOR); {
+      renderBucketWith(true, true, mainCamera);
+    } ForgE.fb.end();
   }
 
-  private void renderBucketWith(boolean withSkybox, boolean withWater, String fbo, ICamera camera) {
-    ForgE.fb.begin(fbo); {
-      finalBucket.clear();
-      octreeVisibleObjects.clear();
-      camera.extendFov(); {
-        terrain.occulsion(camera);//TODO: change!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        frustrumOctreeQuery.setFrustum(camera.normalOrDebugFrustrum());//TODO: change!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        octree.retrieve(octreeVisibleObjects, frustrumOctreeQuery);
-      } camera.restoreFov();
+  private void renderBucketWith(boolean withSkybox, boolean withWater, ICamera camera) {
+    finalBucket.clear();
+    octreeVisibleObjects.clear();
+    camera.extendFov(); {
+      terrain.occulsion(camera);//TODO: change!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      frustrumOctreeQuery.setFrustum(camera.normalOrDebugFrustrum());//TODO: change!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      octree.retrieve(octreeVisibleObjects, frustrumOctreeQuery);
+    } camera.restoreFov();
 
-      for (int i = 0; i < octreeVisibleObjects.size; i++) {
-        PositionComponent position = (PositionComponent) octreeVisibleObjects.get(i);
-        if (position.entity != null && rm.has(position.entity)) {
-          RenderableComponent renderable = rm.get(position.entity);
-          ModelInstance modelInstance    = renderable.getModelInstance();
+    for (int i = 0; i < octreeVisibleObjects.size; i++) {
+      PositionComponent position = (PositionComponent) octreeVisibleObjects.get(i);
+      if (position.entity != null && rm.has(position.entity)) {
+        RenderableComponent renderable = rm.get(position.entity);
+        ModelInstance modelInstance    = renderable.getModelInstance();
 
-          position.applyWorldTransform(modelInstance.transform);
-          finalBucket.add(modelInstance);
-        }
+        position.applyWorldTransform(modelInstance.transform);
+        finalBucket.add(modelInstance);
+      }
+    }
+
+    batch.begin((Camera)camera); {
+      ForgE.graphics.clearAll(env.skyColor);
+      if (withSkybox){
+        skybox.render(batch, env, (Camera)camera);
       }
 
-      batch.begin((Camera)camera); {
-        ForgE.graphics.clearAll(env.skyColor);
-        if (withSkybox){
-          skybox.render(batch, env, (Camera)camera);
-        }
-
-        batch.pushAll(terrain.visibleTerrainFaces);
-        if (withWater)
-          batch.pushAll(terrain.visibleWaterFaces);
-        batch.addAll(finalBucket);
-        batch.render(env);
-      } batch.end();
-    } ForgE.fb.end();
+      batch.pushAll(terrain.visibleTerrainFaces);
+      if (withWater)
+        batch.pushAll(terrain.visibleWaterFaces);
+      batch.addAll(finalBucket);
+      batch.render(env);
+    } batch.end();
   }
 
   public void processEntity(Entity entity, float deltaTime) {

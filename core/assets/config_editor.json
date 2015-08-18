@@ -1,0 +1,6 @@
+{
+  generateWireframe: true,
+  renderStaticOctree: false,
+  renderBoundingBox: false,
+  debug: true,
+}

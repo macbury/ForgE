@@ -3,6 +3,7 @@ package macbury.forge.editor.windows;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglAWTCanvas;
 import com.badlogic.gdx.backends.lwjgl.LwjglAWTInput;
+import com.badlogic.gdx.utils.Json;
 import com.ezware.dialog.task.TaskDialogs;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -109,12 +110,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     this.inputProcessor = new GdxSwingInputProcessor();
 
     this.jobs = new JobManager();
-    Config config = new Config();
-    config.generateWireframe = true;
-    config.renderStaticOctree = false;
-    config.renderBoundingBox = false;
-    config.debug = true;
-
+    Config config = Config.load("editor");
     engine = new ForgE(config);
 
     blocksController = new BlocksController(blockList, directoryWatcher, jobs, (ImagePanel) panelPrimaryBlock, (ImagePanel) panelSecondaryBlock);

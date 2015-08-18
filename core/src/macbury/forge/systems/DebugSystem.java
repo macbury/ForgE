@@ -64,9 +64,7 @@ public class DebugSystem extends IteratingSystem implements Disposable {
     this.frustrumDebugger = level.frustrumDebugger;
     this.tempBox          = new BoundingBox();
     this.tempVec          = new Vector3();
-
   }
-
 
   @Override
   public boolean checkProcessing() {
