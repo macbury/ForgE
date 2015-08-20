@@ -1,4 +1,4 @@
-package macbury.forge.shaders;
+package macbury.forge.shaders.providers;
 
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.utils.Array;

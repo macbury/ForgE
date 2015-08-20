@@ -1,6 +1,6 @@
 {
   class: macbury.forge.shaders.TerrainShader,
-  
+  depth: "terrain-depthmap",
   fragment: "terrain",
   vertex:   "terrain",
   structs: [

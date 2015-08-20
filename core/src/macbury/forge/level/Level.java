@@ -14,9 +14,10 @@ import macbury.forge.graphics.fbo.Fbo;
 import macbury.forge.graphics.frustrum.FrustrumDebugAndRenderer;
 import macbury.forge.level.env.LevelEnv;
 import macbury.forge.octree.OctreeNode;
+import macbury.forge.shaders.providers.DepthShaderProvider;
+import macbury.forge.shaders.providers.ShaderProvider;
 import macbury.forge.systems.engine.EntitySystemsManager;
 import macbury.forge.terrain.TerrainEngine;
-import macbury.forge.terrain.geometry.DynamicGeometryProvider;
 import macbury.forge.terrain.geometry.TerrainGeometryProvider;
 import macbury.forge.ui.DebugFrameBufferResult;
 import macbury.forge.ui.FullScreenFrameBufferResult;
@@ -30,6 +31,8 @@ public class Level implements Disposable {
   public final EntitySystemsManager entities;
   public final GameCamera               camera;
   public final VoxelBatch               batch;
+  public final ShaderProvider           colorShaderProvider;
+  public final DepthShaderProvider depthShaderProvider;
   public ChunkMap                 terrainMap;
   public LevelState               state;
   /**
@@ -47,6 +50,8 @@ public class Level implements Disposable {
   public final TerrainGeometryProvider terrainGeometryProvider;
 
   public Level(LevelState state, TerrainGeometryProvider geometryProvider) {
+    this.colorShaderProvider      = new ShaderProvider();
+    this.depthShaderProvider      = new DepthShaderProvider();
     this.ui                       = new Stage(new ScreenViewport());
     this.env                      = state.env;
     this.state                    = state;
@@ -56,7 +61,7 @@ public class Level implements Disposable {
 
     this.octree                   = OctreeNode.root();
 
-    this.batch                    = new VoxelBatch(renderContext);
+    this.batch                    = new VoxelBatch(renderContext, colorShaderProvider);
     this.camera                   = new GameCamera();
     this.frustrumDebugger         = new FrustrumDebugAndRenderer();
     frustrumDebugger.add(camera);
@@ -107,6 +112,8 @@ public class Level implements Disposable {
     state.dispose();
     state = null;
     terrainMap = null;
+    colorShaderProvider.dispose();
+    depthShaderProvider.dispose();
   }
 
 }

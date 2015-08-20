@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import macbury.forge.ForgE;
 import macbury.forge.level.env.LevelEnv;
+import macbury.forge.shaders.DepthShader;
 import macbury.forge.shaders.ShaderError;
 
 import java.io.File;
@@ -38,7 +39,7 @@ public abstract class BaseShader implements Disposable {
   private String uniformsSrc = "";
   private String name;
   private String depth;
-  private BaseShader depthShader;
+  private DepthShader depthShader;
   private ShaderError currentError;
 
   public boolean load(ShadersManager manager) {
@@ -209,6 +210,10 @@ public abstract class BaseShader implements Disposable {
     localUniforms  = null;
   }
 
+  public DepthShader getDepthShader() {
+    return depthShader;
+  }
+
   public void setName(String name) {
     this.name = name;
   }
@@ -227,7 +232,7 @@ public abstract class BaseShader implements Disposable {
 
   public void assignDepthShader(ShadersManager shaderProvider) {
     if (depth != null) {
-      depthShader = shaderProvider.get(depth);
+      depthShader = (DepthShader)shaderProvider.get(depth);
       if (depthShader == null) {
         throw new GdxRuntimeException("Could not find depth shader: " + depth + " for " + name);
       }

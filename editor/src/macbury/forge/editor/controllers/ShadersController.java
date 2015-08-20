@@ -4,6 +4,7 @@ import bibliothek.gui.dock.common.DefaultSingleCDockable;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonWriter;
 import macbury.forge.ForgE;
 import macbury.forge.editor.reloader.DirectoryWatchJob;
 import macbury.forge.editor.reloader.DirectoryWatcher;
@@ -16,6 +17,7 @@ import macbury.forge.utils.FileForgeUtils;
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import java.awt.*;
+import java.io.StringWriter;
 
 /**
  * Created by macbury on 12.11.14.
@@ -26,7 +28,7 @@ public class ShadersController implements DirectoryWatchJob.DirectoryWatchJobLis
   private final MainWindow mainWindow;
   private DefaultSingleCDockable dockable;
 
-  private final static String VERT_TEMPLATE = "void main() {\n" +
+  private final static String VERT_TEMPLATE = "attribute vec4 a_position; \nvoid main() {\n" +
       "  gl_Position       = u_projectionMatrix * u_worldTransform * a_position;\n" +
       "}";
   private final static String FRAG_TEMPLATE = "void main() {\n" +
@@ -99,6 +101,40 @@ public class ShadersController implements DirectoryWatchJob.DirectoryWatchJobLis
     } else {
       FileForgeUtils.writeString(fragFile, FRAG_TEMPLATE);
       FileForgeUtils.writeString(vertFile, VERT_TEMPLATE);
+      FileForgeUtils.writeString(jsonFile, generateJsonTemplate(shaderName));
+
     }
+  }
+
+  private String generateJsonTemplate(String shaderName) {
+    StringWriter stringWriter = new StringWriter();
+    Json json = new Json(JsonWriter.OutputType.javascript);
+    json.setWriter(stringWriter);
+    json.writeObjectStart(); {
+      json.writeValue("class", macbury.forge.shaders.Default.class.getName());
+      json.writeValue("fragment", shaderName);
+      json.writeValue("vertex", shaderName);
+      json.writeArrayStart("structs"); {
+
+      } json.writeArrayEnd();
+
+      json.writeArrayStart("uniforms"); {
+        json.writeValue("ProjectionMatrix");
+        json.writeValue("WorldTransform");
+      } json.writeArrayEnd();
+
+      json.writeObjectStart("helpers"); {
+        json.writeArrayStart("vertex"); {
+
+        } json.writeArrayEnd();
+
+        json.writeArrayStart("fragment"); {
+
+        } json.writeArrayEnd();
+      } json.writeObjectEnd();
+    } json.writeObjectEnd();
+
+
+    return stringWriter.toString();
   }
 }

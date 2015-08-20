@@ -15,13 +15,12 @@ import macbury.forge.ForgE;
 import macbury.forge.assets.assets.TextureAsset;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
 import macbury.forge.graphics.batch.renderable.SpriteRenderable;
-import macbury.forge.graphics.batch.renderable.SunMonRenderable;
 import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
 import macbury.forge.graphics.batch.sprites.Sprite3D;
 import macbury.forge.graphics.batch.sprites.Sprite3DCache;
 import macbury.forge.graphics.batch.sprites.TextureSprite3D;
 import macbury.forge.level.env.LevelEnv;
-import macbury.forge.shaders.ShaderProvider;
+import macbury.forge.shaders.providers.ShaderProvider;
 import macbury.forge.shaders.utils.RenderableBaseShader;
 
 /**
@@ -31,7 +30,7 @@ public class VoxelBatch implements Disposable {
   public final ShapeRenderer shapeRenderer;
   private final SpriteRenderablePool spriteRenderablePool;
   private final CameraRenderableSorter sorter;
-  private final ShaderProvider shaderProvider;
+  private ShaderProvider shaderProvider;
   private final Array<Sprite3DCache> spriteCache;
   private final RenderablePool renderablePool;
   public long trianglesPerFrame;
@@ -41,9 +40,9 @@ public class VoxelBatch implements Disposable {
   private boolean sorted;
   public int renderablesPerFrame;
 
-  public VoxelBatch(RenderContext customRenderContext) {
+  public VoxelBatch(RenderContext customRenderContext, ShaderProvider shaderProvider) {
     this.context              = customRenderContext;
-    this.shaderProvider       = new ShaderProvider();
+    this.shaderProvider       = shaderProvider;
     this.shapeRenderer        = new ShapeRenderer();
     this.sorter               = new CameraRenderableSorter();
     this.spriteRenderablePool = new SpriteRenderablePool();
@@ -51,6 +50,10 @@ public class VoxelBatch implements Disposable {
     this.renderablePool       = new RenderablePool();
     renderablesPerFrame       = 0;
     trianglesPerFrame         = 0;
+  }
+
+  public void setShaderProvider(ShaderProvider shaderProvider) {
+    this.shaderProvider = shaderProvider;
   }
 
   public Sprite3D build(TextureAsset asset, boolean isStatic, boolean transparent) {
@@ -153,17 +156,18 @@ public class VoxelBatch implements Disposable {
     RenderableBaseShader currentRenderableShader = null;
     for (int i = 0; i < renderables.size; i++) {
       final Renderable renderable = renderables.get(i);
-      currentRenderableShader         = shaderProvider.provide(renderable);
+      currentRenderableShader     = shaderProvider.provide(renderable);
 
-      if (currentShader != currentRenderableShader) {
-        if (currentShader != null) currentShader.end();
-        currentShader = currentRenderableShader;
-        currentShader.begin(camera, context, env);
-      }
-      currentShader.render(renderable);
-      //trianglesPerFrame += renderable.triangleCount;
-      if (SpriteRenderable.class.isInstance(renderable)) {
-        spriteRenderablePool.free((SpriteRenderable)renderable);
+      if (currentRenderableShader != null) {
+        if (currentShader != currentRenderableShader) {
+          if (currentShader != null) currentShader.end();
+          currentShader = currentRenderableShader;
+          currentShader.begin(camera, context, env);
+        }
+        currentShader.render(renderable);
+        if (SpriteRenderable.class.isInstance(renderable)) {
+          spriteRenderablePool.free((SpriteRenderable)renderable);
+        }
       }
     }
 
@@ -194,6 +198,7 @@ public class VoxelBatch implements Disposable {
     spriteCache.clear();
     renderablePool.clear();
     camera = null;
+    shaderProvider = null;
   }
 
 

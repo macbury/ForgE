@@ -2,6 +2,8 @@ package macbury.forge.editor.controllers.resources;
 
 import macbury.forge.ForgE;
 import macbury.forge.shaders.utils.BaseShader;
+import macbury.forge.shaders.utils.ShaderReloadListener;
+import macbury.forge.shaders.utils.ShadersManager;
 
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.*;
@@ -35,12 +37,28 @@ public class ResourcesModel extends DefaultTreeModel {
     }
   }
 
-  public class GameShadersFolderNode extends BaseGameFolderNode {
+  public class GameShadersFolderNode extends BaseGameFolderNode implements ShaderReloadListener {
     public GameShadersFolderNode() {
       super("Shaders");
+      ForgE.shaders.addOnShaderReloadListener(this);
+      rebuildTree();
+    }
+
+    public void rebuildTree() {
+      removeAllChildren();
       for (BaseShader shader : ForgE.shaders.all()) {
         add(new GameShaderNode(shader.getName()));
       }
+    }
+
+    @Override
+    public void onShadersReload(ShadersManager shaderManager) {
+
+    }
+
+    @Override
+    public void onShaderError(ShadersManager shaderManager, BaseShader program) {
+
     }
   }
 

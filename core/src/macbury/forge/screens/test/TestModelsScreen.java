@@ -50,7 +50,7 @@ public class TestModelsScreen extends AbstractScreen {
 
 
     this.modelBatch        = new ModelBatch();
-    this.voxelBatch        = new VoxelBatch(new RenderContext(new DefaultTextureBinder(DefaultTextureBinder.WEIGHTED)));
+    //this.voxelBatch        = new VoxelBatch(new RenderContext(new DefaultTextureBinder(DefaultTextureBinder.WEIGHTED)));
     ModelLoader g3djLoader = new G3dModelLoader(new UBJsonReader());
     model                  = g3djLoader.loadModel(Gdx.files.internal("raw-models/test.g3db"));
 

@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.RenderableProvider;
 import com.badlogic.gdx.math.Vector3;
@@ -22,6 +23,8 @@ import macbury.forge.level.env.LevelEnv;
 import macbury.forge.octree.OctreeNode;
 import macbury.forge.octree.OctreeObject;
 import macbury.forge.octree.query.FrustrumClassFilterOctreeQuery;
+import macbury.forge.shaders.providers.DepthShaderProvider;
+import macbury.forge.shaders.providers.ShaderProvider;
 import macbury.forge.terrain.TerrainEngine;
 import macbury.forge.utils.CameraUtils;
 
@@ -36,6 +39,8 @@ public class WorldRenderingSystem extends EntitySystem {
   private final OctreeNode octree;
 
   private final FrustrumClassFilterOctreeQuery frustrumOctreeQuery = new FrustrumClassFilterOctreeQuery();
+  private ShaderProvider colorShaderProvider;
+  private DepthShaderProvider depthShaderProvider;
   private ComponentMapper<PositionComponent>   pm = ComponentMapper.getFor(PositionComponent.class);
   private ComponentMapper<RenderableComponent> rm = ComponentMapper.getFor(RenderableComponent.class);
   private VoxelBatch batch;
@@ -48,6 +53,8 @@ public class WorldRenderingSystem extends EntitySystem {
 
     this.terrain                = level.terrainEngine;
     this.batch                  = level.batch;
+    this.colorShaderProvider    = level.colorShaderProvider;
+    this.depthShaderProvider    = level.depthShaderProvider;
     this.env                    = level.env;
     this.mainCamera             = level.camera;
     this.skybox                 = level.env.skybox;
@@ -58,7 +65,10 @@ public class WorldRenderingSystem extends EntitySystem {
 
   @Override
   public void update(float deltaTime) {
+    batch.setShaderProvider(depthShaderProvider);
     renderSunDepth();
+
+    batch.setShaderProvider(colorShaderProvider);
     renderReflections();
     renderRefractions();
 
@@ -68,10 +78,10 @@ public class WorldRenderingSystem extends EntitySystem {
   private void renderSunDepth() {
     env.water.clipMode                    = LevelEnv.ClipMode.None;
     OrthographicDirectionalLight sunLight = env.mainLight;
-    float cacheFar          = mainCamera.far;
-    mainCamera.far          = cacheFar / 2;
+    //float cacheFar          = mainCamera.far;
+    //mainCamera.far          = cacheFar / 2;
     sunLight.update(mainCamera);
-    mainCamera.far          = cacheFar ;
+   // mainCamera.far          = cacheFar ;
     ForgE.fb.begin(Fbo.FRAMEBUFFER_SUN_DEPTH); {
       renderBucketWith(false, false, sunLight.getShadowCamera());
     } ForgE.fb.end();
@@ -129,9 +139,11 @@ public class WorldRenderingSystem extends EntitySystem {
     }
 
     batch.begin((Camera)camera); {
-      ForgE.graphics.clearAll(env.skyColor);
       if (withSkybox){
+        ForgE.graphics.clearAll(env.skyColor);
         skybox.render(batch, env, (Camera)camera);
+      } else {
+        ForgE.graphics.clearAll(Color.CLEAR);
       }
 
       batch.pushAll(terrain.visibleTerrainFaces);

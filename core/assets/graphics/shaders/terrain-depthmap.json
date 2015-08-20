@@ -1,0 +1,16 @@
+{
+  class:    "macbury.forge.shaders.DepthShader",
+  fragment: "terrain-depthmap",
+  vertex:   "terrain-depthmap",
+  structs:[
+
+  ],
+  uniforms: [
+    "ProjectionMatrix",
+    "WorldTransform"
+  ],
+  helpers:{
+    vertex:[],
+    fragment:[]
+  }
+}
