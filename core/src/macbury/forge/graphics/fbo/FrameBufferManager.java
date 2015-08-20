@@ -31,7 +31,7 @@ public class FrameBufferManager implements Disposable {
   }
 
   public FrameBuffer create(String fbIdn) {
-    return create(fbIdn, Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
+    return create(fbIdn, Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true, Texture.TextureWrap.Repeat);
   }
 
   public FrameBuffer get(String key) {
@@ -75,7 +75,7 @@ public class FrameBufferManager implements Disposable {
    * @param fbHeight - desired height
    * @param hasDepth - whether to attach depth buffer
    */
-  public FrameBuffer create(String fbIdn, Pixmap.Format format, int fbWidth, int fbHeight, boolean hasDepth) {
+  public FrameBuffer create(String fbIdn, Pixmap.Format format, int fbWidth, int fbHeight, boolean hasDepth, Texture.TextureWrap textureWrap) {
     FrameBuffer fb = frameBuffers.get(fbIdn);
 
     if (fb == null || fb.getWidth() != fbWidth || fb.getHeight() != fbHeight) {
@@ -85,7 +85,8 @@ public class FrameBufferManager implements Disposable {
       Gdx.app.log(TAG, "Creating framebuffer: " + fbIdn);
       fb = new FrameBuffer(format, fbWidth, fbHeight, hasDepth);
       fb.getColorBufferTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-      fb.getColorBufferTexture().setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+      fb.getColorBufferTexture().setWrap(textureWrap, textureWrap);
+
     }
     frameBuffers.put(fbIdn, fb);
     return fb;
@@ -142,9 +143,9 @@ public class FrameBufferManager implements Disposable {
 
   public void createDefaultFrameBuffers() {
     create(Fbo.FRAMEBUFFER_MAIN_COLOR);
-    create(Fbo.FRAMEBUFFER_REFLECTIONS, Pixmap.Format.RGBA8888, ForgE.config.reflectionBufferSize, ForgE.config.reflectionBufferSize, true);
-    create(Fbo.FRAMEBUFFER_REFRACTIONS, Pixmap.Format.RGBA8888, ForgE.config.refractionBufferSize, ForgE.config.refractionBufferSize, true);
-    create(Fbo.FRAMEBUFFER_SUN_DEPTH, Pixmap.Format.RGBA8888, ForgE.config.shadowMapSize, ForgE.config.shadowMapSize, true);
+    create(Fbo.FRAMEBUFFER_REFLECTIONS, Pixmap.Format.RGBA8888, ForgE.config.reflectionBufferSize, ForgE.config.reflectionBufferSize, true, Texture.TextureWrap.Repeat);
+    create(Fbo.FRAMEBUFFER_REFRACTIONS, Pixmap.Format.RGBA8888, ForgE.config.refractionBufferSize, ForgE.config.refractionBufferSize, true, Texture.TextureWrap.Repeat);
+    create(Fbo.FRAMEBUFFER_SUN_DEPTH, Pixmap.Format.RGBA8888, ForgE.config.shadowMapSize, ForgE.config.shadowMapSize, true, Texture.TextureWrap.ClampToEdge);
   }
 
   public ObjectMap<String, FrameBuffer> all() {

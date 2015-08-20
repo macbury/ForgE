@@ -58,8 +58,8 @@ public abstract class BaseShader implements Disposable {
       loadGlobalAndLocalUniforms();
     }
 
-    fragmentSrc = applyDebugPrefixes() + applyStructs() + applyUniformsSrc() + loadHelpers(FRAGMENT_HELPER_KEY) + fragmentSrc;
-    vertexSrc   = applyDebugPrefixes() + applyStructs() + applyUniformsSrc() + loadHelpers(VERTEX_HELPER_KEY) + vertexSrc;
+    fragmentSrc = applyPrecisions() + applyDebugPrefixes() + applyStructs() + applyUniformsSrc() + loadHelpers(FRAGMENT_HELPER_KEY) + fragmentSrc;
+    vertexSrc   = applyPrecisions() + applyDebugPrefixes() + applyStructs() + applyUniformsSrc() + loadHelpers(VERTEX_HELPER_KEY) + vertexSrc;
 
     ShaderProgram newShaderProgram = new ShaderProgram(vertexSrc, fragmentSrc);
     if (newShaderProgram.isCompiled()) {
@@ -70,6 +70,19 @@ public abstract class BaseShader implements Disposable {
       currentError.print();
       return false;
     }
+  }
+
+  private String applyPrecisions() {
+    return "#ifdef GL_ES \n" +
+        "#define LOWP lowp\n" +
+        "#define MED mediump\n" +
+        "#define HIGH highp\n" +
+        "precision mediump float;\n" +
+        "#else\n" +
+        "#define MED\n" +
+        "#define LOWP\n" +
+        "#define HIGH\n" +
+        "#endif\n";
   }
 
   public FileHandle getVertexFile() {

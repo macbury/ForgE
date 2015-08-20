@@ -3,10 +3,13 @@ package macbury.forge.systems;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.RenderableProvider;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import macbury.forge.ForgE;
@@ -79,18 +82,20 @@ public class WorldRenderingSystem extends EntitySystem {
     env.water.clipMode                    = LevelEnv.ClipMode.None;
     OrthographicDirectionalLight sunLight = env.mainLight;
     //float cacheFar          = mainCamera.far;
-    //mainCamera.far          = cacheFar / 2;
+    //mainCamera.far          = 10;
+    //mainCamera.update(true);
     sunLight.update(mainCamera);
-   // mainCamera.far          = cacheFar ;
     ForgE.fb.begin(Fbo.FRAMEBUFFER_SUN_DEPTH); {
       renderBucketWith(false, false, sunLight.getShadowCamera());
     } ForgE.fb.end();
+
+    //mainCamera.far          = cacheFar;
   }
 
   private void renderReflections() {
     env.water.clipMode      = LevelEnv.ClipMode.Reflection;
-    float cacheFar          = mainCamera.far;
-    mainCamera.far          = cacheFar / 2;
+    //float cacheFar          = mainCamera.far;
+    //mainCamera.far          = cacheFar / 2;
     float distance          = 2 * (mainCamera.position.y - env.water.getElevationWithWaterBlockHeight());
     mainCamera.position.y   -= distance;
     CameraUtils.invertPitch(mainCamera);
@@ -101,7 +106,7 @@ public class WorldRenderingSystem extends EntitySystem {
 
     mainCamera.position.y   += distance;
     CameraUtils.invertPitch(mainCamera);
-    mainCamera.far = cacheFar;
+    //mainCamera.far = cacheFar;
   }
 
   private void renderRefractions() {
@@ -143,7 +148,7 @@ public class WorldRenderingSystem extends EntitySystem {
         ForgE.graphics.clearAll(env.skyColor);
         skybox.render(batch, env, (Camera)camera);
       } else {
-        ForgE.graphics.clearAll(Color.CLEAR);
+        ForgE.graphics.clearAll(Color.BLACK);
       }
 
       batch.pushAll(terrain.visibleTerrainFaces);

@@ -1,6 +1,6 @@
 game.provider("$GameplayScreen", function($log, $input, $entities, $assets, $gdxApp, $time) {
   var TAG                    = "$GameplayScreen";
-  var FAR_CAMERA             = 100;
+  var FAR_CAMERA             = 70;
   var NEAR_CAMERA            = 0.01;
   var FIELD_OF_VIEW          = 70;
   function GameplayController(teleport, level) {

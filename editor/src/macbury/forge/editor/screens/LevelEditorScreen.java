@@ -24,7 +24,7 @@ import macbury.forge.ui.Overlay;
  */
 public class LevelEditorScreen extends AbstractScreen {
   private static final String TAG = "EditorScreen";
-  private static final float LEVEL_EDITOR_FAR_CAMERA = 200;
+  private static final float LEVEL_EDITOR_FAR_CAMERA = 120;
   private final LevelState state;
   public Level level;
   private Stage stage;

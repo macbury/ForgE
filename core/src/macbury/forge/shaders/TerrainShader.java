@@ -27,7 +27,7 @@ public class TerrainShader extends RenderableBaseShader<VoxelChunkRenderable> {
 
   @Override
   public void beforeRender(VoxelChunkRenderable renderable) {
-    if (renderable.haveTransparency()) {
+    if (BaseRenderable.haveTransparency(renderable.material)) {
       context.setBlending(true, GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
       context.setCullFace(GL30.GL_NONE);
     } else {

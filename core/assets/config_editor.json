@@ -3,4 +3,5 @@
   renderStaticOctree: false,
   renderBoundingBox: false,
   debug: true,
+  shadowMapSize: 1024
 }

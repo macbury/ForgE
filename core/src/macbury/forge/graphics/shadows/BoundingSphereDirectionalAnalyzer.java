@@ -27,7 +27,7 @@ public class BoundingSphereDirectionalAnalyzer implements DirectionalAnalyzer {
     }
 
     bb.getCenter(sphere.center);
-    sphere.radius = bb.getDimensions(tmpV).len() * 0.5f;
+    sphere.radius = bb.getDimensions(tmpV).len() * 0.65f;
 
     // Position at sphere center
     tmpV.set(sphere.center);
@@ -39,7 +39,7 @@ public class BoundingSphereDirectionalAnalyzer implements DirectionalAnalyzer {
     result.direction.set(direction);
     result.position.set(tmpV.sub(tmpV2));
     result.near = 0.5f*sphere.radius;
-    result.far = 2.5f*sphere.radius;
+    result.far = 2.5f*sphere.radius+0.5f;
     result.up.set(direction.y, direction.z,direction.x);
     result.viewportWidth = sphere.radius;
     result.viewportHeight = sphere.radius;

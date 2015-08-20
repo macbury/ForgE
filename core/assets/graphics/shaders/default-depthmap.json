@@ -1,0 +1,16 @@
+{
+  class:"macbury.forge.shaders.DepthShader",
+  fragment:"default-depthmap",
+  vertex:"default-depthmap",
+  structs:[],
+  uniforms:[
+    "ProjectionMatrix",
+    "WorldTransform",
+    "EyePosition",
+    "CameraFarNear"
+  ],
+  helpers:{
+    vertex:[],
+    fragment:[]
+  }
+}

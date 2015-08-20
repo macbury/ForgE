@@ -2,6 +2,7 @@
   class: macbury.forge.shaders.Default,
   fragment: "default",
   vertex:   "default",
+  depth: "default-depthmap",
   structs: [
     "DirectionalLight",
     "ClipPlane"

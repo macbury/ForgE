@@ -5,7 +5,8 @@
   vertex:   "terrain",
   structs: [
     "DirectionalLight",
-    "ClipPlane"
+    "ClipPlane",
+    "ShadowMap"
   ],
   uniforms: [
     "ProjectionMatrix",
@@ -18,7 +19,9 @@
     "Fog",
     "Sun",
     "Time",
-    "Wind"
+    "Wind",
+    "ShadowMap",
+    "CameraFarNear"
   ],
   helpers: {
     vertex: ["directional_light", "fog", "foliage"],

@@ -21,6 +21,7 @@ import macbury.forge.level.LevelState;
 import macbury.forge.shaders.utils.BaseShader;
 import macbury.forge.shaders.utils.ShaderReloadListener;
 import macbury.forge.shaders.utils.ShadersManager;
+import macbury.forge.time.TimeManager;
 import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
@@ -314,7 +315,7 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
 
   private void setState(LevelState state) {
     currentLevelState = state;
-
+    ForgE.time.setDuration(TimeManager.DEFAULT_TIME);
     ForgE.db.lastOpenedMapId = state.id;
     mainWindow.setTitle(state.name);
     ForgE.db.save();
