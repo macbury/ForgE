@@ -1,10 +1,12 @@
 package macbury.forge.editor.views;
 
+import com.badlogic.gdx.Gdx;
 import macbury.forge.Config;
 import macbury.forge.ForgE;
 import macbury.forge.editor.controllers.BlocksController;
 import macbury.forge.editor.controllers.DockFramesController;
 import macbury.forge.editor.controllers.ProjectController;
+import macbury.forge.editor.controllers.ShadersController;
 import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
 import macbury.forge.editor.screens.LevelEditorScreen;
 
@@ -22,6 +24,7 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
   private final ProjectController controller;
   private final BlocksController blocksController;
   private final DockFramesController dockFrameController;
+  private final ShadersController shadersController;
   public JCheckBoxMenuItem debugRenderDynamicOctree;
   public JCheckBoxMenuItem debugBoundingBox;
   public JRadioButtonMenuItem debugWireframeItem;
@@ -32,25 +35,47 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
   private JRadioButtonMenuItem debugNormalsItem;
   private JRadioButtonMenuItem debugLightingItem;
 
-  public MainMenu(ProjectController projectController, BlocksController blocksController, DockFramesController dockFrameController) {
+  public MainMenu(ProjectController projectController, BlocksController blocksController, DockFramesController dockFrameController, ShadersController shadersController) {
     super();
 
     this.controller = projectController;
     this.blocksController = blocksController;
     this.dockFrameController = dockFrameController;
+    this.shadersController   = shadersController;
     //add(Box.createRigidArea(new Dimension(320,28)));
   }
 
   public void createAllMenus() {
+    createCreateMenu();
     createMapMenu();
-    addSeparator();
     createDebugWindow();
-    addSeparator();
     createPiplineMenu();
-    addSeparator();
     createExportFboMenu();
     addSeparator();
     add(dockFrameController.menu.getMenu());
+  }
+
+  private void createCreateMenu() {
+    JMenu createMenu           = new JMenu("Create");
+    JMenuItem mapItem    = new JMenuItem("New map");
+    mapItem.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        controller.newMap();
+      }
+    });
+    createMenu.add(mapItem);
+
+    JMenuItem shaderItem    = new JMenuItem("New shader");
+    shaderItem.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        shadersController.newShader();
+      }
+    });
+    createMenu.add(shaderItem);
+
+    add(createMenu);
   }
 
   private void createExportFboMenu() {
@@ -60,12 +85,20 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
       item.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-          File screenshotFile = ForgE.fb.saveAsPng(frameBufferName).file();
-          try {
-            Desktop.getDesktop().open(screenshotFile);
-          } catch (IOException e1) {
-            e1.printStackTrace();
-          }
+
+          Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+              File screenshotFile = ForgE.fb.saveAsPng(frameBufferName).file();
+              try {
+                Desktop.getDesktop().open(screenshotFile);
+              } catch (IOException e1) {
+                e1.printStackTrace();
+              }
+            }
+          });
+
+
         }
       });
       fboMenu.add(item);
@@ -209,15 +242,6 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
 
 
   private void createMapMenu() {
-    JMenuItem newProjectItem    = new JMenuItem("Create a new map");
-    newProjectItem.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        controller.newMap();
-      }
-    });
-    add(newProjectItem);
-
     JMenuItem closeMapItem    = new JMenuItem("Close map");
     closeMapItem.addActionListener(new ActionListener() {
       @Override

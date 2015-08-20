@@ -74,6 +74,10 @@ public class ShadersManager {
       }
     }
 
+    for (int i = 0; i < shaderList.size; i++) {
+      shaderList.get(i).assignDepthShader(this);
+    }
+
     triggerOnShaderReload();
   }
 

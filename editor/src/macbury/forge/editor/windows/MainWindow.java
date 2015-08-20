@@ -92,7 +92,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     setContentPane(mainContentPane);
     mainContentPane.remove(mainSplitPane);
     this.directoryWatcher     = new DirectoryWatcher();
-    shadersController         = new ShadersController(directoryWatcher);
+    shadersController         = new ShadersController(directoryWatcher, this);
     terrainInspectorPanel     = new MapPropertySheet();
     this.codeEditorWindow     = new CodeEditorWindow();
     this.resourcesController  = new ResourcesController();
@@ -116,7 +116,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     blocksController = new BlocksController(blockList, directoryWatcher, jobs, (ImagePanel) panelPrimaryBlock, (ImagePanel) panelSecondaryBlock);
     this.progressTaskDialog = new ProgressTaskDialog();
     projectController = new ProjectController();
-    mainMenu = new MainMenu(projectController, blocksController, dockFrameController);
+    mainMenu = new MainMenu(projectController, blocksController, dockFrameController, shadersController);
     eventsToolsController = new EventsController(this);
     terrainToolsController = new TerrainToolsController(terrainToolsToolbar, blocksController, inputProcessor, terrainInspectorPanel);
     playerController = new PlayerController(projectController, jobs);

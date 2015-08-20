@@ -1,5 +1,6 @@
 {
   class: macbury.forge.shaders.TerrainShader,
+  
   fragment: "terrain",
   vertex:   "terrain",
   structs: [

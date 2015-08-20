@@ -68,7 +68,10 @@ public class WorldRenderingSystem extends EntitySystem {
   private void renderSunDepth() {
     env.water.clipMode                    = LevelEnv.ClipMode.None;
     OrthographicDirectionalLight sunLight = env.mainLight;
+    float cacheFar          = mainCamera.far;
+    mainCamera.far          = cacheFar / 2;
     sunLight.update(mainCamera);
+    mainCamera.far          = cacheFar ;
     ForgE.fb.begin(Fbo.FRAMEBUFFER_SUN_DEPTH); {
       renderBucketWith(false, false, sunLight.getShadowCamera());
     } ForgE.fb.end();

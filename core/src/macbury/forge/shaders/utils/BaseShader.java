@@ -37,7 +37,8 @@ public abstract class BaseShader implements Disposable {
   protected LevelEnv env;
   private String uniformsSrc = "";
   private String name;
-
+  private String depth;
+  private BaseShader depthShader;
   private ShaderError currentError;
 
   public boolean load(ShadersManager manager) {
@@ -198,6 +199,14 @@ public abstract class BaseShader implements Disposable {
   @Override
   public void dispose() {
     shader.dispose();
+    shader = null;
+    depthShader = null;
+    camera = null;
+    context = null;
+    globalUniforms.clear();
+    localUniforms.clear();
+    globalUniforms = null;
+    localUniforms  = null;
   }
 
   public void setName(String name) {
@@ -214,5 +223,14 @@ public abstract class BaseShader implements Disposable {
 
   public ShaderError getCurrentError() {
     return currentError;
+  }
+
+  public void assignDepthShader(ShadersManager shaderProvider) {
+    if (depth != null) {
+      depthShader = shaderProvider.get(depth);
+      if (depthShader == null) {
+        throw new GdxRuntimeException("Could not find depth shader: " + depth + " for " + name);
+      }
+    }
   }
 }

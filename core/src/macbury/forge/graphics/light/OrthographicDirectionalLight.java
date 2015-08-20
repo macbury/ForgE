@@ -22,9 +22,9 @@ public class OrthographicDirectionalLight extends DirectionalLight implements Di
   public OrthographicDirectionalLight() {
     super();
 
-    this.shadowCamera   = new OrtographicGameCamera(20, 20);
-    shadowCamera.near   = 1;
-    shadowCamera.far    = 100;
+    this.shadowCamera   = new OrtographicGameCamera(5, 5);
+    shadowCamera.near   = -1f;
+    shadowCamera.far    = 50;
     frustrumAnalyzer    = new BoundingSphereDirectionalAnalyzer();
     this.shadowCamera.update(true);
   }

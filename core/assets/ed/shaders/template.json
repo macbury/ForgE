@@ -1,0 +1,24 @@
+{
+  class: macbury.forge.shaders.Default,
+  fragment: "default",
+  vertex:   "default",
+  structs: [
+    "DirectionalLight",
+    "ClipPlane"
+  ],
+  uniforms: [
+    "ProjectionMatrix",
+    "WorldTransform",
+    "Normals",
+    "Fog",
+    "EyePosition",
+    "Sun",
+    "ColorDiffuse",
+    "DiffuseTexture",
+    "ClipWaterPlane"
+  ],
+  helpers: {
+    vertex: ["directional_light", "fog"],
+    fragment: ["fog", "clip_water_plane"]
+  }
+}

@@ -13,6 +13,7 @@ import macbury.forge.ForgE;
 import macbury.forge.level.env.LevelEnv;
 import macbury.forge.shaders.FrameBufferShader;
 import macbury.forge.shaders.utils.BaseShader;
+import macbury.forge.utils.ScreenshotFactory;
 
 /**
  * Created by macbury on 19.05.15.
@@ -151,15 +152,14 @@ public class FrameBufferManager implements Disposable {
   }
 
   public FileHandle saveAsPng(String frameBufferName) {
+    ForgE.fb.begin(frameBufferName);
     FrameBuffer frameBuffer = get(frameBufferName);
     if (frameBuffer == null) {
       throw new GdxRuntimeException("Cannot save: " + frameBufferName);
     }
     FileHandle saveFile = Gdx.files.absolute("/tmp/fb_out.png");
-    TextureData data    = frameBuffer.getColorBufferTexture().getTextureData();
-    if (!data.isPrepared())
-      data.prepare();
-    PixmapIO.writePNG(saveFile, data.consumePixmap());
+    ScreenshotFactory.saveScreenshot(saveFile, frameBuffer.getWidth(), frameBuffer.getHeight());
+    ForgE.fb.end();
     return saveFile;
   }
 }
