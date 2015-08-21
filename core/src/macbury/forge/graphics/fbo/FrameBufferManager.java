@@ -145,7 +145,8 @@ public class FrameBufferManager implements Disposable {
     create(Fbo.FRAMEBUFFER_MAIN_COLOR);
     create(Fbo.FRAMEBUFFER_REFLECTIONS, Pixmap.Format.RGBA8888, ForgE.config.reflectionBufferSize, ForgE.config.reflectionBufferSize, true, Texture.TextureWrap.Repeat);
     create(Fbo.FRAMEBUFFER_REFRACTIONS, Pixmap.Format.RGBA8888, ForgE.config.refractionBufferSize, ForgE.config.refractionBufferSize, true, Texture.TextureWrap.Repeat);
-    create(Fbo.FRAMEBUFFER_SUN_DEPTH, Pixmap.Format.RGBA8888, ForgE.config.shadowMapSize, ForgE.config.shadowMapSize, true, Texture.TextureWrap.ClampToEdge);
+    create(Fbo.FRAMEBUFFER_SUN_FAR_DEPTH, Pixmap.Format.Alpha, ForgE.config.farShadowMapSize, ForgE.config.farShadowMapSize, true, Texture.TextureWrap.ClampToEdge);
+    create(Fbo.FRAMEBUFFER_SUN_NEAR_DEPTH, Pixmap.Format.Alpha, ForgE.config.farShadowMapSize, ForgE.config.nearShadowMapSize, true, Texture.TextureWrap.ClampToEdge);
   }
 
   public ObjectMap<String, FrameBuffer> all() {

@@ -32,7 +32,7 @@ void main() {
   v_position        = u_worldTransform * a_position;
   v_position        = applyWind(waviness, v_position);
 
-  v_positionLightTrans = u_shadowMap.lightTransform * v_position;
+  v_positionLightTrans = u_shadowMap.farTransform * v_position;
 
   gl_Position       = u_projectionMatrix * v_position;
 }

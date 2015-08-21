@@ -3,13 +3,10 @@ package macbury.forge.systems;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.RenderableProvider;
-import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import macbury.forge.ForgE;
@@ -81,15 +78,18 @@ public class WorldRenderingSystem extends EntitySystem {
   private void renderSunDepth() {
     env.water.clipMode                    = LevelEnv.ClipMode.None;
     OrthographicDirectionalLight sunLight = env.mainLight;
-    //float cacheFar          = mainCamera.far;
-    //mainCamera.far          = 10;
-    //mainCamera.update(true);
-    sunLight.update(mainCamera);
-    ForgE.fb.begin(Fbo.FRAMEBUFFER_SUN_DEPTH); {
-      renderBucketWith(false, false, sunLight.getShadowCamera());
-    } ForgE.fb.end();
 
-    //mainCamera.far          = cacheFar;
+    sunLight.beginFar(mainCamera); {
+      ForgE.fb.begin(Fbo.FRAMEBUFFER_SUN_FAR_DEPTH); {
+        renderBucketWith(false, false, sunLight.getShadowCamera());
+      } ForgE.fb.end();
+    } sunLight.end(mainCamera);
+
+    sunLight.beginNear(mainCamera); {
+      ForgE.fb.begin(Fbo.FRAMEBUFFER_SUN_NEAR_DEPTH); {
+        renderBucketWith(false, false, sunLight.getShadowCamera());
+      } ForgE.fb.end();
+    } sunLight.end(mainCamera);
   }
 
   private void renderReflections() {

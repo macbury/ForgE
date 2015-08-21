@@ -29,6 +29,8 @@ public class DayNightSkybox extends Skybox {
   private final static int DISTANCE_TO_SUN = 40;
   private final static int SUN_SIZE = 10;
   private static final String TAG = "DayNightSkybox";
+  private static final float MIN_LIGHT_ROTATION = -160;
+  private static final float MAX_LIGHT_ROTATION = -20;
   private TextureAsset sunAsset;
   private TextureAsset moonAsset;
   private TextureAsset skyMapAsset;
@@ -100,7 +102,7 @@ public class DayNightSkybox extends Skybox {
 
   private void renderSatelites(Camera camera, LevelEnv env, VoxelBatch batch) {
     //tempDirection.set(tempCamPosition).sub(tempPosition).nor();
-    env.mainLight.direction.set(0,0,-1).rotate(Vector3.X, MathUtils.clamp(ForgE.time.getSateliteRotation(), -170, -10));
+    env.mainLight.direction.set(0,0,-1).rotate(Vector3.X, MathUtils.clamp(ForgE.time.getSateliteRotation(), MIN_LIGHT_ROTATION, MAX_LIGHT_ROTATION));
 
     env.mainLight.color.set(sunColor);
     env.ambientLight.set(ambientColor);

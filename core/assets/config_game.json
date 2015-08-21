@@ -3,5 +3,6 @@
   resolutionWidth: 1360,
   resolutionHeight: 768,
   fullscreen: false,
-  shadowMapSize: 1024
+  nearShadowMapSize: 1024,
+  farShadowMapSize: 1024,
 }

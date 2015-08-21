@@ -9,10 +9,15 @@
     "ProjectionMatrix",
     "WorldTransform",
     "EyePosition",
-    "CameraFarNear"
+    "CameraFarNear",
+    "Wind",
+    "MapSize",
+    "Time",
+    "DiffuseTerrainTexture",
+    "NearShadowDistance"
   ],
   helpers:{
-    vertex:[],
+    vertex:["foliage"],
     fragment:[]
   }
 }
