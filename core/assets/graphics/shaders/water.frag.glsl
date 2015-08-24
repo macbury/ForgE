@@ -6,10 +6,23 @@ varying vec2   v_texDisplacementCoords;
 varying vec2   v_texNormalCoords;
 varying vec2   v_moveOffset;
 
+
 void main() {
   vec2 distortedTexCoords = texture2D(u_waterRefractionDUDVMap, v_texDisplacementCoords + v_moveOffset).rg*0.1f;
   distortedTexCoords      = v_texDisplacementCoords + vec2(distortedTexCoords.x, distortedTexCoords.y+v_moveOffset.x);
   vec2 totalDisortion     = (texture2D(u_waterRefractionDUDVMap, distortedTexCoords).rg * 2.0f - 1.0f) * u_waterWaveStrength;
+
+  vec4 multiSampledNormalTextureValue = max(
+    texture2D(u_waterNormalATexture, distortedTexCoords),
+    texture2D(u_waterNormalBTexture, distortedTexCoords)
+  );
+
+  vec3 normal              = normalize(vec3(
+    multiSampledNormalTextureValue.r * 2.0f - 1.0f,
+    multiSampledNormalTextureValue.b * 2.5,
+    multiSampledNormalTextureValue.g * 2.0f - 1.0f
+  ));
+
 
   vec2 ndc                 = (v_clipSpace.xy/v_clipSpace.w)/2.0f + 0.5f;
   vec2 refreactTexCords    = vec2(ndc.x, ndc.y);
@@ -24,19 +37,8 @@ void main() {
 
   vec4 refractionColor     = texture2D(u_refractionTexture, refreactTexCords);
   vec4 reflectionColor     = texture2D(u_reflectionTexture, reflectionTexCords);
-  vec4 waterDiffuse        = mix(reflectionColor, refractionColor, refractiveFactor(v_cameraPosition, u_waterRefractionFactor));
+  vec4 waterDiffuse        = mix(reflectionColor, refractionColor, refractiveFactor(v_cameraPosition, u_waterRefractionFactor, vec3(0,1,0)));
   vec4 waterColor          = mix(waterDiffuse, u_waterColor, u_waterColorTint);
-
-  vec4 multiSampledNormalTextureValue = max(
-    texture2D(u_waterNormalATexture, distortedTexCoords),
-    texture2D(u_waterNormalBTexture, distortedTexCoords)
-  );
-
-  vec3 normal              = normalize(vec3(
-    multiSampledNormalTextureValue.r * 2.0f - 1.0f,
-    multiSampledNormalTextureValue.b,
-    multiSampledNormalTextureValue.g * 2.0f - 1.0f
-  ));
 
   vec4 specularComponent   = vec4(directionalLightSpecular(u_mainLight, normal, u_waterShineDamper, u_waterReflectivity, normalize(v_cameraPosition)), 0.0f);
 

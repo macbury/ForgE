@@ -25,6 +25,7 @@ import java.util.HashMap;
  * Created by macbury on 11.03.15.
  */
 public class MapTreeModel extends DefaultTreeModel implements TreeExpansionListener {
+  private static final String TAG = "MapTreeModel";
   private final JTree tree;
   private ProjectNode rootProject;
   private HashMap<String, BaseNode> pathNodesMap;
@@ -71,10 +72,16 @@ public class MapTreeModel extends DefaultTreeModel implements TreeExpansionListe
         pushNode(node);
       } else {
         int levelId       = ForgE.levels.getLevelId(f);
-        LevelState state  = ForgE.levels.loadBasicLevelStateInfo(levelId);
-        MapNode node      = new MapNode(state.getName(), levelId, f);
-        parent.add(node);
-        pushNode(node);
+        try {
+          LevelState state  = ForgE.levels.loadBasicLevelStateInfo(levelId);
+          MapNode node      = new MapNode(state.getName(), levelId, f);
+          parent.add(node);
+          pushNode(node);
+        } catch (Exception e) {
+          Gdx.app.log(TAG, "Skipping: " + levelId);
+          e.printStackTrace();
+        }
+
       }
     }
   }

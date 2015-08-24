@@ -13,7 +13,6 @@ varying vec2   v_uvStart;
 varying vec2   v_uvMul;
 
 varying float  v_transparent;
-
 varying vec4   v_positionLightTrans;
 
 void main() {
@@ -27,12 +26,12 @@ void main() {
   v_uvMul           = a_textureFullCoords.zw - v_uvStart;
 
   vec3 lightDiffuse = applySunLight(v_normal);
-  v_lightDiffuse    = u_ambientLight + vec4(lightDiffuse, 1.0f);
+  v_lightDiffuse    = vec4(lightDiffuse, 1.0f);
   v_textCoord       = a_texCoord0;
   v_position        = u_worldTransform * a_position;
   v_position        = applyWind(waviness, v_position);
 
-  v_positionLightTrans = u_shadowMap.farTransform * v_position;
+  v_positionLightTrans = u_shadowMap.nearTransform * v_position;
 
-  gl_Position       = u_projectionMatrix * v_position;
+  gl_Position          = u_projectionMatrix * v_position;
 }

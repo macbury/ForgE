@@ -25,7 +25,7 @@
   ],
   helpers: {
     vertex: ["directional_light", "fog", "foliage"],
-    fragment: ["fog", "clip_water_plane"]
+    fragment: ["fog", "clip_water_plane", "shadow_map"]
   },
 
 }

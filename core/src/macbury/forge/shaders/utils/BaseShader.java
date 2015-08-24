@@ -170,6 +170,10 @@ public abstract class BaseShader implements Disposable {
     return shader.getLog();
   }
 
+  public boolean isValid() {
+    return shader != null;
+  }
+
   /**
    * Setup uniforms and begin new render context
    * @param camera
@@ -179,11 +183,13 @@ public abstract class BaseShader implements Disposable {
     this.camera  = camera;
     this.context = context;
     this.env     = env;
-    shader.begin();
+    if (isValid()) {
+      shader.begin();
 
-    context.begin();
-    bindGlobalUniforms(camera, context, env);
-    afterBegin();
+      context.begin();
+      bindGlobalUniforms(camera, context, env);
+      afterBegin();
+    }
   }
 
   protected void bindGlobalUniforms(Camera camera, RenderContext context, LevelEnv env) {
@@ -206,13 +212,17 @@ public abstract class BaseShader implements Disposable {
 
   public void end () {
     this.camera = null;
-    this.shader.end();
+    if (isValid()) {
+      this.shader.end();
+    }
+
     context.end();
   }
 
   @Override
   public void dispose() {
-    shader.dispose();
+    if (isValid())
+      shader.dispose();
     shader = null;
     depthShader = null;
     camera = null;

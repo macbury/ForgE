@@ -1,5 +1,6 @@
 varying vec4   v_position;
 
 void main() {
-  gl_FragColor    = vec4(length(v_position.xyz-u_eyePosition.xyz)/u_cameraFar);
+  float depth     = length(v_position.xyz-u_eyePosition.xyz) / u_cameraFar;
+  gl_FragColor    = pack(depth);
 }

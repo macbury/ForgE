@@ -12,7 +12,7 @@ import macbury.forge.shaders.utils.BaseUniform;
  */
 public class UniformEyePosition extends BaseUniform {
   public static final String UNIFORM_EYE_POSITION      = "u_eyePosition";
-  private static final float CONST = 1.1881f;
+  public static final float CONST = 1.1881f;
 
   @Override
   public void defineUniforms() {

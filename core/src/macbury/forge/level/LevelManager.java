@@ -5,6 +5,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.KryoException;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import macbury.forge.storage.StorageManager;
@@ -52,6 +53,8 @@ public class LevelManager {
       levelState                              = kryo.readObject(input, LevelState.class, new FullLevelStateSerializer());
       input.close();
     } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    } catch (KryoException e) {
       e.printStackTrace();
     }
     storageManager.pool.release(kryo);

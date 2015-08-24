@@ -26,11 +26,12 @@ public class UniformShadowMap extends BaseUniform {
 
   @Override
   public void bind(ShaderProgram shader, LevelEnv env, RenderContext context, Camera camera) {
+    Camera shadowCamera = env.mainLight.getCamera();
     shader.setUniformi(UNIFORM_SHADOW_FAR_MAP_TEXTURE, context.textureBinder.bind(ForgE.fb.get(Fbo.FRAMEBUFFER_SUN_FAR_DEPTH).getColorBufferTexture()));
     shader.setUniformi(UNIFORM_SHADOW_NEAR_MAP_TEXTURE, context.textureBinder.bind(ForgE.fb.get(Fbo.FRAMEBUFFER_SUN_NEAR_DEPTH).getColorBufferTexture()));
     shader.setUniformMatrix(UNIFORM_SHADOW_MAP_FAR_TRANSFORM, env.mainLight.farMatrix);
     shader.setUniformMatrix(UNIFORM_SHADOW_MAP_NEAR_TRANSFORM, env.mainLight.nearMatrix);
-    //shader.setUniformf(UNIFORM_SHADOW_MAP_POSITION, env.mainLight.getCamera().position);
+    //shader.setUniformf(UNIFORM_SHADOW_MAP_POSITION, shadowCamera.position.x, shadowCamera.position.y, shadowCamera.position.z, UniformEyePosition.CONST / (shadowCamera.far * shadowCamera.far));
   }
 
   @Override

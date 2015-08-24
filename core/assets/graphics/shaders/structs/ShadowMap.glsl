@@ -3,4 +3,5 @@ struct ShadowMap {
   sampler2D nearDepthMap;
   mat4 farTransform;
   mat4 nearTransform;
+  vec4 lightPosition;
 };

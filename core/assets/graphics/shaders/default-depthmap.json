@@ -11,6 +11,6 @@
   ],
   helpers:{
     vertex:[],
-    fragment:[]
+    fragment:["shadow_map"]
   }
 }

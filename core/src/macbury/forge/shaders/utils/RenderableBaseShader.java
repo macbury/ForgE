@@ -23,17 +23,19 @@ public abstract class RenderableBaseShader<T extends Renderable> extends BaseSha
   public abstract void beforeRender(final T renderable);
 
   public void render(final T renderable) {
-    if (currentMesh != renderable.mesh) {
-      if (currentMesh != null) {
-        currentMesh.unbind(shader);
+    if (isValid()) {
+      if (currentMesh != renderable.mesh) {
+        if (currentMesh != null) {
+          currentMesh.unbind(shader);
+        }
+        currentMesh = renderable.mesh;
+        currentMesh.bind(shader);
       }
-      currentMesh = renderable.mesh;
-      currentMesh.bind(shader);
-    }
 
-    beforeRender(renderable);
-    bindLocalUniforms(renderable);
-    renderWithCurrentMesh(renderable);
+      beforeRender(renderable);
+      bindLocalUniforms(renderable);
+      renderWithCurrentMesh(renderable);
+    }
   }
 
   protected void renderWithCurrentMesh(final T renderable) {

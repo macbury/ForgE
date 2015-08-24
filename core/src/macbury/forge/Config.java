@@ -23,7 +23,7 @@ public class Config {
   public int refractionBufferSize    = 512;
   public int farShadowMapSize        = 512;
   public int nearShadowMapSize       = 1024;
-  public float nearShadowDistance      = 10;
+  public float nearShadowDistance    = 10;
 
   public boolean generateWireframe   = false;
   public boolean debug               = false;
