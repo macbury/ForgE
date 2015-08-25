@@ -13,6 +13,7 @@ import java.util.Date;
 public class TimeManager implements Disposable {
   private static final float SATELITE_START_ROTATION = 10;
   private static final float SATELITE_END_ROTATION = -190;
+  private final int timeSpeed;
 
   private float duration;
   private long days;
@@ -23,17 +24,18 @@ public class TimeManager implements Disposable {
   public static final float DAY_END_HOUR      = 20 * HOUR_IN_SECONDS + 35 * MINUTE_IN_SECONDS;
   public static final float DAY_LENGTH        = DAY_END_HOUR - DAY_START_HOUR;
   public static final float NIGHT_LENGTH      = DAY_IN_SECONDS - DAY_END_HOUR + DAY_START_HOUR;
-  public static final float DEFAULT_TIME      = 18 * HOUR_IN_SECONDS;
+  public static final float DEFAULT_TIME      = 19 * HOUR_IN_SECONDS;
   private float sateliteRotation;
   private float sateliteProgress;
 
   public TimeManager() {
-    this.duration = DEFAULT_TIME;
-    days          = 1;
+    this.duration  = DEFAULT_TIME;
+    days           = 1;
+    this.timeSpeed = 1000;
   }
 
   public void update() {
-    this.duration += 10 * Gdx.graphics.getDeltaTime();
+    this.duration += timeSpeed * Gdx.graphics.getDeltaTime();
     if (duration >= DAY_IN_SECONDS) {
       duration = 0;
       days += 1;
@@ -53,7 +55,7 @@ public class TimeManager implements Disposable {
       }
       sateliteProgress = nightSeconds / NIGHT_LENGTH;
     }
-    sateliteRotation = MathUtils.round(MathUtils.lerp(SATELITE_START_ROTATION, SATELITE_END_ROTATION, sateliteProgress));
+    sateliteRotation = MathUtils.lerp(SATELITE_START_ROTATION, SATELITE_END_ROTATION, sateliteProgress);
   }
 
   @Override

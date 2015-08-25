@@ -62,6 +62,7 @@ public class OrthographicDirectionalLight extends DirectionalLight implements Di
     mainCamera.near = ForgE.config.nearShadowDistance;
     mainCamera.update(true);
     update(mainCamera);
+
     farMatrix.set(shadowCamera.combined);
   }
 

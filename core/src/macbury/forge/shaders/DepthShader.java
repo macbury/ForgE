@@ -18,6 +18,7 @@ public class DepthShader extends RenderableBaseShader<Renderable> {
   @Override
   public void beforeRender(Renderable renderable) {
     context.setDepthMask(true);
+    context.setDepthTest(GL30.GL_LESS);
     if (BaseRenderable.haveTransparency(renderable.material)) {
       context.setCullFace(GL30.GL_NONE);
     } else {

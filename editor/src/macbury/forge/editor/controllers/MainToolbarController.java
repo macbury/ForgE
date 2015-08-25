@@ -73,7 +73,7 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
     redoMapping = inputProcessor.registerMapping(Input.Keys.CONTROL_LEFT, Input.Keys.Y, this);
 
     JPanel timeScrollContainer = new JPanel(new BorderLayout());
-    timeScrollContainer.setPreferredSize(new Dimension(240, 32));
+    timeScrollContainer.setPreferredSize(new Dimension(260, 32));
 
     this.currentTimeLabel    = new JLabel("8:00", SwingConstants.CENTER);
     timeScrollContainer.add(currentTimeLabel, BorderLayout.NORTH);

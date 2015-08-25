@@ -69,14 +69,12 @@ public class WorldRenderingSystem extends EntitySystem {
       renderSunDepth();
     }
 
-
     batch.setShaderProvider(colorShaderProvider); {
       renderReflections();
       renderRefractions();
 
       renderFinal();
     }
-
   }
 
   private void renderSunDepth() {
