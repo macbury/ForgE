@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
+import com.badlogic.gdx.graphics.glutils.FloatFrameBuffer;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
@@ -31,7 +32,7 @@ public class FrameBufferManager implements Disposable {
   }
 
   public FrameBuffer create(String fbIdn) {
-    return create(fbIdn, Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true, Texture.TextureWrap.Repeat);
+    return create(fbIdn, Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true, Texture.TextureWrap.Repeat, Texture.TextureFilter.Linear);
   }
 
   public FrameBuffer get(String key) {
@@ -75,7 +76,7 @@ public class FrameBufferManager implements Disposable {
    * @param fbHeight - desired height
    * @param hasDepth - whether to attach depth buffer
    */
-  public FrameBuffer create(String fbIdn, Pixmap.Format format, int fbWidth, int fbHeight, boolean hasDepth, Texture.TextureWrap textureWrap) {
+  public FrameBuffer create(String fbIdn, Pixmap.Format format, int fbWidth, int fbHeight, boolean hasDepth, Texture.TextureWrap textureWrap, Texture.TextureFilter filter) {
     FrameBuffer fb = frameBuffers.get(fbIdn);
 
     if (fb == null || fb.getWidth() != fbWidth || fb.getHeight() != fbHeight) {
@@ -84,7 +85,32 @@ public class FrameBufferManager implements Disposable {
       }
       Gdx.app.log(TAG, "Creating framebuffer: " + fbIdn);
       fb = new FrameBuffer(format, fbWidth, fbHeight, hasDepth);
-      fb.getColorBufferTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+      fb.getColorBufferTexture().setFilter(filter, filter);
+      fb.getColorBufferTexture().setWrap(textureWrap, textureWrap);
+
+    }
+    frameBuffers.put(fbIdn, fb);
+    return fb;
+  }
+
+  /**
+   * Creates a new Framebuffer with given params.
+   * @param fbIdn - this framebuffer's identifier
+   * @param format - pixel format of this framebuffer
+   * @param fbWidth - desired width
+   * @param fbHeight - desired height
+   * @param hasDepth - whether to attach depth buffer
+   */
+  public FrameBuffer createFloat(String fbIdn, int fbWidth, int fbHeight, boolean hasDepth, Texture.TextureWrap textureWrap, Texture.TextureFilter filter) {
+    FrameBuffer fb = frameBuffers.get(fbIdn);
+
+    if (fb == null || fb.getWidth() != fbWidth || fb.getHeight() != fbHeight) {
+      if (fb != null) {
+        fb.dispose();
+      }
+      Gdx.app.log(TAG, "Creating float framebuffer: " + fbIdn);
+      fb = new FloatFrameBuffer(fbWidth, fbHeight, hasDepth);
+      fb.getColorBufferTexture().setFilter(filter, filter);
       fb.getColorBufferTexture().setWrap(textureWrap, textureWrap);
 
     }
@@ -143,10 +169,10 @@ public class FrameBufferManager implements Disposable {
 
   public void createDefaultFrameBuffers() {
     create(Fbo.FRAMEBUFFER_MAIN_COLOR);
-    create(Fbo.FRAMEBUFFER_REFLECTIONS, Pixmap.Format.RGBA8888, ForgE.config.reflectionBufferSize, ForgE.config.reflectionBufferSize, true, Texture.TextureWrap.Repeat);
-    create(Fbo.FRAMEBUFFER_REFRACTIONS, Pixmap.Format.RGBA8888, ForgE.config.refractionBufferSize, ForgE.config.refractionBufferSize, true, Texture.TextureWrap.Repeat);
-    create(Fbo.FRAMEBUFFER_SUN_FAR_DEPTH, Pixmap.Format.RGBA8888, ForgE.config.farShadowMapSize, ForgE.config.farShadowMapSize, true, Texture.TextureWrap.ClampToEdge);
-    create(Fbo.FRAMEBUFFER_SUN_NEAR_DEPTH, Pixmap.Format.RGBA8888, ForgE.config.farShadowMapSize, ForgE.config.nearShadowMapSize, true, Texture.TextureWrap.ClampToEdge);
+    create(Fbo.FRAMEBUFFER_REFLECTIONS, Pixmap.Format.RGBA8888, ForgE.config.reflectionBufferSize, ForgE.config.reflectionBufferSize, true, Texture.TextureWrap.Repeat, Texture.TextureFilter.Linear);
+    create(Fbo.FRAMEBUFFER_REFRACTIONS, Pixmap.Format.RGBA8888, ForgE.config.refractionBufferSize, ForgE.config.refractionBufferSize, true, Texture.TextureWrap.Repeat, Texture.TextureFilter.Linear);
+    createFloat(Fbo.FRAMEBUFFER_SUN_FAR_DEPTH, ForgE.config.farShadowMapSize, ForgE.config.farShadowMapSize, true, Texture.TextureWrap.ClampToEdge, Texture.TextureFilter.Linear);
+    createFloat(Fbo.FRAMEBUFFER_SUN_NEAR_DEPTH, ForgE.config.farShadowMapSize, ForgE.config.nearShadowMapSize, true, Texture.TextureWrap.ClampToEdge, Texture.TextureFilter.Linear);
   }
 
   public ObjectMap<String, FrameBuffer> all() {

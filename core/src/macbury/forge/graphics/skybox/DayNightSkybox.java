@@ -102,7 +102,7 @@ public class DayNightSkybox extends Skybox {
 
   private void renderSatelites(Camera camera, LevelEnv env, VoxelBatch batch) {
     //tempDirection.set(tempCamPosition).sub(tempPosition).nor();
-    env.mainLight.direction.set(0,0,-1).rotate(Vector3.X, MathUtils.clamp(ForgE.time.getSateliteRotation(), MIN_LIGHT_ROTATION, MAX_LIGHT_ROTATION));
+    env.mainLight.direction.set(0,0,-1).rotate(Vector3.X, MathUtils.clamp(ForgE.time.getSateliteRotation(), MIN_LIGHT_ROTATION, MAX_LIGHT_ROTATION));//.rotate(Vector3.Y, 5f);
 
     env.mainLight.color.set(sunColor);
     env.ambientLight.set(ambientColor);

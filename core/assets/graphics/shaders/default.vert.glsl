@@ -7,7 +7,7 @@ varying vec4   v_color;
 varying vec3   v_normal;
 varying vec4   v_position;
 varying vec2   v_textCord;
-
+varying vec4   v_positionInLightSpace;
 void main() {
   v_normal          = normalize(u_normalMatrix * a_normal);
   v_color           = u_colorDiffuse;
@@ -15,5 +15,8 @@ void main() {
   vec3 lightDiffuse = directionalLightDiffuse(u_mainLight, v_normal);
   v_lightDiffuse    = u_ambientLight + vec4(lightDiffuse, 1.0f);
   v_position        = u_worldTransform * a_position;
+
+  v_positionInLightSpace = u_shadowMap.farTransform * vec4(v_position.xyz, 1.0f);
+
   gl_Position       = u_projectionMatrix * v_position;
 }

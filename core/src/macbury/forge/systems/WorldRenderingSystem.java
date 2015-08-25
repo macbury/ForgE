@@ -65,14 +65,18 @@ public class WorldRenderingSystem extends EntitySystem {
 
   @Override
   public void update(float deltaTime) {
-    batch.setShaderProvider(depthShaderProvider);
-    renderSunDepth();
+    batch.setShaderProvider(depthShaderProvider); {
+      renderSunDepth();
+    }
 
-    batch.setShaderProvider(colorShaderProvider);
-    renderReflections();
-    renderRefractions();
 
-    renderFinal();
+    batch.setShaderProvider(colorShaderProvider); {
+      renderReflections();
+      renderRefractions();
+
+      renderFinal();
+    }
+
   }
 
   private void renderSunDepth() {
@@ -143,7 +147,7 @@ public class WorldRenderingSystem extends EntitySystem {
       }
     }
 
-    batch.begin((Camera)camera); {
+    batch.begin((Camera) camera); {
       if (withSkybox){
         ForgE.graphics.clearAll(env.skyColor);
         skybox.render(batch, env, (Camera)camera);

@@ -5,7 +5,8 @@
   depth: "default-depthmap",
   structs: [
     "DirectionalLight",
-    "ClipPlane"
+    "ClipPlane",
+    "ShadowMap"
   ],
   uniforms: [
     "ProjectionMatrix",
@@ -16,10 +17,12 @@
     "Sun",
     "ColorDiffuse",
     "DiffuseTexture",
-    "ClipWaterPlane"
+    "ClipWaterPlane",
+    "ShadowMap",
+    "CameraFarNear"
   ],
   helpers: {
     vertex: ["directional_light", "fog"],
-    fragment: ["fog", "clip_water_plane"]
+    fragment: ["fog", "clip_water_plane", "shadow_map"]
   }
 }

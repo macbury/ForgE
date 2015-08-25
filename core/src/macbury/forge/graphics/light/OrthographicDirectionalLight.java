@@ -29,7 +29,7 @@ public class OrthographicDirectionalLight extends DirectionalLight implements Di
     super();
 
     this.shadowCamera   = new OrtographicGameCamera(5, 5);
-    shadowCamera.near   = -1f;
+    shadowCamera.near   = 0.1f;
     shadowCamera.far    = 50;
     frustrumAnalyzer    = new BoundingSphereDirectionalAnalyzer();
     this.shadowCamera.update(true);
@@ -49,6 +49,12 @@ public class OrthographicDirectionalLight extends DirectionalLight implements Di
   private void restoreNearFar(GameCamera mainCamera) {
     mainCamera.near = oldNear;
     mainCamera.far  = oldFar;
+  }
+
+  public void begin(GameCamera mainCamera) {
+    cacheNearFar(mainCamera);
+    update(mainCamera);
+    farMatrix.set(shadowCamera.combined);
   }
 
   public void beginFar(GameCamera mainCamera) {
@@ -84,6 +90,7 @@ public class OrthographicDirectionalLight extends DirectionalLight implements Di
   public void dispose() {
 
   }
+
 
 
 }

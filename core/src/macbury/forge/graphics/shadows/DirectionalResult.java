@@ -24,6 +24,6 @@ public class DirectionalResult {
     cam.far = far;
     cam.viewportWidth = viewportWidth;
     cam.viewportHeight = viewportHeight;
-    cam.update();
+    cam.update(true);
   }
 }

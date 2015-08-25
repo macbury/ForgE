@@ -13,7 +13,7 @@ varying vec2   v_uvStart;
 varying vec2   v_uvMul;
 
 varying float  v_transparent;
-varying vec4   v_positionLightTrans;
+varying vec4   v_positionInLightSpace;
 
 void main() {
   v_normal          = normalize(u_normalMatrix * a_normal);
@@ -31,7 +31,7 @@ void main() {
   v_position        = u_worldTransform * a_position;
   v_position        = applyWind(waviness, v_position);
 
-  v_positionLightTrans = u_shadowMap.nearTransform * v_position;
-
+  v_positionInLightSpace = u_shadowMap.farTransform * vec4(v_position.xyz, 1.0f);
+  //v_positionInLightSpace = u_shadowMap.nearTransform * vec4(v_position.xyz, 1.0f);
   gl_Position          = u_projectionMatrix * v_position;
 }

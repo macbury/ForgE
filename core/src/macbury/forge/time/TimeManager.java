@@ -53,7 +53,7 @@ public class TimeManager implements Disposable {
       }
       sateliteProgress = nightSeconds / NIGHT_LENGTH;
     }
-    sateliteRotation = MathUtils.lerp(SATELITE_START_ROTATION, SATELITE_END_ROTATION, sateliteProgress);
+    sateliteRotation = MathUtils.round(MathUtils.lerp(SATELITE_START_ROTATION, SATELITE_END_ROTATION, sateliteProgress));
   }
 
   @Override
