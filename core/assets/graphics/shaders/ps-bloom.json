@@ -1,13 +1,11 @@
 {
   class:    "macbury.forge.shaders.FrameBufferShader",
-  fragment: "ps-final",
-  vertex:   "ps-final",
+  fragment: "ps-bloom",
+  vertex:   "ps-bloom",
   structs: [],
   uniforms:[
     "ProjectionMatrix",
-    "FbMainColor",
-    "VignetteTexture",
-    "FbBloomTexture"
+    "FbDownSampledMain"
   ],
   helpers:{
     vertex:[],

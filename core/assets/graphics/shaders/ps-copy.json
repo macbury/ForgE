@@ -1,0 +1,13 @@
+{
+  class:    "macbury.forge.shaders.CopyFrameBufferShader",
+  fragment: "ps-copy",
+  vertex:   "ps-copy",
+  structs: [],
+  uniforms:[
+    "ProjectionMatrix",
+  ],
+  helpers:{
+    vertex:[],
+    fragment:[]
+  }
+}

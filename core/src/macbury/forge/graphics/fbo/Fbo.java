@@ -11,4 +11,6 @@ public class Fbo {
   public static final String FRAMEBUFFER_REFLECTIONS = "Reflections";
   public static final String FRAMEBUFFER_REFRACTIONS = "Refractions";
   public static final String FRAMEBUFFER_FINAL       = "Final";
+  public static final String FRAMEBUFFER_BLOOM       = "Bloom";
+  public static final String FRAMEBUFFER_DOWN_SAMPLED_MAIN = "Downsampled main";
 }

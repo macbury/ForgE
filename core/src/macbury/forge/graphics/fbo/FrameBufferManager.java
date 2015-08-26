@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
 import macbury.forge.ForgE;
 import macbury.forge.level.env.LevelEnv;
+import macbury.forge.shaders.CopyFrameBufferShader;
 import macbury.forge.shaders.FrameBufferShader;
 import macbury.forge.shaders.utils.BaseShader;
 import macbury.forge.utils.ScreenshotFactory;
@@ -21,6 +22,7 @@ import macbury.forge.utils.ScreenshotFactory;
  */
 public class FrameBufferManager implements Disposable {
   private static final String TAG                   = "FrameBufferManager";
+  private static final String COPY_FB_SHADER        = "ps-copy";
   private ObjectMap<String, FrameBuffer> frameBuffers;
   private Mesh screenQuad;
   private OrthographicCamera screenCamera;
@@ -56,6 +58,19 @@ public class FrameBufferManager implements Disposable {
     }
   }
 
+  public void copyFB(RenderContext renderContext, LevelEnv env, String inputFrameBufferId, String outputFrameBufferId) {
+    CopyFrameBufferShader shader = (CopyFrameBufferShader)ForgE.shaders.get(COPY_FB_SHADER);
+    renderContext.begin(); {
+      Texture srcTexture = get(inputFrameBufferId).getColorBufferTexture();
+      begin(outputFrameBufferId); {
+        ForgE.graphics.clearAll(Color.CLEAR);
+        shader.begin(screenCamera, renderContext, env); {
+          shader.render(screenQuad, GL30.GL_TRIANGLE_STRIP, srcTexture);
+        } shader.end();
+      } end();
+    } renderContext.end();
+  }
+
   /**
    * Resizes internal camera for framebuffer use, call this in you ApplicationListener's resize.
    * @param width - new screen width
@@ -65,6 +80,7 @@ public class FrameBufferManager implements Disposable {
   public void resize(int width, int height, boolean resizeFramebuffers) {
     screenCamera = new OrthographicCamera(width, height);
     clear();
+
     createScreenQuad();
     createDefaultFrameBuffers();
   }
@@ -125,11 +141,10 @@ public class FrameBufferManager implements Disposable {
   private void createScreenQuad() {
     if (screenQuad != null)
       return;
-    screenQuad = new Mesh(true, 4, 6, VertexAttribute.Position(), new VertexAttribute(VertexAttributes.Usage.ColorUnpacked, 4, "a_color"),
-        VertexAttribute.TexCoords(0));
+    screenQuad = new Mesh(true, 4, 6, VertexAttribute.Position(), new VertexAttribute(VertexAttributes.Usage.ColorUnpacked, 4, "a_color"), VertexAttribute.TexCoords(0));
 
 
-    Vector3 vec0 = new Vector3(0, 0, 0);
+    Vector3 vec0 = new Vector3(0, -1, 0);
     screenCamera.unproject(vec0);
     Vector3 vec1 = new Vector3(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0);
     screenCamera.unproject(vec1);
@@ -171,6 +186,8 @@ public class FrameBufferManager implements Disposable {
   public void createDefaultFrameBuffers() {
     create(Fbo.FRAMEBUFFER_FINAL);
     create(Fbo.FRAMEBUFFER_MAIN_COLOR);
+    create(Fbo.FRAMEBUFFER_DOWN_SAMPLED_MAIN, Pixmap.Format.RGBA8888, ForgE.config.bloomTextureSize, ForgE.config.bloomTextureSize, false, Texture.TextureWrap.MirroredRepeat, Texture.TextureFilter.Linear);
+    create(Fbo.FRAMEBUFFER_BLOOM, Pixmap.Format.RGBA8888, ForgE.config.bloomTextureSize, ForgE.config.bloomTextureSize, false, Texture.TextureWrap.MirroredRepeat, Texture.TextureFilter.Linear);
     create(Fbo.FRAMEBUFFER_REFLECTIONS, Pixmap.Format.RGBA8888, ForgE.config.reflectionBufferSize, ForgE.config.reflectionBufferSize, true, Texture.TextureWrap.Repeat, Texture.TextureFilter.Linear);
     create(Fbo.FRAMEBUFFER_REFRACTIONS, Pixmap.Format.RGBA8888, ForgE.config.refractionBufferSize, ForgE.config.refractionBufferSize, true, Texture.TextureWrap.Repeat, Texture.TextureFilter.Linear);
     createFloat(Fbo.FRAMEBUFFER_SUN_FAR_DEPTH, ForgE.config.farShadowMapSize, ForgE.config.farShadowMapSize, true, Texture.TextureWrap.ClampToEdge, Texture.TextureFilter.Linear);

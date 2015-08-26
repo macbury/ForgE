@@ -3,6 +3,7 @@ package macbury.forge.graphics.postprocessing;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import macbury.forge.graphics.postprocessing.effects.PostProcessBloomImage;
 import macbury.forge.graphics.postprocessing.effects.PostProcessFinalImage;
 import macbury.forge.level.env.LevelEnv;
 
@@ -15,6 +16,7 @@ public class PostProcessingManager implements Disposable {
 
   public PostProcessingManager() {
     this.effects = new Array<PostProcessingEffect>();
+    this.effects.add(new PostProcessBloomImage());
     this.effects.add(new PostProcessFinalImage());
   }
 

@@ -12,10 +12,12 @@ import java.nio.file.Paths;
  * Created by macbury on 18.10.14.
  */
 public class Config {
+
+
   public enum RenderDebug {
     Textured, Wireframe, Normals, Lighting
   }
-
+  public int bloomTextureSize        = 512;
   public int resolutionWidth         = 1360;
   public int resolutionHeight        = 768;
   public boolean fullscreen          = false;

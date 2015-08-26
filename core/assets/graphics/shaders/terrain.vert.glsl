@@ -18,7 +18,7 @@ varying vec4   v_positionInLightSpace;
 void main() {
   v_normal          = normalize(u_normalMatrix * a_normal);
   float ao          = a_material.r;
-  float specular    = a_material.g;
+  float emission    = a_material.g;
   float waviness    = a_material.a;
   v_transparent     = a_material.b;
 
