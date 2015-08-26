@@ -17,7 +17,7 @@ public class Config {
   public enum RenderDebug {
     Textured, Wireframe, Normals, Lighting
   }
-  public int bloomTextureSize        = 512;
+  public int bloomTextureSize        = 256;
   public int resolutionWidth         = 1360;
   public int resolutionHeight        = 768;
   public boolean fullscreen          = false;

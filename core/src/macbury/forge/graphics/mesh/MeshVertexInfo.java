@@ -45,6 +45,11 @@ public class MeshVertexInfo implements Pool.Poolable {
     return vertexAttributes;
   }
 
+  public MeshVertexInfo emission(float emission) {
+    this.material.setEmission(emission);
+    return this;
+  }
+
   public static enum AttributeType {
     Position(VertexAttributes.Usage.Position, 3,ShaderProgram.POSITION_ATTRIBUTE),
     Normal(VertexAttributes.Usage.Normal, 3, ShaderProgram.NORMAL_ATTRIBUTE),

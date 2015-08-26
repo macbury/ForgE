@@ -71,7 +71,10 @@ public class Block {
    * Is a liquid block
    */
   public boolean liquid = false;
-
+  /**
+   * Is emit light...
+   */
+  public float emission = 0.0f;
   /**
    * Is block solid and collidable
    */

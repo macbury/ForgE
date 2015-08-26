@@ -45,7 +45,7 @@ public class VoxelsAssembler extends MeshAssembler {
   }
 
   private MeshVertexInfo vertex(VoxelDef voxelDef, BlockShapePart part, int index, TextureAtlas.AtlasRegion sideRegion, AbstractGreedyAlgorithm.GreedyQuad terrainPart) {
-    MeshVertexInfo vert = this.vertex().ao(voxelDef.ao).transparent(voxelDef.block.transparent);
+    MeshVertexInfo vert = this.vertex().ao(voxelDef.ao).transparent(voxelDef.block.transparent).emission(voxelDef.block.emission);
 
     vertexTranslationFromShape(
         voxelDef.position,
@@ -107,6 +107,7 @@ public class VoxelsAssembler extends MeshAssembler {
     if (part.waviness != null) {
       vert.material.setWaviness(part.waviness[index]);
     }
+
 
     return vert;
   }

@@ -6,7 +6,7 @@ varying float  v_transparent;
 varying vec2   v_uvStart;
 varying vec2   v_uvMul;
 varying vec4   v_positionInLightSpace;
-
+varying float  v_emission;
 void main() {
   discardIfClipped(v_position);
 
@@ -22,7 +22,7 @@ void main() {
 
   vec4 lighting       = u_ambientLight + (1.0f - shadow) * v_lightDiffuse;
 
-  vec4 diffuse        = lighting * texture;
+  vec4 diffuse        = (lighting * texture) + texture * v_emission;
 
   #ifdef normalsDebugFlag
     diffuse.rgb = v_normal;

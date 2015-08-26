@@ -2,7 +2,7 @@ varying   vec2 v_texCoords;
 void main() {
   vec4 sum = vec4(0.0);
 
-  float blurSize = 0.004f;
+  float blurSize = 0.002f;
 /*
   sum += texture2D(u_downSampledMainTexture, vec2(v_texCoords.x, v_texCoords.y - 4.0*blurSize)) * 0.05;
   sum += texture2D(u_downSampledMainTexture, vec2(v_texCoords.x, v_texCoords.y - 3.0*blurSize)) * 0.09;

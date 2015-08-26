@@ -13,12 +13,13 @@ varying vec2   v_uvStart;
 varying vec2   v_uvMul;
 
 varying float  v_transparent;
+varying float  v_emission;
 varying vec4   v_positionInLightSpace;
 
 void main() {
   v_normal          = normalize(u_normalMatrix * a_normal);
   float ao          = a_material.r;
-  float emission    = a_material.g;
+  v_emission        = a_material.g;
   float waviness    = a_material.a;
   v_transparent     = a_material.b;
 

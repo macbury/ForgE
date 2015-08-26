@@ -3,6 +3,7 @@
   shadeAO: false,
   envAO: false,
   transparent: false,
+  emission: 1.0f,
   textures: {
     all: "glow_stone"
   }
