@@ -10,4 +10,5 @@ public class Fbo {
 
   public static final String FRAMEBUFFER_REFLECTIONS = "Reflections";
   public static final String FRAMEBUFFER_REFRACTIONS = "Refractions";
+  public static final String FRAMEBUFFER_FINAL       = "Final";
 }

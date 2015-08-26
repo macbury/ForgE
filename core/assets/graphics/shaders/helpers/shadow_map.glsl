@@ -1,16 +1,16 @@
 float calculateDepth(vec4 position, vec4 eyePosition, float cameraFar) {
-  return position.z / cameraFar;//length(eyePosition.xyz - position.xyz) / cameraFar;
+  return length(eyePosition.xyz - position.xyz) / cameraFar;
 }
 
 vec4 pack(float depth) {
-  const HIGH vec4 bias = vec4(1.0 / 255.0, 1.0 / 255.0, 1.0 / 255.0, 0.0);
-  HIGH vec4 color = vec4(depth, fract(depth * 255.0), fract(depth * 65025.0), fract(depth * 160581375.0));
+  const vec4 bias = vec4(1.0 / 255.0, 1.0 / 255.0, 1.0 / 255.0, 0.0);
+	vec4 color = vec4(depth, fract(depth * 255.0), fract(depth * 65025.0), fract(depth * 160581375.0));
   return color - (color.yzww * bias);
 }
 
 float unpack(vec4 packedZValue) {
-	const vec4 unpackFactors = vec4( 1.0 / (256.0 * 256.0 * 256.0), 1.0 / (256.0 * 256.0), 1.0 / 256.0, 1.0 );
-	return dot(packedZValue,unpackFactors);
+  const vec4 bitShifts = vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 160581375.0);
+	return dot(packedZValue,bitShifts);
 }
 
 float shadowBias(vec3 normal, vec3 lightDir) {
@@ -27,7 +27,7 @@ float shadowCalculation(vec4 positionInLightSpace, sampler2D depthMap, float bia
   // Transform to [0,1] range
   positionInLightSpace    = transformFrom0To1Range(positionInLightSpace);
   // Get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
-  float closestDepth      = unpack(texture2D(depthMap, positionInLightSpace.xy));
+  float closestDepth      = step(positionInLightSpace.z, unpack(texture2D(depthMap, positionInLightSpace.xy)));
   // Get depth of current fragment from light's perspective
   float currentDepth      = positionInLightSpace.z;
   // Check whether current frag pos is in shadow
@@ -42,6 +42,6 @@ float shadowCalculation(vec4 positionInLightSpace, sampler2D depthMap, float bia
   }
   shadow /= 9.0f;
 */
-  float shadow            = currentDepth - bias < closestDepth  ? 0.0f : 1.0f;
+  float shadow            = currentDepth - bias < closestDepth  ? 1.0f : 0.0f;
   return shadow;
 }

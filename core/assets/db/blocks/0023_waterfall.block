@@ -1,9 +1,0 @@
-{
-  shadeAO: true,
-  envAO: true,
-  shape: "waterfall",
-  solid: false,
-  liquid: true,
-  textures: {
-  }
-}

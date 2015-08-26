@@ -20,7 +20,7 @@ public class UniformTime extends BaseUniform {
 
   @Override
   public void bind(ShaderProgram shader, LevelEnv env, RenderContext context, Camera camera) {
-    shader.setUniformf(UNIFORM_TIME, ForgE.graphics.getElapsedTime());
+    shader.setUniformf(UNIFORM_TIME, ForgE.time.getSecondsWithMilis() * 0.15f);
   }
 
   @Override

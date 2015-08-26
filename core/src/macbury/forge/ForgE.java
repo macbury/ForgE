@@ -9,6 +9,7 @@ import macbury.forge.blocks.BlocksProvider;
 import macbury.forge.db.GameDatabase;
 import macbury.forge.graphics.GraphicsUtils;
 import macbury.forge.graphics.fbo.FrameBufferManager;
+import macbury.forge.graphics.postprocessing.PostProcessingManager;
 import macbury.forge.input.InputManager;
 import macbury.forge.level.LevelManager;
 import macbury.forge.screens.ScreenManager;

@@ -12,6 +12,5 @@ void main() {
     discard;
   }
 
-  float depth        = calculateDepth(v_position, u_eyePosition, u_cameraFar);
   gl_FragColor       = pack(v_depth);
 }

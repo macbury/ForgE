@@ -18,6 +18,9 @@ void main() {
 
   v_position        = u_worldTransform * vec4(a_position.xyz, 1.0f);
   v_position        = applyWind(waviness, v_position);
+
+  vec4 position     = u_projectionMatrix * v_position;
+
   v_depth           = v_position.z * 0.5f + 0.5f;
-  gl_Position       = u_projectionMatrix * v_position;
+  gl_Position       = position;
 }

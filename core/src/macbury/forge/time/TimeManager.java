@@ -31,7 +31,7 @@ public class TimeManager implements Disposable {
   public TimeManager() {
     this.duration  = DEFAULT_TIME;
     days           = 1;
-    this.timeSpeed = 1000;
+    this.timeSpeed = 10;
   }
 
   public void update() {
@@ -94,6 +94,10 @@ public class TimeManager implements Disposable {
 
   public int getSeconds() {
     return (int)duration;
+  }
+
+  public float getSecondsWithMilis() {
+    return duration;
   }
 
   public String getFormattedDuration() {

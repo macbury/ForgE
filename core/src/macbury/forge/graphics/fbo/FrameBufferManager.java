@@ -168,6 +168,7 @@ public class FrameBufferManager implements Disposable {
   }
 
   public void createDefaultFrameBuffers() {
+    create(Fbo.FRAMEBUFFER_FINAL);
     create(Fbo.FRAMEBUFFER_MAIN_COLOR);
     create(Fbo.FRAMEBUFFER_REFLECTIONS, Pixmap.Format.RGBA8888, ForgE.config.reflectionBufferSize, ForgE.config.reflectionBufferSize, true, Texture.TextureWrap.Repeat, Texture.TextureFilter.Linear);
     create(Fbo.FRAMEBUFFER_REFRACTIONS, Pixmap.Format.RGBA8888, ForgE.config.refractionBufferSize, ForgE.config.refractionBufferSize, true, Texture.TextureWrap.Repeat, Texture.TextureFilter.Linear);

@@ -62,8 +62,17 @@ public class OrthographicDirectionalLight extends DirectionalLight implements Di
     mainCamera.near = ForgE.config.nearShadowDistance;
     mainCamera.update(true);
     update(mainCamera);
+  }
 
+
+  public void endFar(GameCamera mainCamera) {
     farMatrix.set(shadowCamera.combined);
+    restoreNearFar(mainCamera);
+  }
+
+  public void end(GameCamera mainCamera) {
+    farMatrix.set(shadowCamera.combined);
+    restoreNearFar(mainCamera);
   }
 
   public void beginNear(GameCamera mainCamera) {
@@ -74,9 +83,12 @@ public class OrthographicDirectionalLight extends DirectionalLight implements Di
     nearMatrix.set(shadowCamera.combined);
   }
 
-  public void end(GameCamera mainCamera) {
+  public void endNear(GameCamera mainCamera) {
+    nearMatrix.set(shadowCamera.combined);
     restoreNearFar(mainCamera);
   }
+
+
 
   public ICamera getShadowCamera() {
     return shadowCamera;
@@ -91,7 +103,6 @@ public class OrthographicDirectionalLight extends DirectionalLight implements Di
   public void dispose() {
 
   }
-
 
 
 }

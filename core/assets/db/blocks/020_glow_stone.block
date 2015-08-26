@@ -1,9 +1,9 @@
 {
   solid: true,
-  shadeAO: true,
-  envAO: true,
+  shadeAO: false,
+  envAO: false,
   transparent: false,
   textures: {
-    top: "grass",
+    all: "glow_stone"
   }
 }

@@ -2,6 +2,7 @@ package macbury.forge;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Json;
+import macbury.forge.utils.KVStorage;
 
 import java.io.IOException;
 import java.nio.file.Files;

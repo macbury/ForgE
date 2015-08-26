@@ -95,93 +95,100 @@ glass_yellow
   orig: 16, 16
   offset: 0, 0
   index: -1
-grass_side
+glow_stone
   rotate: false
   xy: 410, 2
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
-grass_side_snowed
+grass_side
   rotate: false
   xy: 444, 2
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
-grass_top
+grass_side_snowed
   rotate: false
   xy: 478, 2
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
-leaves_oak
+grass_top
   rotate: false
   xy: 512, 2
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
-log_big_oak
+leaves_oak
   rotate: false
   xy: 546, 2
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
-log_big_oak_top
+log_big_oak
   rotate: false
   xy: 580, 2
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
-potatoes_stage
+log_big_oak_top
   rotate: false
   xy: 614, 2
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
-sand
+potatoes_stage
   rotate: false
   xy: 648, 2
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
-snow
+sand
   rotate: false
   xy: 682, 2
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
-stone
+snow
   rotate: false
   xy: 716, 2
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
-stone_andesite_smooth
+stone
   rotate: false
   xy: 750, 2
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
-stonebrick
+stone_andesite_smooth
   rotate: false
   xy: 784, 2
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
-wheat_stage
+stonebrick
   rotate: false
   xy: 818, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+wheat_stage
+  rotate: false
+  xy: 852, 2
   size: 16, 16
   orig: 16, 16
   offset: 0, 0

@@ -15,8 +15,8 @@ public class Material extends Color {
     this.r = ao;
   }
 
-  public void setSpecular(float specular) {
-    this.g = specular;
+  public void setEmission(float emission) {
+    this.g = emission;
   }
 
   public void setTransparent(boolean transparent) {

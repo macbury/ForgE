@@ -12,6 +12,7 @@ import macbury.forge.graphics.batch.VoxelBatch;
 import macbury.forge.graphics.camera.GameCamera;
 import macbury.forge.graphics.fbo.Fbo;
 import macbury.forge.graphics.frustrum.FrustrumDebugAndRenderer;
+import macbury.forge.graphics.postprocessing.PostProcessingManager;
 import macbury.forge.level.env.LevelEnv;
 import macbury.forge.octree.OctreeNode;
 import macbury.forge.shaders.providers.DepthShaderProvider;
@@ -47,6 +48,7 @@ public class Level implements Disposable {
   public final TerrainEngine            terrainEngine;
   public final LevelEnv                 env;
   public final Stage                    ui;
+  public final PostProcessingManager    postProcessing;
   public final TerrainGeometryProvider terrainGeometryProvider;
 
   public Level(LevelState state, TerrainGeometryProvider geometryProvider) {
@@ -57,6 +59,7 @@ public class Level implements Disposable {
     this.state                    = state;
     this.terrainMap               = state.terrainMap;
     this.terrainGeometryProvider  = geometryProvider;
+    this.postProcessing           = new PostProcessingManager();
     this.renderContext            = new RenderContext(new DefaultTextureBinder(DefaultTextureBinder.WEIGHTED, 1));
 
     this.octree                   = OctreeNode.root();
@@ -93,6 +96,8 @@ public class Level implements Disposable {
     terrainEngine.update();
     entities.update(delta);
 
+    postProcessing.render();
+
     ForgE.graphics.clearAll(Color.BLACK);
 
     ui.act(delta);
@@ -115,6 +120,8 @@ public class Level implements Disposable {
     terrainMap = null;
     colorShaderProvider.dispose();
     depthShaderProvider.dispose();
+    postProcessing.dispose();
+    ui.dispose();
   }
 
 }
