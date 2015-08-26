@@ -15,9 +15,11 @@ import macbury.forge.graphics.fbo.FrameBufferManager;
 public class FullScreenFrameBufferResult extends Actor {
 
   private final TextureRegion region;
+  private final String fboName;
 
-  public FullScreenFrameBufferResult() {
+  public FullScreenFrameBufferResult(String fboName) {
     region = new TextureRegion();
+    this.fboName = fboName;
     setWidth(Gdx.graphics.getWidth());
     setHeight(Gdx.graphics.getHeight());
     setZIndex(0);
@@ -26,7 +28,7 @@ public class FullScreenFrameBufferResult extends Actor {
   @Override
   public void draw(Batch batch, float parentAlpha) {
     super.draw(batch, parentAlpha);
-    Texture tex = ForgE.fb.get(Fbo.FRAMEBUFFER_MAIN_COLOR).getColorBufferTexture();
+    Texture tex = ForgE.fb.get(fboName).getColorBufferTexture();
     region.setTexture(tex);
     region.setRegion(0, 0, tex.getWidth(), tex.getHeight());
     region.flip(false, true);

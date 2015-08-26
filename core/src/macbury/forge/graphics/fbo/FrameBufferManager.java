@@ -45,6 +45,7 @@ public class FrameBufferManager implements Disposable {
       FrameBufferShader shader = (FrameBufferShader)baseShader;
       renderContext.begin(); {
         begin(outputFrameBufferId); {
+          ForgE.graphics.clearAll(Color.CLEAR);
           shader.begin(screenCamera, renderContext, env); {
             shader.render(screenQuad, GL30.GL_TRIANGLE_STRIP);
           } shader.end();
@@ -124,9 +125,9 @@ public class FrameBufferManager implements Disposable {
   private void createScreenQuad() {
     if (screenQuad != null)
       return;
-    screenQuad = new Mesh(true, 4, 6, new VertexAttribute(VertexAttributes.Usage.Position, 3,
-      "a_position"), new VertexAttribute(VertexAttributes.Usage.ColorUnpacked, 4, "a_color"),
-      new VertexAttribute(VertexAttributes.Usage.TextureCoordinates, 2, "a_texCoords"));
+    screenQuad = new Mesh(true, 4, 6, VertexAttribute.Position(), new VertexAttribute(VertexAttributes.Usage.ColorUnpacked, 4, "a_color"),
+        VertexAttribute.TexCoords(0));
+
 
     Vector3 vec0 = new Vector3(0, 0, 0);
     screenCamera.unproject(vec0);
