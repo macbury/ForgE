@@ -1,8 +1,12 @@
 {
-  generateWireframe: true,
-  renderStaticOctree: false,
-  renderBoundingBox: false,
-  debug: true,
-  nearShadowMapSize: 1024,
-  farShadowMapSize: 1024,
+  Debug: true,
+  GenerateWireframe: true,
+  NearShadowMapSize: {
+    class: java.lang.Integer,
+    value: 1024
+  },
+  FarShadowMapSize: {
+    class: java.lang.Integer,
+    value: 1024
+  },
 }

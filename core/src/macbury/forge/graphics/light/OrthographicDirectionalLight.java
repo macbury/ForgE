@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
+import macbury.forge.Config;
 import macbury.forge.ForgE;
 import macbury.forge.graphics.camera.GameCamera;
 import macbury.forge.graphics.camera.ICamera;
@@ -59,7 +60,7 @@ public class OrthographicDirectionalLight extends DirectionalLight implements Di
 
   public void beginFar(GameCamera mainCamera) {
     cacheNearFar(mainCamera);
-    mainCamera.near = ForgE.config.nearShadowDistance;
+    mainCamera.near = ForgE.config.getInt(Config.Key.NearShadowDistance);
     mainCamera.update(true);
     update(mainCamera);
   }
@@ -77,7 +78,7 @@ public class OrthographicDirectionalLight extends DirectionalLight implements Di
 
   public void beginNear(GameCamera mainCamera) {
     cacheNearFar(mainCamera);
-    mainCamera.far = ForgE.config.nearShadowDistance;
+    mainCamera.far = ForgE.config.getInt(Config.Key.NearShadowDistance);
     mainCamera.update(true);
     update(mainCamera);
     nearMatrix.set(shadowCamera.combined);

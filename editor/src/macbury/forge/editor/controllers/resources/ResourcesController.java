@@ -1,6 +1,7 @@
 package macbury.forge.editor.controllers.resources;
 
 import com.badlogic.gdx.Gdx;
+import macbury.forge.Config;
 import macbury.forge.ForgE;
 import macbury.forge.shaders.utils.BaseShader;
 
@@ -59,9 +60,9 @@ public class ResourcesController extends MouseAdapter {
   private void openShaderToEdit(ResourcesModel.GameShaderNode node) {
     BaseShader shader = ForgE.shaders.get(node.getName());
     try {
-      Runtime.getRuntime().exec(ForgE.config.editor + " " + shader.getJsonFile().getAbsolutePath());
-      Runtime.getRuntime().exec(ForgE.config.editor + " " + shader.getFragmentFile().path());
-      Runtime.getRuntime().exec(ForgE.config.editor + " " + shader.getVertexFile().path());
+      Runtime.getRuntime().exec(ForgE.config.getString(Config.Key.Editor) + " " + shader.getJsonFile().getAbsolutePath());
+      Runtime.getRuntime().exec(ForgE.config.getString(Config.Key.Editor) + " " + shader.getFragmentFile().path());
+      Runtime.getRuntime().exec(ForgE.config.getString(Config.Key.Editor) + " " + shader.getVertexFile().path());
     } catch (IOException e) {
       e.printStackTrace();
     }

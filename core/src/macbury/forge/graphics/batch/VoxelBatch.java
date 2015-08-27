@@ -112,7 +112,7 @@ public class VoxelBatch implements Disposable {
   public void render(LevelEnv env) {
     if (camera == null) throw new GdxRuntimeException("Call begin() first.");
     sortUnlessNotSorted();
-    if (ForgE.config.renderDebug == Config.RenderDebug.Wireframe) {
+    if (ForgE.config.getRenderDebug() == Config.RenderDebug.Wireframe) {
       renderWireframe();
     } else {
       renderTextured(env);

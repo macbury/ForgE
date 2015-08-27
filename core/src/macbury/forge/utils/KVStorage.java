@@ -3,17 +3,21 @@ package macbury.forge.utils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ObjectMap;
+import macbury.forge.Config;
 
 /**
  * Created by macbury on 25.08.15.
  */
-public class KVStorage implements Disposable {
-  private ObjectMap<String, Object> values;
+public abstract class KVStorage<K extends Enum> implements Disposable {
+  private ObjectMap<K, Object> values;
   private Array<OnChangeListener> listeners;
   public KVStorage() {
-    this.values     = new ObjectMap<String, Object>();
+    this.values     = new ObjectMap<K, Object>();
     this.listeners  = new Array<OnChangeListener>();
+    setDefaults();
   }
+
+  public abstract void setDefaults();
 
   public void addListener(OnChangeListener listener) {
     if (!listeners.contains(listener, true))
@@ -24,43 +28,47 @@ public class KVStorage implements Disposable {
     listeners.removeValue(listener, true);
   }
 
-  public void putObject(String key, Object value) {
+  public void putObject(K key, Object value) {
     values.put(key, value);
     triggerChange(key);
   }
 
-  public void putInt(String key, int value) {
+  public void putInt(K key, int value) {
     values.put(key, value);
     triggerChange(key);
   }
 
-  public void putString(String key, String value) {
+  public void putString(K key, String value) {
     values.put(key, value);
     triggerChange(key);
   }
 
-  public void putBool(String key, boolean value) {
+  public void putBool(K key, boolean value) {
     values.put(key, value);
     triggerChange(key);
   }
 
-  public int getInt(String key) {
+  public int getInt(K key) {
     return (int)values.get(key);
   }
 
-  public String getString(String key) {
+  public String getString(K key) {
     return (String)values.get(key);
   }
 
-  public boolean getBool(String key) {
+  public boolean getBool(K key) {
     return (boolean)values.get(key);
   }
 
-  public Object getObject(String key) {
+  public Object getObject(K key) {
     return values.get(key);
   }
 
-  protected void triggerChange(String key) {
+  public float getFloat(K key) {
+    return (float)values.get(key);
+  }
+
+  protected void triggerChange(K key) {
     for (OnChangeListener listener : listeners) {
       listener.onKeyChange(key, this);
     }
@@ -74,7 +82,9 @@ public class KVStorage implements Disposable {
     values    = null;
   }
 
-  public interface OnChangeListener {
-    public void onKeyChange(String key, KVStorage storage);
+
+
+  public interface OnChangeListener<K> {
+    public void onKeyChange(K key, KVStorage storage);
   }
 }

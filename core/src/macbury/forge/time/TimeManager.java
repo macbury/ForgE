@@ -24,7 +24,7 @@ public class TimeManager implements Disposable {
   public static final float DAY_END_HOUR      = 20 * HOUR_IN_SECONDS + 35 * MINUTE_IN_SECONDS;
   public static final float DAY_LENGTH        = DAY_END_HOUR - DAY_START_HOUR;
   public static final float NIGHT_LENGTH      = DAY_IN_SECONDS - DAY_END_HOUR + DAY_START_HOUR;
-  public static final float DEFAULT_TIME      = 19 * HOUR_IN_SECONDS;
+  public static final float DEFAULT_TIME      = 12 * HOUR_IN_SECONDS;
   private float sateliteRotation;
   private float sateliteProgress;
 

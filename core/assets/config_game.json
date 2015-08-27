@@ -1,8 +1,20 @@
 {
-  debug: false,
-  resolutionWidth: 1360,
-  resolutionHeight: 768,
-  fullscreen: false,
-  nearShadowMapSize: 1024,
-  farShadowMapSize: 1024,
+  Debug: false,
+  ResolutionWidth: {
+    class: java.lang.Integer,
+    value: 1360
+  },
+  ResolutionHeight: {
+    class: java.lang.Integer,
+    value: 768
+  },
+  Fullscreen: false,
+  NearShadowMapSize: {
+    class: java.lang.Integer,
+    value: 1024
+  },
+  FarShadowMapSize: {
+    class: java.lang.Integer,
+    value: 1024
+  },
 }

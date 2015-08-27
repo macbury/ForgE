@@ -137,7 +137,7 @@ public abstract class BaseShader implements Disposable {
 
   private String applyDebugPrefixes() {
     String out = "";
-    switch (ForgE.config.renderDebug) {
+    switch (ForgE.config.getRenderDebug()) {
       case Normals:
         out += "#define normalsDebugFlag\n";
         break;

@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Disposable;
+import macbury.forge.Config;
 import macbury.forge.ForgE;
 import macbury.forge.components.CursorComponent;
 import macbury.forge.components.PositionComponent;
@@ -68,7 +69,7 @@ public class DebugSystem extends IteratingSystem implements Disposable {
 
   @Override
   public boolean checkProcessing() {
-    return ForgE.config.debug;
+    return ForgE.config.getBool(Config.Key.Debug);
   }
 
   @Override
@@ -76,7 +77,7 @@ public class DebugSystem extends IteratingSystem implements Disposable {
     PositionComponent positionComponent = pm.get(entity);
     CursorComponent cursorComponent   = cm.get(entity);
 
-    if (ForgE.config.renderBoundingBox) {
+    if (ForgE.config.getBool(Config.Key.RenderBoundingBox)) {
       //positionComponent.getBoundingBox(tempBox);
       tempVec.set(positionComponent.size).scl(0.5f);
       tempVec2.set(positionComponent.vector).sub(tempVec);
@@ -105,7 +106,7 @@ public class DebugSystem extends IteratingSystem implements Disposable {
       batch.shapeRenderer.setColor(BOUNDING_BOX_COLOR);
       batch.shapeRenderer.identity();
       super.update(deltaTime);
-      if (ForgE.config.renderBoundingBox) {
+      if (ForgE.config.getBool(Config.Key.RenderBoundingBox)) {
         batch.shapeRenderer.identity();
         for (int i = 0; i < terrain.chunks.size; i++) {
           Chunk chunk = terrain.chunks.get(i);
@@ -118,14 +119,14 @@ public class DebugSystem extends IteratingSystem implements Disposable {
       }
 
       batch.shapeRenderer.setColor(OCTREE_BOUNDS_COLOR);
-      if (ForgE.config.renderDynamicOctree) {
+      if (ForgE.config.getBool(Config.Key.RenderDynamicOctree)) {
         DebugShape.cullledOctree(batch.shapeRenderer, dynamicOctree, camera.normalOrDebugFrustrum());
       }
 
-      if (ForgE.config.renderStaticOctree) {
+      if (ForgE.config.getBool(Config.Key.RenderStaticOctree)) {
         DebugShape.cullledOctree(batch.shapeRenderer, terrainOctree, camera.normalOrDebugFrustrum());
       }
-      if (ForgE.config.debug) {
+      if (ForgE.config.getBool(Config.Key.Debug)) {
         renderStartPosition();
       }
 
@@ -135,7 +136,7 @@ public class DebugSystem extends IteratingSystem implements Disposable {
     context.end();
     batch.render(level.env);
     batch.end();
-    if (ForgE.config.renderBulletDebug) {
+    if (ForgE.config.getBool(Config.Key.RenderBulletDebug)) {
       context.begin(); {
         context.setDepthTest(GL30.GL_LEQUAL);
         context.setCullFace(GL30.GL_BACK);

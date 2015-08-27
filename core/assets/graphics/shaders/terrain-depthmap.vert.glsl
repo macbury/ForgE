@@ -8,7 +8,6 @@ varying vec4   v_position;
 varying vec2   v_uvStart;
 varying vec2   v_uvMul;
 
-varying float  v_depth;
 
 void main() {
   float waviness    = a_material.a;
@@ -21,6 +20,5 @@ void main() {
 
   vec4 position     = u_projectionMatrix * v_position;
 
-  v_depth           = v_position.z * 0.5f + 0.5f;
   gl_Position       = position;
 }

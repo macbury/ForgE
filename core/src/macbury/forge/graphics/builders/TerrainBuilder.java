@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import macbury.forge.Config;
 import macbury.forge.ForgE;
 import macbury.forge.blocks.Block;
 import macbury.forge.graphics.batch.renderable.VoxelChunkRenderable;
@@ -117,7 +118,7 @@ public class TerrainBuilder {
       voxelChunkRenderableFactory.material                    = material;
       voxelChunkRenderableFactory.primitiveType               = GL30.GL_TRIANGLES;
 
-      if (ForgE.config.generateWireframe)
+      if (ForgE.config.getBool(Config.Key.GenerateWireframe))
         voxelChunkRenderableFactory.wireframe           = assembler.wireframe();
       voxelChunkRenderableFactory.triangleCount         = assembler.getTriangleCount();
       voxelChunkRenderableFactory.attributes            = MeshVertexInfo.voxelTypes();
@@ -145,7 +146,7 @@ public class TerrainBuilder {
       VoxelChunkRenderable renderable   = new VoxelChunkRenderable();
       renderable.primitiveType          = GL30.GL_TRIANGLES;
 
-      if (ForgE.config.generateWireframe)
+      if (ForgE.config.getBool(Config.Key.GenerateWireframe))
         renderable.wireframe           = assembler.wireframe();
       renderable.triangleCount         = assembler.getTriangleCount();
       renderable.meshFactory           = assembler.meshFactory(MeshVertexInfo.voxelTypes());

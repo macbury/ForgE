@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
+import macbury.forge.ForgE;
+import macbury.forge.utils.KVStorage;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -13,7 +15,7 @@ import java.util.HashMap;
 /**
  * Created by macbury on 16.10.14.
  */
-public class ShadersManager {
+public class ShadersManager implements KVStorage.OnChangeListener {
   public static final String SHADERS_PATH =  "graphics/shaders/";
   public static final String SHADER_HELPERS_PATH = SHADERS_PATH + "helpers/";
   public static final String SHADER_STRUCTS_PATH = SHADERS_PATH + "structs/";
@@ -26,6 +28,7 @@ public class ShadersManager {
     this.shaderReloadListeners = new Array<ShaderReloadListener>();
     this.shaders               = new HashMap<String, BaseShader>();
     this.shaderList            = new Array<BaseShader>();
+    ForgE.config.addListener(this);
     reload();
   }
 
@@ -107,5 +110,15 @@ public class ShadersManager {
 
   public Array<BaseShader> all() {
     return shaderList;
+  }
+
+  @Override
+  public void onKeyChange(Object key, KVStorage storage) {
+    Gdx.app.postRunnable(new Runnable() {
+      @Override
+      public void run() {
+        reload();
+      }
+    });
   }
 }

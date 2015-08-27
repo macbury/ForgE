@@ -116,15 +116,15 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
   }
 
   public void refresh() {
-    debugRenderDynamicOctree.setState(ForgE.config.renderDynamicOctree);
-    debugBoundingBox.setState(ForgE.config.renderBoundingBox);
-    debugRenderStaticOctree.setState(ForgE.config.renderStaticOctree);
+    debugRenderDynamicOctree.setState(ForgE.config.getBool(Config.Key.RenderDynamicOctree));
+    debugBoundingBox.setState(ForgE.config.getBool(Config.Key.RenderBoundingBox));
+    debugRenderStaticOctree.setState(ForgE.config.getBool(Config.Key.RenderStaticOctree));
 
     if (editor == null) {
       debugRenderMenu.setVisible(false);
     } else {
       debugRenderMenu.setVisible(true);
-      switch (ForgE.config.renderDebug) {
+      switch (ForgE.config.getRenderDebug()) {
         case Normals:
           debugNormalsItem.setSelected(true);
         break;
@@ -221,21 +221,21 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
     debugRenderDynamicOctree.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        ForgE.config.renderDynamicOctree = debugRenderDynamicOctree.getState();
+        ForgE.config.putBool(Config.Key.RenderDynamicOctree, debugRenderDynamicOctree.getState());
       }
     });
 
     debugRenderStaticOctree.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        ForgE.config.renderStaticOctree = debugRenderStaticOctree.getState();
+        ForgE.config.putBool(Config.Key.RenderStaticOctree, debugRenderStaticOctree.getState());
       }
     });
 
     debugBoundingBox.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        ForgE.config.renderBoundingBox = debugBoundingBox.getState();
+        ForgE.config.putBool(Config.Key.RenderBoundingBox, debugBoundingBox.getState());
       }
     });
   }
@@ -273,7 +273,7 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
   }
 
   private void setRenderingMode(Config.RenderDebug renderType) {
-    ForgE.config.setRenderDebugTo(renderType);
+    ForgE.config.putRenderDebug(renderType);
   }
 
   @Override

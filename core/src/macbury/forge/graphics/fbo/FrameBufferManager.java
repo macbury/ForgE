@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
+import macbury.forge.Config;
 import macbury.forge.ForgE;
 import macbury.forge.level.env.LevelEnv;
 import macbury.forge.shaders.CopyFrameBufferShader;
@@ -186,12 +187,12 @@ public class FrameBufferManager implements Disposable {
   public void createDefaultFrameBuffers() {
     create(Fbo.FRAMEBUFFER_FINAL);
     create(Fbo.FRAMEBUFFER_MAIN_COLOR);
-    create(Fbo.FRAMEBUFFER_DOWN_SAMPLED_MAIN, Pixmap.Format.RGBA8888, ForgE.config.bloomTextureSize, ForgE.config.bloomTextureSize, false, Texture.TextureWrap.MirroredRepeat, Texture.TextureFilter.Linear);
-    create(Fbo.FRAMEBUFFER_BLOOM, Pixmap.Format.RGBA8888, ForgE.config.bloomTextureSize, ForgE.config.bloomTextureSize, false, Texture.TextureWrap.MirroredRepeat, Texture.TextureFilter.Linear);
-    create(Fbo.FRAMEBUFFER_REFLECTIONS, Pixmap.Format.RGBA8888, ForgE.config.reflectionBufferSize, ForgE.config.reflectionBufferSize, true, Texture.TextureWrap.Repeat, Texture.TextureFilter.Linear);
-    create(Fbo.FRAMEBUFFER_REFRACTIONS, Pixmap.Format.RGBA8888, ForgE.config.refractionBufferSize, ForgE.config.refractionBufferSize, true, Texture.TextureWrap.Repeat, Texture.TextureFilter.Linear);
-    createFloat(Fbo.FRAMEBUFFER_SUN_FAR_DEPTH, ForgE.config.farShadowMapSize, ForgE.config.farShadowMapSize, true, Texture.TextureWrap.ClampToEdge, Texture.TextureFilter.Linear);
-    createFloat(Fbo.FRAMEBUFFER_SUN_NEAR_DEPTH, ForgE.config.farShadowMapSize, ForgE.config.nearShadowMapSize, true, Texture.TextureWrap.ClampToEdge, Texture.TextureFilter.Linear);
+    create(Fbo.FRAMEBUFFER_DOWN_SAMPLED_MAIN, Pixmap.Format.RGBA8888, ForgE.config.getInt(Config.Key.BloomTextureSize), ForgE.config.getInt(Config.Key.BloomTextureSize), false, Texture.TextureWrap.MirroredRepeat, Texture.TextureFilter.Linear);
+    create(Fbo.FRAMEBUFFER_BLOOM, Pixmap.Format.RGBA8888, ForgE.config.getInt(Config.Key.BloomTextureSize), ForgE.config.getInt(Config.Key.BloomTextureSize), false, Texture.TextureWrap.MirroredRepeat, Texture.TextureFilter.Linear);
+    create(Fbo.FRAMEBUFFER_REFLECTIONS, Pixmap.Format.RGBA8888, ForgE.config.getInt(Config.Key.ReflectionBufferSize), ForgE.config.getInt(Config.Key.ReflectionBufferSize), true, Texture.TextureWrap.Repeat, Texture.TextureFilter.Linear);
+    create(Fbo.FRAMEBUFFER_REFRACTIONS, Pixmap.Format.RGBA8888, ForgE.config.getInt(Config.Key.RefractionBufferSize), ForgE.config.getInt(Config.Key.RefractionBufferSize), true, Texture.TextureWrap.Repeat, Texture.TextureFilter.Linear);
+    createFloat(Fbo.FRAMEBUFFER_SUN_FAR_DEPTH, ForgE.config.getInt(Config.Key.FarShadowMapSize), ForgE.config.getInt(Config.Key.FarShadowMapSize), true, Texture.TextureWrap.ClampToEdge, Texture.TextureFilter.Linear);
+    createFloat(Fbo.FRAMEBUFFER_SUN_NEAR_DEPTH, ForgE.config.getInt(Config.Key.NearShadowMapSize), ForgE.config.getInt(Config.Key.NearShadowMapSize), true, Texture.TextureWrap.ClampToEdge, Texture.TextureFilter.Linear);
   }
 
   public ObjectMap<String, FrameBuffer> all() {

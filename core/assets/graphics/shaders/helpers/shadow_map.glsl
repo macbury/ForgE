@@ -21,15 +21,32 @@ vec4 transformFrom0To1Range(vec4 vector) {
   return vector * 0.5f + 0.5f;
 }
 
+float chebshevComputeQuantity(vec4 positionInLightSpace, sampler2D depthMap, float bias) {
+  float currentDepth = (positionInLightSpace.z / positionInLightSpace.w )* 0.5f + 0.5f;
+  vec2 projCoords    = (positionInLightSpace.xy / positionInLightSpace.w) * 0.5f + 0.5f;
+  // get two moments
+  vec2 moments      = texture2D(depthMap, projCoords.xy).rg;
+  if (currentDepth <= moments.x) {
+    return 1.0f;
+  } else {
+    float E_x2 = moments.y;
+    float Ex_2 = moments.x * moments.x;
+    float variance = E_x2 - (Ex_2);
+    float t = currentDepth - moments.x;
+    float pMax = variance / (variance + t*t);
+    return pMax;
+  }
+}
+
 float shadowCalculation(vec4 positionInLightSpace, sampler2D depthMap, float bias) {
   // perform perspective divide
-  vec3 projCoords         = positionInLightSpace.xyz / positionInLightSpace.w;
+  vec3 projCoords         = (positionInLightSpace.xyz / positionInLightSpace.w) * 0.5f + 0.5f;
   // Transform to [0,1] range
-  positionInLightSpace    = transformFrom0To1Range(positionInLightSpace);
+  //projCoords    = transformFrom0To1Range(positionInLightSpace);
   // Get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
-  float closestDepth      = step(positionInLightSpace.z, unpack(texture2D(depthMap, positionInLightSpace.xy)));
+  float closestDepth      = step(projCoords.z, unpack(texture2D(depthMap, projCoords.xy)));
   // Get depth of current fragment from light's perspective
-  float currentDepth      = positionInLightSpace.z;
+  float currentDepth      = projCoords.z;
   // Check whether current frag pos is in shadow
 /*
   vec2 texelSize          = vec2(0.0009765f);

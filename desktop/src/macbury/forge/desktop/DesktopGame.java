@@ -28,9 +28,9 @@ public class DesktopGame implements ForgEBootListener, Thread.UncaughtExceptionH
     config.resizable      = false;
     config.foregroundFPS  = 30;
 
-    config.width          = forgeConfig.resolutionWidth;
-    config.height         = forgeConfig.resolutionHeight;
-    config.fullscreen     = forgeConfig.fullscreen;
+    config.width          = forgeConfig.getInt(Config.Key.ResolutionWidth);
+    config.height         = forgeConfig.getInt(Config.Key.ResolutionHeight);
+    config.fullscreen     = forgeConfig.getBool(Config.Key.Fullscreen);
 
     ForgE engine              = new ForgE(forgeConfig);
     engine.addBootListener(this);
