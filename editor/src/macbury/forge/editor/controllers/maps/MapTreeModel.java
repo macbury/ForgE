@@ -63,14 +63,14 @@ public class MapTreeModel extends DefaultTreeModel implements TreeExpansionListe
   }
 
   private void buildTree(FileHandle begin, BaseNode parent)  {
-    FileHandle[] newHandles = begin.list(ForgE.levels.mapAndDirFileFilter);
+    FileHandle[] newHandles = begin.list();
     for (FileHandle f : newHandles) {
       if (f.isDirectory()) {
         FolderNode node = new FolderNode(f.nameWithoutExtension(), f);
         parent.add(node);
         buildTree(f, node);
         pushNode(node);
-      } else {
+      } else if (f.name().endsWith(LevelState.LEVEL_FILE_EXT)) {
         int levelId       = ForgE.levels.getLevelId(f);
         try {
           LevelState state  = ForgE.levels.loadBasicLevelStateInfo(levelId);
