@@ -19,27 +19,51 @@ import macbury.forge.graphics.shadows.BoundingSphereDirectionalAnalyzer;
  * Created by macbury on 14.08.15.
  */
 public class OrthographicDirectionalLight extends DirectionalLight implements Disposable {
+  private final float halfHeight;
+  private final float halfDepth;
   private OrtographicGameCamera shadowCamera;
   public Matrix4 nearMatrix;
   public Matrix4 farMatrix;
   private BoundingSphereDirectionalAnalyzer frustrumAnalyzer;
   private float oldNear;
   private float oldFar;
-
+  protected final Vector3 tmpV = new Vector3();
   public OrthographicDirectionalLight() {
     super();
 
-    this.shadowCamera   = new OrtographicGameCamera(5, 5);
-    shadowCamera.near   = 0.1f;
-    shadowCamera.far    = 50;
+    float shadowViewportWidth = 30;
+    float shadowViewportHeight = 30;
+    float shadowNear    = 0.1f;
+    float shadowFar     = 100;
+
+    this.shadowCamera   = new OrtographicGameCamera(shadowViewportWidth, shadowViewportHeight);
+    shadowCamera.near   = shadowNear;
+    shadowCamera.far    = shadowFar;
+
+    halfHeight          = shadowViewportHeight * 0.5f;
+    halfDepth           = shadowNear + 0.5f * (shadowFar - shadowNear);
+
     frustrumAnalyzer    = new BoundingSphereDirectionalAnalyzer();
     this.shadowCamera.update(true);
     this.nearMatrix     = new Matrix4();
     this.farMatrix      = new Matrix4();
   }
-
+/*
   private void update(GameCamera mainCamera) {
     frustrumAnalyzer.analyze(mainCamera.normalOrDebugFrustrum(), direction).set(shadowCamera);
+  }*/
+
+  public void update (final Camera camera) {
+    update(tmpV.set(camera.direction).scl(halfHeight), camera.direction);
+  }
+
+  public void update (final Vector3 center, final Vector3 forward) {
+    // cam.position.set(10,10,10);
+    shadowCamera.position.set(direction).scl(-halfDepth).add(center);
+    shadowCamera.direction.set(direction).nor();
+    // cam.up.set(forward).nor();
+    shadowCamera.normalizeUp();
+    shadowCamera.update();
   }
 
   private void cacheNearFar(GameCamera mainCamera) {

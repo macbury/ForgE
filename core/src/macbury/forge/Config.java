@@ -47,19 +47,21 @@ public class Config extends KVStorage<Config.Key> {
 
 
   public static Config load(String namespace) {
+    Config config   = new Config();
     Json json       = new Json();
     byte[] encoded  = new byte[0];
     try {
-      encoded = Files.readAllBytes(Paths.get("./config_" + namespace + ".json"));
+      encoded         = Files.readAllBytes(Paths.get("./config_" + namespace + ".json"));
+      String text     = new String(encoded);
+      ObjectMap<String, Object> values = json.fromJson(ObjectMap.class, text);
+
+      for(String rawKey : values.keys()) {
+        Key key = Key.valueOf(rawKey);
+        config.putObject(key, values.get(rawKey));
+      }
+
     } catch (IOException e) {
       e.printStackTrace();
-    }
-    String text     = new String(encoded);
-    ObjectMap<String, Object> values = json.fromJson(ObjectMap.class, text);
-    Config config   = new Config();
-    for(String rawKey : values.keys()) {
-      Key key = Key.valueOf(rawKey);
-      config.putObject(key, values.get(rawKey));
     }
     return config;
   }

@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.utils.Array;
 import macbury.forge.assets.AssetsManager;
+import macbury.forge.assets.FileManager;
 import macbury.forge.blocks.BlocksProvider;
 import macbury.forge.db.GameDatabase;
 import macbury.forge.graphics.GraphicsUtils;
@@ -20,6 +21,7 @@ import macbury.forge.entities.EntityManager;
 import macbury.forge.time.TimeManager;
 
 public class ForgE extends Game {
+  private static final String TAG = "Forge";
   public static GraphicsUtils       graphics;
   public static ScreenManager       screens;
   public static AssetsManager       assets;
@@ -35,7 +37,7 @@ public class ForgE extends Game {
   public static FrameBufferManager  fb;
   public static TimeManager         time;
   private Array<ForgEBootListener>  bootListeners;
-
+  public static FileManager         files;
 
   public ForgE(Config config) {
     super();
@@ -46,6 +48,8 @@ public class ForgE extends Game {
   @Override
   public void create () {
     Bullet.init(false, true);
+    //Gdx.app.log(TAG, Gdx.files.classpath("db/entities/crate.json").readString());
+    files         = new FileManager();
     storage       = new StorageManager();
     db            = storage.loadOrInitializeDB();
     graphics      = new GraphicsUtils();

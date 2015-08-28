@@ -2,6 +2,7 @@ package macbury.forge.db.models;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import macbury.forge.ForgE;
 
 /**
  * Created by macbury on 11.05.15.
@@ -13,6 +14,6 @@ public abstract class BaseModel {
   public abstract String getStorageDir();
 
   public FileHandle getFileHandle() {
-    return Gdx.files.internal(DB_PATH+ getStorageDir() + getFilename());
+    return ForgE.files.internal(DB_PATH+ getStorageDir() + getFilename());
   }
 }

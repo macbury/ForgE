@@ -19,6 +19,8 @@ public class UniformShadowMap extends BaseUniform {
   private static final String UNIFORM_SHADOW_MAP_FAR_TRANSFORM  = "u_shadowMap.farTransform";
   private static final String UNIFORM_SHADOW_MAP_NEAR_TRANSFORM = "u_shadowMap.nearTransform";
   private static final String UNIFORM_SHADOW_MAP_POSITION       = "u_shadowMap.lightPosition";
+  private static final String UNIFORM_SHADOW_MAP_FAR            = "u_shadowMap.far";
+  private static final String UNIFORM_SHADOW_MAP_NEAR            = "u_shadowMap.near";
   @Override
   public void defineUniforms() {
     define(UNIFORM_SHADOW_MAP, STRUCT);
@@ -31,7 +33,9 @@ public class UniformShadowMap extends BaseUniform {
     shader.setUniformi(UNIFORM_SHADOW_NEAR_MAP_TEXTURE, context.textureBinder.bind(ForgE.fb.get(Fbo.FRAMEBUFFER_SUN_NEAR_DEPTH).getColorBufferTexture()));
     shader.setUniformMatrix(UNIFORM_SHADOW_MAP_FAR_TRANSFORM, env.mainLight.farMatrix);
     shader.setUniformMatrix(UNIFORM_SHADOW_MAP_NEAR_TRANSFORM, env.mainLight.nearMatrix);
-    //shader.setUniformf(UNIFORM_SHADOW_MAP_POSITION, shadowCamera.position.x, shadowCamera.position.y, shadowCamera.position.z, UniformEyePosition.CONST / (shadowCamera.far * shadowCamera.far));
+    shader.setUniformf(UNIFORM_SHADOW_MAP_POSITION, shadowCamera.position.x, shadowCamera.position.y, shadowCamera.position.z, UniformEyePosition.CONST / (shadowCamera.far * shadowCamera.far));
+    shader.setUniformf(UNIFORM_SHADOW_MAP_FAR, shadowCamera.far);
+    shader.setUniformf(UNIFORM_SHADOW_MAP_NEAR, shadowCamera.near);
   }
 
   @Override

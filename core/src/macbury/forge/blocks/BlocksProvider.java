@@ -4,10 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GLTexture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.GdxRuntimeException;
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.SerializationException;
+import com.badlogic.gdx.utils.*;
+import macbury.forge.ForgE;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -45,7 +43,7 @@ public class BlocksProvider implements Disposable {
 
   private void loadShapes() {
     Json json = new Json();
-    FileHandle[] shapesFiles = Gdx.files.internal(BLOCKS_SHAPE_PATH).list(new FilenameFilter() {
+    Array<FileHandle> shapesFiles = ForgE.files.list(BLOCKS_SHAPE_PATH, new FilenameFilter() {
       @Override
       public boolean accept(File dir, String name) {
         return name.endsWith("."+SHAPE_EXT);
@@ -64,14 +62,14 @@ public class BlocksProvider implements Disposable {
 
   private void loadBlocks() {
     Json json = new Json();
-    FileHandle[] blocksFiles = Gdx.files.internal(BLOCKS_PATH).list(new FilenameFilter() {
+    Array<FileHandle> blocksFiles = ForgE.files.list(BLOCKS_PATH, new FilenameFilter() {
       @Override
       public boolean accept(File dir, String name) {
-        return name.endsWith("."+BLOCK_EXT);
+        return name.endsWith("." + BLOCK_EXT);
       }
     });
 
-    this.blocks     = new Block[blocksFiles.length + 1];
+    this.blocks     = new Block[blocksFiles.size + 1];
     this.blocks[0]  = new AirBlock();
 
     for (FileHandle blockFile : blocksFiles) {
@@ -120,7 +118,7 @@ public class BlocksProvider implements Disposable {
   }
 
   public FileHandle getTextureAtlasFile() {
-    return Gdx.files.internal(TILEMAP_PATH);
+    return ForgE.files.internal(TILEMAP_PATH);
   }
 
   public Block find(byte blockId) {

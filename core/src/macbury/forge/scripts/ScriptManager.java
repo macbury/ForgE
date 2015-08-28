@@ -17,24 +17,20 @@ import macbury.forge.components.PositionComponent;
 import macbury.forge.components.RigidBodyComoponent;
 import macbury.forge.level.Level;
 import macbury.forge.screens.AbstractScreen;
-import macbury.forge.screens.GameplayScreen;
-import macbury.forge.scripts.modules.BaseGameScriptModule;
 import macbury.forge.scripts.modules.LoggingGameScriptModule;
 import macbury.forge.terrain.geometry.DynamicGeometryProvider;
 import macbury.forge.terrain.geometry.FileGeometryProvider;
 import org.mozilla.javascript.Context;
-import org.mozilla.javascript.NativeJavaPackage;
 import org.mozilla.javascript.ScriptableObject;
 
 import java.io.File;
-import java.io.FileFilter;
-import java.lang.reflect.InvocationTargetException;
+import java.io.FilenameFilter;
 
 /**
  * Created by macbury on 12.05.15.
  */
 public class ScriptManager implements Disposable {
-  public static final String STORE_DIR = "db/scripts/";
+  public static final String SCRIPTS_DIR = "db/scripts/";
   public static final String FILE_EXT  = ".fjs";
   private static final String TAG      = "ScriptManager";
 
@@ -60,12 +56,6 @@ public class ScriptManager implements Disposable {
   private final ScriptableObject mainScope;
   private GameScriptLib gameScript;
 
-  public FileFilter scriptFileFilter = new FileFilter() {
-    @Override
-    public boolean accept(File pathname) {
-      return pathname.getName().endsWith(FILE_EXT) || pathname.isDirectory();
-    }
-  };
 
   public ScriptManager() {
     this.context   = Context.enter();
@@ -74,24 +64,16 @@ public class ScriptManager implements Disposable {
     addGameObj();
   }
 
-  private void getHandles(FileHandle begin, Array<FileHandle> handles)  {
-    FileHandle[] newHandles = begin.list(scriptFileFilter);
-    for (FileHandle f : newHandles) {
-      if (f.isDirectory()) {
-        getHandles(f, handles);
-      } else {
-        handles.add(f);
-      }
-    }
-  }
-
   public void loadAndRun() {
+    Gdx.app.log(TAG, "Searching for scripts...");
     registerDefaultModules();
-    Array<FileHandle> scriptFiles = new Array<FileHandle>();
-    getHandles(Gdx.files.internal(STORE_DIR), scriptFiles);
+    Array<FileHandle> scriptFiles = ForgE.files.listRecursive(SCRIPTS_DIR);
+
     for (FileHandle handle : scriptFiles) {
-      Gdx.app.log(TAG, "Loading: " + handle.path());
-      eval(handle);
+      if (handle.name().endsWith(FILE_EXT)) {
+        Gdx.app.log(TAG, "Loading: " + handle.path());
+        eval(handle);
+      }
     }
 
     gameScript.compileModules(context, mainScope);

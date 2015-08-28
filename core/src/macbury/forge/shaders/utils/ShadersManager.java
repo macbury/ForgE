@@ -43,7 +43,7 @@ public class ShadersManager implements KVStorage.OnChangeListener {
     }
     shaders.clear();
     shaderList.clear();
-    FileHandle[] shadersToImport = Gdx.files.internal(SHADERS_PATH).list(new FilenameFilter() {
+    Array<FileHandle> shadersToImport = ForgE.files.list(SHADERS_PATH, new FilenameFilter() {
       @Override
       public boolean accept(File dir, String name) {
         return name.contains(".json");

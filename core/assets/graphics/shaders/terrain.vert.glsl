@@ -32,6 +32,6 @@ void main() {
   v_position        = u_worldTransform * a_position;
   v_position        = applyWind(waviness, v_position);
 
-  v_positionInLightSpace = u_shadowMap.farTransform * vec4(v_position.xyz, 1.0f);
+  v_positionInLightSpace = u_shadowMap.farTransform * v_position;
   gl_Position            = u_projectionMatrix * v_position;
 }

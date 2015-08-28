@@ -18,18 +18,33 @@ task run(dependsOn: classes, type: JavaExec) {
     ignoreExitValue = true
 }
 
+task copyAssets(type: Copy) {
+    from files("${assetsDir}/graphics/") {
+        into "META-INF/resources"
+    }
+}
+
+
 task dist(type: Jar) {
+    copy {
+        from "${assetsDir}/config_game.json"
+        into distDir
+    }
     from files(sourceSets.main.output.classesDir)
     from files(sourceSets.main.output.resourcesDir)
     from {configurations.compile.collect {zipTree(it)}}
-    //from files(project.assetsDir);
+    from fileTree(dir: assetsDir, includes: ["db/**/*", "audio/**/*", "graphics/**/*"])
+
+    /* from files("${assetsDir}/audio");
+     from files("${assetsDir}/graphics");
+     */
 
     exclude 'META-INF/*.DSA', 'META-INF/*.RSA', 'META-INF/*.SF'
 
     manifest {
         attributes 'Main-Class': project.mainClassName
     }
-
+/*
     copy {
         from "${assetsDir}/db"
         into "${distDir}/db"
@@ -44,7 +59,7 @@ task dist(type: Jar) {
         into "${distDir}/graphics"
     }
 
-
+    */
 }
 
 

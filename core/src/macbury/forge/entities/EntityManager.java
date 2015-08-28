@@ -3,8 +3,10 @@ package macbury.forge.entities;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Json;
+import macbury.forge.ForgE;
 import macbury.forge.components.*;
 import macbury.forge.db.models.Teleport;
 import macbury.forge.systems.engine.EntitySystemsManager;
@@ -43,7 +45,7 @@ public class EntityManager implements Disposable {
   private void reload() {
     builders.clear();
     Gdx.app.log(TAG, "Reloading...");
-    FileHandle[] entityJsons = Gdx.files.internal(ENTITIES_STORAGE).list(new FilenameFilter() {
+    Array<FileHandle> entityJsons = ForgE.files.list(ENTITIES_STORAGE, new FilenameFilter() {
       @Override
       public boolean accept(File dir, String name) {
         return name.endsWith(ENTITY_EXT);

@@ -80,6 +80,12 @@ public class WorldRenderingSystem extends EntitySystem {
   private void renderSunDepth() {
     env.water.clipMode                    = LevelEnv.ClipMode.None;
     OrthographicDirectionalLight sunLight = env.mainLight;
+/*
+    sunLight.beginNear(mainCamera); {
+      ForgE.fb.begin(Fbo.FRAMEBUFFER_SUN_NEAR_DEPTH); {
+        renderBucketWith(false, false, sunLight.getShadowCamera());
+      } ForgE.fb.end();
+    } sunLight.endNear(mainCamera);
 
     sunLight.beginFar(mainCamera); {
       ForgE.fb.begin(Fbo.FRAMEBUFFER_SUN_FAR_DEPTH); {
@@ -87,11 +93,12 @@ public class WorldRenderingSystem extends EntitySystem {
       } ForgE.fb.end();
     } sunLight.endFar(mainCamera);
 
-    sunLight.beginNear(mainCamera); {
-      ForgE.fb.begin(Fbo.FRAMEBUFFER_SUN_NEAR_DEPTH); {
+ */
+    sunLight.begin(mainCamera); {
+      ForgE.fb.begin(Fbo.FRAMEBUFFER_SUN_FAR_DEPTH); {
         renderBucketWith(false, false, sunLight.getShadowCamera());
       } ForgE.fb.end();
-    } sunLight.endNear(mainCamera);
+    } sunLight.end(mainCamera);
   }
 
   private void renderReflections() {
@@ -115,7 +122,8 @@ public class WorldRenderingSystem extends EntitySystem {
     env.water.clipMode = LevelEnv.ClipMode.Refraction;
     ForgE.fb.begin(Fbo.FRAMEBUFFER_REFRACTIONS); {
       renderBucketWith(false, false, mainCamera);
-    } ForgE.fb.end();
+    }
+    ForgE.fb.end();
   }
 
   private void renderFinal() {
@@ -145,8 +153,9 @@ public class WorldRenderingSystem extends EntitySystem {
       }
     }
 
-    batch.begin((Camera) camera); {
-      if (withSkybox){
+    batch.begin((Camera) camera);
+    {
+      if (withSkybox) {
         ForgE.graphics.clearAll(env.skyColor);
         skybox.render(batch, env, (Camera)camera);
       } else {

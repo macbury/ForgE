@@ -8,6 +8,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.KryoException;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
+import macbury.forge.ForgE;
 import macbury.forge.storage.StorageManager;
 import macbury.forge.storage.serializers.level.FullLevelStateSerializer;
 import macbury.forge.storage.serializers.level.LevelStateBasicInfoSerializer;
@@ -29,12 +30,6 @@ public class LevelManager {
   private final LevelStateBasicInfoSerializer basicLevelInfoSerializer;
   private HashMap<Integer, FileHandle> idToPathMap;
 
-  public FileFilter mapAndDirFileFilter = new FileFilter() {
-    @Override
-    public boolean accept(File pathname) {
-      return pathname.getName().endsWith(LevelState.LEVEL_FILE_EXT) || pathname.isDirectory();
-    }
-  };
 
   public LevelManager(StorageManager storageManager) {
     this.storageManager = storageManager;
@@ -48,12 +43,11 @@ public class LevelManager {
     LevelState levelState = null;
     Gdx.app.log(TAG, "Loading map: " + mapFile.toString());
     try {
-      InflaterInputStream inflaterInputStream = new InflaterInputStream(new FileInputStream(mapFile.file()));
+
+      InflaterInputStream inflaterInputStream = new InflaterInputStream(mapFile.read());
       Input input                             = new Input(inflaterInputStream);
       levelState                              = kryo.readObject(input, LevelState.class, new FullLevelStateSerializer());
       input.close();
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
     } catch (KryoException e) {
       e.printStackTrace();
     }
@@ -63,17 +57,13 @@ public class LevelManager {
 
   public FileGeometryProvider loadGeometry(LevelState state) {
     Kryo kryo             = storageManager.pool.borrow();
-    File file             = getGeoFile(state.id);
+    FileHandle handle     = getGeoHandle(state.id);
     FileGeometryProvider geometryProvider = null;
-    Gdx.app.log(TAG, "Loading geometry: " + file.toString());
-    try {
-      InflaterInputStream inflaterInputStream = new InflaterInputStream(new FileInputStream(file));
-      Input input                             = new Input(inflaterInputStream);
-      geometryProvider                        = kryo.readObject(input, FileGeometryProvider.class, new TerrainGeometryProviderSerializer());
-      input.close();
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-    }
+    Gdx.app.log(TAG, "Loading geometry: " + handle.path());
+    InflaterInputStream inflaterInputStream = new InflaterInputStream(handle.read());
+    Input input                             = new Input(inflaterInputStream);
+    geometryProvider                        = kryo.readObject(input, FileGeometryProvider.class, new TerrainGeometryProviderSerializer());
+    input.close();
     storageManager.pool.release(kryo);
     return geometryProvider;
   }
@@ -99,8 +89,13 @@ public class LevelManager {
   }
 
   public File getGeoFile(int levelStateId) {
-    return new File(Gdx.files.internal(LevelState.MAP_STORAGE_DIR).file().getAbsolutePath() + File.separator + LevelState.MAP_NAME_PREFIX+levelStateId+LevelState.GEO_FILE_EXT);
+    return getGeoHandle(levelStateId).file();
   }
+
+  public FileHandle getGeoHandle(int levelStateId) {
+    return ForgE.files.internal("maps:"+ LevelState.MAP_NAME_PREFIX+levelStateId+LevelState.GEO_FILE_EXT);
+  }
+
 
   public void save(TerrainGeometryProvider provider, LevelState state) {
     Kryo kryo          = storageManager.pool.borrow(); {
@@ -123,32 +118,24 @@ public class LevelManager {
   }
 
   public void save(LevelState state) {
-    String storeDir = Gdx.files.internal(LevelState.MAP_STORAGE_DIR).file().getAbsolutePath();
+    String storeDir = ForgE.files.internal(LevelState.MAP_STORAGE_DIR).file().getAbsolutePath();
     if (exists(state.id)) {
       storeDir = getFileHandle(state.id).file().getParent();
     }
     save(state, storeDir);
   }
 
-  private void getHandles(FileHandle begin, Array<FileHandle> handles)  {
-    FileHandle[] newHandles = begin.list(mapAndDirFileFilter);
-    for (FileHandle f : newHandles) {
-      if (f.isDirectory()) {
-        getHandles(f, handles);
-      } else {
-        handles.add(f);
-      }
-    }
-  }
 
   public void reload() {
     Kryo kryo                                = storageManager.pool.borrow();
-    Array<FileHandle> tempFiles              = new Array<FileHandle>();
-    getHandles(Gdx.files.internal(LevelState.MAP_STORAGE_DIR), tempFiles);
+    Array<FileHandle> tempFiles              = ForgE.files.listRecursive(LevelState.MAP_STORAGE_DIR);
+
     for (FileHandle file : tempFiles) {
-      if (!file.isDirectory()) {
+      if (file.name().endsWith(LevelState.LEVEL_FILE_EXT)) {
         int levelId = getLevelId(file);
-        idToPathMap.put(levelId, file);
+        if (levelId != -1) {
+          idToPathMap.put(levelId, file);
+        }
       }
     }
     storageManager.pool.release(kryo);
@@ -176,7 +163,12 @@ public class LevelManager {
   }
 
   public int getLevelId(FileHandle file) {
-    return Integer.valueOf(file.nameWithoutExtension().replaceAll(LevelState.MAP_NAME_PREFIX, ""));
+    try {
+      return Integer.valueOf(file.nameWithoutExtension().replaceAll(LevelState.MAP_NAME_PREFIX, ""));
+    } catch (NumberFormatException e) {
+      return -1;
+    }
+
   }
 
   public FileHandle getFileHandle(int id) {

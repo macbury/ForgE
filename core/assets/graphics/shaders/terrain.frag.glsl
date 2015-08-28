@@ -17,9 +17,10 @@ void main() {
     discard;
   }
 
+
   float bias          = shadowBias(v_normal, u_mainLight.direction);
   float shadow        = shadowCalculation(v_positionInLightSpace, u_shadowMap.farDepthMap, bias);
-
+  shadow              = 0.0f;
   vec4 lighting       = u_ambientLight + (1.0f - shadow) * v_lightDiffuse;
 
   vec4 diffuse        = (lighting * texture) + texture * v_emission;

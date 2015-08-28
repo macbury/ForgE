@@ -86,18 +86,18 @@ public abstract class BaseShader implements Disposable {
   }
 
   public FileHandle getVertexFile() {
-    return Gdx.files.internal(ShadersManager.SHADERS_PATH +vertex+".vert.glsl");
+    return ForgE.files.internal(ShadersManager.SHADERS_PATH +vertex+".vert.glsl");
   }
 
   public FileHandle getFragmentFile() {
-    return Gdx.files.internal(ShadersManager.SHADERS_PATH +fragment+".frag.glsl");
+    return ForgE.files.internal(ShadersManager.SHADERS_PATH +fragment+".frag.glsl");
   }
 
   private String applyStructs() {
     String output = "";
     if (structs != null) {
       for(String structureName : structs) {
-        output += Gdx.files.internal(ShadersManager.SHADER_STRUCTS_PATH +structureName+".glsl").readString() + "\n";
+        output += ForgE.files.internal(ShadersManager.SHADER_STRUCTS_PATH +structureName+".glsl").readString() + "\n";
       }
     }
     return output;
@@ -163,7 +163,7 @@ public abstract class BaseShader implements Disposable {
   }
 
   private String loadHelperSrc(String helperName) {
-    return Gdx.files.internal(ShadersManager.SHADER_HELPERS_PATH +helperName+".glsl").readString() + "\n";
+    return ForgE.files.internal(ShadersManager.SHADER_HELPERS_PATH +helperName+".glsl").readString() + "\n";
   }
 
   public String getLog() {
@@ -246,7 +246,7 @@ public abstract class BaseShader implements Disposable {
   }
 
   public File getJsonFile() {
-    return Gdx.files.internal(ShadersManager.SHADERS_PATH + name + ".json").file();
+    return ForgE.files.internal(ShadersManager.SHADERS_PATH + name + ".json").file();
   }
 
   public ShaderError getCurrentError() {

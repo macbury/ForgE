@@ -14,6 +14,7 @@ import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.pool.KryoFactory;
 import com.esotericsoftware.kryo.pool.KryoPool;
 import com.esotericsoftware.kryo.serializers.TaggedFieldSerializer;
+import macbury.forge.ForgE;
 import macbury.forge.assets.assets.Asset;
 import macbury.forge.assets.assets.CubemapAsset;
 import macbury.forge.assets.assets.ModelAsset;
@@ -93,7 +94,7 @@ public class StorageManager {
   }
 
   public GameDatabase loadOrInitializeDB() {
-    FileHandle dbFile = Gdx.files.internal(GameDatabase.FILE_NAME);
+    FileHandle dbFile = ForgE.files.internal(GameDatabase.FILE_NAME);
     Kryo kryo         = pool.borrow();
     GameDatabase db   = null;
     if (dbFile.exists()) {
@@ -109,7 +110,7 @@ public class StorageManager {
 
   public void saveDB(GameDatabase db) {
     Kryo kryo         = pool.borrow();
-    FileHandle dbFile = Gdx.files.internal(GameDatabase.FILE_NAME);
+    FileHandle dbFile = ForgE.files.internal(GameDatabase.FILE_NAME);
     try {
       Output output = new Output(new FileOutputStream(dbFile.file(), false));
       kryo.writeObject(output, db);
