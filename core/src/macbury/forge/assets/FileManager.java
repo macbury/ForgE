@@ -44,6 +44,7 @@ public class FileManager implements Disposable {
     putMapping("textures", "graphics/textures/");
     putMapping("skybox", "graphics/textures/skybox/");
     putMapping("maps", LevelState.MAP_STORAGE_DIR);
+    putMapping("postprocessing", "graphics/postprocessing/");
   }
 
   private String applyMapping(String path) {

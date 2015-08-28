@@ -59,7 +59,7 @@ public class Level implements Disposable {
     this.state                    = state;
     this.terrainMap               = state.terrainMap;
     this.terrainGeometryProvider  = geometryProvider;
-    this.postProcessing           = new PostProcessingManager();
+    this.postProcessing           = new PostProcessingManager(ForgE.files.internal("postprocessing:default.json"));
     this.renderContext            = new RenderContext(new DefaultTextureBinder(DefaultTextureBinder.WEIGHTED, 1));
 
     this.octree                   = OctreeNode.root();
@@ -86,6 +86,7 @@ public class Level implements Disposable {
     camera.viewportHeight = height;
     camera.update(true);
     ui.getViewport().update(width, height, true);
+    postProcessing.reload();
   }
 
   public void render(float delta) {

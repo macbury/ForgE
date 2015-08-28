@@ -1,0 +1,29 @@
+{
+  buffers: [
+    { width: 512, height: 512, format: "RGBA8888", filter: "Linear", wrap: "MirroredRepeat", depth: false, name: "my:small-color" },
+    { width: 512, height: 512, format: "RGBA8888", filter: "Linear", wrap: "ClampToEdge", depth: false, name: "my:blurred" }
+  ],
+
+  steps: [
+    { copy: "forge:maincolor", target: "my:small-color" },
+    {
+      target: "my:blurred",
+      fragment: "blur",
+      customUniforms: {
+        u_mainTexture: "my:small-color",
+        u_blurPower: 0.2
+      },
+      uniforms: [
+        "ProjectionMatrix"
+      ]
+    },
+    {
+      fragment: "final",
+      customUniforms: {
+	u_mainTexture: "forge:maincolor",
+	u_bluredTexture: "my:blurred"
+      }
+    }
+  ]
+
+}

@@ -78,8 +78,9 @@ public class ForgE extends Game {
 
   @Override
   public void resize(int width, int height) {
-    super.resize(width, height);
     fb.resize(width, height, true);
+    super.resize(width, height);
+
   }
 
   public void addBootListener(ForgEBootListener bootListener) {

@@ -181,6 +181,9 @@ public class FrameBufferManager implements Disposable {
     if (currentFrameBuffer != null)
       throw new GdxRuntimeException("Already binded other buffer!");
     currentFrameBuffer = get(fbIdn);
+    if (currentFrameBuffer == null) {
+      throw new GdxRuntimeException("Could not found: " + fbIdn);
+    }
     currentFrameBuffer.begin();
   }
 
@@ -209,5 +212,13 @@ public class FrameBufferManager implements Disposable {
     ScreenshotFactory.saveScreenshot(saveFile, frameBuffer.getWidth(), frameBuffer.getHeight());
     ForgE.fb.end();
     return saveFile;
+  }
+
+  public void destroy(String frameBufferName) {
+    if (frameBuffers.containsKey(frameBufferName)) {
+      get(frameBufferName).dispose();
+      frameBuffers.remove(frameBufferName);
+    }
+
   }
 }
