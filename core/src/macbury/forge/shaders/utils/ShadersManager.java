@@ -41,16 +41,18 @@ public class ShadersManager implements KVStorage.OnChangeListener {
     for(String key : shaders.keySet()) {
       shaders.get(key).dispose();
     }
+
     shaders.clear();
     shaderList.clear();
+
     Array<FileHandle> shadersToImport = ForgE.files.list(SHADERS_PATH, new FilenameFilter() {
       @Override
       public boolean accept(File dir, String name) {
         return name.contains(".json");
       }
     });
-    for (FileHandle file : shadersToImport) {
 
+    for (FileHandle file : shadersToImport) {
       String shaderName     = file.nameWithoutExtension();
       BaseShader shader     = null;
       if (shaders.containsKey(shaderName)) {

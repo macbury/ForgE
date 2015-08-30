@@ -5,7 +5,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g3d.utils.DefaultTextureBinder;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import macbury.forge.ForgE;
 import macbury.forge.graphics.batch.VoxelBatch;
@@ -73,10 +75,17 @@ public class Level implements Disposable {
     this.entities                 = new EntitySystemsManager(this);
 
     octree.setBounds(terrainMap.getBounds(ChunkMap.TERRAIN_TILE_SIZE));
-
     ui.addActor(new FullScreenFrameBufferResult(Fbo.FRAMEBUFFER_FINAL));
-    ui.addActor(DebugFrameBufferResult.build(Fbo.FRAMEBUFFER_SUN_FAR_DEPTH, 256, 0, 0));
-    ui.addActor(DebugFrameBufferResult.build(Fbo.FRAMEBUFFER_SUN_NEAR_DEPTH, 256, 256, 0));
+
+    Array<String> fbos = ForgE.fb.all().keys().toArray();
+    int size = Gdx.graphics.getWidth() / (fbos.size + 1);
+
+    for (int i = 0; i < fbos.size; i++) {
+      ui.addActor(DebugFrameBufferResult.build(fbos.get(i), size, i * size, 0));
+    }
+
+    //ui.addActor(DebugFrameBufferResult.build(Fbo.FRAMEBUFFER_SUN_FAR_DEPTH, 256, 0, 0));
+    //ui.addActor(DebugFrameBufferResult.build(Fbo.FRAMEBUFFER_SUN_NEAR_DEPTH, 256, 256, 0));
    // ui.addActor(DebugFrameBufferResult.build(Fbo.FRAMEBUFFER_REFLECTIONS, 256, 0, 0));
     //ui.addActor(DebugFrameBufferResult.build(Fbo.FRAMEBUFFER_REFRACTIONS, 256, 256, 0));
   }

@@ -53,9 +53,11 @@ public class PostProcessingManager implements Disposable {
     if (factory.steps != null) {
       Gdx.app.log(TAG, "Found steps to create:");
       for (PostProcessingStepFactory stepFactory : factory.steps) {
-        steps.add(stepFactory.build());
+        steps.add(stepFactory.build(this));
       }
     }
+
+    factory = null;
   }
 
   public void render(RenderContext renderContext, LevelEnv env) {

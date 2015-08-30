@@ -190,8 +190,7 @@ public class FrameBufferManager implements Disposable {
   public void createDefaultFrameBuffers() {
     create(Fbo.FRAMEBUFFER_FINAL);
     create(Fbo.FRAMEBUFFER_MAIN_COLOR);
-    create(Fbo.FRAMEBUFFER_DOWN_SAMPLED_MAIN, Pixmap.Format.RGBA8888, ForgE.config.getInt(Config.Key.BloomTextureSize), ForgE.config.getInt(Config.Key.BloomTextureSize), false, Texture.TextureWrap.MirroredRepeat, Texture.TextureFilter.Linear);
-    create(Fbo.FRAMEBUFFER_BLOOM, Pixmap.Format.RGBA8888, ForgE.config.getInt(Config.Key.BloomTextureSize), ForgE.config.getInt(Config.Key.BloomTextureSize), false, Texture.TextureWrap.MirroredRepeat, Texture.TextureFilter.Linear);
+
     create(Fbo.FRAMEBUFFER_REFLECTIONS, Pixmap.Format.RGBA8888, ForgE.config.getInt(Config.Key.ReflectionBufferSize), ForgE.config.getInt(Config.Key.ReflectionBufferSize), true, Texture.TextureWrap.Repeat, Texture.TextureFilter.Linear);
     create(Fbo.FRAMEBUFFER_REFRACTIONS, Pixmap.Format.RGBA8888, ForgE.config.getInt(Config.Key.RefractionBufferSize), ForgE.config.getInt(Config.Key.RefractionBufferSize), true, Texture.TextureWrap.Repeat, Texture.TextureFilter.Linear);
     createFloat(Fbo.FRAMEBUFFER_SUN_FAR_DEPTH, ForgE.config.getInt(Config.Key.FarShadowMapSize), ForgE.config.getInt(Config.Key.FarShadowMapSize), true, Texture.TextureWrap.ClampToEdge, Texture.TextureFilter.Nearest);
@@ -220,5 +219,13 @@ public class FrameBufferManager implements Disposable {
       frameBuffers.remove(frameBufferName);
     }
 
+  }
+
+  public OrthographicCamera getScreenCamera() {
+    return screenCamera;
+  }
+
+  public Mesh getScreenQuad() {
+    return screenQuad;
   }
 }

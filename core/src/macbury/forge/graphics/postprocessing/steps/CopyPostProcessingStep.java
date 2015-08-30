@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import macbury.forge.ForgE;
 import macbury.forge.graphics.fbo.Fbo;
+import macbury.forge.graphics.postprocessing.PostProcessingManager;
 import macbury.forge.graphics.postprocessing.steps.PostProcessingStep;
 import macbury.forge.level.env.LevelEnv;
 
@@ -15,7 +16,7 @@ public class CopyPostProcessingStep extends PostProcessingStep {
   private String source;
   private String target;
 
-  public CopyPostProcessingStep(String source, String target) {
+  public CopyPostProcessingStep(String source, String target, PostProcessingManager manager) {
     this.source = source;
     this.target = target;
 

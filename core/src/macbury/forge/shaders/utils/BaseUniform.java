@@ -17,7 +17,6 @@ public abstract class BaseUniform implements Disposable {
   public static final String CLASS_PREFIX = "macbury.forge.shaders.uniforms.Uniform";
   public BaseUniform() {
     uniformDefinitions = new Array<UniformDefinition>();
-    defineUniforms();
   }
 
   public abstract void defineUniforms();
@@ -34,7 +33,10 @@ public abstract class BaseUniform implements Disposable {
 
 
   public String getSrc() {
-    String output = "";
+    uniformDefinitions.clear();
+    defineUniforms();
+    String output = "// Uniform: "+getClass().getName()+'\n';
+
     for (UniformDefinition definition : uniformDefinitions) {
       output += definition.toString() + '\n';
     }

@@ -28,25 +28,28 @@ public abstract class BaseShader implements Disposable {
   protected ShaderProgram shader;
   protected Camera camera;
   protected RenderContext context;
-  private String fragment;
-  private String vertex;
-  private HashMap<String, Array<String>> helpers;
-  private Array<String> uniforms;
-  private Array<String> structs;
-  private Array<BaseUniform> globalUniforms;
-  private Array<BaseRenderableUniform> localUniforms;
+  protected String fragment;
+  protected String vertex;
+  protected HashMap<String, Array<String>> helpers;
+  protected Array<String> uniforms;
+  protected Array<String> structs;
+  protected Array<BaseUniform> globalUniforms;
+  protected Array<BaseRenderableUniform> localUniforms;
   protected LevelEnv env;
-  private String uniformsSrc = "";
-  private String name;
-  private String depth;
-  private DepthShader depthShader;
-  private ShaderError currentError;
+  protected String uniformsSrc = "";
+  protected String name;
+  protected String depth;
+  protected DepthShader depthShader;
+  protected ShaderError currentError;
 
-  public boolean load(ShadersManager manager) {
+  public BaseShader() {
     this.globalUniforms               = new Array<BaseUniform>();
     this.localUniforms                = new Array<BaseRenderableUniform>();
+  }
+
+  public boolean load(ShadersManager manager) {
     this.currentError                 = null;
-    ShaderProgram.pedantic = false;
+    ShaderProgram.pedantic            = false;
 
     String fragmentSrc   = getFragmentFile().readString();
     String   vertexSrc   = getVertexFile().readString();
@@ -57,6 +60,8 @@ public abstract class BaseShader implements Disposable {
     if (uniforms != null) {
       loadGlobalAndLocalUniforms();
     }
+
+    getUniformsDefinitionsSrc();
 
     fragmentSrc = applyPrecisions() + applyDebugPrefixes() + applyStructs() + applyUniformsSrc() + loadHelpers(FRAGMENT_HELPER_KEY) + fragmentSrc;
     vertexSrc   = applyPrecisions() + applyDebugPrefixes() + applyStructs() + applyUniformsSrc() + loadHelpers(VERTEX_HELPER_KEY) + vertexSrc;
@@ -108,7 +113,6 @@ public abstract class BaseShader implements Disposable {
   }
 
   private void loadGlobalAndLocalUniforms() {
-    this.uniformsSrc = "";
     for (String uniformName : uniforms) {
       try {
         String uniformClassName = BaseUniform.CLASS_PREFIX+uniformName;
@@ -121,7 +125,7 @@ public abstract class BaseShader implements Disposable {
           Gdx.app.log(TAG, "Adding global uniform: "+uniformClassName);
           globalUniforms.add(uniform);
         }
-        uniformsSrc += "// Uniform: "+uniformClassName+'\n' + uniform.getSrc();
+
       } catch (InstantiationException e) {
         e.printStackTrace();
       } catch (IllegalAccessException e) {
@@ -133,6 +137,17 @@ public abstract class BaseShader implements Disposable {
 
     Gdx.app.log(TAG, "Local uniforms: " + localUniforms.size);
     Gdx.app.log(TAG, "Global uniforms: " + globalUniforms.size);
+  }
+
+  private void getUniformsDefinitionsSrc() {
+    this.uniformsSrc = "";
+    for (BaseUniform uniform : globalUniforms) {
+      uniformsSrc += uniform.getSrc();
+    }
+
+    for (BaseUniform uniform : localUniforms) {
+      uniformsSrc += uniform.getSrc();
+    }
   }
 
   private String applyDebugPrefixes() {
@@ -152,13 +167,16 @@ public abstract class BaseShader implements Disposable {
 
   private String loadHelpers(String key) {
     String helperSrc = "";
-    if (helpers.containsKey(key)) {
-      Array<String> helperNames = helpers.get(key);
-      for (int i = 0; i < helperNames.size; i++) {
-        String helperName = helperNames.get(i);
-        helperSrc += loadHelperSrc(helperName);
+    if (helpers != null) {
+      if (helpers.containsKey(key)) {
+        Array<String> helperNames = helpers.get(key);
+        for (int i = 0; i < helperNames.size; i++) {
+          String helperName = helperNames.get(i);
+          helperSrc += loadHelperSrc(helperName);
+        }
       }
     }
+
     return helperSrc;
   }
 
@@ -227,6 +245,18 @@ public abstract class BaseShader implements Disposable {
     depthShader = null;
     camera = null;
     context = null;
+    if (globalUniforms != null) {
+      for (BaseUniform uniform : globalUniforms) {
+        uniform.dispose();
+      }
+    }
+
+    if (localUniforms != null) {
+      for (BaseUniform uniform : localUniforms) {
+        uniform.dispose();
+      }
+    }
+
     globalUniforms.clear();
     localUniforms.clear();
     globalUniforms = null;
