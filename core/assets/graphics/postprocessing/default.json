@@ -12,11 +12,11 @@
       fragment: "fix-light-scattering",
       customUniforms: {
         u_mainTexture: "forge:light-scattering",
-        u_density: 0.80,
-        u_weight: 5.65,
-        u_exposure: 0.0034,
+        u_density: 0.87,
+        u_weight: 5.60,
+        u_exposure: 0.0014,
         u_decay: 1.0,
-        u_numSamples: 50
+        u_numSamples: 70
       },
       uniforms: [
         "LightPositionOnScreen"
@@ -27,7 +27,7 @@
       fragment: "blur",
       customUniforms: {
         u_mainTexture: "my:small-color",
-        u_blurPower: 0.005
+        u_blurPower: 0.003
       },
     },
     {
