@@ -38,6 +38,12 @@ public abstract class KVStorage<K extends Enum> implements Disposable {
     triggerChange(key);
   }
 
+
+  public void putFloat(K key, float value) {
+    values.put(key, value);
+    triggerChange(key);
+  }
+
   public void putString(K key, String value) {
     values.put(key, value);
     triggerChange(key);

@@ -2,7 +2,7 @@
   buffers: [
     { width: 512, height: 512, format: "RGB888", filter: "Linear", wrap: "MirroredRepeat", depth: false, name: "my:small-color" },
     { width: 512, height: 512, format: "RGB888", filter: "Linear", wrap: "ClampToEdge", depth: false, name: "my:blur" }
-    { width: 512, height: 512, format: "RGBA8888", filter: "Linear", wrap: "ClampToEdge", depth: false, name: "my:light-scattering" }
+    { width: 256, height: 256, format: "RGBA8888", filter: "Linear", wrap: "ClampToEdge", depth: false, name: "my:light-scattering" }
   ],
 
   steps: [

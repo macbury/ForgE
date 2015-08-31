@@ -88,8 +88,11 @@ public class VoxelBatch implements Disposable {
    */
   public void add(final Renderable renderable) {
     if (camera == null) throw new GdxRuntimeException("Call begin() first.");
-    renderables.add(renderable);
-    renderable.mesh.setAutoBind(false);
+    if (renderable.mesh != null) {
+      renderables.add(renderable);
+      renderable.mesh.setAutoBind(false);
+    }
+
   }
 
   /**

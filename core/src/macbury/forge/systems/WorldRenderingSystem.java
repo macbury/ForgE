@@ -85,7 +85,7 @@ public class WorldRenderingSystem extends EntitySystem {
   private void renderSunDepth() {
     env.water.clipMode                    = LevelEnv.ClipMode.None;
     OrthographicDirectionalLight sunLight = env.mainLight;
-/*
+
     sunLight.beginNear(mainCamera); {
       ForgE.fb.begin(Fbo.FRAMEBUFFER_SUN_NEAR_DEPTH); {
         renderBucketWith(false, false, sunLight.getShadowCamera());
@@ -98,14 +98,14 @@ public class WorldRenderingSystem extends EntitySystem {
       } ForgE.fb.end();
     } sunLight.endFar(mainCamera);
 
- */
-    sunLight.begin(mainCamera); {
+
+    /*sunLight.begin(mainCamera); {
       ForgE.fb.begin(Fbo.FRAMEBUFFER_SUN_FAR_DEPTH); {
         prepareElementsToRender(sunLight.getShadowCamera());
         renderBucketWith(false, false, sunLight.getShadowCamera());
       }
       ForgE.fb.end();
-    } sunLight.end(mainCamera);
+    } sunLight.end(mainCamera);*/
   }
 
   private void renderReflections() {

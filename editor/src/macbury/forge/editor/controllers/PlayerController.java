@@ -13,10 +13,10 @@ import javax.swing.*;
  * Created by macbury on 06.05.15.
  */
 public class PlayerController implements RunGameJob.Listener {
+  private static final String TAG = "PlayerController";
   private final ProjectController projectController;
   private final JobManager jobs;
   private RunGameJob currentRunGameJob;
-  private RunningGameConsoleFrame currentFrame;
   private AbstractScreen currentScreen;
 
   public PlayerController(ProjectController projectController, JobManager jobs) {
@@ -37,8 +37,6 @@ public class PlayerController implements RunGameJob.Listener {
   private void showConsole() {
     currentScreen = ForgE.screens.current();
     ForgE.screens.set(null);
-    this.currentFrame = new RunningGameConsoleFrame();
-    currentFrame.setVisible(true);
   }
 
   private void restoreScreen() {
@@ -75,8 +73,8 @@ public class PlayerController implements RunGameJob.Listener {
 
   @Override
   public void onLog(String line) {
-    //Gdx.app.log("Gradle log", line);
-    if (currentFrame != null)
-      currentFrame.putToLog(line);
+    Gdx.app.log(TAG, line);
+   // if (currentFrame != null)
+   //   currentFrame.putToLog(line);
   }
 }

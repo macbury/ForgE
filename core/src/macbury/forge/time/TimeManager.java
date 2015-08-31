@@ -3,6 +3,8 @@ package macbury.forge.time;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Disposable;
+import macbury.forge.Config;
+import macbury.forge.ForgE;
 
 import java.time.Duration;
 import java.util.Date;
@@ -13,7 +15,7 @@ import java.util.Date;
 public class TimeManager implements Disposable {
   private static final float SATELITE_START_ROTATION = 10;
   private static final float SATELITE_END_ROTATION = -190;
-  private final int timeSpeed;
+  private final float timeSpeed;
 
   private float duration;
   private long days;
@@ -31,7 +33,7 @@ public class TimeManager implements Disposable {
   public TimeManager() {
     this.duration  = DEFAULT_TIME;
     days           = 1;
-    this.timeSpeed = 1000;
+    this.timeSpeed = (float)ForgE.config.getFloat(Config.Key.TimeSpeed);
   }
 
   public void update() {

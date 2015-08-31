@@ -26,7 +26,7 @@ public class RunGameJob extends Job<Void> {
 
   @Override
   public boolean isBlockingUI() {
-    return false;
+    return true;
   }
 
   @Override
@@ -39,10 +39,10 @@ public class RunGameJob extends Job<Void> {
     listener.onGameStart();
 
     currentGradleProcess = createGradleProcess();
-    if (currentGradleProcess != null) {
-      createAndReadBuffer();
-    } else {
-
+    try {
+      currentGradleProcess.waitFor();
+    } catch (InterruptedException e) {
+      e.printStackTrace();
     }
 
     listener.onGameEnd();
@@ -84,23 +84,30 @@ public class RunGameJob extends Job<Void> {
   }
 
   private Process createGradleProcess() {
-    List<String> argumentsList = new ArrayList<String>();
-    argumentsList.add("/bin/bash");
-    argumentsList.add("gradlew");
-    argumentsList.add("desktop:run");
-    argumentsList.add("-PappArgs\"['--fullscreen']\"");
+    String workingDir = null;
+    try {
+      workingDir = Gdx.files.internal("../../").file().getCanonicalPath();
+    } catch (IOException e) {
 
-    ProcessBuilder processBuilder = new ProcessBuilder(argumentsList.toArray(new String[argumentsList.size()]));
-    processBuilder.redirectErrorStream(true);
-    String workingDir = Gdx.files.internal("../../").file().getAbsolutePath();
+      e.printStackTrace();
+    }
+
+    String command = "/usr/bin/gnome-terminal --working-directory='"+workingDir+"' --command='./gradlew desktop:run'";
+    Gdx.app.log(TAG, "Exec: " + command);
     Gdx.app.log(TAG, "Running in: " + workingDir);
-    processBuilder.directory(new File(workingDir));
-    //processBuilder.directory(new File("/home/macbury/Projects/ForgE/"));
+    try {
+      return Runtime.getRuntime().exec(new String[]{"/bin/sh" , "-ic",command});
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+/*
+    ProcessBuilder processBuilder = new ProcessBuilder("/bin/sh", "-ic",command);
+    processBuilder.redirectErrorStream(true);
     try {
       return processBuilder.start();
     } catch (IOException e) {
       e.printStackTrace();
-    }
+    }*/
     return null;
   }
 
