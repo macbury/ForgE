@@ -50,7 +50,7 @@ public class Level implements Disposable {
   public final TerrainEngine            terrainEngine;
   public final LevelEnv                 env;
   public final Stage                    ui;
-  public final PostProcessingManager    postProcessing;
+  public PostProcessingManager    postProcessing;
   public final TerrainGeometryProvider terrainGeometryProvider;
 
   public Level(LevelState state, TerrainGeometryProvider geometryProvider) {

@@ -1,7 +1,7 @@
 {
   buffers: [
-    { width: 512, height: 512, format: "RGBA8888", filter: "Linear", wrap: "MirroredRepeat", depth: false, name: "my:small-color" },
-    { width: 512, height: 512, format: "RGBA8888", filter: "Linear", wrap: "ClampToEdge", depth: false, name: "my:blur" }
+    { width: 512, height: 512, format: "RGB888", filter: "Linear", wrap: "MirroredRepeat", depth: false, name: "my:small-color" },
+    { width: 512, height: 512, format: "RGB888", filter: "Linear", wrap: "ClampToEdge", depth: false, name: "my:blur" }
   ],
 
   steps: [
@@ -11,7 +11,7 @@
       fragment: "blur",
       customUniforms: {
         u_mainTexture: "my:small-color",
-        u_blurPower: 0.002
+        u_blurPower: 0.005
       },
     },
     {
@@ -22,7 +22,8 @@
       ],
       customUniforms: {
 	       u_mainTexture: "forge:main-color",
-         u_blurTexture: "my:blur"
+         u_blurTexture: "my:blur",
+         u_blurMix:  0.25
       }
     }
   ]

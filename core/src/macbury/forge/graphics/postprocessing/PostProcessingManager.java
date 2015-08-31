@@ -18,21 +18,19 @@ import macbury.forge.level.env.LevelEnv;
  */
 public class PostProcessingManager implements Disposable {
   private static final String TAG = "PostProcessingManager";
+  public static final String STORAGE_DIR = "graphics/postprocessing/";
   private FileHandle fileHandle;
   private Array<PostProcessingStep> steps;
   private ObjectMap<String, FrameBuffer> frameBuffers;
   private PostProcessingFactory factory;
 
-  //public PostProcessingManager() {
-
-    //this.effects.add(new PostProcessBloomImage());
-   // this.effects.add(new PostProcessFinalImage());
-  //}
-
   public PostProcessingManager(FileHandle internal) {
     this.steps        = new Array<PostProcessingStep>();
-    this.frameBuffers = new  ObjectMap<String, FrameBuffer>();
+    this.frameBuffers = new ObjectMap<String, FrameBuffer>();
     this.fileHandle   = internal;
+    if (!fileHandle.exists()) {
+      throw new GdxRuntimeException("Could not find: " + fileHandle.path());
+    }
     reload();
   }
 
