@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.assets.assets.TextureAsset;
+import macbury.forge.graphics.camera.GameCamera;
 import macbury.forge.graphics.light.OrthographicDirectionalLight;
 import macbury.forge.graphics.skybox.CubemapSkybox;
 import macbury.forge.graphics.skybox.Skybox;
@@ -17,10 +18,16 @@ import macbury.forge.voxel.ChunkMap;
  * Created by macbury on 28.10.14.
  */
 public class LevelEnv implements Disposable {
+  public GameCamera mainCamera;
 
   public enum ClipMode {
     None, Reflection, Refraction
   }
+
+  public enum DepthShaderMode {
+    Normal, OnlyFront
+  }
+
   public Skybox skybox;
   public OrthographicDirectionalLight mainLight;
   public Color ambientLight;
@@ -33,9 +40,11 @@ public class LevelEnv implements Disposable {
   public Vector3 gravity = new Vector3(0, -6f, 0);
   private Texture windDisplacementTexture;
 
+  public DepthShaderMode depthShaderMode = DepthShaderMode.Normal;
   public WaterEnv water;
 
   public LevelEnv() {
+    mainCamera   = new GameCamera();
     water        = new WaterEnv();
     skyColor     = Color.valueOf("3498db");
     fogColor     = new Color(skyColor);

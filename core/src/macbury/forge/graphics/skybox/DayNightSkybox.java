@@ -50,6 +50,8 @@ public class DayNightSkybox extends Skybox {
   private Color fogColor              = new Color();
   private Color ambientColor          = new Color();
   private Color sunColor              = new Color();
+  private boolean renderOnlySun;
+
   @Override
   public void update(float delta, Camera camera) {
     updateFogColor();
@@ -132,7 +134,8 @@ public class DayNightSkybox extends Skybox {
   @Override
   public void getRenderables(Array<Renderable> renderables, Pool<Renderable> pool) {
     //renderables.add(buildSunMoon());
-    renderables.add(getCubeRenderable());
+    if (!renderOnlySun)
+      renderables.add(getCubeRenderable());
 
   }
 
@@ -276,4 +279,15 @@ public class DayNightSkybox extends Skybox {
     return skyMapTexture;
   }
 
+  public void setRenderOnlySun(boolean renderOnlySun) {
+    this.renderOnlySun = renderOnlySun;
+  }
+
+  public boolean isRenderOnlySun() {
+    return renderOnlySun;
+  }
+
+  public void getLightPosition(Vector3 out) {
+    sunMonRenderable.worldTransform.getTranslation(out);
+  }
 }

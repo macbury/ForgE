@@ -15,7 +15,7 @@ import java.nio.file.Paths;
 public class Config extends KVStorage<Config.Key> {
   public enum Key {
     ResolutionWidth, ResolutionHeight, Fullscreen, Debug, NearShadowMapSize, FarShadowMapSize, BloomTextureSize, ReflectionBufferSize, RefractionBufferSize,
-    GenerateWireframe, NearShadowDistance, RenderDebug, RenderDynamicOctree, RenderStaticOctree, RenderBoundingBox, RenderBulletDebug, Editor,
+    GenerateWireframe, NearShadowDistance, RenderDebug, RenderDynamicOctree, RenderStaticOctree, RenderBoundingBox, RenderBulletDebug, Editor, LightScatteringTextureSize
   }
 
   public enum RenderDebug {
@@ -33,6 +33,7 @@ public class Config extends KVStorage<Config.Key> {
     putInt(Key.BloomTextureSize, 512);
     putInt(Key.ReflectionBufferSize, 512);
     putInt(Key.RefractionBufferSize, 512);
+    putInt(Key.LightScatteringTextureSize, 512);
     putInt(Key.NearShadowDistance, 10);
     putBool(Key.Fullscreen, false);
     putBool(Key.Debug, false);

@@ -3,10 +3,7 @@ package macbury.forge.editor.views;
 import com.badlogic.gdx.Gdx;
 import macbury.forge.Config;
 import macbury.forge.ForgE;
-import macbury.forge.editor.controllers.BlocksController;
-import macbury.forge.editor.controllers.DockFramesController;
-import macbury.forge.editor.controllers.ProjectController;
-import macbury.forge.editor.controllers.ShadersController;
+import macbury.forge.editor.controllers.*;
 import macbury.forge.editor.controllers.listeners.OnMapChangeListener;
 import macbury.forge.editor.screens.LevelEditorScreen;
 
@@ -25,6 +22,7 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
   private final BlocksController blocksController;
   private final DockFramesController dockFrameController;
   private final ShadersController shadersController;
+  private final PostProcessingController postProcessingController;
   public JCheckBoxMenuItem debugRenderDynamicOctree;
   public JCheckBoxMenuItem debugBoundingBox;
   public JRadioButtonMenuItem debugWireframeItem;
@@ -35,13 +33,14 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
   private JRadioButtonMenuItem debugNormalsItem;
   private JRadioButtonMenuItem debugLightingItem;
 
-  public MainMenu(ProjectController projectController, BlocksController blocksController, DockFramesController dockFrameController, ShadersController shadersController) {
+  public MainMenu(ProjectController projectController, BlocksController blocksController, DockFramesController dockFrameController, ShadersController shadersController, PostProcessingController postProcessingController) {
     super();
 
     this.controller = projectController;
     this.blocksController = blocksController;
     this.dockFrameController = dockFrameController;
     this.shadersController   = shadersController;
+    this.postProcessingController = postProcessingController;
     //add(Box.createRigidArea(new Dimension(320,28)));
   }
 
@@ -80,29 +79,8 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
 
   private void createExportFboMenu() {
     JMenu fboMenu          = new JMenu("Export FBO");
-    for (String frameBufferName : ForgE.fb.all().keys()) {
-      JMenuItem item = new JMenuItem(frameBufferName);
-      item.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
+    postProcessingController.setMenu(fboMenu);
 
-          Gdx.app.postRunnable(new Runnable() {
-            @Override
-            public void run() {
-              File screenshotFile = ForgE.fb.saveAsPng(frameBufferName).file();
-              try {
-                Desktop.getDesktop().open(screenshotFile);
-              } catch (IOException e1) {
-                e1.printStackTrace();
-              }
-            }
-          });
-
-
-        }
-      });
-      fboMenu.add(item);
-    }
     add(fboMenu);
   }
 

@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import macbury.forge.graphics.batch.renderable.BaseRenderable;
+import macbury.forge.level.env.LevelEnv;
 import macbury.forge.shaders.utils.RenderableBaseShader;
 
 /**
@@ -19,11 +20,16 @@ public class DepthShader extends RenderableBaseShader<Renderable> {
   public void beforeRender(Renderable renderable) {
     context.setDepthMask(true);
     context.setDepthTest(GL30.GL_LESS);
-    if (BaseRenderable.haveTransparency(renderable.material)) {
-      context.setCullFace(GL30.GL_NONE);
+    if (env.depthShaderMode == LevelEnv.DepthShaderMode.Normal) {
+      if (BaseRenderable.haveTransparency(renderable.material)) {
+        context.setCullFace(GL30.GL_NONE);
+      } else {
+        context.setCullFace(GL20.GL_FRONT);
+      }
     } else {
-      context.setCullFace(GL20.GL_FRONT);
+      context.setCullFace(GL20.GL_BACK);
     }
+
   }
 
   @Override

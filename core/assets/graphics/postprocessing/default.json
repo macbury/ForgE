@@ -2,10 +2,26 @@
   buffers: [
     { width: 512, height: 512, format: "RGB888", filter: "Linear", wrap: "MirroredRepeat", depth: false, name: "my:small-color" },
     { width: 512, height: 512, format: "RGB888", filter: "Linear", wrap: "ClampToEdge", depth: false, name: "my:blur" }
+    { width: 512, height: 512, format: "RGBA8888", filter: "Linear", wrap: "ClampToEdge", depth: false, name: "my:light-scattering" }
   ],
 
   steps: [
     { copy: "forge:main-color", target: "my:small-color" },
+    {
+      target: "my:light-scattering",
+      fragment: "fix-light-scattering",
+      customUniforms: {
+        u_mainTexture: "forge:light-scattering",
+        u_density: 0.80,
+        u_weight: 5.65,
+        u_exposure: 0.0034,
+        u_decay: 1.0,
+        u_numSamples: 50
+      },
+      uniforms: [
+        "LightPositionOnScreen"
+      ]
+    },
     {
       target: "my:blur",
       fragment: "blur",
@@ -23,6 +39,7 @@
       customUniforms: {
 	       u_mainTexture: "forge:main-color",
          u_blurTexture: "my:blur",
+         u_lightScatteringTexture: "my:light-scattering",
          u_blurMix:  0.25
       }
     }

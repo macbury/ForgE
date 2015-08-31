@@ -67,7 +67,7 @@ public class Level implements Disposable {
     this.octree                   = OctreeNode.root();
 
     this.batch                    = new VoxelBatch(renderContext, colorShaderProvider);
-    this.camera                   = new GameCamera();
+    this.camera                   = env.mainCamera;
     this.frustrumDebugger         = new FrustrumDebugAndRenderer();
     frustrumDebugger.add(camera);
     frustrumDebugger.add(env.mainLight.getShadowCamera());

@@ -3,14 +3,16 @@ float calculateDepth(vec4 position, vec4 eyePosition, float cameraFar) {
 }
 
 vec4 pack(float depth) {
-  const vec4 bias = vec4(1.0 / 255.0, 1.0 / 255.0, 1.0 / 255.0, 0.0);
-	vec4 color = vec4(depth, fract(depth * 255.0), fract(depth * 65025.0), fract(depth * 160581375.0));
-  return color - (color.yzww * bias);
+  //const vec4 bias = vec4(1.0 / 255.0, 1.0 / 255.0, 1.0 / 255.0, 0.0);
+	//vec4 color      = vec4(depth, fract(depth * 255.0), fract(depth * 65025.0), fract(depth * 160581375.0));
+//  return color - (color.yzww * bias);
+  return vec4(depth, 0.0f, 0.0f, 1.0f);
 }
 
 float unpack(vec4 packedZValue) {
-  const vec4 bitShifts = vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 160581375.0);
-	return dot(packedZValue,bitShifts);
+  //const vec4 bitShifts = vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 160581375.0);
+	//return dot(packedZValue,bitShifts);
+  return packedZValue.r;
 }
 
 float shadowBias(vec3 normal, vec3 lightDir) {

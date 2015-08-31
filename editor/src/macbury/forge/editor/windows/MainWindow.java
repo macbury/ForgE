@@ -118,7 +118,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     blocksController = new BlocksController(blockList, directoryWatcher, jobs, (ImagePanel) panelPrimaryBlock, (ImagePanel) panelSecondaryBlock);
     this.progressTaskDialog = new ProgressTaskDialog();
     projectController = new ProjectController();
-    mainMenu = new MainMenu(projectController, blocksController, dockFrameController, shadersController);
+    mainMenu = new MainMenu(projectController, blocksController, dockFrameController, shadersController, postProcessingController);
     eventsToolsController = new EventsController(this);
     terrainToolsController = new TerrainToolsController(terrainToolsToolbar, blocksController, inputProcessor, terrainInspectorPanel);
     playerController = new PlayerController(projectController, jobs);
