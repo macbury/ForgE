@@ -40,6 +40,10 @@ public class FrameBufferShader extends BaseShader {
     fragment = factory.fragment;
     vertex   = factory.vertex;
     uniforms = factory.uniforms;
+
+    helpers  = factory.helpers;
+    structs  = factory.structs;
+
     globalUniforms.add(new UniformProjectionMatrix());
     if (factory.customUniforms != null) {
       for (String uniformName : factory.customUniforms.keys()) {

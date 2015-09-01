@@ -77,12 +77,6 @@ public class Level implements Disposable {
     octree.setBounds(terrainMap.getBounds(ChunkMap.TERRAIN_TILE_SIZE));
     ui.addActor(new FullScreenFrameBufferResult(Fbo.FRAMEBUFFER_FINAL));
 
-    /*Array<String> fbos = ForgE.fb.all().keys().toArray();
-    int size = Gdx.graphics.getWidth() / (fbos.size + 1);
-
-    for (int i = 0; i < fbos.size; i++) {
-      ui.addActor(DebugFrameBufferResult.build(fbos.get(i), size, i * size, 0));
-    }*/
 
     //ui.addActor(DebugFrameBufferResult.build(Fbo.FRAMEBUFFER_SUN_FAR_DEPTH, 256, 0, 0));
     //ui.addActor(DebugFrameBufferResult.build(Fbo.FRAMEBUFFER_SUN_NEAR_DEPTH, 256, 256, 0));

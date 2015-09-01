@@ -1,17 +1,30 @@
 {
   buffers: [
     { width: 512, height: 512, format: "RGB888", filter: "Linear", wrap: "MirroredRepeat", depth: false, name: "my:small-color" },
-    { width: 512, height: 512, format: "RGB888", filter: "Linear", wrap: "ClampToEdge", depth: false, name: "my:blur" }
+    { width: 512, height: 512, format: "RGB888", filter: "Linear", wrap: "ClampToEdge", depth: false, name: "my:blur" },
+    { width: 256, height: 256, format: "RGBA8888", filter: "Linear", wrap: "ClampToEdge", depth: false, name: "my:light-scattering-assembler" }
     { width: 256, height: 256, format: "RGBA8888", filter: "Linear", wrap: "ClampToEdge", depth: false, name: "my:light-scattering" }
   ],
 
   steps: [
     { copy: "forge:main-color", target: "my:small-color" },
     {
-      target: "my:light-scattering",
-      fragment: "fix-light-scattering",
+      target: "my:light-scattering-assembler",
+      fragment: "prepare-light-scattering-texture",
       customUniforms: {
-        u_mainTexture: "forge:light-scattering",
+        u_depthTexture: "forge:depth",
+        u_sunTexture: "forge:sun"
+      },
+      helpers: {
+        vertex: [],
+        fragment: ["shadow_map"]
+      },
+    },
+    {
+      target: "my:light-scattering",
+      fragment: "light-scattering",
+      customUniforms: {
+        u_mainTexture: "my:light-scattering-assembler",
         u_density: 0.87,
         u_weight: 5.60,
         u_exposure: 0.0014,

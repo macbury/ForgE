@@ -64,7 +64,16 @@ public class LevelEditorScreen extends AbstractScreen {
     stage.addActor(overlay);
 
 
+    previewFbos();
+  }
 
+  public void previewFbos() {
+    Array<String> fbos = ForgE.fb.all().keys().toArray();
+    int size = Gdx.graphics.getWidth() / (fbos.size + 1);
+
+    for (int i = 0; i < fbos.size; i++) {
+      level.ui.addActor(DebugFrameBufferResult.build(fbos.get(i), size, i * size, 0));
+    }
   }
 
   public void addAfterRenderListener(ForgeAfterRenderListener listener) {

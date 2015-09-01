@@ -10,7 +10,8 @@ public class Fbo {
   public static final String FRAMEBUFFER_REFLECTIONS          = "forge:reflections";
   public static final String FRAMEBUFFER_REFRACTIONS          = "forge:refractions";
 
-  public static final String FRAMEBUFFER_LIGHT_SCATTERING     = "forge:light-scattering";
+  public static final String FRAMEBUFFER_SUN                  = "forge:sun";
+  public static final String FRAMEBUFFER_DEPTH                = "forge:depth";
 
   public final static String FRAMEBUFFER_MAIN_COLOR           = "forge:main-color";
   public static final String FRAMEBUFFER_FINAL                = "forge:final-color";

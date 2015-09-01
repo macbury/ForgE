@@ -190,9 +190,13 @@ public class FrameBufferManager implements Disposable {
   public void createDefaultFrameBuffers() {
     create(Fbo.FRAMEBUFFER_FINAL);
     create(Fbo.FRAMEBUFFER_MAIN_COLOR);
-    create(Fbo.FRAMEBUFFER_LIGHT_SCATTERING, Pixmap.Format.RGBA8888, ForgE.config.getInt(Config.Key.LightScatteringTextureSize), ForgE.config.getInt(Config.Key.LightScatteringTextureSize), true, Texture.TextureWrap.ClampToEdge, Texture.TextureFilter.Nearest);
+
+    create(Fbo.FRAMEBUFFER_SUN, Pixmap.Format.RGBA8888, ForgE.config.getInt(Config.Key.LightScatteringTextureSize), ForgE.config.getInt(Config.Key.LightScatteringTextureSize), true, Texture.TextureWrap.ClampToEdge, Texture.TextureFilter.Linear);
+    createFloat(Fbo.FRAMEBUFFER_DEPTH, ForgE.config.getInt(Config.Key.DepthMapSize), ForgE.config.getInt(Config.Key.DepthMapSize), true, Texture.TextureWrap.ClampToEdge, Texture.TextureFilter.Nearest);
+
     create(Fbo.FRAMEBUFFER_REFLECTIONS, Pixmap.Format.RGBA8888, ForgE.config.getInt(Config.Key.ReflectionBufferSize), ForgE.config.getInt(Config.Key.ReflectionBufferSize), true, Texture.TextureWrap.Repeat, Texture.TextureFilter.Linear);
     create(Fbo.FRAMEBUFFER_REFRACTIONS, Pixmap.Format.RGBA8888, ForgE.config.getInt(Config.Key.RefractionBufferSize), ForgE.config.getInt(Config.Key.RefractionBufferSize), true, Texture.TextureWrap.Repeat, Texture.TextureFilter.Linear);
+
     createFloat(Fbo.FRAMEBUFFER_SUN_FAR_DEPTH, ForgE.config.getInt(Config.Key.FarShadowMapSize), ForgE.config.getInt(Config.Key.FarShadowMapSize), true, Texture.TextureWrap.ClampToEdge, Texture.TextureFilter.Nearest);
     createFloat(Fbo.FRAMEBUFFER_SUN_NEAR_DEPTH, ForgE.config.getInt(Config.Key.NearShadowMapSize), ForgE.config.getInt(Config.Key.NearShadowMapSize), true, Texture.TextureWrap.ClampToEdge, Texture.TextureFilter.Nearest);
   }

@@ -6,7 +6,7 @@ vec4 pack(float depth) {
   //const vec4 bias = vec4(1.0 / 255.0, 1.0 / 255.0, 1.0 / 255.0, 0.0);
 	//vec4 color      = vec4(depth, fract(depth * 255.0), fract(depth * 65025.0), fract(depth * 160581375.0));
 //  return color - (color.yzww * bias);
-  return vec4(depth, 0.0f, 0.0f, 1.0f);
+  return vec4(depth, depth, depth, 1.0f);
 }
 
 float unpack(vec4 packedZValue) {

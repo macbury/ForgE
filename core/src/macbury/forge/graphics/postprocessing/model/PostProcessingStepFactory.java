@@ -9,6 +9,8 @@ import macbury.forge.graphics.postprocessing.steps.PostProcessingStep;
 import macbury.forge.graphics.postprocessing.steps.ShaderPostProcessingStep;
 import macbury.forge.shaders.FrameBufferShader;
 
+import java.util.HashMap;
+
 /**
  * Created by macbury on 28.08.15.
  */
@@ -22,6 +24,8 @@ public class PostProcessingStepFactory {
 
   public ObjectMap<String, String> customUniforms;
   public Array<String> uniforms;
+  public Array<String> structs;
+  public HashMap<String, Array<String>> helpers;
 
   public PostProcessingStep build(PostProcessingManager manager) {
     setDefaults();

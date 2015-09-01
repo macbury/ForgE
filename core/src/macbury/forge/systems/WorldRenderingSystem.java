@@ -66,24 +66,40 @@ public class WorldRenderingSystem extends EntitySystem {
 
   @Override
   public void update(float deltaTime) {
-    env.depthShaderMode = LevelEnv.DepthShaderMode.Normal;
     batch.setShaderProvider(depthShaderProvider); {
-      renderSunDepth();
+      env.water.clipMode  = LevelEnv.ClipMode.None;
+      env.depthShaderMode = LevelEnv.DepthShaderMode.Normal;
+      renderSunDepthFromLightPerspective();
     }
 
     batch.setShaderProvider(colorShaderProvider); {
       renderReflections();
       renderRefractions();
-
+      renderSun();
       env.water.clipMode = LevelEnv.ClipMode.None;
       prepareElementsToRender(mainCamera);
       renderFinal();
     }
-    renderLightScattering();
+
+    batch.setShaderProvider(depthShaderProvider); {
+      renderDepthFromPlayerPerspective();
+    }
+    //renderLightScattering();
   }
 
-  private void renderSunDepth() {
-    env.water.clipMode                    = LevelEnv.ClipMode.None;
+  private void renderDepthFromPlayerPerspective() {
+    env.depthShaderMode = LevelEnv.DepthShaderMode.OnlyFront;
+    ForgE.fb.begin(Fbo.FRAMEBUFFER_DEPTH); {
+      ForgE.graphics.clearAll(Color.CLEAR);
+      batch.begin(mainCamera); {
+        batch.pushAll(terrain.visibleTerrainFaces);
+        batch.addAll(finalBucket);
+        batch.render(env);
+      } batch.end();
+    } ForgE.fb.end();
+  }
+
+  private void renderSunDepthFromLightPerspective() {
     OrthographicDirectionalLight sunLight = env.mainLight;
 
     sunLight.beginNear(mainCamera); {
@@ -126,10 +142,23 @@ public class WorldRenderingSystem extends EntitySystem {
     //mainCamera.far = cacheFar;
   }
 
+  private void renderSun() {
+    ForgE.fb.begin(Fbo.FRAMEBUFFER_SUN); {
+      ForgE.graphics.clearAll(Color.CLEAR);
+      batch.begin(mainCamera); {
+        if (DayNightSkybox.class.isInstance(skybox)) {
+          DayNightSkybox dayNightSkybox = (DayNightSkybox)skybox;
+          dayNightSkybox.setRenderOnlySun(true);
+        }
+        skybox.render(batch, env, mainCamera);
+        batch.render(env);
+      } batch.end();
+    } ForgE.fb.end();
+  }
+
   private void renderRefractions() {
     env.water.clipMode = LevelEnv.ClipMode.Refraction;
-    ForgE.fb.begin(Fbo.FRAMEBUFFER_REFRACTIONS);
-    {
+    ForgE.fb.begin(Fbo.FRAMEBUFFER_REFRACTIONS); {
       prepareElementsToRender(mainCamera);
       renderBucketWith(false, false, mainCamera);
     }
@@ -142,27 +171,6 @@ public class WorldRenderingSystem extends EntitySystem {
     } ForgE.fb.end();
   }
 
-  private void renderLightScattering() {
-    env.depthShaderMode = LevelEnv.DepthShaderMode.OnlyFront;
-    ForgE.fb.begin(Fbo.FRAMEBUFFER_LIGHT_SCATTERING); {
-      ForgE.graphics.clearAll(Color.CLEAR);
-      batch.begin(mainCamera); {
-        batch.setShaderProvider(colorShaderProvider); {
-          if (DayNightSkybox.class.isInstance(skybox)) {
-            DayNightSkybox dayNightSkybox = (DayNightSkybox)skybox;
-            dayNightSkybox.setRenderOnlySun(true);
-          }
-          skybox.render(batch, env, mainCamera);
-        }
-
-        batch.setShaderProvider(depthShaderProvider); {
-          batch.pushAll(terrain.visibleTerrainFaces);
-          batch.addAll(finalBucket);
-          batch.render(env);
-        }
-      } batch.end();
-    } ForgE.fb.end();
-  }
 
   private void prepareElementsToRender(ICamera camera) {
     finalBucket.clear();

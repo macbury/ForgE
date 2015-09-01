@@ -2,13 +2,7 @@
 varying   vec2 v_texCoords;
 
 vec4 getSampleColor(vec2 coords) {
-  vec4 rawColor     = texture2D(u_mainTexture, coords);
-
-  if (rawColor.r >= 0.01f && rawColor.g == 0.0f && rawColor.b == 0.0f) {
-    return vec4(0.0f, 0.0f, 0.0f, 1.0f);
-  } else {
-    return rawColor;
-  }
+  return texture2D(u_mainTexture, coords);
 }
 
 void main() {
