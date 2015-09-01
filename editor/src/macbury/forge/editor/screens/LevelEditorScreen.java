@@ -43,7 +43,7 @@ public class LevelEditorScreen extends AbstractScreen {
   }
 
   @Override
-  protected void initialize() {
+  protected void onInitialize() {
     GLProfiler.enable();
     this.overlay              = new Overlay();
     this.stage                = new Stage();

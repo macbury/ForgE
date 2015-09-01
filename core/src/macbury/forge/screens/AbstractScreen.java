@@ -10,9 +10,9 @@ public abstract class AbstractScreen implements Screen {
 
   public void initializeOnce() {
     if (!initialized)
-      initialize();
+      onInitialize();
     initialized = true;
   }
 
-  protected abstract void initialize();
+  protected abstract void onInitialize();
 }

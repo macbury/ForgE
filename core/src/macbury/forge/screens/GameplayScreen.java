@@ -33,7 +33,7 @@ public class GameplayScreen extends AbstractScreen {
   }
 
   @Override
-  protected void initialize() {
+  protected void onInitialize() {
     Gdx.input.setCursorCatched(true);
     this.cameraController     = new FirstPersonCameraController(level.camera);
     level.camera.far          = FAR_CAMERA;

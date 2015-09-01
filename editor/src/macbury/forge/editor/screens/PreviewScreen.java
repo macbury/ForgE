@@ -16,7 +16,7 @@ public class PreviewScreen extends AbstractScreen {
   private PerspectiveCamera camera;
 
   @Override
-  protected void initialize() {
+  protected void onInitialize() {
     this.renderContext       = new RenderContext(new DefaultTextureBinder(DefaultTextureBinder.WEIGHTED, 1));
     this.camera              = new PerspectiveCamera(67, 64, 64);
   }

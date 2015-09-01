@@ -13,7 +13,7 @@ public class TestMeshScreen extends AbstractScreen {
   private Level level;
 
   @Override
-  protected void initialize() {
+  protected void onInitialize() {
     //this.level              = new Level();
     //this.cameraController   = new CameraInputController(level.camera);
 

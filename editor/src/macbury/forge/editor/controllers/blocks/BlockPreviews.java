@@ -125,7 +125,7 @@ public class BlockPreviews extends AbstractScreen {
   }
 
   @Override
-  protected void initialize() {
+  protected void onInitialize() {
     if (removeOld) {
       clearOld();
     }

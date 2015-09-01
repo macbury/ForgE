@@ -42,7 +42,7 @@ public class LoadingScreen extends AbstractScreen implements Promise<Level> {
   }
 
   @Override
-  protected void initialize() {
+  protected void onInitialize() {
     this.shapeRenderer = new ShapeRenderer();
     this.camera        = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     this.fpsLogger     = new FPSLogger();

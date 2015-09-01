@@ -31,7 +31,6 @@ public class FrameBufferManager implements Disposable {
 
   public FrameBufferManager() {
     frameBuffers = new ObjectMap<String, FrameBuffer>();
-    createDefaultFrameBuffers();
   }
 
   public FrameBuffer create(String fbIdn) {

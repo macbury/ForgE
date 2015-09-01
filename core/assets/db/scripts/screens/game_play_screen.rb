@@ -1,0 +1,3 @@
+class GameplayScreen < AbstractScreen
+
+end

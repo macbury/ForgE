@@ -37,7 +37,7 @@ public class TestModelsScreen extends AbstractScreen {
   private Vector3 tmpV2 = new Vector3();
 
   @Override
-  protected void initialize() {
+  protected void onInitialize() {
     this.levelEnv          = new LevelEnv();
     this.camera            = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     camera.near = 0.1f;

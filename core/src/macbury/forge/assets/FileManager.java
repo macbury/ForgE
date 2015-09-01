@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.ForgE;
 import macbury.forge.graphics.postprocessing.PostProcessingManager;
 import macbury.forge.level.LevelState;
+import macbury.forge.scripts.ScriptManager;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -45,6 +46,7 @@ public class FileManager implements Disposable {
     putMapping("textures", "graphics/textures/");
     putMapping("skybox", "graphics/textures/skybox/");
     putMapping("maps", LevelState.MAP_STORAGE_DIR);
+    putMapping("scripts", ScriptManager.SCRIPTS_DIR);
     putMapping("postprocessing", PostProcessingManager.STORAGE_DIR);
   }
 

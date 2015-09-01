@@ -48,7 +48,6 @@ public class ForgE extends Game {
   @Override
   public void create () {
     Bullet.init(false, true);
-    //Gdx.app.log(TAG, Gdx.files.classpath("db/entities/crate.json").readString());
     files         = new FileManager();
     storage       = new StorageManager();
     db            = storage.loadOrInitializeDB();
@@ -80,7 +79,6 @@ public class ForgE extends Game {
   public void resize(int width, int height) {
     fb.resize(width, height, true);
     super.resize(width, height);
-
   }
 
   public void addBootListener(ForgEBootListener bootListener) {

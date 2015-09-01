@@ -1,0 +1,3 @@
+class LoadingLevelScreen < AbstractScreen
+
+end
