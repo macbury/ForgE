@@ -3,11 +3,26 @@
     { width: 512, height: 512, format: "RGB888", filter: "Linear", wrap: "MirroredRepeat", depth: false, name: "my:small-color" },
     { width: 512, height: 512, format: "RGB888", filter: "Linear", wrap: "ClampToEdge", depth: false, name: "my:blur" },
     { width: 256, height: 256, format: "RGBA8888", filter: "Linear", wrap: "ClampToEdge", depth: false, name: "my:light-scattering-assembler" }
-    { width: 256, height: 256, format: "RGBA8888", filter: "Linear", wrap: "ClampToEdge", depth: false, name: "my:light-scattering" }
+    { width: 256, height: 256, format: "RGBA8888", filter: "Linear", wrap: "ClampToEdge", depth: false, name: "my:light-scattering" },
+    //{ width: 1024, height: 1024, format: "Alpha", filter: "Linear", wrap: "ClampToEdge", depth: false, name: "my:sobel" },
   ],
 
   steps: [
     { copy: "forge:main-color", target: "my:small-color" },
+    /*
+    {
+      target: "my:sobel",
+      fragment: "sobel",
+      customUniforms: {
+        u_depthTexture: "forge:depth",
+        u_depthTexelSize: 0.0009765625
+      },
+      helpers: {
+        vertex: [],
+        fragment: ["shadow_map"]
+      },
+    },
+    */
     {
       target: "my:light-scattering-assembler",
       fragment: "prepare-light-scattering-texture",
@@ -50,10 +65,11 @@
         "VignetteTexture"
       ],
       customUniforms: {
-	       u_mainTexture: "forge:main-color",
-         u_blurTexture: "my:blur",
-         u_lightScatteringTexture: "my:light-scattering",
-         u_blurMix:  0.25
+        //u_outlineTexture: "my:sobel",
+	      u_mainTexture: "forge:main-color",
+        u_blurTexture: "my:blur",
+        u_lightScatteringTexture: "my:light-scattering",
+        u_blurMix:  0.25
       }
     }
   ]

@@ -379,9 +379,9 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
   @Override
   public void onJobError(Job job, Exception e) {
     JOptionPane.showMessageDialog(mainWindow,
-      e.toString(),
-      "Job error",
-      JOptionPane.ERROR_MESSAGE);
+        e.toString(),
+        "Job error",
+        JOptionPane.ERROR_MESSAGE);
   }
 
   @Override
@@ -440,5 +440,17 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
 
   public boolean haveOpenedMap() {
     return levelEditorScreen != null;
+  }
+
+  public void resume() {
+    if (levelEditorScreen != null) {
+      levelEditorScreen.resume();
+    }
+  }
+
+  public void pause() {
+    if (levelEditorScreen != null) {
+      levelEditorScreen.pause();
+    }
   }
 }

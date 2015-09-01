@@ -25,12 +25,9 @@ import macbury.forge.editor.views.MapPropertySheet;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
+import java.awt.event.*;
 
-public class MainWindow extends JFrame implements ForgEBootListener, FocusListener, WindowFocusListener, Thread.UncaughtExceptionHandler {
+public class MainWindow extends JFrame implements ForgEBootListener, FocusListener, WindowFocusListener, Thread.UncaughtExceptionHandler, WindowListener {
   private static final String WINDOW_MAIN_NAME = "ForgE";
   private final BlocksController blocksController;
   private final DirectoryWatcher directoryWatcher;
@@ -156,6 +153,8 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     projectController.addOnMapChangeListener(eventsToolsController);
     mainContentPane.setVisible(true);
     invalidate();
+
+    addWindowListener(this);
     addWindowFocusListener(this);
   }
 
@@ -213,11 +212,15 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
   public void windowGainedFocus(WindowEvent e) {
     bruteFocus = true;
     //mainContentPane.grabFocus();
+    Gdx.graphics.setContinuousRendering(true);
   }
+
+
 
   @Override
   public void windowLostFocus(WindowEvent e) {
     bruteFocus = false;
+    Gdx.graphics.setContinuousRendering(false);
   }
 
   @Override
@@ -373,5 +376,40 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
    */
   public JComponent $$$getRootComponent$$$() {
     return mainContentPane;
+  }
+
+  @Override
+  public void windowOpened(WindowEvent e) {
+
+  }
+
+  @Override
+  public void windowClosing(WindowEvent e) {
+
+  }
+
+  @Override
+  public void windowClosed(WindowEvent e) {
+
+  }
+
+  @Override
+  public void windowIconified(WindowEvent e) {
+
+  }
+
+  @Override
+  public void windowDeiconified(WindowEvent e) {
+
+  }
+
+  @Override
+  public void windowActivated(WindowEvent e) {
+    //projectController.resume();
+  }
+
+  @Override
+  public void windowDeactivated(WindowEvent e) {
+   // projectController.pause();
   }
 }

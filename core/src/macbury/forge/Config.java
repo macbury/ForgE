@@ -31,7 +31,7 @@ public class Config extends KVStorage<Config.Key> {
     putInt(Key.BloomTextureSize, 512);
     putInt(Key.ReflectionBufferSize, 512);
     putInt(Key.RefractionBufferSize, 512);
-    putInt(Key.DepthMapSize, 512);
+    putInt(Key.DepthMapSize, 1024);
     putInt(Key.LightScatteringTextureSize, 512);
     putInt(Key.NearShadowDistance, 10);
     putBool(Key.Fullscreen, false);

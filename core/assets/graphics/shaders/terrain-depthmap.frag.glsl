@@ -3,11 +3,15 @@ varying vec2   v_uvStart;
 varying vec2   v_uvMul;
 varying vec2   v_textCoord;
 
+uniform float  u_transparentDepthEnabled;
+
 void main() {
-  vec2 tilingTextCord = (fract(v_textCoord) * v_uvMul) + v_uvStart;
-  vec4 texture        = texture2D(u_diffuseTexture, tilingTextCord);
-  if (texture.a <= 0.0f) {
-    discard;
+  if (u_transparentDepthEnabled > 0.0f) {
+    vec2 tilingTextCord = (fract(v_textCoord) * v_uvMul) + v_uvStart;
+    vec4 texture        = texture2D(u_diffuseTexture, tilingTextCord);
+    if (texture.a <= 0.0f) {
+      discard;
+    }
   }
 
   float depth     = calculateDepth(v_position, u_eyePosition, u_cameraFar);
