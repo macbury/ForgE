@@ -146,6 +146,10 @@ public class TerrainEngine implements Disposable {
     return map.chunkToRebuild.size == 0;
   }
 
+  public int getChunkToRebuildSize() {
+    return map.chunkToRebuild.size;
+  }
+
   public void buildMeshForAvalibleChunks() {
     for (Chunk chunk : chunks) {
       chunk.buildMesh();

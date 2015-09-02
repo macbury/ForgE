@@ -14,6 +14,7 @@ public class ScreenManager {
   }
 
   public void set(AbstractScreen screen) {
+
     currentScreen = screen;
     if (currentScreen != null) {
       currentScreen.initializeOnce();

@@ -11,6 +11,7 @@ import macbury.forge.ForgE;
 import macbury.forge.ForgEBootListener;
 import macbury.forge.screens.LoadingScreen;
 import macbury.forge.screens.test.TestModelsScreen;
+import macbury.forge.scripts.ScriptThread;
 import macbury.forge.utils.ArgsParser;
 
 import javax.swing.*;
@@ -18,7 +19,7 @@ import javax.swing.*;
 /**
  * Created by macbury on 24.03.15.
  */
-public class DesktopGame implements ForgEBootListener, Thread.UncaughtExceptionHandler {
+public class DesktopGame implements ForgEBootListener, Thread.UncaughtExceptionHandler, ScriptThread.Listener {
   public DesktopGame(String[] arg) {
     SwingThemeHelper.useGTK();
 
@@ -40,7 +41,7 @@ public class DesktopGame implements ForgEBootListener, Thread.UncaughtExceptionH
   @Override
   public void afterEngineCreate(ForgE engine) {
     ForgE.blocks.loadAtlasAndUvsIfNull();
-    ForgE.scripts.loadAndRun();
+    ForgE.scripts.loadAndRun(this);
     /*if (ForgE.db.startPosition == null) {
       throw new GdxRuntimeException("Start position not found!");
     } else {
@@ -54,5 +55,17 @@ public class DesktopGame implements ForgEBootListener, Thread.UncaughtExceptionH
     TaskDialogs.showException(e);
     e.printStackTrace();
     Gdx.app.exit();
+  }
+
+  @Override
+  public void onRubyError(Throwable e) {
+    TaskDialogs.showException(e);
+    e.printStackTrace();
+    Gdx.app.postRunnable(new Runnable() {
+      @Override
+      public void run() {
+        Gdx.app.exit();
+      }
+    });
   }
 }

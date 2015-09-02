@@ -65,7 +65,8 @@ public class ScriptThread extends Thread implements Disposable {
           DynamicGeometryProvider.class,
           ForgE.class,
           Gdx.class,
-          Color.class
+          Color.class,
+          Runnable.class
       }
   );
 
@@ -76,8 +77,8 @@ public class ScriptThread extends Thread implements Disposable {
   private void executeScript(String filename, String source) {
     try {
       ruby.exec(filename, 1, 1, source);
-    } catch (Exception e) {
-      listener.onRubyError(e);
+    } catch (BSFException e) {
+      listener.onRubyError(e.getTargetException());
     }
   }
 
@@ -112,7 +113,7 @@ public class ScriptThread extends Thread implements Disposable {
   private void initalizeContext() {
     Gdx.app.log(TAG, "Initializing context...");
     executeScript("<init>", "def import(path)\n" +
-        "  require ForgE.files.internal(path).path()\n" +
+        "  require ForgE.files.internal(path+'.rb').path()\n" +
         "end"
     );
     for (int i = 0; i < packagesToImport.size; i++) {
@@ -148,6 +149,6 @@ public class ScriptThread extends Thread implements Disposable {
   }
 
   public interface Listener {
-    public void onRubyError(Exception error);
+    public void onRubyError(Throwable error);
   }
 }

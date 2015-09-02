@@ -1,4 +1,0 @@
-game.run(function ($log, $teleport) {
-  $log.info("main.js", "Initialized game...");
-  $teleport.toStartPosition();
-});
