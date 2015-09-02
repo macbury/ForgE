@@ -9,9 +9,23 @@ class LoadingLevelScreen < AbstractScreen
   PROGRESS_LOAD_SAVE             = 75
   PROGRESS_LOAD_ASSETS           = 90
   PROGRESS_DONE                  = 100
+
+  ROTATION_SPEED                 = 80.0
+  STANDARD_CUBE_ROTATION         = 60.0
+
   def onInitialize
     Gdx.app.log(TAG, self.teleport.to_s)
-    @progress = PROGRESS_INITIAL
+
+    @camera         = PerspectiveCamera.new(67, Gdx.graphics.getWidth, Gdx.graphics.getHeight)
+    @boxTransMat    = Matrix4.new
+    @shapeRenderer  = ShapeRenderer.new
+
+    @camera.position.set(0, 8, 0)
+    @camera.lookAt(Vector3::Zero)
+
+    @indicatorRotation = 0.0
+
+    @progress       = PROGRESS_INITIAL
     load_level_state_and_geometry
   end
 
@@ -49,12 +63,17 @@ class LoadingLevelScreen < AbstractScreen
   def load_save
     @progress        = PROGRESS_LOAD_SAVE
     Gdx.app.log(TAG, "Loading entities etc...")
-    Gdx.app.log(TAG, "Loading assets")
-    load_assets
+    Defer.exec(Proc.new {
+      sleep 1
+    }) do
+      @progress        = PROGRESS_LOAD_ASSETS
+      Gdx.app.log(TAG, "Loading assets")
+      load_assets
+    end
+
   end
 
   def load_assets
-    @progress        = PROGRESS_LOAD_ASSETS
     if ForgE.assets.loadPendingInChunks
       ForgE.assets.unloadUnusedAssets
       loading_finished
@@ -73,7 +92,36 @@ class LoadingLevelScreen < AbstractScreen
   end
 
   def render(delta)
-    ForgE.graphics.clearAll(Color::RED)
+    ForgE.graphics.clearAll(Color::BLACK)
+    @camera.update
+    @indicatorRotation += ROTATION_SPEED * delta;
+
+    renderVoxelProgress
+    renderVoxelBorder
+  end
+
+  def renderVoxelBorder
+    @shapeRenderer.begin(ShapeRenderer::ShapeType::Line)
+      @shapeRenderer.setProjectionMatrix(@camera.combined)
+      @shapeRenderer.identity
+      @shapeRenderer.setColor(1.0, 1.0, 1.0, 1.0)
+      @shapeRenderer.translate(6, 0, 4)
+      @shapeRenderer.rotate(0,0,1, STANDARD_CUBE_ROTATION)
+      @shapeRenderer.rotate(0,0,1, @indicatorRotation)
+      @shapeRenderer.box(-0.5,-0.5,-0.5, 1, 1, 1)
+    @shapeRenderer.end
+  end
+
+  def renderVoxelProgress
+    @shapeRenderer.begin(ShapeRenderer::ShapeType::Filled)
+      @shapeRenderer.setProjectionMatrix(@camera.combined)
+      @shapeRenderer.identity
+      @shapeRenderer.setColor(1.0, 1.0, 1.0, 0.7)
+      @shapeRenderer.translate(6, 0, 4)
+      @shapeRenderer.rotate(0,0,1, STANDARD_CUBE_ROTATION)
+      @shapeRenderer.rotate(0,0,1, @indicatorRotation)
+      @shapeRenderer.box(-0.5,-0.5,-0.5, 1, 1, @progress / 100.0)
+    @shapeRenderer.end
   end
 
   def resize(width, height)
@@ -97,7 +145,10 @@ class LoadingLevelScreen < AbstractScreen
   end
 
   def dispose
+    Gdx.app.log(TAG, "Dispose...")
     self.teleport = nil
+    @shapeRenderer.dispose
+    @shapeRenderer = nil
     @level = nil
   end
 end

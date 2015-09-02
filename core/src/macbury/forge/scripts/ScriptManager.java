@@ -24,7 +24,7 @@ public class ScriptManager implements Disposable {
   @Override
   public void dispose() {
     if (thread != null)
-    thread.dispose();
+      thread.dispose();
   }
 
 }

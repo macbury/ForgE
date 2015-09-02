@@ -36,6 +36,7 @@ public class ForgE extends Game {
   public static ScriptManager       scripts;
   public static FrameBufferManager  fb;
   public static TimeManager         time;
+  public static Thread              thread;
   private Array<ForgEBootListener>  bootListeners;
   public static FileManager         files;
 
@@ -62,6 +63,7 @@ public class ForgE extends Game {
     scripts       = new ScriptManager();
     fb            = new FrameBufferManager();
     time          = new TimeManager();
+    thread        = Thread.currentThread();
     Gdx.input.setInputProcessor(input);
     for (ForgEBootListener listener : bootListeners) {
       listener.afterEngineCreate(this);
@@ -89,6 +91,10 @@ public class ForgE extends Game {
   public void dispose() {
     scripts.dispose();
     super.dispose();
+  }
+
+  public static boolean isOpenGlCurrentThread() {
+    return Thread.currentThread() == thread;
   }
 
 

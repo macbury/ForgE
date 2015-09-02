@@ -31,7 +31,7 @@ public class DepthShader extends RenderableBaseShader<Renderable> {
         context.setCullFace(GL20.GL_FRONT);
       }
     } else {
-      shader.setUniformf(UNIFORM_TRANSPARENT_DEPTH, 0.0f);
+      shader.setUniformf(UNIFORM_TRANSPARENT_DEPTH, 1.0f);
       context.setCullFace(GL20.GL_BACK);
     }
 

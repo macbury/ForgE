@@ -13,7 +13,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import javafx.application.Application;
 import macbury.forge.ForgE;
 import macbury.forge.components.PlayerComponent;
 import macbury.forge.components.PositionComponent;
@@ -22,19 +21,10 @@ import macbury.forge.level.Level;
 import macbury.forge.screens.AbstractScreen;
 import macbury.forge.terrain.geometry.DynamicGeometryProvider;
 import macbury.forge.terrain.geometry.FileGeometryProvider;
-import org.apache.bsf.BSFDeclaredBean;
 import org.apache.bsf.BSFException;
 import org.apache.bsf.BSFManager;
-import org.apache.bsf.util.ObjectRegistry;
-import org.jruby.CompatVersion;
-import org.jruby.RubyInstanceConfig;
-import org.jruby.embed.AttributeName;
-import org.jruby.embed.LocalContextScope;
-import org.jruby.embed.LocalVariableBehavior;
 import org.jruby.embed.ScriptingContainer;
 import org.jruby.embed.bsf.JRubyEngine;
-import org.jruby.javasupport.JavaEmbedUtils;
-
 /**
  * Created by macbury on 01.09.15.
  */

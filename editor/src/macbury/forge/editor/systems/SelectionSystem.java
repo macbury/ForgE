@@ -66,12 +66,15 @@ public class SelectionSystem extends EntitySystem {
 
   @Override
   public void update(float deltaTime) {
-    cursorComponent.set(selection.getBoundingBox());
-    if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
-      selection.setSelectType(SelectType.Replace);
-    } else {
-      selection.setSelectType(SelectType.Append);
+    if (selection != null) {
+      cursorComponent.set(selection.getBoundingBox());
+      if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
+        selection.setSelectType(SelectType.Replace);
+      } else {
+        selection.setSelectType(SelectType.Append);
+      }
     }
+
   }
 
   private boolean getCurrentVoxelCursor(float screenX, float screenY) {

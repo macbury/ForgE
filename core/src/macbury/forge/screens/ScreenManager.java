@@ -1,5 +1,7 @@
 package macbury.forge.screens;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import macbury.forge.ForgE;
 
 /**
@@ -14,7 +16,20 @@ public class ScreenManager {
   }
 
   public void set(AbstractScreen screen) {
+    if (ForgE.isOpenGlCurrentThread()) {
+      setCurrentScreen(screen);
+    } else {
+      Gdx.app.postRunnable(new Runnable() {
+        @Override
+        public void run() {
+          setCurrentScreen(screen);
+        }
+      });
+    }
 
+  }
+
+  private void setCurrentScreen(AbstractScreen screen) {
     currentScreen = screen;
     if (currentScreen != null) {
       currentScreen.initializeOnce();
