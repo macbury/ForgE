@@ -10,6 +10,7 @@ public class Overlay extends Widget {
   public Overlay() {
     super();
     setFillParent(true);
+    setZIndex(2);
   }
 
   private void blur() {

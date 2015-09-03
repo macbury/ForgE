@@ -3,7 +3,6 @@ package macbury.forge.editor.windows;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglAWTCanvas;
 import com.badlogic.gdx.backends.lwjgl.LwjglAWTInput;
-import com.badlogic.gdx.utils.Json;
 import com.ezware.dialog.task.TaskDialogs;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -109,7 +108,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
 
     this.jobs = new JobManager();
     Config config = Config.load("editor");
-    engine = new ForgE(config);
+    engine = new ForgE(config, new String[]{});
 
     postProcessingController = new PostProcessingController(directoryWatcher);
     blocksController = new BlocksController(blockList, directoryWatcher, jobs, (ImagePanel) panelPrimaryBlock, (ImagePanel) panelSecondaryBlock);

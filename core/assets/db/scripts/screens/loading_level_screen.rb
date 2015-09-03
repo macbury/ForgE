@@ -53,7 +53,7 @@ class LoadingLevelScreen < AbstractScreen
     Defer.exec(Proc.new {
       @progress        = PROGRESS_BUILD_GEOMETRY
       while !@level.terrainEngine.rebuildInBackground(50)
-        Gdx.app.log(TAG, "Loaded 50 chunks")
+
       end
     }) do
       load_save
@@ -151,4 +151,5 @@ class LoadingLevelScreen < AbstractScreen
     @shapeRenderer = nil
     @level = nil
   end
+  
 end

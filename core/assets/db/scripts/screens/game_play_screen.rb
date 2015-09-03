@@ -14,6 +14,9 @@ class GameplayScreen < AbstractScreen
     self.level.camera.far          = FAR_CAMERA
     self.level.camera.near         = NEAR_CAMERA
     self.level.camera.fieldOfView  = FIELD_OF_VIEW
+
+    @gameplay_view                 = GameplayView.new
+
     spawn_player
   end
 
@@ -54,11 +57,11 @@ this.level.entities.addEntity(playerEntity);
   end
 
   def show
-
+    ForgE.ui.addActor(@gameplay_view)
   end
 
   def hide
-
+    @gameplay_view.remove
   end
 
   def pause

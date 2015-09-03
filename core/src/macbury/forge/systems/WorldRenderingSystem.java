@@ -1,14 +1,13 @@
 package macbury.forge.systems;
 
 import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.RenderableProvider;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.ForgE;
 import macbury.forge.components.PositionComponent;
 import macbury.forge.components.RenderableComponent;
@@ -32,7 +31,7 @@ import macbury.forge.utils.CameraUtils;
 /**
  * Created by macbury on 19.10.14.
  */
-public class WorldRenderingSystem extends EntitySystem {
+public class WorldRenderingSystem extends EntitySystem implements Disposable{
   private final GameCamera mainCamera;
   private final LevelEnv env;
   private final TerrainEngine terrain;
@@ -47,7 +46,8 @@ public class WorldRenderingSystem extends EntitySystem {
   private VoxelBatch batch;
   private final Array<OctreeObject> octreeVisibleObjects = new Array<OctreeObject>();
   private final Array<RenderableProvider> finalBucket;
-  private Vector3 tempNormal = new Vector3();
+
+  private RenderListener listener;
 
   public WorldRenderingSystem(Level level) {
     super();
@@ -62,6 +62,14 @@ public class WorldRenderingSystem extends EntitySystem {
     this.octree                 = level.octree;
     this.finalBucket            = new Array<RenderableProvider>();
     frustrumOctreeQuery.setKlass(PositionComponent.class);
+  }
+
+  public RenderListener getListener() {
+    return listener;
+  }
+
+  public void setListener(RenderListener listener) {
+    this.listener = listener;
   }
 
   @Override
@@ -104,13 +112,13 @@ public class WorldRenderingSystem extends EntitySystem {
 
     sunLight.beginNear(mainCamera); {
       ForgE.fb.begin(Fbo.FRAMEBUFFER_SUN_NEAR_DEPTH); {
-        renderBucketWith(false, false, sunLight.getShadowCamera());
+        renderBucketWith(false, false, false, sunLight.getShadowCamera());
       } ForgE.fb.end();
     } sunLight.endNear(mainCamera);
 
     sunLight.beginFar(mainCamera); {
       ForgE.fb.begin(Fbo.FRAMEBUFFER_SUN_FAR_DEPTH); {
-        renderBucketWith(false, false, sunLight.getShadowCamera());
+        renderBucketWith(false, false, false, sunLight.getShadowCamera());
       } ForgE.fb.end();
     } sunLight.endFar(mainCamera);
 
@@ -134,7 +142,7 @@ public class WorldRenderingSystem extends EntitySystem {
     mainCamera.update(true);
     ForgE.fb.begin(Fbo.FRAMEBUFFER_REFLECTIONS); {
       prepareElementsToRender(mainCamera);
-      renderBucketWith(true, false, mainCamera);
+      renderBucketWith(false, true, false, mainCamera);
     } ForgE.fb.end();
 
     mainCamera.position.y   += distance;
@@ -160,14 +168,14 @@ public class WorldRenderingSystem extends EntitySystem {
     env.water.clipMode = LevelEnv.ClipMode.Refraction;
     ForgE.fb.begin(Fbo.FRAMEBUFFER_REFRACTIONS); {
       prepareElementsToRender(mainCamera);
-      renderBucketWith(false, false, mainCamera);
+      renderBucketWith(false, false, false, mainCamera);
     }
     ForgE.fb.end();
   }
 
   private void renderFinal() {
     ForgE.fb.begin(Fbo.FRAMEBUFFER_MAIN_COLOR); {
-      renderBucketWith(true, true, mainCamera);
+      renderBucketWith(true, true, true, mainCamera);
     } ForgE.fb.end();
   }
 
@@ -193,7 +201,7 @@ public class WorldRenderingSystem extends EntitySystem {
     }
   }
 
-  private void renderBucketWith(boolean withSkybox, boolean withWater, ICamera camera) {
+  private void renderBucketWith(boolean withDebug, boolean withSkybox, boolean withWater, ICamera camera) {
     batch.begin((Camera) camera); {
       if (withSkybox) {
         ForgE.graphics.clearAll(env.skyColor);
@@ -210,8 +218,22 @@ public class WorldRenderingSystem extends EntitySystem {
       if (withWater)
         batch.pushAll(terrain.visibleWaterFaces);
       batch.addAll(finalBucket);
+
       batch.render(env);
     } batch.end();
+
+    if (withDebug && listener != null) {
+      listener.onDebugColorRender(batch);
+    }
   }
 
+  @Override
+  public void dispose() {
+    listener = null;
+  }
+
+
+  public interface RenderListener {
+    public void onDebugColorRender(VoxelBatch batch);
+  }
 }

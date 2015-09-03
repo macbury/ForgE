@@ -49,14 +49,13 @@ public class Level implements Disposable {
   public final FrustrumDebugAndRenderer frustrumDebugger;
   public final TerrainEngine            terrainEngine;
   public final LevelEnv                 env;
-  public final Stage                    ui;
   public PostProcessingManager    postProcessing;
   public final TerrainGeometryProvider terrainGeometryProvider;
 
   public Level(LevelState state, TerrainGeometryProvider geometryProvider) {
     this.colorShaderProvider      = new ShaderProvider();
     this.depthShaderProvider      = new DepthShaderProvider();
-    this.ui                       = new Stage(new ScreenViewport());
+
     this.env                      = state.env;
     this.state                    = state;
     this.terrainMap               = state.terrainMap;
@@ -75,20 +74,13 @@ public class Level implements Disposable {
     this.entities                 = new EntitySystemsManager(this);
 
     octree.setBounds(terrainMap.getBounds(ChunkMap.TERRAIN_TILE_SIZE));
-    ui.addActor(new FullScreenFrameBufferResult(Fbo.FRAMEBUFFER_FINAL));
 
-
-    //ui.addActor(DebugFrameBufferResult.build(Fbo.FRAMEBUFFER_SUN_FAR_DEPTH, 256, 0, 0));
-    //ui.addActor(DebugFrameBufferResult.build(Fbo.FRAMEBUFFER_SUN_NEAR_DEPTH, 256, 256, 0));
-   // ui.addActor(DebugFrameBufferResult.build(Fbo.FRAMEBUFFER_REFLECTIONS, 256, 0, 0));
-    //ui.addActor(DebugFrameBufferResult.build(Fbo.FRAMEBUFFER_REFRACTIONS, 256, 256, 0));
   }
 
   public void resize(int width, int height) {
     camera.viewportWidth  = width;
     camera.viewportHeight = height;
     camera.update(true);
-    ui.getViewport().update(width, height, true);
     postProcessing.reload();
   }
 
@@ -102,10 +94,6 @@ public class Level implements Disposable {
 
     postProcessing.render(renderContext, env);
 
-    ForgE.graphics.clearAll(Color.BLACK);
-
-    ui.act(delta);
-    ui.draw();
   }
 
   @Override
@@ -125,7 +113,6 @@ public class Level implements Disposable {
     colorShaderProvider.dispose();
     depthShaderProvider.dispose();
     postProcessing.dispose();
-    ui.dispose();
   }
 
 }

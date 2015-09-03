@@ -21,6 +21,7 @@ import macbury.forge.level.Level;
 import macbury.forge.screens.AbstractScreen;
 import macbury.forge.terrain.geometry.DynamicGeometryProvider;
 import macbury.forge.terrain.geometry.FileGeometryProvider;
+import macbury.forge.ui.GameplayView;
 import org.apache.bsf.BSFException;
 import org.apache.bsf.BSFManager;
 import org.jruby.embed.ScriptingContainer;
@@ -56,7 +57,8 @@ public class ScriptThread extends Thread implements Disposable {
           ForgE.class,
           Gdx.class,
           Color.class,
-          Runnable.class
+          Runnable.class,
+          GameplayView.class
       }
   );
 
@@ -103,9 +105,10 @@ public class ScriptThread extends Thread implements Disposable {
   private void initalizeContext() {
     Gdx.app.log(TAG, "Initializing context...");
     executeScript("<init>", "def import(path)\n" +
-        "  require ForgE.files.internal(path+'.rb').path()\n" +
-        "end"
+            "  require ForgE.files.internal(path+'.rb').path()\n" +
+            "end"
     );
+
     for (int i = 0; i < packagesToImport.size; i++) {
       Gdx.app.log(TAG, "Setting: " + packagesToImport.get(i).getCanonicalName());
       executeScript("<init>", "java_import '" + packagesToImport.get(i).getCanonicalName()+"';");

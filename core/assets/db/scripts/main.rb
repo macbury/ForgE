@@ -4,9 +4,9 @@ import "scripts:screens/game_play_screen"
 import "scripts:screens/loading_level_screen"
 
 if ForgE.db.startPosition
-  loadingScreen          = LoadingLevelScreen.new
-  loadingScreen.teleport = ForgE.db.startPosition
-  ForgE.screens.set(loadingScreen)
+  #loadingScreen          = LoadingLevelScreen.new
+  #loadingScreen.teleport = ForgE.db.startPosition
+  ForgE.screens.set(MainMenuScreen.new)
 else
   throw "Could not find start position!"
 end

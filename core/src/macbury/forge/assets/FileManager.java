@@ -48,6 +48,7 @@ public class FileManager implements Disposable {
     putMapping("maps", LevelState.MAP_STORAGE_DIR);
     putMapping("scripts", ScriptManager.SCRIPTS_DIR);
     putMapping("postprocessing", PostProcessingManager.STORAGE_DIR);
+    putMapping("fonts", "fonts/");
   }
 
   private String applyMapping(String path) {

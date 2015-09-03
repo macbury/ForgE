@@ -1,9 +1,8 @@
 package macbury.forge.systems;
 
-import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.GL30;
@@ -12,6 +11,7 @@ import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.Config;
 import macbury.forge.ForgE;
@@ -32,12 +32,11 @@ import macbury.forge.terrain.TerrainEngine;
 /**
  * Created by macbury on 20.10.14.
  */
-public class DebugSystem extends IteratingSystem implements Disposable {
+public class DebugSystem extends EntitySystem implements Disposable, WorldRenderingSystem.RenderListener, EntityListener {
   private static final Color BOUNDING_BOX_COLOR  = Color.DARK_GRAY;
   private static final Color OCTREE_BOUNDS_COLOR = Color.OLIVE;
   private static final float DEBUG_BOX_OFFSET_POSITION    = 0.05f;
   private static final float DEBUG_BOX_OFFSET_SIZE        = DEBUG_BOX_OFFSET_POSITION * 2;
-  private final VoxelBatch batch;
   private final GameCamera camera;
   private final OctreeNode dynamicOctree;
   private final FrustrumDebugAndRenderer frustrumDebugger;
@@ -45,7 +44,10 @@ public class DebugSystem extends IteratingSystem implements Disposable {
   private final TerrainEngine terrain;
   private final RenderContext context;
   private final Level level;
+  private final Family family;
+  private final VoxelBatch batch;
   private Texture startPositionIcon;
+  private Array<Entity> entities;
   private ComponentMapper<PositionComponent>   pm = ComponentMapper.getFor(PositionComponent.class);
   private ComponentMapper<CursorComponent>     cm = ComponentMapper.getFor(CursorComponent.class);
   private final BoundingBox tempBox;
@@ -54,7 +56,9 @@ public class DebugSystem extends IteratingSystem implements Disposable {
   private Sprite3D          startPositionSprite;
 
   public DebugSystem(Level level) {
-    super(Family.getFor(PositionComponent.class));
+    super();
+    this.entities         = new Array<Entity>();
+    this.family           = Family.getFor(PositionComponent.class);
     this.level            = level;
     this.batch            = level.batch;
     this.context          = level.renderContext;
@@ -72,7 +76,6 @@ public class DebugSystem extends IteratingSystem implements Disposable {
     return ForgE.config.getBool(Config.Key.Debug);
   }
 
-  @Override
   public void processEntity(Entity entity, float deltaTime) {
     PositionComponent positionComponent = pm.get(entity);
     CursorComponent cursorComponent   = cm.get(entity);
@@ -92,62 +95,7 @@ public class DebugSystem extends IteratingSystem implements Disposable {
     }
   }
 
-  @Override
-  public void update(float deltaTime) {
-    ForgE.fb.begin(Fbo.FRAMEBUFFER_MAIN_COLOR);
-    batch.begin(camera);
-    context.begin();
-    context.setDepthTest(GL30.GL_LEQUAL);
-    context.setCullFace(GL30.GL_BACK);
-    context.setDepthTest(GL20.GL_LEQUAL);
-    batch.shapeRenderer.setProjectionMatrix(camera.combined);
-
-    batch.shapeRenderer.begin(ShapeRenderer.ShapeType.Line); {
-      batch.shapeRenderer.setColor(BOUNDING_BOX_COLOR);
-      batch.shapeRenderer.identity();
-      super.update(deltaTime);
-      if (ForgE.config.getBool(Config.Key.RenderBoundingBox)) {
-        batch.shapeRenderer.identity();
-        for (int i = 0; i < terrain.chunks.size; i++) {
-          Chunk chunk = terrain.chunks.get(i);
-          chunk.getBoundingBox(tempBox);
-          for (int j = 0; j < chunk.renderables.size; j++) {
-            VoxelChunkRenderable renderable = chunk.renderables.get(j);
-            DebugShape.draw(batch.shapeRenderer, renderable.boundingBox);
-          }
-        }
-      }
-
-      batch.shapeRenderer.setColor(OCTREE_BOUNDS_COLOR);
-      if (ForgE.config.getBool(Config.Key.RenderDynamicOctree)) {
-        DebugShape.cullledOctree(batch.shapeRenderer, dynamicOctree, camera.normalOrDebugFrustrum());
-      }
-
-      if (ForgE.config.getBool(Config.Key.RenderStaticOctree)) {
-        DebugShape.cullledOctree(batch.shapeRenderer, terrainOctree, camera.normalOrDebugFrustrum());
-      }
-      if (ForgE.config.getBool(Config.Key.Debug)) {
-        renderStartPosition();
-      }
-
-    } batch.shapeRenderer.end();
-
-    frustrumDebugger.render(camera);
-    context.end();
-    batch.render(level.env);
-    batch.end();
-    if (ForgE.config.getBool(Config.Key.RenderBulletDebug)) {
-      context.begin(); {
-        context.setDepthTest(GL30.GL_LEQUAL);
-        context.setCullFace(GL30.GL_BACK);
-        context.setDepthTest(GL20.GL_LEQUAL);
-        level.entities.psychics.debugDraw(camera);
-      } context.end();
-    }
-    ForgE.fb.end();
-  }
-
-  private void renderStartPosition() {
+  private void renderStartPosition(VoxelBatch batch) {
     if (ForgE.db.startPosition != null && level.state.id == ForgE.db.startPosition.mapId) {
 
       level.terrainMap.localVoxelPositionToWorldPosition(ForgE.db.startPosition.voxelPosition, tempVec);
@@ -181,5 +129,76 @@ public class DebugSystem extends IteratingSystem implements Disposable {
   public void dispose() {
     if (startPositionIcon != null)
       startPositionIcon.dispose();
+    entities.clear();
+  }
+
+  @Override
+  public void onDebugColorRender(VoxelBatch batch) {
+    batch.begin(camera);
+    context.begin();
+    context.setDepthTest(GL30.GL_LEQUAL);
+    context.setCullFace(GL30.GL_BACK);
+    context.setDepthTest(GL20.GL_LEQUAL);
+    batch.shapeRenderer.setProjectionMatrix(camera.combined);
+
+    batch.shapeRenderer.begin(ShapeRenderer.ShapeType.Line); {
+      batch.shapeRenderer.setColor(BOUNDING_BOX_COLOR);
+      batch.shapeRenderer.identity();
+
+      for (int i = 0; i < entities.size; i++) {
+        processEntity(entities.get(i), Gdx.graphics.getDeltaTime());
+      }
+
+      if (ForgE.config.getBool(Config.Key.RenderBoundingBox)) {
+        batch.shapeRenderer.identity();
+        for (int i = 0; i < terrain.chunks.size; i++) {
+          Chunk chunk = terrain.chunks.get(i);
+          chunk.getBoundingBox(tempBox);
+          for (int j = 0; j < chunk.renderables.size; j++) {
+            VoxelChunkRenderable renderable = chunk.renderables.get(j);
+            DebugShape.draw(batch.shapeRenderer, renderable.boundingBox);
+          }
+        }
+      }
+
+      batch.shapeRenderer.setColor(OCTREE_BOUNDS_COLOR);
+      if (ForgE.config.getBool(Config.Key.RenderDynamicOctree)) {
+        DebugShape.cullledOctree(batch.shapeRenderer, dynamicOctree, camera.normalOrDebugFrustrum());
+      }
+
+      if (ForgE.config.getBool(Config.Key.RenderStaticOctree)) {
+        DebugShape.cullledOctree(batch.shapeRenderer, terrainOctree, camera.normalOrDebugFrustrum());
+      }
+
+      if (ForgE.config.getBool(Config.Key.Debug)) {
+        renderStartPosition(batch);
+      }
+
+
+    } batch.shapeRenderer.end();
+
+    frustrumDebugger.render(camera);
+    context.end();
+    batch.render(level.env);
+    batch.end();
+    if (ForgE.config.getBool(Config.Key.RenderBulletDebug)) {
+      context.begin(); {
+        context.setDepthTest(GL30.GL_LEQUAL);
+        context.setCullFace(GL30.GL_BACK);
+        context.setDepthTest(GL20.GL_LEQUAL);
+        level.entities.psychics.debugDraw(camera);
+      } context.end();
+    }
+  }
+
+  @Override
+  public void entityAdded(Entity entity) {
+    if (family.matches(entity))
+      entities.add(entity);
+  }
+
+  @Override
+  public void entityRemoved(Entity entity) {
+    entities.removeValue(entity, true);
   }
 }

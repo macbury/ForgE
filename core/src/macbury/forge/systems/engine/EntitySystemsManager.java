@@ -37,6 +37,8 @@ public class EntitySystemsManager extends PooledEngine implements Disposable {
     addSystem(debug);
 
     addEntityListener(psychics);
+    addEntityListener(debug);
+    rendering.setListener(debug);
   }
 
   @Override

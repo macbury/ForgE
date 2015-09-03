@@ -20,7 +20,7 @@ import javax.swing.*;
  * Created by macbury on 24.03.15.
  */
 public class DesktopGame implements ForgEBootListener, Thread.UncaughtExceptionHandler, ScriptThread.Listener {
-  public DesktopGame(String[] arg) {
+  public DesktopGame(String[] args) {
     SwingThemeHelper.useGTK();
 
     Thread.setDefaultUncaughtExceptionHandler(this);
@@ -33,7 +33,7 @@ public class DesktopGame implements ForgEBootListener, Thread.UncaughtExceptionH
     config.height         = forgeConfig.getInt(Config.Key.ResolutionHeight);
     config.fullscreen     = forgeConfig.getBool(Config.Key.Fullscreen);
 
-    ForgE engine              = new ForgE(forgeConfig);
+    ForgE engine              = new ForgE(forgeConfig, args);
     engine.addBootListener(this);
     new LwjglApplication(engine, config);
   }

@@ -17,6 +17,7 @@ import macbury.forge.level.LevelState;
 import macbury.forge.screens.AbstractScreen;
 import macbury.forge.terrain.geometry.DynamicGeometryProvider;
 import macbury.forge.ui.DebugFrameBufferResult;
+import macbury.forge.ui.FullScreenFrameBufferResult;
 import macbury.forge.ui.Overlay;
 
 /**
@@ -27,7 +28,6 @@ public class LevelEditorScreen extends AbstractScreen {
   private static final float LEVEL_EDITOR_FAR_CAMERA = 120;
   private final LevelState state;
   public Level level;
-  private Stage stage;
   private RTSCameraController cameraController;
   private Overlay overlay;
   public SelectionSystem selectionSystem;
@@ -35,6 +35,7 @@ public class LevelEditorScreen extends AbstractScreen {
   private DecalBatch decalBatch;
   private Array<ForgeAfterRenderListener> afterRenderListenerArray = new Array<ForgeAfterRenderListener>();
   private boolean pause = false;
+  private FullScreenFrameBufferResult fullScreenBuffer;
 
   public LevelEditorScreen(LevelState state, JobManager jobs) {
     super();
@@ -46,7 +47,6 @@ public class LevelEditorScreen extends AbstractScreen {
   protected void onInitialize() {
     GLProfiler.enable();
     this.overlay              = new Overlay();
-    this.stage                = new Stage();
 
     this.level                = new Level(state, new DynamicGeometryProvider(state.terrainMap));
     this.selectionSystem      = new SelectionSystem(level);
@@ -61,10 +61,9 @@ public class LevelEditorScreen extends AbstractScreen {
     selectionSystem.setOverlay(overlay);
     level.entities.addSystem(selectionSystem);
     level.entities.psychics.disable();
-    stage.addActor(overlay);
 
-
-    previewFbos();
+    this.fullScreenBuffer = new FullScreenFrameBufferResult(Fbo.FRAMEBUFFER_FINAL);
+    //previewFbos();
   }
 
   public void previewFbos() {
@@ -72,7 +71,7 @@ public class LevelEditorScreen extends AbstractScreen {
     int size = Gdx.graphics.getWidth() / (fbos.size + 1);
 
     for (int i = 0; i < fbos.size; i++) {
-      level.ui.addActor(DebugFrameBufferResult.build(fbos.get(i), size, i * size, 0));
+      ForgE.ui.addActor(DebugFrameBufferResult.build(fbos.get(i), size, i * size, 0));
     }
   }
 
@@ -88,10 +87,8 @@ public class LevelEditorScreen extends AbstractScreen {
   public void render(float delta) {
     if (!pause) {
       ForgE.assets.loadPendingInChunks();
-      stage.act(delta);
       cameraController.update(delta);
       level.render(delta);
-      stage.draw();
 
       for (int i = 0; i < afterRenderListenerArray.size; i++) {
         afterRenderListenerArray.get(i).forgeAfterRenderCallback(this);
@@ -105,18 +102,19 @@ public class LevelEditorScreen extends AbstractScreen {
     Gdx.app.log(TAG, "Resize: "+ width +"x"+height);
 
     level.resize(width, height);
-    stage.getViewport().update(width,height);
     overlay.invalidate();
   }
 
   @Override
   public void show() {
-    ForgE.input.addProcessor(stage);
+    ForgE.ui.addActor(fullScreenBuffer);
+    ForgE.ui.addActor(overlay);
   }
 
   @Override
   public void hide() {
-    ForgE.input.removeProcessor(stage);
+    overlay.remove();
+    fullScreenBuffer.remove();
   }
 
   @Override
