@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g3d.decals.CameraGroupStrategy;
 import com.badlogic.gdx.graphics.g3d.decals.DecalBatch;
 import com.badlogic.gdx.graphics.profiling.GLProfiler;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import macbury.forge.ForgE;
 import macbury.forge.editor.parell.JobManager;
@@ -16,9 +15,9 @@ import macbury.forge.level.Level;
 import macbury.forge.level.LevelState;
 import macbury.forge.screens.AbstractScreen;
 import macbury.forge.terrain.geometry.DynamicGeometryProvider;
-import macbury.forge.ui.DebugFrameBufferResult;
-import macbury.forge.ui.FullScreenFrameBufferResult;
-import macbury.forge.ui.Overlay;
+import macbury.forge.ui.views.DebugFrameBufferResult;
+import macbury.forge.ui.views.FullScreenFrameBufferResult;
+import macbury.forge.ui.views.Overlay;
 
 /**
  * Created by macbury on 18.10.14.

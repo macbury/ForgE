@@ -2,6 +2,7 @@ package macbury.forge.scripts;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Disposable;
+import macbury.forge.scripts.script.BaseScriptRunner;
 
 /**
  * Created by macbury on 12.05.15.
@@ -19,6 +20,12 @@ public class ScriptManager implements Disposable {
   public void loadAndRun(ScriptThread.Listener listener) {
     this.thread    = new ScriptThread(listener);
     thread.start("scripts:main.rb");
+  }
+
+  public void run(BaseScriptRunner runner) {
+    if (thread != null) {
+      thread.add(runner);
+    }
   }
 
   @Override

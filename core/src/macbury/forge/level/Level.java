@@ -1,18 +1,12 @@
 package macbury.forge.level;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g3d.utils.DefaultTextureBinder;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.ObjectMap;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import macbury.forge.ForgE;
 import macbury.forge.graphics.batch.VoxelBatch;
 import macbury.forge.graphics.camera.GameCamera;
-import macbury.forge.graphics.fbo.Fbo;
 import macbury.forge.graphics.frustrum.FrustrumDebugAndRenderer;
 import macbury.forge.graphics.postprocessing.PostProcessingManager;
 import macbury.forge.level.env.LevelEnv;
@@ -22,8 +16,6 @@ import macbury.forge.shaders.providers.ShaderProvider;
 import macbury.forge.systems.engine.EntitySystemsManager;
 import macbury.forge.terrain.TerrainEngine;
 import macbury.forge.terrain.geometry.TerrainGeometryProvider;
-import macbury.forge.ui.DebugFrameBufferResult;
-import macbury.forge.ui.FullScreenFrameBufferResult;
 import macbury.forge.voxel.ChunkMap;
 
 /**
@@ -74,7 +66,6 @@ public class Level implements Disposable {
     this.entities                 = new EntitySystemsManager(this);
 
     octree.setBounds(terrainMap.getBounds(ChunkMap.TERRAIN_TILE_SIZE));
-
   }
 
   public void resize(int width, int height) {

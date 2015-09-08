@@ -42,6 +42,11 @@ public class PlayerSystem extends IteratingSystem {
   }
 
   @Override
+  public boolean checkProcessing() {
+    return super.checkProcessing() && !ForgE.ui.console.isEnabled();
+  }
+
+  @Override
   public void update(float deltaTime) {
     super.update(deltaTime);
   }

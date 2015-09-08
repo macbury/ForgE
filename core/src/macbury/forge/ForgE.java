@@ -22,6 +22,7 @@ import macbury.forge.shaders.utils.ShadersManager;
 import macbury.forge.storage.StorageManager;
 import macbury.forge.entities.EntityManager;
 import macbury.forge.time.TimeManager;
+import macbury.forge.ui.UIManager;
 
 public class ForgE extends Game {
   private static final String TAG = "Forge";
@@ -40,7 +41,7 @@ public class ForgE extends Game {
   public static FrameBufferManager  fb;
   public static TimeManager         time;
   public static Thread              thread;
-  public static Stage               ui;
+  public static UIManager           ui;
   public static String[]            args;
   private Array<ForgEBootListener>  bootListeners;
   public static FileManager         files;
@@ -70,13 +71,15 @@ public class ForgE extends Game {
     fb            = new FrameBufferManager();
     time          = new TimeManager();
     thread        = Thread.currentThread();
-    ui            = new Stage(new ScreenViewport());
-    ForgE.input.addProcessor(ui);
+    ui            = new UIManager();
 
     Gdx.input.setInputProcessor(input);
     for (ForgEBootListener listener : bootListeners) {
       listener.afterEngineCreate(this);
     }
+
+    ForgE.input.addProcessor(0, ui);
+    
   }
 
   @Override

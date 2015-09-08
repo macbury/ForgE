@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.g3d.utils.FirstPersonCameraController;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
@@ -19,9 +21,10 @@ import macbury.forge.components.PositionComponent;
 import macbury.forge.components.RigidBodyComoponent;
 import macbury.forge.level.Level;
 import macbury.forge.screens.AbstractScreen;
+import macbury.forge.scripts.script.BaseScriptRunner;
 import macbury.forge.terrain.geometry.DynamicGeometryProvider;
 import macbury.forge.terrain.geometry.FileGeometryProvider;
-import macbury.forge.ui.GameplayView;
+import macbury.forge.ui.views.GameplayView;
 import org.apache.bsf.BSFException;
 import org.apache.bsf.BSFManager;
 import org.jruby.embed.ScriptingContainer;
@@ -37,7 +40,8 @@ public class ScriptThread extends Thread implements Disposable {
   private JRubyEngine ruby;
   private ScriptingContainer container;
   private FileHandle mainFileHandle;
-
+  private boolean running;
+  private Array<BaseScriptRunner> eventQueue;
   private static final Array<Class> packagesToImport = new Array<Class>(
       new Class[] {
           Matrix4.class,
@@ -58,12 +62,16 @@ public class ScriptThread extends Thread implements Disposable {
           Gdx.class,
           Color.class,
           Runnable.class,
-          GameplayView.class
+          GameplayView.class,
+          Label.class,
+          InputListener.class
       }
   );
 
+
   public ScriptThread(Listener listener) {
     this.listener = listener;
+    this.eventQueue = new Array<BaseScriptRunner>();
   }
 
   private void executeScript(String filename, String source) {
@@ -74,20 +82,40 @@ public class ScriptThread extends Thread implements Disposable {
     }
   }
 
+  public void add(BaseScriptRunner runner) {
+    synchronized (eventQueue) {
+      eventQueue.add(runner);
+    }
+  }
+
   @Override
   public void run() {
+    running = true;
     initEngine();
     initalizeContext();
     runMain();
 
-    while(ruby != null) {
-     /* try {
-        //manager.exec(RUBY_LANG, "(java)", 1, 1, "a += 1");
-        //manager.exec(RUBY_LANG, "(java)", 1, 1, "$app.log('s',a.to_s)");
-      } catch (BSFException e) {
-        e.printStackTrace();
-      }*/
+    while(running) {
+      synchronized (eventQueue) {
+        if (eventQueue.size > 0) {
+          BaseScriptRunner runner = eventQueue.removeIndex(0);
+          try {
+            runner.run(ruby);
+          } catch (BSFException e) {
+            listener.onRubyError(e);
+          } finally {
+            runner.dispose();
+          }
+        }
+      }
     }
+
+    Gdx.app.log(TAG, "Stopping thread...");
+    ruby.terminate();
+    ruby           = null;
+    manager        = null;
+    mainFileHandle = null;
+    container      = null;
   }
 
   private void initEngine() {
@@ -104,6 +132,7 @@ public class ScriptThread extends Thread implements Disposable {
 
   private void initalizeContext() {
     Gdx.app.log(TAG, "Initializing context...");
+    executeScript("<init>", "Thread.abort_on_exception=true;");
     executeScript("<init>", "def import(path)\n" +
             "  require ForgE.files.internal(path+'.rb').path()\n" +
             "end"
@@ -133,12 +162,14 @@ public class ScriptThread extends Thread implements Disposable {
 
   @Override
   public void dispose() {
-    ruby.terminate();
-    ruby = null;
-    manager = null;
-    mainFileHandle = null;
-    container = null;
-    listener  = null;
+    running        = false;
+    listener       = null;
+    synchronized (eventQueue) {
+      for (BaseScriptRunner runner : eventQueue) {
+        runner.dispose();
+      }
+      eventQueue.clear();
+    }
   }
 
   public interface Listener {

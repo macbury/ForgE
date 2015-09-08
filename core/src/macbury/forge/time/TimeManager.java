@@ -111,6 +111,10 @@ public class TimeManager implements Disposable {
     updateRotation();
   }
 
+  public void setHour(int hour) {
+    setDuration(hour * HOUR_IN_SECONDS);
+  }
+
   public void setDuration(float otherDuration) {
     this.duration = otherDuration;
   }

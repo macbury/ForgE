@@ -1,4 +1,4 @@
-package macbury.forge.ui;
+package macbury.forge.ui.views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -22,7 +22,7 @@ public class FullScreenFrameBufferResult extends Actor {
     this.fboName = fboName;
     setWidth(Gdx.graphics.getWidth());
     setHeight(Gdx.graphics.getHeight());
-    setZIndex(0);
+    setZIndex(1);
   }
 
   @Override

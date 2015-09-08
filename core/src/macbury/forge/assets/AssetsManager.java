@@ -8,10 +8,7 @@ import com.badlogic.gdx.graphics.g3d.utils.TextureProvider;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import macbury.forge.ForgE;
-import macbury.forge.assets.assets.Asset;
-import macbury.forge.assets.assets.CubemapAsset;
-import macbury.forge.assets.assets.ModelAsset;
-import macbury.forge.assets.assets.TextureAsset;
+import macbury.forge.assets.assets.*;
 
 import java.util.HashMap;
 import java.util.Set;
@@ -20,7 +17,6 @@ import java.util.Set;
  * Created by macbury on 16.10.14.
  */
 public class AssetsManager implements Disposable {
-  public static final String ASSETS_PREFIX = "assets/";
   private static final String TAG = "AssetsManager";
   private static final int MAX_TO_LOAD_PER_TICK = 10;
   private HashMap<String, Asset> loadedAssets;
@@ -58,7 +54,9 @@ public class AssetsManager implements Disposable {
     return asset;
   }
 
-
+  public SoundAsset getSound(String path) {
+    return (SoundAsset)getAsset(SoundAsset.class, path);
+  }
 
   public TextureAsset getTexture(String path) {
     return (TextureAsset)getAsset(TextureAsset.class, path);

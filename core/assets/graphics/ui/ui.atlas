@@ -1,0 +1,36 @@
+
+ui.png
+size: 256,64
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+buttonSquare_beige
+  rotate: false
+  xy: 2, 2
+  size: 45, 49
+  split: 13, 11, 17, 20
+  orig: 45, 49
+  offset: 0, 0
+  index: -1
+buttonSquare_beige_pressed
+  rotate: false
+  xy: 49, 2
+  size: 45, 45
+  split: 11, 10, 17, 17
+  orig: 45, 45
+  offset: 0, 0
+  index: -1
+console_bg
+  rotate: false
+  xy: 96, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+console_cursor
+  rotate: false
+  xy: 143, 2
+  size: 6, 16
+  orig: 6, 16
+  offset: 0, 0
+  index: -1

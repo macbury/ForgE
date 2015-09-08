@@ -8,6 +8,7 @@ import macbury.forge.ForgE;
 import macbury.forge.graphics.postprocessing.PostProcessingManager;
 import macbury.forge.level.LevelState;
 import macbury.forge.scripts.ScriptManager;
+import macbury.forge.ui.UIManager;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -45,10 +46,11 @@ public class FileManager implements Disposable {
   private void configureMappings() {
     putMapping("textures", "graphics/textures/");
     putMapping("skybox", "graphics/textures/skybox/");
+    putMapping("sounds", "audio/sounds/");
     putMapping("maps", LevelState.MAP_STORAGE_DIR);
     putMapping("scripts", ScriptManager.SCRIPTS_DIR);
     putMapping("postprocessing", PostProcessingManager.STORAGE_DIR);
-    putMapping("fonts", "fonts/");
+    putMapping("ui", UIManager.STORE_PATH);
   }
 
   private String applyMapping(String path) {

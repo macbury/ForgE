@@ -42,6 +42,7 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
   private final CodeEditorController codeEditorController;
   public final ResourcesController resourcesController;
   private final PostProcessingController postProcessingController;
+  private final UiController uiController;
   private LwjglAWTCanvas openGLCanvas;
   private ForgE engine;
   private ProjectController projectController;
@@ -109,12 +110,12 @@ public class MainWindow extends JFrame implements ForgEBootListener, FocusListen
     this.jobs = new JobManager();
     Config config = Config.load("editor");
     engine = new ForgE(config, new String[]{});
-
+    uiController             = new UiController(directoryWatcher, jobs);
     postProcessingController = new PostProcessingController(directoryWatcher);
     blocksController = new BlocksController(blockList, directoryWatcher, jobs, (ImagePanel) panelPrimaryBlock, (ImagePanel) panelSecondaryBlock);
     this.progressTaskDialog = new ProgressTaskDialog();
     projectController = new ProjectController();
-    mainMenu = new MainMenu(projectController, blocksController, dockFrameController, shadersController, postProcessingController);
+    mainMenu = new MainMenu(projectController, blocksController, dockFrameController, shadersController, postProcessingController, uiController);
     eventsToolsController = new EventsController(this);
     terrainToolsController = new TerrainToolsController(terrainToolsToolbar, blocksController, inputProcessor, terrainInspectorPanel);
     playerController = new PlayerController(projectController, jobs);

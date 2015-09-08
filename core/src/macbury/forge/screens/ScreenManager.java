@@ -8,6 +8,7 @@ import macbury.forge.ForgE;
  * Created by macbury on 15.10.14.
  */
 public class ScreenManager {
+  private static final String TAG = "ScreenManager";
   private final ForgE engine;
   private AbstractScreen currentScreen;
 
@@ -30,8 +31,14 @@ public class ScreenManager {
   }
 
   private void setCurrentScreen(AbstractScreen screen) {
+    ForgE.ui.console.hide();
+    if (currentScreen != screen && currentScreen != null) {
+      Gdx.app.log(TAG, "Disposing:" + currentScreen.getClass());
+      currentScreen.dispose();
+    }
     currentScreen = screen;
     if (currentScreen != null) {
+      Gdx.app.log(TAG, "initializing:" + currentScreen.getClass());
       currentScreen.initializeOnce();
     }
     engine.setScreen(screen);

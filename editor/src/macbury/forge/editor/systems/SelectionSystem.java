@@ -17,7 +17,7 @@ import macbury.forge.editor.selection.SelectType;
 import macbury.forge.editor.selection.SelectionInterface;
 import macbury.forge.graphics.camera.GameCamera;
 import macbury.forge.level.Level;
-import macbury.forge.ui.Overlay;
+import macbury.forge.ui.views.Overlay;
 import macbury.forge.utils.VoxelCursor;
 import macbury.forge.utils.VoxelPicker;
 import macbury.forge.voxel.ChunkMap;

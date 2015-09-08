@@ -1,4 +1,4 @@
-package macbury.forge.ui;
+package macbury.forge.ui.views;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Widget;

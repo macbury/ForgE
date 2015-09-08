@@ -1,0 +1,29 @@
+{
+  com.badlogic.gdx.graphics.Color: {
+    black: { r: 0, g: 0, b: 0, a: 1 },
+    white: { r: 1, g: 1, b: 1, a: 1 },
+    red: { r: 1, g: 0, b: 0, a: 1 },
+    yellow: { r: 0.5, g: 0.5, b: 0, a: 1 }
+  },
+
+  com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
+    default: { font: "default", fontColor: "white" }
+  },
+
+  com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
+    console: {
+      font: "default",
+      fontColor: "white",
+      cursor: "console_cursor"
+    }
+  },
+
+  com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
+    default: {
+      up: "buttonSquare_beige",
+      down: "buttonSquare_beige_pressed",
+      font: "default",
+      fontColor: "black"
+    }
+  }
+}

@@ -23,6 +23,7 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
   private final DockFramesController dockFrameController;
   private final ShadersController shadersController;
   private final PostProcessingController postProcessingController;
+  private final UiController uiController;
   public JCheckBoxMenuItem debugRenderDynamicOctree;
   public JCheckBoxMenuItem debugBoundingBox;
   public JRadioButtonMenuItem debugWireframeItem;
@@ -33,7 +34,7 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
   private JRadioButtonMenuItem debugNormalsItem;
   private JRadioButtonMenuItem debugLightingItem;
 
-  public MainMenu(ProjectController projectController, BlocksController blocksController, DockFramesController dockFrameController, ShadersController shadersController, PostProcessingController postProcessingController) {
+  public MainMenu(ProjectController projectController, BlocksController blocksController, DockFramesController dockFrameController, ShadersController shadersController, PostProcessingController postProcessingController, UiController uiController) {
     super();
 
     this.controller = projectController;
@@ -41,6 +42,7 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
     this.dockFrameController = dockFrameController;
     this.shadersController   = shadersController;
     this.postProcessingController = postProcessingController;
+    this.uiController             = uiController;
     //add(Box.createRigidArea(new Dimension(320,28)));
   }
 
@@ -121,16 +123,27 @@ public class MainMenu extends JPopupMenu implements OnMapChangeListener {
 
   private void createPiplineMenu() {
     JMenu assetsMenu          = new JMenu("Assets");
-    JMenuItem rebuild         = new JMenuItem("Rebuild blocks");
+    JMenuItem rebuildBlocks         = new JMenuItem("Rebuild blocks");
 
-    rebuild.addActionListener(new ActionListener() {
+    rebuildBlocks.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
         blocksController.rebuildTileset();
       }
     });
 
-    assetsMenu.add(rebuild);
+    assetsMenu.add(rebuildBlocks);
+
+    JMenuItem rebuildUi         = new JMenuItem("Rebuild ui");
+
+    rebuildUi.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        uiController.rebuild();
+      }
+    });
+
+    assetsMenu.add(rebuildUi);
     add(assetsMenu);
   }
 

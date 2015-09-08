@@ -15,7 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import macbury.forge.ForgE;
 import macbury.forge.input.InputManager;
-import macbury.forge.ui.Overlay;
+import macbury.forge.ui.views.Overlay;
 
 /**
  * Created by macbury on 05.03.14.

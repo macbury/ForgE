@@ -29,17 +29,14 @@ class GameplayScreen < AbstractScreen
   end
 
   def spawn_entity
-=begin
-var playerEntity            = $entities.get(entityName).build(this.level.entities);
-var playerPositionComponent = playerEntity.getComponent(PositionComponent);
-var temp                    = new Vector3(this.level.camera.direction).scl(2);
-temp.add(this.level.camera.position);
-
-playerEntity.getComponent(PositionComponent).vector.set(temp);
-temp.set(this.level.camera.direction).scl(15);
-playerEntity.getComponent(RigidBodyComoponent).initialImpulse.set(temp);
-this.level.entities.addEntity(playerEntity);
-=end
+    boxEntity         = ForgE.entities.get("crate").build(self.level.entities)
+    positionComponent = boxEntity.getComponent(PositionComponent.java_class)
+    temp              = Vector3.new(@level.camera.direction).scl(2)
+    temp.add(self.level.camera.position)
+    positionComponent.vector.set(temp)
+    temp.set(self.level.camera.direction).scl(15)
+    boxEntity.getComponent(RigidBodyComoponent.java_class).initialImpulse.set(temp)
+    self.level.entities.addEntity(boxEntity)
   end
 
   def render(delta)
@@ -50,6 +47,7 @@ this.level.entities.addEntity(playerEntity);
 
     spawn_entity if Gdx.input.isKeyJustPressed(Input::Keys::E)
     Gdx.app.exit if Gdx.input.isKeyPressed(Input::Keys::ESCAPE)
+
   end
 
   def resize(width, height)

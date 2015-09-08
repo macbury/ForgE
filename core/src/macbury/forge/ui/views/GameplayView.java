@@ -1,4 +1,4 @@
-package macbury.forge.ui;
+package macbury.forge.ui.views;
 
 import macbury.forge.graphics.fbo.Fbo;
 

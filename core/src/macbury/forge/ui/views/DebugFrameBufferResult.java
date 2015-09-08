@@ -1,12 +1,11 @@
-package macbury.forge.ui;
+package macbury.forge.ui.views;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import macbury.forge.ForgE;
-import macbury.forge.graphics.fbo.Fbo;
-import macbury.forge.graphics.fbo.FrameBufferManager;
+
 /**
  * Created by macbury on 20.07.15.
  */

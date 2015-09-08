@@ -42,29 +42,30 @@ public class DesktopGame implements ForgEBootListener, Thread.UncaughtExceptionH
   public void afterEngineCreate(ForgE engine) {
     ForgE.blocks.loadAtlasAndUvsIfNull();
     ForgE.scripts.loadAndRun(this);
-    /*if (ForgE.db.startPosition == null) {
-      throw new GdxRuntimeException("Start position not found!");
-    } else {
-      ForgE.screens.set(new LoadingScreen(ForgE.db.startPosition));
-      //ForgE.screens.set(new TestModelsScreen());
-    }*/
+
   }
 
   @Override
   public void uncaughtException(Thread t, Throwable e) {
     TaskDialogs.showException(e);
     e.printStackTrace();
-    Gdx.app.exit();
+    exit();
   }
 
   @Override
   public void onRubyError(Throwable e) {
     TaskDialogs.showException(e);
     e.printStackTrace();
-    Gdx.app.postRunnable(new Runnable() {
+    exit();
+  }
+
+  public void exit() {
+    ForgE.scripts.dispose();
+    Gdx.app.exit();
+    SwingUtilities.invokeLater(new Runnable() {
       @Override
       public void run() {
-        Gdx.app.exit();
+        System.exit(1);
       }
     });
   }
