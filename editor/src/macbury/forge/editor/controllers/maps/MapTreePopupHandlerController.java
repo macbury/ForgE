@@ -57,7 +57,7 @@ public class MapTreePopupHandlerController implements ActionListener {
   private void setSelectedNode(MapTreeModel.BaseNode node) {
     selectedNode    = node;
 
-    //Gdx.app.log(TAG, selectedNode.getDirectory());
+    //ForgE.log(TAG, selectedNode.getDirectory());
     tree.addSelectionPath(new TreePath(node.getPath()));
     buildMenuForNode(selectedNode);
   }

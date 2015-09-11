@@ -66,7 +66,7 @@ public class ApplyCustomBrushChangeable extends TerrainCursorChangeable {
 
         if (c >= 0) {
           cursor.set(x, from.y, z);
-          //Gdx.app.log(TAG, cursor.toString());
+          //ForgE.log(TAG, cursor.toString());
           while(true) {
             if (map.isSolid(cursor.x, cursor.y-1, cursor.z) || map.isOutOfBounds(cursor.x, cursor.y-1, cursor.z)) {
               break;

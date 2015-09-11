@@ -52,7 +52,7 @@ public class ResourcesController extends MouseAdapter {
     if (ResourcesModel.GameShaderNode.class.isInstance(object)) {
       openShaderToEdit((ResourcesModel.GameShaderNode)object);
     } else {
-      Gdx.app.log(TAG, "Double click on: " + object.toString() + " at index =" + selRow);
+      ForgE.log(TAG, "Double click on: " + object.toString() + " at index =" + selRow);
     }
 
   }

@@ -2,6 +2,7 @@ package macbury.forge.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -31,11 +32,10 @@ public class UIManager extends Stage {
     super(new ScreenViewport());
 
     this.skin = new Skin(new TextureAtlas(ForgE.files.internal("ui:ui.atlas")));
-    loadFonts();
+    loadFont(ForgE.files.internal("ui:advocut-webfont.ttf"), "default");
+    loadFont(ForgE.files.internal("ui:console.ttf"), "console");
     skin.load(ForgE.files.internal("ui:ui.json"));
     this.console = new GameConsoleView(this);
-
-
   }
 
   public WidgetGroup container() {
@@ -57,12 +57,12 @@ public class UIManager extends Stage {
     return new TextButton(text, skin, style);
   }
 
-  private void loadFonts() {
-    FreeTypeFontGenerator generator                       = new FreeTypeFontGenerator(ForgE.files.internal("ui:advocut-webfont.ttf"));
+  private void loadFont(FileHandle handle, String styleName) {
+    FreeTypeFontGenerator generator                       = new FreeTypeFontGenerator(handle);
     FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
     parameter.size = 20;
     BitmapFont defaultFont = generator.generateFont(parameter);
-    skin.add("default", defaultFont);
+    skin.add(styleName, defaultFont);
     generator.dispose();
   }
 

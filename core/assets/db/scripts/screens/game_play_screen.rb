@@ -1,13 +1,13 @@
 class GameplayScreen < AbstractScreen
   TAG                    = "GameplayScreen"
-  FAR_CAMERA             = 70;
-  NEAR_CAMERA            = 0.01;
-  FIELD_OF_VIEW          = 70;
+  FAR_CAMERA             = 70
+  NEAR_CAMERA            = 0.01
+  FIELD_OF_VIEW          = 70
   attr_accessor :level, :teleport
 
   def onInitialize
-    #Gdx.app.log(TAG, "Level=" + self.level.to_s)
-    #Gdx.app.log(TAG, "Teleport=" + self.teleport.to_s)
+    #ForgE.log(TAG, "Level=" + self.level.to_s)
+    #ForgE.log(TAG, "Teleport=" + self.teleport.to_s)
     Gdx.input.setCursorCatched(true)
     @cameraController = FirstPersonCameraController.new(self.level.camera);
 
@@ -45,8 +45,8 @@ class GameplayScreen < AbstractScreen
     @cameraController.update(delta)
     self.level.render(delta)
 
-    spawn_entity if Gdx.input.isKeyJustPressed(Input::Keys::E)
-    Gdx.app.exit if Gdx.input.isKeyPressed(Input::Keys::ESCAPE)
+    #spawn_entity if Gdx.input.isKeyJustPressed(Input::Keys::E)
+    #Gdx.app.exit if Gdx.input.isKeyPressed(Input::Keys::ESCAPE)
 
   end
 

@@ -20,7 +20,7 @@ public class FrameBufferFactory {
   public boolean depth;
 
   public FrameBuffer build() {
-    Gdx.app.log(TAG, "Building: " + name);
+    ForgE.log(TAG, "Building: " + name);
     return ForgE.fb.create(name, format, width, height, depth, wrap, filter);
   }
 }

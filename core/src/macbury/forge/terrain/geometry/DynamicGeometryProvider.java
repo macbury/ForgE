@@ -26,11 +26,11 @@ public class DynamicGeometryProvider extends TerrainGeometryProvider {
     int cacheIndex              = caches.indexOf(geometryCache, false);
 
     if (cacheIndex != -1) {
-      //Gdx.app.log(TAG, "Replacing chunk: " + chunk.toString());
+      //ForgE.log(TAG, "Replacing chunk: " + chunk.toString());
       caches.get(cacheIndex).dispose();
       caches.removeIndex(cacheIndex);
     } else {
-      //Gdx.app.log(TAG, "Adding chunk: " + chunk.toString());
+      //ForgE.log(TAG, "Adding chunk: " + chunk.toString());
     }
 
     builder.begin(); {

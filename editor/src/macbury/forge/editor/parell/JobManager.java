@@ -2,6 +2,7 @@ package macbury.forge.editor.parell;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
+import macbury.forge.ForgE;
 
 import java.util.Stack;
 
@@ -25,7 +26,7 @@ public class JobManager extends Thread {
   }
 
   public void enqueue(Job job) {
-    Gdx.app.log(TAG, "Adding job");
+    ForgE.log(TAG, "Adding job");
     synchronized (pendingJobs) {
       pendingJobs.push(job);
     }
@@ -73,7 +74,7 @@ public class JobManager extends Thread {
   }
 
   public void onJobStart(Job job) {
-    Gdx.app.log(TAG, "Starting job: " + job.getClass().getSimpleName() );
+    ForgE.log(TAG, "Starting job: " + job.getClass().getSimpleName() );
     for (int i = 0; i < listeners.size; i++) {
       JobListener listener = listeners.get(i);
       synchronized (listener) {
@@ -84,7 +85,7 @@ public class JobManager extends Thread {
   }
 
   public void onJobError(Job job, Exception e) {
-    Gdx.app.log(TAG, "Job failed: " + job.getClass().getSimpleName() );
+    ForgE.log(TAG, "Job failed: " + job.getClass().getSimpleName() );
     for (int i = 0; i < listeners.size; i++) {
       JobListener listener = listeners.get(i);
       listener.onJobError(job, e);
@@ -93,7 +94,7 @@ public class JobManager extends Thread {
 
   public void onJobFinish(Job job) {
     System.gc();
-    Gdx.app.log(TAG, "Finished job: " + job.getClass().getSimpleName() );
+    ForgE.log(TAG, "Finished job: " + job.getClass().getSimpleName() );
     for (int i = 0; i < listeners.size; i++) {
       JobListener listener = listeners.get(i);
       listener.onJobFinish(job);

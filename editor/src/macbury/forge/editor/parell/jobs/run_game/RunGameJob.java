@@ -1,6 +1,7 @@
 package macbury.forge.editor.parell.jobs.run_game;
 
 import com.badlogic.gdx.Gdx;
+import macbury.forge.ForgE;
 import macbury.forge.editor.parell.Job;
 
 import java.io.BufferedReader;
@@ -93,8 +94,8 @@ public class RunGameJob extends Job<Void> {
     }
 
     String command = "/usr/bin/gnome-terminal --working-directory='"+workingDir+"' --command='./gradlew desktop:run'";
-    Gdx.app.log(TAG, "Exec: " + command);
-    Gdx.app.log(TAG, "Running in: " + workingDir);
+    ForgE.log(TAG, "Exec: " + command);
+    ForgE.log(TAG, "Running in: " + workingDir);
     try {
       return Runtime.getRuntime().exec(new String[]{"/bin/sh" , "-ic",command});
     } catch (IOException e) {

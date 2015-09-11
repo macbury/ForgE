@@ -35,21 +35,21 @@ public class PostProcessingManager implements Disposable {
   }
 
   public void reload() {
-    Gdx.app.log(TAG, "Reloading...");
+    ForgE.log(TAG, "Reloading...");
     unloadEffectsAndBuffers();
 
     Json json    = new Json();
     this.factory = json.fromJson(PostProcessingFactory.class, fileHandle.readString());
 
     if (factory.buffers != null) {
-      Gdx.app.log(TAG, "Found buffers to create:");
+      ForgE.log(TAG, "Found buffers to create:");
       for (FrameBufferFactory frameBufferFactory : factory.buffers) {
         frameBuffers.put(frameBufferFactory.name, frameBufferFactory.build());
       }
     }
 
     if (factory.steps != null) {
-      Gdx.app.log(TAG, "Found steps to create:");
+      ForgE.log(TAG, "Found steps to create:");
       for (PostProcessingStepFactory stepFactory : factory.steps) {
         steps.add(stepFactory.build(this));
       }
@@ -74,7 +74,7 @@ public class PostProcessingManager implements Disposable {
   }
 
   private void unloadEffectsAndBuffers() {
-    Gdx.app.log(TAG, "Unloading framebuffers and effects...");
+    ForgE.log(TAG, "Unloading framebuffers and effects...");
     for (String frameBufferName : frameBuffers.keys()) {
       ForgE.fb.destroy(frameBufferName);
     }

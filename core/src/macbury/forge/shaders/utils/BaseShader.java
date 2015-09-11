@@ -119,10 +119,10 @@ public abstract class BaseShader implements Disposable {
 
         BaseUniform uniform = (BaseUniform)Class.forName(uniformClassName).newInstance();
         if (BaseRenderableUniform.class.isInstance(uniform)) {
-          Gdx.app.log(TAG, "Adding local uniform: "+uniformClassName);
+          ForgE.log(TAG, "Adding local uniform: "+uniformClassName);
           localUniforms.add((BaseRenderableUniform) uniform);
         } else {
-          Gdx.app.log(TAG, "Adding global uniform: "+uniformClassName);
+          ForgE.log(TAG, "Adding global uniform: "+uniformClassName);
           globalUniforms.add(uniform);
         }
 
@@ -135,8 +135,8 @@ public abstract class BaseShader implements Disposable {
       }
     }
 
-    Gdx.app.log(TAG, "Local uniforms: " + localUniforms.size);
-    Gdx.app.log(TAG, "Global uniforms: " + globalUniforms.size);
+    ForgE.log(TAG, "Local uniforms: " + localUniforms.size);
+    ForgE.log(TAG, "Global uniforms: " + globalUniforms.size);
   }
 
   private void getUniformsDefinitionsSrc() {
@@ -161,7 +161,7 @@ public abstract class BaseShader implements Disposable {
         break;
     }
 
-    Gdx.app.log(TAG, "Debug prefixes: \n"+out);
+    ForgE.log(TAG, "Debug prefixes: \n"+out);
     return out;
   }
 

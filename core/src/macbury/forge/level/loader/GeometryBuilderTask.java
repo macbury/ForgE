@@ -1,6 +1,7 @@
 package macbury.forge.level.loader;
 
 import com.badlogic.gdx.Gdx;
+import macbury.forge.ForgE;
 import macbury.forge.level.Level;
 import macbury.forge.level.LevelState;
 import macbury.forge.promises.FutureTask;
@@ -26,7 +27,7 @@ public class GeometryBuilderTask extends GdxFutureTask<LevelState, Level> {
     super.execute(object);
     this.levelState = object;
     //this.level      = new Level(levelState);
-    Gdx.app.log(TAG, "Initializing level!");
+    ForgE.log(TAG, "Initializing level!");
   }
 
   @Override

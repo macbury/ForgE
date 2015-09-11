@@ -22,6 +22,10 @@ public class ScriptManager implements Disposable {
     thread.start("scripts:main.rb");
   }
 
+  public void putGlobal(String name, Object value) {
+    thread.putGlobal(name, value);
+  }
+
   public void run(BaseScriptRunner runner) {
     if (thread != null) {
       thread.add(runner);

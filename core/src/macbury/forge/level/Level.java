@@ -89,7 +89,7 @@ public class Level implements Disposable {
 
   @Override
   public void dispose() {
-    Gdx.app.log(TAG, "Dispose...");
+    ForgE.log(TAG, "Dispose...");
     env.dispose();
     batch.dispose();
     terrainMap.dispose();

@@ -1,6 +1,7 @@
 package macbury.forge.editor.undo_redo.actions;
 
 import com.badlogic.gdx.Gdx;
+import macbury.forge.ForgE;
 import macbury.forge.blocks.Block;
 import macbury.forge.editor.selection.AbstractSelection;
 import macbury.forge.voxel.Voxel;
@@ -37,6 +38,6 @@ public class ApplyBlock extends TerrainCursorChangeable {
       currentVoxel.alginTo = alignToSide;
       map.setVoxelForPosition(currentVoxel, from);
     }
-    Gdx.app.log(TAG, "Algin for: " + from.toString() + " is " + alignToSide.toString());
+    ForgE.log(TAG, "Algin for: " + from.toString() + " is " + alignToSide.toString());
   }
 }

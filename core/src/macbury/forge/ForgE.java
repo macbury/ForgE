@@ -46,6 +46,8 @@ public class ForgE extends Game {
   private Array<ForgEBootListener>  bootListeners;
   public static FileManager         files;
 
+  private static Array<LogListener>        listeners = new Array<LogListener>();
+
   public ForgE(Config config, String[] args) {
     super();
     this.args           = args;
@@ -79,7 +81,7 @@ public class ForgE extends Game {
     }
 
     ForgE.input.addProcessor(0, ui);
-    
+
   }
 
   @Override
@@ -112,5 +114,22 @@ public class ForgE extends Game {
     return Thread.currentThread() == thread;
   }
 
+  public static void log(String tag, String string) {
+    Gdx.app.log(tag, string);
+    for (int i = 0; i < listeners.size; i++) {
+      listeners.get(i).onLogResult(tag, string);
+    }
+  }
 
+  public static void addLogListener(LogListener listener) {
+    listeners.add(listener);
+  }
+
+  public static void removeLogListener(LogListener listener) {
+    listeners.removeValue(listener, true);
+  }
+
+  public interface LogListener {
+    public void onLogResult(String tag, String msg);
+  }
 }

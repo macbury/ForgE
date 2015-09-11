@@ -44,7 +44,7 @@ public class EntityManager implements Disposable {
 
   private void reload() {
     builders.clear();
-    Gdx.app.log(TAG, "Reloading...");
+    ForgE.log(TAG, "Reloading...");
     Array<FileHandle> entityJsons = ForgE.files.list(ENTITIES_STORAGE, new FilenameFilter() {
       @Override
       public boolean accept(File dir, String name) {
@@ -56,7 +56,7 @@ public class EntityManager implements Disposable {
       EntityBuilder builder = json.fromJson(EntityBuilder.class, handle.readString());
       builder.setManager(this);
       builders.put(builder.getName(), builder);
-      Gdx.app.log(TAG, "Loaded: " + builder.getName() + " from " + handle.path());
+      ForgE.log(TAG, "Loaded: " + builder.getName() + " from " + handle.path());
     }
   }
 

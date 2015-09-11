@@ -197,7 +197,7 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
           null);
 
       if (response == 0) {
-        Gdx.app.log(TAG, "Removing dir: " + pathFile);
+        ForgE.log(TAG, "Removing dir: " + pathFile);
         try {
           FileUtils.deleteDirectory(new File(pathFile));
         } catch (IOException e) {
@@ -215,7 +215,7 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
       String folderName = JOptionPane.showInputDialog("Enter folder name:");
       if (folderName.length() >= 1) {
         File file = new File(pathFile + File.separator + folderName);
-        Gdx.app.log(TAG, "Creating directory" + file.getAbsolutePath());
+        ForgE.log(TAG, "Creating directory" + file.getAbsolutePath());
         file.mkdirs();
         triggerMapStructureChange();
       }
@@ -230,7 +230,7 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
         Path sourcePath = FileSystems.getDefault().getPath(source);
         Path targetPath = FileSystems.getDefault().getPath(target, sourcePath.getFileName().toString());
 
-        Gdx.app.log(TAG, "Move " + sourcePath + " to " + targetPath);
+        ForgE.log(TAG, "Move " + sourcePath + " to " + targetPath);
         Files.move(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING);
 
         triggerMapStructureChange();
@@ -255,7 +255,7 @@ public class ProjectController implements JobListener, ShaderReloadListener, Map
       if (response == 0) {
         FileHandle levelHandle = ForgE.levels.getFileHandle(levelStateId);
         File  geoHandle        = ForgE.levels.getGeoFile(levelStateId);
-        Gdx.app.log(TAG, "Removing map: " + levelHandle.file().getAbsolutePath());
+        ForgE.log(TAG, "Removing map: " + levelHandle.file().getAbsolutePath());
 
         levelHandle.file().delete();
         if (geoHandle.exists())

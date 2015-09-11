@@ -27,7 +27,7 @@ public class GdxSwingInputProcessor extends InputAdapter {
     if (currentMapping != null) {
       return true;
     } else {
-      //Gdx.app.log(TAG, "Triggered keycode: " + keycode);
+      //ForgE.log(TAG, "Triggered keycode: " + keycode);
       for (KeyShortcutMapping mapping : mappings) {
         if (mapping.canHandle(keycode)) {
           currentMapping = mapping;

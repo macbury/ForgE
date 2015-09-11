@@ -56,10 +56,10 @@ public class ShadersManager implements KVStorage.OnChangeListener {
       String shaderName     = file.nameWithoutExtension();
       BaseShader shader     = null;
       if (shaders.containsKey(shaderName)) {
-        Gdx.app.log(TAG, "Reloading: "+ shaderName);
+        ForgE.log(TAG, "Reloading: "+ shaderName);
         shader = shaders.get(shaderName);
       } else {
-        Gdx.app.log(TAG, "Loading: "+ shaderName);
+        ForgE.log(TAG, "Loading: "+ shaderName);
         shader   = json.fromJson(BaseShader.class, file);
       }
 
@@ -70,12 +70,12 @@ public class ShadersManager implements KVStorage.OnChangeListener {
         if (!file.nameWithoutExtension().contains("-preview") && !file.nameWithoutExtension().contains("-debug")) {
           shaderList.add(shader);
         } else {
-          Gdx.app.log(TAG, "Skipping preview and debug shader");
+          ForgE.log(TAG, "Skipping preview and debug shader");
         }
 
       } else {
         triggerOnShaderError(shader);
-        Gdx.app.log(TAG, shader.getLog());
+        ForgE.log(TAG, shader.getLog());
       }
     }
 

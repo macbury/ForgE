@@ -3,6 +3,7 @@ package macbury.forge.editor.undo_redo.actions;
 import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryo.Kryo;
 import com.l2fprod.common.propertysheet.Property;
+import macbury.forge.ForgE;
 import macbury.forge.editor.controllers.tools.events.EventsController;
 import macbury.forge.editor.controllers.tools.inspector.InspectorController;
 import macbury.forge.editor.undo_redo.Changeable;
@@ -31,15 +32,15 @@ public class PropertyChangeable extends Changeable {
     Kryo kryo = new Kryo();
     this.oldValue = kryo.copy(event.getOldValue());
     this.newValue = kryo.copy(event.getNewValue());
-    Gdx.app.log(TAG, "New value: " + newValue);
-    Gdx.app.log(TAG, "Old value: " + oldValue);
+    ForgE.log(TAG, "New value: " + newValue);
+    ForgE.log(TAG, "Old value: " + oldValue);
   }
 
   @Override
   public void revert() {
     inspector.stopListeningForPropertyChanges();
     try {
-      Gdx.app.log(TAG, "Revert from " + newValue + " to " + oldValue + " for " + object);
+      ForgE.log(TAG, "Revert from " + newValue + " to " + oldValue + " for " + object);
       prop.setValue(oldValue);
       prop.writeToObject(object);
     } catch (Exception e) {
@@ -52,7 +53,7 @@ public class PropertyChangeable extends Changeable {
   public void apply() {
     inspector.stopListeningForPropertyChanges();
     try {
-      Gdx.app.log(TAG, "Apply " + newValue + " from " + oldValue +  " for " + object);
+      ForgE.log(TAG, "Apply " + newValue + " from " + oldValue +  " for " + object);
       prop.setValue(newValue);
       prop.writeToObject(object);
     } catch (RuntimeException e) {

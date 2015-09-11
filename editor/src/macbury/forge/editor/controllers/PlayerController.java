@@ -73,7 +73,7 @@ public class PlayerController implements RunGameJob.Listener {
 
   @Override
   public void onLog(String line) {
-    Gdx.app.log(TAG, line);
+    ForgE.log(TAG, line);
    // if (currentFrame != null)
    //   currentFrame.putToLog(line);
   }

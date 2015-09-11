@@ -115,7 +115,7 @@ public abstract class AbstractGreedyAlgorithm implements Disposable {
             if(done) { break; }
           }
 
-          //Gdx.app.log(TAG, "New quad: " + mask[n].blockId + " size=" + w+"x"+h + " at " + "X: " + i + " Y: " + j);
+          //ForgE.log(TAG, "New quad: " + mask[n].blockId + " size=" + w+"x"+h + " at " + "X: " + i + " Y: " + j);
 
           GreedyQuad currentPart      = greedyQuadPool.obtain();
           currentPart.face            = face;
@@ -141,7 +141,7 @@ public abstract class AbstractGreedyAlgorithm implements Disposable {
 
           result.add(currentPart);
 
-          //Gdx.app.log(TAG, "Quad: " + currentPart.toString() + " with origin " + origin.toString());
+          //ForgE.log(TAG, "Quad: " + currentPart.toString() + " with origin " + origin.toString());
 
           for(int l = 0; l < h; ++l) {
             for(int k = 0; k < w; ++k) { mask[n + k + l * size] = null; }

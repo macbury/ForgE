@@ -42,7 +42,7 @@ public class GameDatabase {
   }
 
   public void setStartPosition(int levelId, Vector3i voxelPosition) {
-    Gdx.app.log(TAG, "New player start position: " + levelId + " at " + voxelPosition.toString());
+    ForgE.log(TAG, "New player start position: " + levelId + " at " + voxelPosition.toString());
     this.startPosition = new Teleport(voxelPosition, levelId);
     save();
   }

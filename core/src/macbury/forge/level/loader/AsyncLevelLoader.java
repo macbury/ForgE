@@ -16,7 +16,7 @@ public class AsyncLevelLoader extends FutureTask<Integer, LevelState> {
   @Override
   public void execute(Integer levelId) {
     this.levelId = levelId;
-    Gdx.app.log(TAG, "Level id to load: " + levelId);
+    ForgE.log(TAG, "Level id to load: " + levelId);
     this.runnable = new Runnable() {
       @Override
       public void run() {

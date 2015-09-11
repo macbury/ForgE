@@ -67,12 +67,12 @@ public class FrustrumDebugAndRenderer  extends InputAdapter implements Disposabl
         for (ICamera frustrumCamera : cameras) {
           frustrumCamera.saveDebugFrustrum();
         }
-        Gdx.app.log(TAG, "Enabled frustrum debugger");
+        ForgE.log(TAG, "Enabled frustrum debugger");
       } else {
         for (ICamera frustrumCamera : cameras) {
           frustrumCamera.clearDebugFrustrum();
         }
-        Gdx.app.log(TAG, "Disabled frustrum debugger");
+        ForgE.log(TAG, "Disabled frustrum debugger");
       }
       return true;
     } else {

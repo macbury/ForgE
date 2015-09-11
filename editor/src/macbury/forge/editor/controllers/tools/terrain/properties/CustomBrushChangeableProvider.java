@@ -5,6 +5,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.utils.Disposable;
 import com.l2fprod.common.beans.ExtendedPropertyDescriptor;
+import macbury.forge.ForgE;
 import macbury.forge.editor.controllers.tools.inspector.editors.AdvComboBoxPropertyEditor;
 import macbury.forge.editor.controllers.tools.inspector.editors.SpinnerPropertyEditor;
 import macbury.forge.editor.controllers.tools.inspector.renderers.BrushImageIconRenderer;
@@ -79,7 +80,7 @@ public class CustomBrushChangeableProvider extends TerrainChangeableProvider<App
     ApplyCustomBrushChangeable applyCustomBrushChangeable = new ApplyCustomBrushChangeable(map);
     applyCustomBrushChangeable.setScaleAndBrush(scale, brushType);
     applyCustomBrushChangeable.setSelection(getSelection());
-    Gdx.app.log(TAG, "Setting: " + scale);
+    ForgE.log(TAG, "Setting: " + scale);
     return applyCustomBrushChangeable;
   }
 

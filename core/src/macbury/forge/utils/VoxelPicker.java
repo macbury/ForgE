@@ -48,7 +48,7 @@ public class VoxelPicker {
 
           dir.set(Math.abs(dir.x), Math.abs(dir.y), Math.abs(dir.z)).add(CURSOR_TRESHOLD, CURSOR_TRESHOLD, CURSOR_TRESHOLD);
 
-          //Gdx.app.log(TAG, dir.toString());
+          //ForgE.log(TAG, dir.toString());
 
           finalDir.set(Math.round(dir.x), Math.round(dir.y), Math.round(dir.z));
           worldVoxelPosition.sub(finalDir.scl(sign));

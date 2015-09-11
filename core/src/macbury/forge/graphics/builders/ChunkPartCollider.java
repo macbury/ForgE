@@ -58,7 +58,7 @@ public class ChunkPartCollider implements Disposable {
     if (body != null) {
       if (bulletWorld != null) {
         bulletWorld.removeRigidBody(body);
-        //Gdx.app.log(TAG, "Removing rigid body!");
+        //ForgE.log(TAG, "Removing rigid body!");
       }
 
       body.dispose();
@@ -75,7 +75,7 @@ public class ChunkPartCollider implements Disposable {
 
 
   public void initializeAndAddToWorld(btDiscreteDynamicsWorld bulletWorld) {
-    //Gdx.app.log(TAG, "adding collider to bullet world at " + position.toString() + " size: " + size.toString());
+    //ForgE.log(TAG, "adding collider to bullet world at " + position.toString() + " size: " + size.toString());
     bulletWorld.addRigidBody(body, PhysicsSystem.Flags.Ground.mask, PhysicsSystem.Flags.All.mask);
     this.bulletWorld = bulletWorld;
   }

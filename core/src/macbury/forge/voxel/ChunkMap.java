@@ -37,7 +37,7 @@ public class ChunkMap extends VoxelMap {
   }
 
   public void buildFloor() {
-    Gdx.app.log(TAG, "Building floor");
+    ForgE.log(TAG, "Building floor");
     Block mainBlock = blocks.find(1);
     for(int y = 0; y < 1; y++) {
       for(int x = 0; x < width; x++) {
@@ -46,7 +46,7 @@ public class ChunkMap extends VoxelMap {
         }
       }
     }
-    Gdx.app.log(TAG, "Builded all floor");
+    ForgE.log(TAG, "Builded all floor");
   }
 
   public Vector3i voxelPositionToChunkPosition(int x, int y, int z){
@@ -94,37 +94,37 @@ public class ChunkMap extends VoxelMap {
     addToRebuild(centerChunk);
 
     if (centerChunk.start.x == x) {
-      //Gdx.app.log(TAG, "X left border!");
+      //ForgE.log(TAG, "X left border!");
       tempB.set(chunkPosition).x -= 1;
       rebuildChunkForChunkPositionIfExists(tempB);
     }
 
     if (centerChunk.end.x - 1 == x) {
-      //Gdx.app.log(TAG, "X right border!");
+      //ForgE.log(TAG, "X right border!");
       tempB.set(chunkPosition).x += 1;
       rebuildChunkForChunkPositionIfExists(tempB);
     }
 
     if (centerChunk.start.y == y) {
-      //Gdx.app.log(TAG, "Y top border!");
+      //ForgE.log(TAG, "Y top border!");
       tempB.set(chunkPosition).y += 1;
       rebuildChunkForChunkPositionIfExists(tempB);
     }
 
     if (centerChunk.end.y - 1 == y) {
-      //Gdx.app.log(TAG, "Y bottom border!");
+      //ForgE.log(TAG, "Y bottom border!");
       tempB.set(chunkPosition).y += 1;
       rebuildChunkForChunkPositionIfExists(tempB);
     }
 
     if (centerChunk.start.z == z) {
-      //Gdx.app.log(TAG, "Z Front border!");
+      //ForgE.log(TAG, "Z Front border!");
       tempB.set(chunkPosition).z -= 1;
       rebuildChunkForChunkPositionIfExists(tempB);
     }
 
     if (centerChunk.end.z - 1 == z) {
-      //Gdx.app.log(TAG, "Z back border!");
+      //ForgE.log(TAG, "Z back border!");
       tempB.set(chunkPosition).z += 1;
       rebuildChunkForChunkPositionIfExists(tempB);
     }
@@ -168,7 +168,7 @@ public class ChunkMap extends VoxelMap {
   }
 
   public void splitIntoChunks() {
-    Gdx.app.log(TAG, "Splitting into chunks");
+    ForgE.log(TAG, "Splitting into chunks");
     chunks.clear();
     this.countChunksX = width / CHUNK_SIZE;
     this.countChunksY = height / CHUNK_SIZE;
@@ -186,7 +186,7 @@ public class ChunkMap extends VoxelMap {
         }
       }
     }
-    Gdx.app.log(TAG, "Total chunks: " + chunks.size);
+    ForgE.log(TAG, "Total chunks: " + chunks.size);
   }
 
   private void addToRebuild(Chunk chunk) {

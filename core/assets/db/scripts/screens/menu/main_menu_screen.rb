@@ -6,7 +6,6 @@ module Menu
     BUTTON_HEIGHT       = 70
     BUTTON_PADDING      = 5
 
-
     def initialize
 
     end
@@ -57,7 +56,7 @@ module Menu
     private
       def bindEvents
         @startGameButton.onClick do
-          Gdx.app.log("Clicked", "start game button")
+          ForgE.log("Clicked", "start game button")
           @selectSound.play
           loadingScreen          = Loading::LevelScreen.new
           loadingScreen.teleport = ForgE.db.startPosition
@@ -65,12 +64,12 @@ module Menu
         end
 
         @loadGameButton.onClick do
-          Gdx.app.log("Clicked", "load game button")
+          ForgE.log("Clicked", "load game button")
           @selectSound.play
         end
 
         @settingsGameButton.onClick do
-          Gdx.app.log("Clicked", "settings game button")
+          ForgE.log("Clicked", "settings game button")
           @selectSound.play
         end
 

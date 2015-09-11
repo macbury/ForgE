@@ -2,6 +2,7 @@ package macbury.forge.utils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import macbury.forge.ForgE;
 import macbury.forge.shaders.utils.ShadersManager;
 
 import java.io.BufferedWriter;
@@ -20,7 +21,7 @@ public class FileForgeUtils {
   }
 
   public static void writeString(FileHandle file, String text) {
-    Gdx.app.log(TAG, "Writing: "+ file.path());
+    ForgE.log(TAG, "Writing: " + file.path());
     BufferedWriter writer = null;
     try {
       writer = new BufferedWriter( new FileWriter( file.path() ));

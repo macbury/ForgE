@@ -52,7 +52,7 @@ public class Chunk implements OctreeObject, Disposable {
 
   @Override
   public void dispose() {
-    //Gdx.app.log(TAG, "Disposing chunk!");
+    //ForgE.log(TAG, "Disposing chunk!");
     clearFaces();
     clearColliders();
   }

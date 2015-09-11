@@ -20,7 +20,7 @@ public class AssetsChangeWatcher implements JNotifyListener, Disposable {
     this.jobs = jobs;
     try {
       String path = Gdx.files.internal(".").path();
-      Gdx.app.log(TAG, "Watching: " + path);
+      ForgE.log(TAG, "Watching: " + path);
       this.shaderWatchID = JNotify.addWatch(path, JNotify.FILE_CREATED | JNotify.FILE_DELETED | JNotify.FILE_MODIFIED | JNotify.FILE_RENAMED, true, this);
     } catch (JNotifyException e) {
       e.printStackTrace();
@@ -56,7 +56,7 @@ public class AssetsChangeWatcher implements JNotifyListener, Disposable {
   }
 
   void print(String msg) {
-    Gdx.app.log(TAG, msg);
+    ForgE.log(TAG, msg);
   }
 
   @Override

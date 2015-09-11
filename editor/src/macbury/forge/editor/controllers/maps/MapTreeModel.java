@@ -78,7 +78,7 @@ public class MapTreeModel extends DefaultTreeModel implements TreeExpansionListe
           parent.add(node);
           pushNode(node);
         } catch (Exception e) {
-          Gdx.app.log(TAG, "Skipping: " + levelId);
+          ForgE.log(TAG, "Skipping: " + levelId);
           e.printStackTrace();
         }
 

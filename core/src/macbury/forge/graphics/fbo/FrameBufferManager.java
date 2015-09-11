@@ -100,7 +100,7 @@ public class FrameBufferManager implements Disposable {
       if (fb != null) {
         fb.dispose();
       }
-      Gdx.app.log(TAG, "Creating framebuffer: " + fbIdn);
+      ForgE.log(TAG, "Creating framebuffer: " + fbIdn);
       fb = new FrameBuffer(format, fbWidth, fbHeight, hasDepth);
       fb.getColorBufferTexture().setFilter(filter, filter);
       fb.getColorBufferTexture().setWrap(textureWrap, textureWrap);
@@ -125,7 +125,7 @@ public class FrameBufferManager implements Disposable {
       if (fb != null) {
         fb.dispose();
       }
-      Gdx.app.log(TAG, "Creating float framebuffer: " + fbIdn);
+      ForgE.log(TAG, "Creating float framebuffer: " + fbIdn);
       fb = new FloatFrameBuffer(fbWidth, fbHeight, hasDepth);
       fb.getColorBufferTexture().setFilter(filter, filter);
       fb.getColorBufferTexture().setWrap(textureWrap, textureWrap);

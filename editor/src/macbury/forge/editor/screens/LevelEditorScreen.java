@@ -98,7 +98,7 @@ public class LevelEditorScreen extends AbstractScreen {
 
   @Override
   public void resize(int width, int height) {
-    Gdx.app.log(TAG, "Resize: "+ width +"x"+height);
+    ForgE.log(TAG, "Resize: "+ width +"x"+height);
 
     level.resize(width, height);
     overlay.invalidate();

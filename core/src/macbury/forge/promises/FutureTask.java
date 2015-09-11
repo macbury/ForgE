@@ -1,6 +1,7 @@
 package macbury.forge.promises;
 
 import com.badlogic.gdx.Gdx;
+import macbury.forge.ForgE;
 
 /**
  * Created by macbury on 16.03.15.
@@ -17,7 +18,7 @@ public abstract class FutureTask<K, V> {
   public abstract void execute(K object);
 
   protected void done(final V result) {
-    Gdx.app.log(getClass().getSimpleName(), "Done");
+    ForgE.log(getClass().getSimpleName(), "Done");
     Gdx.app.postRunnable(new Runnable() {
       @Override
       public void run() {
@@ -29,7 +30,7 @@ public abstract class FutureTask<K, V> {
   }
 
   protected void reject(final Exception e) {
-    Gdx.app.log(getClass().getSimpleName(), "Error:" + e.toString());
+    ForgE.log(getClass().getSimpleName(), "Error:" + e.toString());
     Gdx.app.postRunnable(new Runnable() {
       @Override
       public void run() {

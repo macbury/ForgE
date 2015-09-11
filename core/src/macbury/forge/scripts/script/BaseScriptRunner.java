@@ -2,6 +2,7 @@ package macbury.forge.scripts.script;
 
 import com.badlogic.gdx.utils.Disposable;
 import org.apache.bsf.BSFException;
+import org.apache.bsf.BSFManager;
 import org.jruby.embed.bsf.JRubyEngine;
 
 /**
@@ -9,5 +10,5 @@ import org.jruby.embed.bsf.JRubyEngine;
  */
 public abstract class BaseScriptRunner implements Disposable {
 
-  public abstract void run(JRubyEngine engine) throws BSFException;
+  public abstract void run(JRubyEngine engine, BSFManager manager) throws BSFException;
 }

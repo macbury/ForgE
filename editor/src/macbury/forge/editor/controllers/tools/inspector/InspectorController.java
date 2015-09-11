@@ -2,6 +2,7 @@ package macbury.forge.editor.controllers.tools.inspector;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import macbury.forge.ForgE;
 import macbury.forge.editor.controllers.MainToolbarController;
 import macbury.forge.editor.controllers.ProjectController;
 import macbury.forge.editor.controllers.tools.inspector.properties.DefaultBeanBinder;
@@ -76,7 +77,7 @@ public class InspectorController implements OnMapChangeListener, DefaultBeanBind
 
   @Override
   public void onPropertyChange(DefaultBeanBinder binder, PropertyChangeEvent event, Object object) {
-    Gdx.app.log(TAG, "On property change event");
+    ForgE.log(TAG, "On property change event");
     stopListeningForPropertyChanges();
     //PropertyChangeable propertyChangeable = new PropertyChangeable(object, event, this);
    // changeManager.addChangeable(propertyChangeable).apply();

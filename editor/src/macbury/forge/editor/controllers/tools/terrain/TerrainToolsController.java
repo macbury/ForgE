@@ -228,7 +228,7 @@ public class TerrainToolsController implements OnMapChangeListener, SelectionInt
   public void onPropertyChange(DefaultBeanBinder binder, PropertyChangeEvent event, Object object) {
     Property prop = (Property) event.getSource();
     try {
-      Gdx.app.log(TAG, "Revert from " + event.getNewValue() + " to " + event.getOldValue()+ " for " + object);
+      ForgE.log(TAG, "Revert from " + event.getNewValue() + " to " + event.getOldValue()+ " for " + object);
       prop.setValue(event.getNewValue());
       prop.writeToObject(object);
     } catch (Exception e) {

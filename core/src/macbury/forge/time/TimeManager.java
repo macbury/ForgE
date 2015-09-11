@@ -118,4 +118,9 @@ public class TimeManager implements Disposable {
   public void setDuration(float otherDuration) {
     this.duration = otherDuration;
   }
+
+  @Override
+  public String toString() {
+    return getFormattedDuration();
+  }
 }

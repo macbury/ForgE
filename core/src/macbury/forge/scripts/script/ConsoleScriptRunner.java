@@ -1,13 +1,15 @@
 package macbury.forge.scripts.script;
 
-import com.badlogic.gdx.Gdx;
+import macbury.forge.ForgE;
 import org.apache.bsf.BSFException;
+import org.apache.bsf.BSFManager;
 import org.jruby.embed.bsf.JRubyEngine;
 
 /**
  * Created by macbury on 08.09.15.
  */
 public class ConsoleScriptRunner extends BaseScriptRunner {
+  private static final String TAG = "<console>";
   private final String src;
 
   public ConsoleScriptRunner(String src) {
@@ -15,10 +17,18 @@ public class ConsoleScriptRunner extends BaseScriptRunner {
   }
 
   @Override
-  public void run(JRubyEngine engine) throws BSFException {
-    Object result = engine.eval("<console>", 0, 0, src);
-    Gdx.app.log("<console>", result.toString());
-
+  public void run(JRubyEngine engine, BSFManager manager) throws BSFException {
+    try {
+      ForgE.log(TAG, src);
+      Object result = engine.eval(TAG, 0, 0, src);
+      if (result != null) {
+        ForgE.log(TAG, "=> "+result.toString());
+      } else {
+        ForgE.log(TAG, "=> nil");
+      }
+    } catch (BSFException e) {
+      ForgE.log(TAG, e.getTargetException().toString());
+    }
   }
 
   @Override

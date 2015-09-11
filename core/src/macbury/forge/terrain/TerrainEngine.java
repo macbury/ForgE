@@ -111,7 +111,7 @@ public class TerrainEngine implements Disposable {
     boolean notDone = map.chunkToRebuild.size > 0;
     if (map.chunkToRebuild.size > 0) {
       ForgE.blocks.loadAtlasAndUvsIfNull();
-      Gdx.app.log(TAG, "Chunks to rebuild: " + map.chunkToRebuild.size);
+      ForgE.log(TAG, "Chunks to rebuild: " + map.chunkToRebuild.size);
       while(map.chunkToRebuild.size > 0) {
         Chunk chunk = map.chunkToRebuild.pop();
         buildChunkGeometry(chunk);
@@ -134,7 +134,7 @@ public class TerrainEngine implements Disposable {
   public boolean rebuildInBackground(int i) {
     if (map.chunkToRebuild.size > 0) {
       ForgE.blocks.loadAtlasAndUvsIfNull();
-      Gdx.app.log(TAG, "Chunks to rebuild: " + map.chunkToRebuild.size);
+      ForgE.log(TAG, "Chunks to rebuild: " + map.chunkToRebuild.size);
       while(map.chunkToRebuild.size > 0) {
         Chunk chunk = map.chunkToRebuild.pop();
         buildChunkGeometry(chunk);

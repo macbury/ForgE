@@ -33,12 +33,12 @@ public class ScreenManager {
   private void setCurrentScreen(AbstractScreen screen) {
     ForgE.ui.console.hide();
     if (currentScreen != screen && currentScreen != null) {
-      Gdx.app.log(TAG, "Disposing:" + currentScreen.getClass());
+      ForgE.log(TAG, "Disposing:" + currentScreen.getClass());
       currentScreen.dispose();
     }
     currentScreen = screen;
     if (currentScreen != null) {
-      Gdx.app.log(TAG, "initializing:" + currentScreen.getClass());
+      ForgE.log(TAG, "initializing:" + currentScreen.getClass());
       currentScreen.initializeOnce();
     }
     engine.setScreen(screen);

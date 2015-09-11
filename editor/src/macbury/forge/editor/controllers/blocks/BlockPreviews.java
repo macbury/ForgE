@@ -64,7 +64,7 @@ public class BlockPreviews extends AbstractScreen {
 
     for (int i = 0; i < filesToRemove.length; i++) {
       FileHandle handle = filesToRemove[i];
-      Gdx.app.log(TAG, "Removing: "+ handle.path().toString());
+      ForgE.log(TAG, "Removing: "+ handle.path().toString());
       handle.file().delete();
     }
   }
@@ -78,10 +78,10 @@ public class BlockPreviews extends AbstractScreen {
     FileHandle preview = blockPreview(block);
 
     if (preview.exists() && !removeOld) {
-      Gdx.app.log(TAG, "Skipping: " + block.name);
+      ForgE.log(TAG, "Skipping: " + block.name);
       return;
     } else {
-      Gdx.app.log(TAG, "Generating block name: " + block.name);
+      ForgE.log(TAG, "Generating block name: " + block.name);
     }
 
     this.voxelMap            = ChunkMap.build();
@@ -117,7 +117,7 @@ public class BlockPreviews extends AbstractScreen {
       }
     } shader.end();
 
-    Gdx.app.log(TAG, "Saving: " + preview.file().getAbsoluteFile());
+    ForgE.log(TAG, "Saving: " + preview.file().getAbsoluteFile());
     ScreenshotFactory.saveScreenshot(new FileHandle(preview.file().getAbsoluteFile()), PREVIEW_SIZE, PREVIEW_SIZE);
     mainChunk.dispose();
     voxelMap.dispose();

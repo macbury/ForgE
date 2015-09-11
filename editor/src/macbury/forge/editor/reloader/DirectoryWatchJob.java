@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import macbury.forge.ForgE;
 import net.contentobjects.jnotify.JNotify;
 import net.contentobjects.jnotify.JNotifyException;
 import net.contentobjects.jnotify.JNotifyListener;
@@ -47,10 +48,10 @@ public class DirectoryWatchJob implements Disposable, JNotifyListener {
     FileHandle handle = Gdx.files.internal(path + file);
 
     if (handle.extension().endsWith("___jb_bak___") || handle.extension().endsWith("___jb_old___") || handle.extension().endsWith("~")) {
-      Gdx.app.log(TAG, "Skipping: " + handle.name());
+      ForgE.log(TAG, "Skipping: " + handle.name());
     } else {
       currentHandle = handle;
-      Gdx.app.log(TAG, "Change for: " + currentHandle.name());
+      ForgE.log(TAG, "Change for: " + currentHandle.name());
     }
   }
 
@@ -66,7 +67,7 @@ public class DirectoryWatchJob implements Disposable, JNotifyListener {
   }
 
   private void executeTrigger() {
-    Gdx.app.log(TAG, "Execute trigger: " + currentHandle.name() + " for " + listeners.size);
+    ForgE.log(TAG, "Execute trigger: " + currentHandle.name() + " for " + listeners.size);
     for (DirectoryWatchJobListener listener : listeners) {
       listener.onFileInDirectoryChange(currentHandle);
     }
@@ -92,7 +93,7 @@ public class DirectoryWatchJob implements Disposable, JNotifyListener {
 
   public void start() {
     try {
-      Gdx.app.log(TAG, "Watching: " + path);
+      ForgE.log(TAG, "Watching: " + path);
       this.jnotifyWatchId = JNotify.addWatch(path, JNotify.FILE_CREATED | JNotify.FILE_DELETED | JNotify.FILE_MODIFIED | JNotify.FILE_RENAMED, true, this);
     } catch (JNotifyException e) {
       e.printStackTrace();

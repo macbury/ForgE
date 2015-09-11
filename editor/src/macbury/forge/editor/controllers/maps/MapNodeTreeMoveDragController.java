@@ -27,7 +27,7 @@ public class MapNodeTreeMoveDragController extends DragSourceAdapter implements 
 
   @Override
   public void dragGestureRecognized(DragGestureEvent dge) {
-    //Gdx.app.log(TAG, "drag started");
+    //ForgE.log(TAG, "drag started");
     dropNode                    = null;
     currentDragNode             = null;
     Point jap                   = dge.getDragOrigin(); // drag point
@@ -91,10 +91,10 @@ public class MapNodeTreeMoveDragController extends DragSourceAdapter implements 
     TreePath path   = tree.getPathForLocation(dragPoint.x, dragPoint.y);
     if (path == null) {
       dropNode = null;
-      //Gdx.app.log(TAG, "No node under cursor");
+      //ForgE.log(TAG, "No node under cursor");
     } else {
       dropNode = (MapTreeModel.BaseNode)path.getLastPathComponent();
-      //Gdx.app.log(TAG, "Node under cursor: " + dropNode.getName());
+      //ForgE.log(TAG, "Node under cursor: " + dropNode.getName());
     }
   }
 
@@ -115,7 +115,7 @@ public class MapNodeTreeMoveDragController extends DragSourceAdapter implements 
 
   @Override
   public void drop(DropTargetDropEvent dtde) {
-    //Gdx.app.log(TAG, "dropped");
+    //ForgE.log(TAG, "dropped");
     getDropNode(dtde.getLocation());
 
     if (dropNode == null) {

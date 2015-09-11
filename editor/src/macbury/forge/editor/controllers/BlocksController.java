@@ -143,7 +143,7 @@ public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.
   @Override
   public void onFileInDirectoryChange(FileHandle handle) {
     if (handle.extension().contains(BlocksProvider.BLOCK_EXT) || handle.extension().contains(BlocksProvider.SHAPE_EXT)) {
-      Gdx.app.log(TAG, "Change in: " + handle.name());
+      ForgE.log(TAG, "Change in: " + handle.name());
       rebuildTileset();
     }
   }
@@ -155,7 +155,7 @@ public class BlocksController implements OnMapChangeListener, DirectoryWatchJob.
   }
 
   public void onRebuildTextures(Boolean success, BuildBlocksTexture buildBlocksTexture) {
-    Gdx.app.log(TAG, "Rebuilded all textures");
+    ForgE.log(TAG, "Rebuilded all textures");
     if (controller != null) {
       controller.rebuildChunks();
       controller.clearUndoRedo();

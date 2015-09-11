@@ -270,7 +270,7 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
 
   @Override
   public void onKeyShortcut(KeyShortcutMapping shortcutMapping) {
-    Gdx.app.log(TAG, "Undo redo shortcut!");
+    ForgE.log(TAG, "Undo redo shortcut!");
     if (undoMapping == shortcutMapping) {
       undo();
     } else if (redoMapping == shortcutMapping) {

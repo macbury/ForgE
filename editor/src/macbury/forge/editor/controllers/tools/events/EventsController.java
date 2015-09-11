@@ -99,7 +99,7 @@ public class EventsController implements SelectionInterface, ActionListener, OnM
   @Override
   public void actionPerformed(ActionEvent e) {
     if (e.getSource() == mntmSetStartPosition) {
-      Gdx.app.log(TAG, "Selected position is: " + selectedVoxelPosition.toString());
+      ForgE.log(TAG, "Selected position is: " + selectedVoxelPosition.toString());
       ForgE.db.setStartPosition(levelId, selectedVoxelPosition);
     }
   }
@@ -159,7 +159,7 @@ public class EventsController implements SelectionInterface, ActionListener, OnM
     if (event.getNewValue() == null || event.getOldValue() == null) {
       return;
     }
-    Gdx.app.log(TAG, "On property change event");
+    ForgE.log(TAG, "On property change event");
     stopListeningForPropertyChanges();
     PropertyChangeable propertyChangeable = new PropertyChangeable(object, event, this);
     changeManager.pushAndExecute(propertyChangeable);

@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.bullet.dynamics.btSequentialImpulseConstraintSol
 import com.badlogic.gdx.physics.bullet.linearmath.btIDebugDraw;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import macbury.forge.ForgE;
 import macbury.forge.components.*;
 import macbury.forge.graphics.builders.Chunk;
 import macbury.forge.graphics.builders.ChunkPartCollider;
@@ -113,7 +114,7 @@ public class PhysicsSystem extends EntitySystem implements EntityListener, Dispo
   }
 
   private void initEntityBulletStuff(Entity entity) {
-    Gdx.app.log(TAG, "Added entity");
+    ForgE.log(TAG, "Added entity");
     PositionComponent positionComponent = pm.get(entity);
     positionComponent.updateTransformMatrix();
     for (int i = 0; i < entity.getComponents().size(); i++) {
@@ -128,7 +129,7 @@ public class PhysicsSystem extends EntitySystem implements EntityListener, Dispo
   }
 
   private void disposeEntityBulletStuff(Entity entity) {
-    Gdx.app.log(TAG, "Removing entity");
+    ForgE.log(TAG, "Removing entity");
     for (int i = 0; i < entity.getComponents().size(); i++) {
       Component component = entity.getComponents().get(i);
 

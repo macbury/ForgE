@@ -7,12 +7,17 @@
   },
 
   com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
-    default: { font: "default", fontColor: "white" }
+    default: { font: "default", fontColor: "white" },
+    console: { font: "console", fontColor: "white" }
+  },
+
+  com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle: {
+    console: { }
   },
 
   com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
     console: {
-      font: "default",
+      font: "console",
       fontColor: "white",
       cursor: "console_cursor"
     }

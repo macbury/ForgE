@@ -51,7 +51,7 @@ public class LoadingScreen extends AbstractScreen implements Promise<Level> {
 
     camera.position.set(0, 8, 0);
     camera.lookAt(Vector3.Zero);
-    Gdx.app.log(TAG, "Preparing to load: " + teleport.mapId);
+    ForgE.log(TAG, "Preparing to load: " + teleport.mapId);
     AsyncLevelLoader loader                 = new AsyncLevelLoader();
     GeometryBuilderTask geometryBuilderTask = new GeometryBuilderTask(promiseTicker);
     loader.then(geometryBuilderTask);
@@ -111,7 +111,7 @@ public class LoadingScreen extends AbstractScreen implements Promise<Level> {
 
   @Override
   public void success(Level loadedLevel) {
-    Gdx.app.log(TAG, "Done all promises!");
+    ForgE.log(TAG, "Done all promises!");
     GameplayScreen screen = new GameplayScreen(teleport, loadedLevel);
     ForgE.screens.set(screen);
   }

@@ -41,7 +41,7 @@ public class LevelManager {
   public LevelState load(FileHandle mapFile) {
     Kryo kryo             = storageManager.pool.borrow();
     LevelState levelState = null;
-    Gdx.app.log(TAG, "Loading map: " + mapFile.toString());
+    ForgE.log(TAG, "Loading map: " + mapFile.toString());
     try {
 
       InflaterInputStream inflaterInputStream = new InflaterInputStream(mapFile.read());
@@ -59,7 +59,7 @@ public class LevelManager {
     Kryo kryo             = storageManager.pool.borrow();
     FileHandle handle     = getGeoHandle(state.id);
     FileGeometryProvider geometryProvider = null;
-    Gdx.app.log(TAG, "Loading geometry: " + handle.path());
+    ForgE.log(TAG, "Loading geometry: " + handle.path());
     InflaterInputStream inflaterInputStream = new InflaterInputStream(handle.read());
     Input input                             = new Input(inflaterInputStream);
     geometryProvider                        = kryo.readObject(input, FileGeometryProvider.class, new TerrainGeometryProviderSerializer());
@@ -74,7 +74,7 @@ public class LevelManager {
     if (file.exists()) {
       file.delete();
     }
-    Gdx.app.log(TAG, "Saving map: " + file.getAbsolutePath());
+    ForgE.log(TAG, "Saving map: " + file.getAbsolutePath());
     try {
       synchronized (state) {
         DeflaterOutputStream outputStream = new DeflaterOutputStream(new FileOutputStream(file, false));
@@ -103,7 +103,7 @@ public class LevelManager {
       if (file.exists()) {
         file.delete();
       }
-      Gdx.app.log(TAG, "Saving geometry: " + file.getAbsolutePath());
+      ForgE.log(TAG, "Saving geometry: " + file.getAbsolutePath());
       try {
         synchronized (provider) {
           DeflaterOutputStream outputStream = new DeflaterOutputStream(new FileOutputStream(file, false));
@@ -145,7 +145,7 @@ public class LevelManager {
     LevelState levelState = null;
     Kryo kryo             = storageManager.pool.borrow();
     FileHandle mapFile    = getLevelFileHandle(levelId);
-    Gdx.app.log(TAG, "Loading map: " + mapFile.toString());
+    ForgE.log(TAG, "Loading map: " + mapFile.toString());
     try {
       InflaterInputStream inflaterInput       = new InflaterInputStream(new FileInputStream(mapFile.file()));
       Input input                             = new Input(inflaterInput);

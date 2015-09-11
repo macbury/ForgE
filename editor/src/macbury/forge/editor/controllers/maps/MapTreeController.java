@@ -86,9 +86,9 @@ public class MapTreeController implements OnMapChangeListener, ForgEBootListener
 
   private void reload() {
     ForgE.levels.reload();
-    Gdx.app.log(TAG, "Reloading tree nodes");
+    ForgE.log(TAG, "Reloading tree nodes");
     mapTreeModel.refresh();
-    Gdx.app.log(TAG, "Done");
+    ForgE.log(TAG, "Done");
   }
 
 

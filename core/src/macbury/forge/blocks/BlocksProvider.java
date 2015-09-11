@@ -33,7 +33,7 @@ public class BlocksProvider implements Disposable {
   }
 
   public void reload() {
-    Gdx.app.log(TAG, "Reloading blocks...");
+    ForgE.log(TAG, "Reloading blocks...");
 
     loadShapes();
     loadBlocks();
@@ -56,7 +56,7 @@ public class BlocksProvider implements Disposable {
       BlockShape blockShape = json.fromJson(BlockShape.class, blockShapeFile.readString());
       blockShape.name       = blockShapeFile.nameWithoutExtension();
       this.shapes.put(blockShape.name, blockShape);
-      Gdx.app.log(TAG, "Loaded block shape: " + blockShape.name);
+      ForgE.log(TAG, "Loaded block shape: " + blockShape.name);
     }
   }
 
@@ -88,7 +88,7 @@ public class BlocksProvider implements Disposable {
           throw new GdxRuntimeException("Block with id "+block.id+" already added!");
         }
         this.blocks[block.id] = block;
-        Gdx.app.log(TAG, "Loaded block: " +block.toString());
+        ForgE.log(TAG, "Loaded block: " +block.toString());
 
       } catch (SerializationException exception) {
         throw new GdxRuntimeException("Could not load block: "+blockFile.name() + " because " + exception.getMessage());

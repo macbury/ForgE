@@ -18,7 +18,7 @@ module Loading
       @loadingLevelLabel = ForgE.ui.label("Loading...", "default")
       @loadingLevelLabel.setPosition(20,20)
 
-      Gdx.app.log(TAG, self.teleport.to_s)
+      ForgE.log(TAG, self.teleport.to_s)
 
       @camera         = PerspectiveCamera.new(67, Gdx.graphics.getWidth, Gdx.graphics.getHeight)
       @boxTransMat    = Matrix4.new
@@ -39,7 +39,7 @@ module Loading
 
     def load_level_state_and_geometry
       Defer.exec(Proc.new {
-        Gdx.app.log(TAG, "Loading state and geometry")
+        ForgE.log(TAG, "Loading state and geometry")
         levelState       = ForgE.levels.load(get_map_id)
         @progress        = PROGRESS_LOAD_STATE
         geometryProvider = ForgE.levels.loadGeometry(levelState)
@@ -47,7 +47,7 @@ module Loading
         [levelState, geometryProvider]
       }) do |levelState, geometryProvider|
         if geometryProvider
-          Gdx.app.log(TAG, "Creating level")
+          ForgE.log(TAG, "Creating level")
           @level = Level.new(levelState, geometryProvider)
           build_geometry
         else
@@ -57,7 +57,7 @@ module Loading
     end
 
     def build_geometry
-      Gdx.app.log(TAG, "Building geometry")
+      ForgE.log(TAG, "Building geometry")
       Defer.exec(Proc.new {
         @progress        = PROGRESS_BUILD_GEOMETRY
         while !@level.terrainEngine.rebuildInBackground(50)
@@ -70,12 +70,12 @@ module Loading
 
     def load_save
       @progress        = PROGRESS_LOAD_SAVE
-      Gdx.app.log(TAG, "Loading entities etc...")
+      ForgE.log(TAG, "Loading entities etc...")
       Defer.exec(Proc.new {
         sleep 1
       }) do
         @progress        = PROGRESS_LOAD_ASSETS
-        Gdx.app.log(TAG, "Loading assets")
+        ForgE.log(TAG, "Loading assets")
         load_assets
       end
 
@@ -148,7 +148,7 @@ module Loading
     end
 
     def dispose
-      Gdx.app.log(TAG, "Dispose...")
+      ForgE.log(TAG, "Dispose...")
       @loadingLevelLabel.remove
       @loadingLevelLabel = nil
       self.teleport = nil

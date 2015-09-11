@@ -3,6 +3,7 @@ package macbury.forge.terrain.geometry;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import macbury.forge.ForgE;
 import macbury.forge.graphics.builders.Chunk;
 
 /**
@@ -28,7 +29,7 @@ public abstract class TerrainGeometryProvider implements Disposable {
 
   @Override
   public void dispose() {
-    Gdx.app.log(TAG, "Disposing: " + caches.size);
+    ForgE.log(TAG, "Disposing: " + caches.size);
     for (GeometryCache cache : caches) {
       cache.dispose();
     }

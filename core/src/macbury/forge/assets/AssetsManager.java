@@ -25,7 +25,7 @@ public class AssetsManager implements Disposable {
 
   public AssetsManager() {
     super();
-    Gdx.app.log(TAG, "Initialized...");
+    ForgE.log(TAG, "Initialized...");
     loadedAssets  = new HashMap<String, Asset>();
     pendingAssets = new Array<Asset>();
   }
@@ -35,13 +35,13 @@ public class AssetsManager implements Disposable {
     if (!loadedAssets.containsKey(path)) {
       Asset tempAsset = null;
       try {
-        //Gdx.app.log(TAG, "Adding pending asset: " + path);
+        //ForgE.log(TAG, "Adding pending asset: " + path);
         tempAsset = assetClass.newInstance();
         tempAsset.setManager(this);
         tempAsset.setPath(path);
         loadedAssets.put(path, tempAsset);
         pendingAssets.add(tempAsset);
-        Gdx.app.log(TAG, "Added to pending: " + tempAsset.getPath());
+        ForgE.log(TAG, "Added to pending: " + tempAsset.getPath());
       } catch (InstantiationException e) {
         e.printStackTrace();
       } catch (IllegalAccessException e) {
@@ -87,7 +87,7 @@ public class AssetsManager implements Disposable {
   public boolean update() {
     if (pendingAssets.size > 0) {
       Asset asset = pendingAssets.pop();
-      Gdx.app.log(TAG, "Loading: " + asset.getPath());
+      ForgE.log(TAG, "Loading: " + asset.getPath());
       asset.load();
       return true;
     } else {
@@ -96,12 +96,12 @@ public class AssetsManager implements Disposable {
   }
 
   public void unloadUnusedAssets() {
-    Gdx.app.log(TAG, "Removing unused assets");
+    ForgE.log(TAG, "Removing unused assets");
     Set<String> keys = loadedAssets.keySet();
     for (String key : keys) {
       Asset asset = loadedAssets.get(key);
       if (asset.isUnused()) {
-        Gdx.app.log(TAG, "Disposing: " + asset.getPath());
+        ForgE.log(TAG, "Disposing: " + asset.getPath());
         loadedAssets.remove(key);
         asset.dispose();
       }
@@ -111,7 +111,7 @@ public class AssetsManager implements Disposable {
   @Override
   public synchronized void dispose() {
     for(Asset asset : loadedAssets.values()) {
-      Gdx.app.log(TAG, "Disposing: " + asset.getPath());
+      ForgE.log(TAG, "Disposing: " + asset.getPath());
       asset.dispose();
     }
     loadedAssets.clear();

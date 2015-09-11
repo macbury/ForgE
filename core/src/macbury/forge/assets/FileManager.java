@@ -40,7 +40,7 @@ public class FileManager implements Disposable {
 
   private void checkMappings() {
     classpathFileStore = Gdx.files.classpath("graphics").exists();
-    Gdx.app.log(TAG, "Initialized...");
+    ForgE.log(TAG, "Initialized...");
   }
 
   private void configureMappings() {
@@ -64,7 +64,7 @@ public class FileManager implements Disposable {
 
   private void putMapping(String key, String path) {
     pathMappings.put(key + ":", path);
-    Gdx.app.log(TAG, "Mapping: " + key + " is " + path);
+    ForgE.log(TAG, "Mapping: " + key + " is " + path);
   }
 
   public FileHandle internal(String path) {
@@ -83,11 +83,11 @@ public class FileManager implements Disposable {
   }
 
   private void getHandles(FileHandle begin, Array<FileHandle> handles)  {
-    //Gdx.app.log(TAG, "begin: " + begin.path());
+    //ForgE.log(TAG, "begin: " + begin.path());
     Array<FileHandle> newHandles = ForgE.files.list(begin.path());
     for (FileHandle f : newHandles) {
       if ((f.isDirectory() || f.extension().length() == 0) ) {
-        //Gdx.app.log(TAG, "in: " + f.path());
+        //ForgE.log(TAG, "in: " + f.path());
         if (!f.path().equals(begin.path())) {
           getHandles(f, handles);
         }

@@ -96,21 +96,25 @@ public class ScriptThread extends Thread implements Disposable {
     runMain();
 
     while(running) {
+      BaseScriptRunner runner = null;
       synchronized (eventQueue) {
         if (eventQueue.size > 0) {
-          BaseScriptRunner runner = eventQueue.removeIndex(0);
-          try {
-            runner.run(ruby);
-          } catch (BSFException e) {
-            listener.onRubyError(e);
-          } finally {
-            runner.dispose();
-          }
+          runner = eventQueue.removeIndex(0);
+        }
+      }
+
+      if (runner != null) {
+        try {
+          runner.run(ruby, manager);
+        } catch (BSFException e) {
+          listener.onRubyError(e);
+        } finally {
+          runner.dispose();
         }
       }
     }
 
-    Gdx.app.log(TAG, "Stopping thread...");
+    ForgE.log(TAG, "Stopping thread...");
     ruby.terminate();
     ruby           = null;
     manager        = null;
@@ -119,7 +123,7 @@ public class ScriptThread extends Thread implements Disposable {
   }
 
   private void initEngine() {
-    Gdx.app.log(TAG, "Initializing engine...");
+    ForgE.log(TAG, "Initializing engine...");
     BSFManager.registerScriptingEngine(RUBY_LANG, "org.jruby.embed.bsf.JRubyEngine", new String[]{"rb"});
     this.manager = new BSFManager();
     this.ruby    = new JRubyEngine();
@@ -131,7 +135,7 @@ public class ScriptThread extends Thread implements Disposable {
   }
 
   private void initalizeContext() {
-    Gdx.app.log(TAG, "Initializing context...");
+    ForgE.log(TAG, "Initializing context...");
     executeScript("<init>", "Thread.abort_on_exception=true;");
     executeScript("<init>", "def import(path)\n" +
             "  require ForgE.files.internal(path+'.rb').path()\n" +
@@ -139,19 +143,19 @@ public class ScriptThread extends Thread implements Disposable {
     );
 
     for (int i = 0; i < packagesToImport.size; i++) {
-      Gdx.app.log(TAG, "Setting: " + packagesToImport.get(i).getCanonicalName());
+      ForgE.log(TAG, "Setting: " + packagesToImport.get(i).getCanonicalName());
       executeScript("<init>", "java_import '" + packagesToImport.get(i).getCanonicalName()+"';");
     }
   }
 
   private void runMain() {
-    Gdx.app.log(TAG, "Running main.rb");
+    ForgE.log(TAG, "Running main.rb");
     executeScript(mainFileHandle.path(), mainFileHandle.readString());
   }
 
   public void start(String path) {
     FileHandle handle = ForgE.files.internal(path);
-    Gdx.app.log(TAG, "Running: " + handle.path());
+    ForgE.log(TAG, "Running: " + handle.path());
     if (handle.exists()) {
       this.mainFileHandle = handle;
     } else {
@@ -169,6 +173,14 @@ public class ScriptThread extends Thread implements Disposable {
         runner.dispose();
       }
       eventQueue.clear();
+    }
+  }
+
+  public void putGlobal(String name, Object value) {
+    try {
+      manager.declareBean(name, value, value.getClass());
+    } catch (BSFException e) {
+      listener.onRubyError(e);
     }
   }
 
