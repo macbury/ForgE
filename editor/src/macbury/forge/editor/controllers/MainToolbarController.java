@@ -48,6 +48,7 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
   private final CodeEditorController codeEditorController;
   private final JLabel currentTimeLabel;
   private final JScrollBar timeScroll;
+  private final JButton terrainGeneratorButton;
   private LevelEditorScreen screen;
   public final InterfaceTrigger<EditorModeListener> editorModeListeners = new InterfaceTrigger<EditorModeListener>();
 
@@ -67,6 +68,8 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
 
     this.codeEditorButton        = buildButton("code");
     codeEditorButton.setVisible(false);
+
+    this.terrainGeneratorButton  = buildButton("terrain_generator");
     this.terrainEditButton       = buildToogleButton("terrain");
     this.entitiesEditButton      = buildToogleButton("entities");
     undoMapping = inputProcessor.registerMapping(Input.Keys.CONTROL_LEFT, Input.Keys.Z, this);
@@ -80,7 +83,7 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
 
     this.timeScroll = new JScrollBar(Adjustable.HORIZONTAL);
     timeScroll.setMaximum((int) TimeManager.DAY_IN_SECONDS);
-    timeScroll.setValue((int)TimeManager.DEFAULT_TIME);
+    timeScroll.setValue((int) TimeManager.DEFAULT_TIME);
     timeScrollContainer.add(timeScroll, BorderLayout.SOUTH);
 
     timeScroll.addAdjustmentListener(this);
@@ -102,6 +105,8 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
     mainToolbar.add(terrainEditButton);
     mainToolbar.add(entitiesEditButton);
     mainToolbar.addSeparator();
+    mainToolbar.add(terrainGeneratorButton);
+    mainToolbar.addSeparator();
     mainToolbar.add(playMapButton);
     mainToolbar.addSeparator();
 
@@ -109,6 +114,9 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
     mainToolbar.add(Box.createHorizontalGlue());
 
     updateRedoUndoButtons();
+
+
+    terrainGeneratorButton.setEnabled(false);
 
     editorModeListeners.trigger(new InterfaceTrigger.Trigger<EditorModeListener>() {
       @Override
@@ -142,6 +150,7 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
   public void onCloseMap(ProjectController controller, LevelEditorScreen screen) {
     setScreen(null);
     terrainEditButton.setEnabled(false);
+    terrainGeneratorButton.setEnabled(false);
     entitiesEditButton.setEnabled(false);
     timeScroll.setEnabled(false);
     editorModeListeners.trigger(new InterfaceTrigger.Trigger<EditorModeListener>() {
@@ -155,6 +164,7 @@ public class MainToolbarController implements OnMapChangeListener, ChangeManager
   @Override
   public void onNewMap(ProjectController controller, LevelEditorScreen screen) {
     setScreen(screen);
+    terrainGeneratorButton.setEnabled(true);
     terrainEditButton.setEnabled(true);
     entitiesEditButton.setEnabled(true);
     selectEditorMode(EditorMode.Terrain);

@@ -15,7 +15,7 @@ import java.util.Date;
 public class TimeManager implements Disposable {
   private static final float SATELITE_START_ROTATION = 10;
   private static final float SATELITE_END_ROTATION = -190;
-  private final float timeSpeed;
+  private float timeSpeed;
 
   private float duration;
   private long days;
@@ -33,7 +33,8 @@ public class TimeManager implements Disposable {
   public TimeManager() {
     this.duration  = DEFAULT_TIME;
     days           = 1;
-    this.timeSpeed = (float)ForgE.config.getFloat(Config.Key.TimeSpeed);
+    setTimeSpeed(ForgE.config.getFloat(Config.Key.TimeSpeed));
+    update();
   }
 
   public void update() {
@@ -117,10 +118,15 @@ public class TimeManager implements Disposable {
 
   public void setDuration(float otherDuration) {
     this.duration = otherDuration;
+    updateRotation();
   }
 
   @Override
   public String toString() {
     return getFormattedDuration();
+  }
+
+  public void setTimeSpeed(float timeSpeed) {
+    this.timeSpeed = timeSpeed;
   }
 }

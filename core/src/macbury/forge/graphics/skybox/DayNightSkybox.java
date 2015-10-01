@@ -75,7 +75,6 @@ public class DayNightSkybox extends Skybox {
 
     fogColor.set(skyMapPixmap.getPixel(mapPosA, maxH));
     ambientColor.set(skyMapPixmap.getPixel(mapPosA, maxH - 2));
-
   }
 
   private void updateSatelites(Camera camera) {
