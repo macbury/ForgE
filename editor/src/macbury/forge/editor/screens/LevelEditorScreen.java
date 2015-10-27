@@ -53,6 +53,7 @@ public class LevelEditorScreen extends AbstractScreen {
     this.decalBatch           = new DecalBatch(new CameraGroupStrategy(level.camera));
     level.camera.far          = LEVEL_EDITOR_FAR_CAMERA;
     level.camera.near         = 0.01f;
+    level.camera.fieldOfView  = 70;
     cameraController.setCenter(level.terrainMap.getWidth() / 2, level.terrainMap.getDepth() / 2);
     cameraController.setCamera(level.camera);
     cameraController.setOverlay(overlay);

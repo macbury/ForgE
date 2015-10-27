@@ -27,7 +27,7 @@ public class DesktopGame implements ForgEBootListener, Thread.UncaughtExceptionH
     Config forgeConfig                   = Config.load("game");
     LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
     config.resizable      = false;
-    config.foregroundFPS  = 30;
+    config.foregroundFPS  = 60;
 
     config.width          = forgeConfig.getInt(Config.Key.ResolutionWidth);
     config.height         = forgeConfig.getInt(Config.Key.ResolutionHeight);

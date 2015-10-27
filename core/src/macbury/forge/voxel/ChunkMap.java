@@ -1,6 +1,5 @@
 package macbury.forge.voxel;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
@@ -9,7 +8,6 @@ import macbury.forge.ForgE;
 import macbury.forge.blocks.Block;
 import macbury.forge.blocks.BlocksProvider;
 import macbury.forge.graphics.builders.Chunk;
-import macbury.forge.procedular.PerlinNoise;
 import macbury.forge.utils.Vector3i;
 
 /**
@@ -58,7 +56,7 @@ public class ChunkMap extends VoxelMap {
   }
 
 
-  public Chunk findForChunkPosition(Vector3i position) {
+  public Chunk findByChunkPosition(Vector3i position) {
     for (Chunk chunk : chunks) {
       if (chunk.position.equals(position))
         return chunk;
@@ -85,7 +83,7 @@ public class ChunkMap extends VoxelMap {
 
   private void rebuildChunkAroundPosition(int x, int y, int z) {
     Vector3i chunkPosition = voxelPositionToChunkPosition(x, y, z);
-    Chunk    centerChunk   = findForChunkPosition(chunkPosition);
+    Chunk    centerChunk   = findByChunkPosition(chunkPosition);
 
     if (centerChunk == null) {
       return;
@@ -131,14 +129,14 @@ public class ChunkMap extends VoxelMap {
   }
 
   public void rebuildChunkForChunkPositionIfExists(Vector3i chunkPosition) {
-    Chunk chunk            = findForChunkPosition(chunkPosition);
+    Chunk chunk            = findByChunkPosition(chunkPosition);
     if (chunk != null) {
       addToRebuild(chunk);
     }
   }
 
   private void rebuildChunkForChunkPosition(Vector3i chunkPosition) {
-    Chunk chunk            = findForChunkPosition(chunkPosition);
+    Chunk chunk            = findByChunkPosition(chunkPosition);
     if (chunk == null) {
       throw new GdxRuntimeException("Chunk is null!!");
     } else {

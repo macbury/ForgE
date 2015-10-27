@@ -240,4 +240,8 @@ public class VoxelMap implements Disposable {
   public static VoxelMap build() {
     return new VoxelMap(ChunkMap.TERRAIN_TILE_SIZE, ForgE.blocks);
   }
+
+  public void removeQuietVoxelForPosition(Vector3i position) {
+    voxelMap[position.x][position.y][position.z] = null;
+  }
 }

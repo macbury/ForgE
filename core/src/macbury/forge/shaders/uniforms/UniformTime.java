@@ -1,5 +1,6 @@
 package macbury.forge.shaders.uniforms;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -20,7 +21,7 @@ public class UniformTime extends BaseUniform {
 
   @Override
   public void bind(ShaderProgram shader, LevelEnv env, RenderContext context, Camera camera) {
-    shader.setUniformf(UNIFORM_TIME, ForgE.time.getSecondsWithMilis() * 0.15f);
+    shader.setUniformf(UNIFORM_TIME, ForgE.graphics.getElapsedTime());
   }
 
   @Override

@@ -168,4 +168,8 @@ public class Vector3i {
   public Vector3 cpyTo(Vector3 tempC) {
     return tempC.set(x, y,z);
   }
+
+  public Vector3i cpy() {
+    return new Vector3i(x,y,z);
+  }
 }
