@@ -63,7 +63,7 @@ public class LevelEditorScreen extends AbstractScreen {
     level.entities.psychics.disable();
 
     this.fullScreenBuffer = new FullScreenFrameBufferResult(Fbo.FRAMEBUFFER_FINAL);
-    //previewFbos();
+    //
   }
 
   public void previewFbos() {
@@ -109,6 +109,8 @@ public class LevelEditorScreen extends AbstractScreen {
   public void show() {
     ForgE.ui.addActor(fullScreenBuffer);
     ForgE.ui.addActor(overlay);
+    ForgE.ui.addActor(DebugFrameBufferResult.build(Fbo.FRAMEBUFFER_DEPTH, 512, 512, 0));
+    //previewFbos();
   }
 
   @Override
